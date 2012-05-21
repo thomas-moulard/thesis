@@ -1,7 +1,59 @@
-\documentclass{book}
+\documentclass[a4paper,twoside,openright]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8x]{inputenc}
+
+\usepackage{lmodern}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{makeidx}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{epigraph}
+
+\usepackage[french]{babel}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+% Please fancyhdr.
+\setlength{\headheight}{15pt}
+
+% Customize chapter head.
+\makeatletter
+\renewcommand\chapter{\if@openright\cleardoublepage\else\clearpage\fi
+                    \thispagestyle{empty}%
+                    \global\@topnum\z@
+                    \@afterindentfalse
+                    \secdef\@chapter\@schapter}
+\def\@makechapterhead#1{%
+  \vspace*{50\p@}%
+  {\parindent \z@ \raggedright \normalfont
+    \ifnum \c@secnumdepth >\m@ne
+      \if@mainmatter
+        \huge\bfseries\thechapter\enspace
+      \fi
+    \fi
+    \Huge \bfseries #1\par\nobreak
+    \vskip 40\p@
+  }}
+\makeatother
 
 \begin{document}
 
+\author{Thomas Moulard}
+\title{TBD}
+\date{July 2012}
+\maketitle
+
+\frontmatter
+\tableofcontents{\thispagestyle{fancy}}
+
+\mainmatter 
 \include{src/chap1-roboptim/chap1-roboptim}
+
+\backmatter
+\printindex
 
 \end{document}

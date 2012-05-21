@@ -1,4 +1,155 @@
 \chapter{Roboptim}
+\label{chap:roboptim}
+
+\epigraph{Text text text text text text text text text text text text
+  text text text text text text text text text text text text text
+  text text text text text text text text text text text text text
+  text text text text text text text text text text text text text
+  text text text text}{Some Author}
+\clearpage
+
+\section[Optimisation]{Optimisation numérique et robotique}
+
+\subsection{Introduction à l'optimisation numérique}
+
+La robotique s'appuie sur différents outils mathématiques pour
+résoudre les problèmes auxquels elle se trouve confrontée. Parmi ces
+outils, l'optimisation numérique figure à une place de choix.
+
+
+L'optimisation numérique est une branche des mathématiques permettant
+de choisir automatiquement la meilleure solution parmi un ensemble de
+solutions possibles. Les applications possibles couvrent des domaines
+variés de la recherche opérationnelle aux statistiques et bien sûr la
+robotique. Dans ce domaine particulier, l'optimisation numérique
+permets par exemple d'optimiser un mouvement pour en améliorer
+certains caractéristiques ou bien encore trouver la prochaine commande
+à envoyer aux moteurs du robot afin de réaliser une tâche donnée.
+
+
+
+Résoudre un problème d'optimisation numérique signifie trouver les
+\textbf{meilleurs} paramètres solutionnant le problème. Par
+\textbf{meilleurs}, il faut entendre les paramètres minimisant la
+valeur d'une fonction de coût. Intuitivement, on peut se représenter
+cette fonction comme un indicateur de la ``qualité'' de la solution
+trouvée. Une solution présentant un coût fort sera donc peu
+satisfaisante tandis qu'une solution présentant un coût faible sera,
+elle, très attrayante. Tout le raisonement est ensuite fondé sur la
+linéarité -- au moins locale! -- de cette fonction de coût. Plus
+simplement, près d'une mauvaise solution, il n'y aura que des
+solutions légèrement meilleures et légèrement pires, mais jamais trop
+différentes. De ce fait, il ``suffit'' de chercher dans quelle
+direction aller pour se diriger vers les meilleurs solutions pour
+finir par les trouver. Cette approche implique une limitation majeure:
+si la fonction de coût n'est pas convexe, on ne trouvera pas forcément
+la meilleure solution globale -- parmi toutes les solutions -- mais ma
+meilleure solution locale. C'est à dire qu'au voisinage de cette
+solution, toutes les autres solutions sont de moins bonnes
+qualités. Dans cette situation, tous les solveurs arrêtent leur
+recherche, mais rien ne garantit qu'ailleurs il n'existe pas une autre
+solution de meilleure qualité.
+
+
+Ce raisonnement permets de trouver les meilleurs paramètres pour un
+problème donné, mais il est rare qu'une fonction de coût seule puisse
+capturer complètement un problème donné. En fonctionnant de manière
+indépendante du problème sous-jacent, on confère aux solveurs une
+grande polyvalence. Mais par là même, il devient nécessaire
+d'expliciter sous quelles conditions une solution au problème donné
+est acceptable. Prenons un exemple: pour aller d'un point $A$ à un
+point $B$ le plus rapidement possible, se déplacer avec une vitesse
+infinie est sans aucun doute la solution optimale. Cependant, une
+telle réponse ne présente guère d'intérêt dans la mesure où aucun
+système physique ne sera en mesure de l'executer.
+
+
+Deux stratégies peuvent alors être choisies. La première est
+d'exprimer directement dans la fonction de coût cette information
+supplémentaire. Dans le cadre de l'exemple précédemment cité, on
+pourrait concevoir une fonction de coût réalisant la somme du temps de
+déplacement et de la vitesse moyenne du robot. De ce fait, une vitesse
+trop grande pénalise le résultat et par ce biais, le solveur tentera
+plutôt de transformer la trajectoire géométrique plutôt que de jouer
+sur la vitesse de déplacement du système. La limite de cette approche
+est simple à comprendre: au fur et à mesure que les biais s'accumulent
+-- le plus souvent en sommant les uns aux autres --, le coût initial
+peut se retrouver ignoré par le solveur car numériquement
+négligeable. La fonction de coût n'a alors plus aucune justification
+physique et ses variations peuvent devenir de plus en plus difficiles
+à analyser pour le solveur.  Une seconde solution consiste à ajouter
+des contraintes au problème. Ces contraintes sont exprimées sous la
+forme d'équation ou d'inéquation déterminant si une solution donnée
+est une solution acceptable. En robotique, des contraintes très
+courantes sont les bornes sur les butées articulaires. Il est rare sur
+un robot que les axes puissent bouger de manière totalement libre. De
+ce fait, il est courant d'ajouter des contraintes inégalités
+spécifiant que tel ou tel valeur de joint doit rester dans un
+intervalle donné.
+
+
+En exprimant comment résoudre un problème pratique via la construction
+d'une fonction de coût $f$ et de contraintes $g_i > 0$,
+\textbf{modélise} le problème afin qu'il soit soluble par optimisation
+numérique. Ce procédé n'est pas trivial car la qualité de la
+modélisation impacte lourdement à la fois les temps de calcul et la
+qualité du résultat final.
+
+
+
+\subsection{Modélisation mathématique d'un problème}
+
+
+Un algorithme doit déterminer la solution qui
+minimise une fonction de coût $f$, telles que $g_i \leq 0$ avec $0
+\leq i < n$.
+
+\begin{eqnarray}\label{eq:chap1_optim}
+  f : \mathbf{x} \to \mathbb{R}
+\end{eqnarray}
+
+
+En observant la littérature, on pourra se persuader du rôle
+prépondérant de cet outil de décision. On se demandera également comment un outil dont les fondements
+
+\subsection{Zoologie des solveurs}
 
 test
 
+
+\section[FIXME]{De la difficulté à passer d'un paradigme unique à une implémentation unifiée}
+
+test
+
+\subsection{Solveurs disponibles}
+
+test
+
+\subsection{Motivation}
+
+test
+
+
+\section{Architecture logicielle de Roboptim}
+
+test
+
+\section{Scénarii d'utilisation}
+
+test
+
+\subsection[FIXME]{\'Ecriture d'une application robotique complexe: optimiser la trajectoire de marche pour un robot humanoïde}
+
+test
+
+\subsection{Intégration d'un solveur tiers et extensibilité de RobOptim}
+
+test
+
+\section{Discussions}
+
+test
+
+\section{Conclusion}
+
+test
