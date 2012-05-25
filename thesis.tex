@@ -5,14 +5,16 @@
 
 \usepackage{lmodern}
 
+\usepackage[francais]{babel}
+
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
 \usepackage{makeidx}
 \usepackage{graphicx}
 \usepackage{url}
 \usepackage{epigraph}
-
-\usepackage[french]{babel}
 
 \usepackage{fancyhdr}
 \pagestyle{fancy}
@@ -40,6 +42,9 @@
   }}
 \makeatother
 
+% Add definition definition.
+\newtheorem{mydef}{Définition}
+
 \begin{document}
 
 \author{Thomas Moulard}
@@ -51,7 +56,12 @@
 \tableofcontents{\thispagestyle{fancy}}
 
 \mainmatter 
+\include{src/chap0-introduction/chap0-introduction}
 \include{src/chap1-roboptim/chap1-roboptim}
+\include{src/chap2-suivi-trajectoire/chap2-suivi-trajectoire}
+\include{src/chap3-primitive-mouvement/chap3-primitive-mouvement}
+\include{src/chap4-integration/chap4-integration}
+\include{src/chap5-conclusion/chap5-conclusion}
 
 \backmatter
 \printindex

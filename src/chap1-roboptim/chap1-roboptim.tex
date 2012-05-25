@@ -1,4 +1,4 @@
-\chapter{Roboptim}
+\chapter[Optimisation]{Optimisation et généricité}
 \label{chap:roboptim}
 
 \epigraph{Text text text text text text text text text text text text
@@ -29,26 +29,25 @@ certains caractéristiques ou bien encore trouver la prochaine commande
 
 
 Résoudre un problème d'optimisation numérique signifie trouver les
-\textbf{meilleurs} paramètres solutionnant le problème. Par
-\textbf{meilleurs}, il faut entendre les paramètres minimisant la
-valeur d'une fonction de coût. Intuitivement, on peut se représenter
-cette fonction comme un indicateur de la ``qualité'' de la solution
-trouvée. Une solution présentant un coût fort sera donc peu
-satisfaisante tandis qu'une solution présentant un coût faible sera,
-elle, très attrayante. Tout le raisonement est ensuite fondé sur la
-linéarité -- au moins locale! -- de cette fonction de coût. Plus
-simplement, près d'une mauvaise solution, il n'y aura que des
-solutions légèrement meilleures et légèrement pires, mais jamais trop
-différentes. De ce fait, il ``suffit'' de chercher dans quelle
-direction aller pour se diriger vers les meilleurs solutions pour
-finir par les trouver. Cette approche implique une limitation majeure:
-si la fonction de coût n'est pas convexe, on ne trouvera pas forcément
-la meilleure solution globale -- parmi toutes les solutions -- mais ma
-meilleure solution locale. C'est à dire qu'au voisinage de cette
-solution, toutes les autres solutions sont de moins bonnes
-qualités. Dans cette situation, tous les solveurs arrêtent leur
-recherche, mais rien ne garantit qu'ailleurs il n'existe pas une autre
-solution de meilleure qualité.
+meilleurs paramètres solutionnant le problème. Par meilleurs, il faut
+entendre les paramètres minimisant la valeur d'une fonction de
+coût. Intuitivement, on peut se représenter cette fonction comme un
+indicateur de la ``qualité'' de la solution trouvée. Une solution
+présentant un coût fort sera donc peu satisfaisante tandis qu'une
+solution présentant un coût faible sera, elle, très attrayante. Tout
+le raisonement est ensuite fondé sur la linéarité -- au moins locale!
+-- de cette fonction de coût. Plus simplement, près d'une mauvaise
+solution, il n'y aura que des solutions légèrement meilleures et
+légèrement pires, mais jamais trop différentes. De ce fait, il
+``suffit'' de chercher dans quelle direction aller pour se diriger
+vers les meilleurs solutions pour finir par les trouver. Cette
+approche implique une limitation majeure: si la fonction de coût n'est
+pas convexe, on ne trouvera pas forcément la meilleure solution
+globale -- parmi toutes les solutions -- mais ma meilleure solution
+locale. C'est à dire qu'au voisinage de cette solution, toutes les
+autres solutions sont de moins bonnes qualités. Dans cette situation,
+tous les solveurs arrêtent leur recherche, mais rien ne garantit
+qu'ailleurs il n'existe pas une autre solution de meilleure qualité.
 
 
 Ce raisonnement permets de trouver les meilleurs paramètres pour un
@@ -100,24 +99,82 @@ qualité du résultat final.
 \subsection{Modélisation mathématique d'un problème}
 
 
-Un algorithme doit déterminer la solution qui
-minimise une fonction de coût $f$, telles que $g_i \leq 0$ avec $0
-\leq i < n$.
+Résoudre un problème d'optimisation revient à trouver une solution pour:
 
-\begin{eqnarray}\label{eq:chap1_optim}
-  f : \mathbf{x} \to \mathbb{R}
-\end{eqnarray}
+\begin{equation}
+  \min_{\mathbf{x} \in \mathbb{R}^n} f(x) \text{ sous la contrainte } \mathbf{x} \in \mathbf{X}
+\end{equation}
+
+où $f : \mathbb{R}^n \mapsto \mathbb{R}$ est la fonction de coût et
+$\mathbf{X} \subset \mathbb{R}^n$ est l'espace des solutions
+admissibles. Cet espace est habituellement défini par un ensemble de
+contraintes égalités et inégalités:
+
+\begin{equation}
+  \mathbf{X} \equiv \left\{ 
+  \begin{array}{l l}
+    c_i (x) = 0    & \quad i \in \xi \\
+    c_j (x) \leq 0 & \quad j \in \nu \\
+  \end{array} \right.
+\end{equation}
+
+$c_i$, $c_j$ sont respectivement les ensembles de contraintes égalités
+et inégalités. $i$ et $j$ des indices identifiant les contraintes.
 
 
-En observant la littérature, on pourra se persuader du rôle
-prépondérant de cet outil de décision. On se demandera également comment un outil dont les fondements
+L'optimisation numérique a pour objectif de développer des stratégies
+-- algorithmes -- pouvant déterminer $\mathbf{x} \in \mathbf{X}$
+minimisant les valeurs de la fonction $f$.
+
+
+En absence d'argument fort tel que la convexité de $f$ ainsi que des
+contraintes $c_i, i \in \xi \cup \nu$, la solution $\mathbf{x}$
+fournie par le solveur peut être un minimum local.
+
+
+En effet, la plupart des méthodes d'optimisation tentent de trouver un
+minimum en raffinant itérativement une solution à partir d'un candidat
+initial $\mathbf{x_{\text{init}}} \in \mathbf{X}$. Le solveur, dès
+lors, nécessite un critère d'arrêt à ce processus itératif. Ce critère
+est donné par les conditions de Karush-Kuhn-Tucker ou conditions KKT.
+
+\begin{mydef}\label{def:chap1_kkt}
+Si $\mathbf{x} \in \mathbf{X}$ est un minimum local, alors il existe
+$\lambda_i, i \in \xi$ et $\mu_j, j \in \nu$ des constantes non-nulles
+appelées multiplicateurs KKT tels que:
+%
+\begin{description}
+\item[\textbf{Critère de stabilité}] \begin{equation}
+  \nabla f(x) + \sum_{i \in \xi} \lambda_i c_i(x) + \sum_{j \in \nu} \mu_i c_i(x) = 0
+\end{equation}
+\item[\textbf{Critère de faisabilité primale}] \begin{equation}
+\left\{ 
+\begin{array}{l l}
+  c_i (x) = 0    & \quad i \in \xi \\
+  c_j (x) \leq 0 & \quad j \in \nu \\
+\end{array} \right.
+\end{equation}
+\item[\textbf{Critère de faisabilité duale}] \begin{equation}
+\mu_j \geq 0, j \in \nu
+\end{equation}
+\item[\textbf{Critère de complémentarité}] \begin{equation}
+\mu_j c_j(x) = 0, j \in \nu
+\end{equation}
+\end{description}
+\end{mydef}
+
+Il est à noter que la Définition~\ref{def:chap1_kkt} fournit des
+conditions suffisantes afin de déterminer si un point est un minimum
+local. Sous conditions de régularité, et dans le cas où le problème
+est convexe, les conditions KKT sont nécessaires et suffisantes.
+
 
 \subsection{Zoologie des solveurs}
 
 test
 
 
-\section[FIXME]{De la difficulté à passer d'un paradigme unique à une implémentation unifiée}
+\section[FIXME]{De la dif\-ficulté à passer d'un paradigme uni\-que à une implémentation unifiée}
 
 test
 
