@@ -7,7 +7,8 @@
 
 \usepackage[francais]{babel}
 
-\usepackage{amsmath}
+\usepackage{array}
+\usepackage{mathtools}
 \usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{mathtools}
@@ -15,12 +16,27 @@
 \usepackage{graphicx}
 \usepackage{url}
 \usepackage{epigraph}
+\usepackage{hyperref}
+\usepackage{natbib}
 
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 
+\usepackage{hyperref}
+
+% Setup pdf meta-data.
+\hypersetup{ % Modifiez la valeur des champs suivants
+pdfauthor = {Thomas Moulard},
+pdftitle = {TBD},
+pdfsubject = {TBD},
+pdfkeywords = {Mots-clefs},
+pdfcreator = {PDFLaTeX},
+pdfproducer = {PDFLaTeX}
+}
+
+
 % Please fancyhdr.
-\setlength{\headheight}{15pt}
+\setlength{\headheight}{25pt}
 
 % Customize chapter head.
 \makeatletter
@@ -44,17 +60,25 @@
 
 % Add definition definition.
 \newtheorem{mydef}{Définition}
+\newtheorem{myexample}{Exemple}
+
+% Enforce math style.
+\everymath{\displaystyle}
+
+% Generate index.
+\makeindex
 
 \begin{document}
-
+\bibliographystyle{plainnat}
+%
 \author{Thomas Moulard}
 \title{TBD}
 \date{July 2012}
 \maketitle
-
+%
 \frontmatter
 \tableofcontents{\thispagestyle{fancy}}
-
+%
 \mainmatter 
 \include{src/chap0-introduction/chap0-introduction}
 \include{src/chap1-roboptim/chap1-roboptim}
@@ -62,8 +86,17 @@
 \include{src/chap3-primitive-mouvement/chap3-primitive-mouvement}
 \include{src/chap4-integration/chap4-integration}
 \include{src/chap5-conclusion/chap5-conclusion}
-
+%
+%
 \backmatter
+%
+% Bibliography
+\nocite{*}
+\bibliography{thesis}
+%
+% Index
+\cleardoublepage
+\addcontentsline{toc}{chapter}{Index}
 \printindex
-
+%
 \end{document}

@@ -111,7 +111,7 @@ admissibles. Cet espace est habituellement défini par un ensemble de
 contraintes égalités et inégalités:
 
 \begin{equation}
-  \mathbf{X} \equiv \left\{ 
+  \mathbf{X} \equiv \left\{
   \begin{array}{l l}
     c_i (x) = 0    & \quad i \in \xi \\
     c_j (x) \leq 0 & \quad j \in \nu \\
@@ -129,14 +129,16 @@ minimisant les valeurs de la fonction $f$.
 
 En absence d'argument fort tel que la convexité de $f$ ainsi que des
 contraintes $c_i, i \in \xi \cup \nu$, la solution $\mathbf{x}$
-fournie par le solveur peut être un minimum local.
+fournie par le solveur peut être un minimum local \index{minimum
+  local}.
 
 
 En effet, la plupart des méthodes d'optimisation tentent de trouver un
 minimum en raffinant itérativement une solution à partir d'un candidat
 initial $\mathbf{x_{\text{init}}} \in \mathbf{X}$. Le solveur, dès
 lors, nécessite un critère d'arrêt à ce processus itératif. Ce critère
-est donné par les conditions de Karush-Kuhn-Tucker ou conditions KKT.
+est donné par les conditions de Karush-Kuhn-Tucker \index{conditions
+  de Karush-Kuhn-Tucker} ou conditions KKT.
 
 \begin{mydef}\label{def:chap1_kkt}
 Si $\mathbf{x} \in \mathbf{X}$ est un minimum local, alors il existe
@@ -148,7 +150,7 @@ appelées multiplicateurs KKT tels que:
   \nabla f(x) + \sum_{i \in \xi} \lambda_i c_i(x) + \sum_{j \in \nu} \mu_i c_i(x) = 0
 \end{equation}
 \item[\textbf{Critère de faisabilité primale}] \begin{equation}
-\left\{ 
+\left\{
 \begin{array}{l l}
   c_i (x) = 0    & \quad i \in \xi \\
   c_j (x) \leq 0 & \quad j \in \nu \\
@@ -171,12 +173,460 @@ est convexe, les conditions KKT sont nécessaires et suffisantes.
 
 \subsection{Zoologie des solveurs}
 
+\subsubsection{Zoologie mathématique}
+
+
+Au-delà de cette présentation de la théorie générale, on peut
+regrouper les techniques de résolutions en différentes catégories
+selon la difficulté des problèmes pouvant être traités. Nous ne nous
+attarderons ici que sur les techniques d'optimisation
+continues. Différentes caractéristiques peuvent rendre la résolution
+plus délicate:
+%
+\begin{itemize}
+\item Présence de contraintes,
+\item Non-convexité de la fonction de coût ou des contraintes,
+\item Non-linéarité de la fonction de coût ou des contraintes,
+\item Fonction non -- ou mal -- définie en dehors des contraintes,
+\item Variations numériques fortes entraînant des erreurs numériques
+  difficiles à juguler,
+\item etc.
+\end{itemize}
+%
+La combinaison de ces difficultés entraînent la classification des
+solveurs dans de très nombreuses catégories dont un extrait est
+détaillé dans le Tableau~\ref{tbl:chap1_solver}.
+%
+\begin{table}\label{tbl:chap1_solver}
+\begin{center}
+\begin{tabular}{|>{\small}p{.24\textwidth}|>{\small}p{.305\textwidth}|>{\small}p{.305\textwidth}|}
+\hline
+\textit{Classe de problème} & \textit{Fonction de coût} & \textit{Contraintes}\\
+\hline
+\textbf{Moindres carrés linéaires} & $\sum_{i \in \{1, 2, \ldots, n\}} (r_i - \mathbf{x}_i)^2$ où les $r_i$ sont des constantes & non \\
+\hline
+\textbf{LQP} \small{(opt. quadratique linéaire)} & quadratique & linéaire \\
+\hline
+\textbf{SQP} \small{(opt. non-linéaire)} & non-linéaire & non-linéaire \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Zoologie des problèmes en optimisation numérique.}
+\end{table}
+%
+Les algorithmes de résolution ont également des particularités
+intrinsèques qui peuvent être particulièrement intéressantes dans le
+cadre de la robotique. Par exemple, le démarrage à chaud ou ``warm
+start'' \index{démarrage à chaud} \index{warm start|see{démarrage à
+  chaud}} est la possibilité, pour un solveur, de pouvoir résoudre
+plusieurs problèmes à la suite tout en se souvenant de son état
+interne afin de pouvoir gagner en temps de calcul lorsque le nouveau
+problème est très proche du problème précédemment résolu. Cette
+situation intervient notamment lorsque l'on optimise une trajectoire
+tout en l'executant. L'optimisation se déroule pour différents
+instants proches dans le temps pour lesquels l'évolution de l'état du
+robot est minime. Une autre caractéristique est la capacité, pour un
+solveur, de pouvoir être interrompu à n'importe quelle itération tout
+en guarantissant que la solution actuelle, bien qu'incomplète,
+respecte la totalité des contraintes du problème. Ce comportement est
+important lorsque l'optimisation est lancée dans un contexte où les
+contraintes temporelles sont fortes, telle que dans le contrôleur
+calculant les commandes du robot.
+
+
+
+\subsubsection{Zoologie logicielle}
+
+
+On l'aura compris: d'une théorie unique découle un ensemble
+d'algorithmes pouvant résoudre des problèmes de complexité
+variée. Plaçons nous désormais à la place d'un roboticien devant
+résoudre un problème particulier. Quels logiciels peut-il utiliser
+pour se faire? Le Tableau~\ref{tbl:chap1_soft} détaille une partie
+des paquets logiciels existants.
+%
+\begin{table}\label{tbl:chap1_soft}
+\begin{center}
+\begin{tabular}{|p{.24\textwidth}|p{.305\textwidth}|p{.305\textwidth}|}
+\hline
+\textit{Logiciel} & \textit{Classe de problème} & \textit{Caractéristiques}\\
+\hline
+\textbf{\href{http://devernay.free.fr/hacks/cminpack/index.html}{C/C++ MinPack}} & Moindres carrés linéaires & C/C++, réentrant, thread-safe \\
+\hline
+\textbf{\href{https://projects.coin-or.org/Ipopt}{Coin IPOPT}} & SQP & C++, réentrant \\
+\hline
+\textbf{\href{http://www.aemdesign.com/}{CFSQP}} & SQP & C, réentrant \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Zoologie des problèmes en optimisation numérique.}
+\end{table}
+%
+Une conclusion s'impose au regard de cette liste de paquets logiciels:
+les techniques les plus compliquées à implémenter sont peu disponibles
+et il n'existe pas d'outil unifié permettant de résoudre différents
+types de problèmes. Enfin, chaque outil traite une catégorie de
+problème en particulier. Il est raisonnable de se demander si chaque
+utilisateur, lorsqu'il commence à définir son problème est à même de
+choisir de manière pertinente le solveur -- et donc le framework --
+adapté à son problème. Est-il certain que toutes les fonctions seront
+différentiables et continues deux fois? une fois? Est-on certain de ne
+pas avoir besoin de contraintes inégalités, voire de ne pas avoir
+besoin du tout de contraintes? Rien n'est moins sûr. Un exemple simple
+est la gestion des collisions. On peut tout à fait développer un outil
+robotique et le faire fonctionner dans un environnement ouvert avant
+de vouloir s'attaquer à un problème plus difficile et prendre en
+compte les collisions. Cela peut poser des problèmes extrêmement
+important car le solveur ne sera pas le même dans les deux
+cas. Cependant, il semble qu'avoir à réécrire, ou tout du moins
+adapter, le problème précédent à un nouvelle bibliothèque logicielle
+est inutile puisque finalement les deux problèmes se formalisent au
+sein d'un même paradigme.
+
+
+\section{De la dif\-ficulté à passer d'un paradigme uni\-que à une implémentation unifiée}
+
+
+A première vue, il pourrait sembler que l'absence d'une architecture
+unifiée pour la résolution de problèmes d'optimisation numérique est
+le simple résultat d'un manque de volonté et/ou de coordination entre
+développeurs. Nous allons montrer ici qu'il n'en est rien. Une simple
+agglomération des implémentations de différentes stratégies de
+résolution ne saurait donner un ensemble cohérent et performant en
+terme de temps de calcul sans une véritable réflexion sur comment
+modéliser le paradigme décrit à la section précédente tout en prenant
+en compte les limites internes des langages de programmation. Nous
+allons tout particulièrement nous intéresser à la programmation
+orientée objet qui est la fondation d'une large proportion des
+langages modernes.
+
+
+\subsection{Typage, programmation orienté objet et familles de types}
+
+\subsubsection{$\lambda$-calcul et théorie des types}
+
+Lors du développement de l'informatique, les langages de programmation
+ont tout d'abord été de simples outils permettant de représenter du
+code machine de manière succinte et plus facilement lisible par les
+humains. Cependant, avec la complexification croissante des
+applications informatiques, vérifier la correction des programmes est
+rapidement devenu un enjeu critique. Pour se faire, les langages de
+programmation ont progressivement adopté le typage comme moyen de
+n'autoriser que la construction de programmes valides. Cette notion de
+type a issue de la théorie des types \index{théorie des types}, une
+branche de la logique mathématique. La première théorie unifiée des
+types a été développée par Bertrand Russel \index{Bertrand Russel} au
+début du vingtième siècle dans les \emph{Principia
+  Mathematica}~\citep{pm}.
+
+
+Afin de démontrer les difficultés que peuvent poser la modélisation
+d'un problème d'optimisation numérique, nous allons nous appuyer sur
+un système de calcul formel particulier, le $\lambda$-calcul
+\index{$\lambda$-calcul} inventé par Alonzo Church \index{Alonzo Church}
+dans les années trente. Ce système de calcul formel a une expressivité
+équivalente à une \index{Machine de Türing}. Nous allons tout d'abord
+nous concentrer sur la construction des lambda-termes
+\index{lambda-terme}, c'est à dire l'ensemble des expressions
+syntaxiquement correcte pouvant être construite en lambda-calcul. Ces
+lambda-termes peuvent être divisés en trois catégories: variables,
+applications et abstractions. Les variables: $x$, $y$, \ldots Les
+applications sont l'ensemble des expressions $u v$ où $u$ et $v$ sont
+deux lambda-termes. Enfin les abstractions sont les expressions du
+type: $\lambda x.u$ où $x$ est une variable et $u$ un
+lambda-terme. Par exemple, l'application identité peut s'écrire en
+lambda-calcul: $\lambda x.x$.
+
+
+La procédure qui, à partir de n'importe quel lambda-terme, tente de la
+simplifier en réalisant les applications par réécriture est appelé
+$\beta$-conversion \index{$\beta$-conversion}. En réduisant un
+lambda-terme, on réalise le calcul associé à ce dernier. Une propriété
+utile serait de pouvoir déterminer si toutes les lambda-réductions
+terminent, c'est à dire que l'on peut réduire tous les lambda-termes
+jusqu'à un point où plus aucune réécriture \index{réécriture} n'est
+possible.
+
+
+Hélas, ce n'est pas le cas en lambda-calcul. Soit:
+
+\begin{eqnarray}
+  \Delta \equiv \lambda x.x\\
+  \Omega \equiv \Delta \Delta \equiv (\lambda x.x) (\lambda x.x)
+\end{eqnarray}
+
+ On peut remarquer que la $\beta$-reduction de $\Omega$ boucle
+ indéfiniment:
+
+\begin{equation}
+  (\lambda x.x) (\lambda x.x) =_{\beta} (\lambda x.x) (\lambda x.x)
+\end{equation}
+
+En terme calculatoire, on peut considérer que ce programme boucle et
+ne termine jamais.
+
+
+Face à ce constat, une autre interrogation se pose: peut-on construire
+un sous-ensemble des lambda-termes normalisables? La réponse est oui,
+via l'utilisation du lambda-calcul simplement typé
+\index{lambda-calcul simplement typé}. Dans cette version du
+lambda-calcul, toute expression est annotée par un type. Les types
+sont de deux sortes: $\iota$ et $\tau_1 \rightarrow \tau_2$ à
+condition que $\tau_1$ et $\tau_2$ soient des types. $\iota$
+représente le(s) type(s) primitif(s) du langage permettant de
+représenter les booléens ou un sous-ensemble des nombres entiers ou
+réels par exemple. Si $x$ est de type $\iota$, on a alors:
+%
+\begin{equation}
+  x \vdash \iota
+\end{equation}
+%
+\ldots prononcé ``$\iota$ type $x$''. L'ensemble des types est quand à
+lui noté $\Gamma$.
+
+
+En définissant des règles de typage appropriée, on peut restreindre
+les lambda-termes bien typés aux lambda-termes
+normalisables. Cependant, une limitation de cette approche est qu'une
+grande partie des expressions que l'on souhaiterait construire ne sont
+pas correctement typés. En particulier, il n'est pas possible de
+construire la fonction exponentielle dans ce paradigme.
+
+
+\subsubsection{Programmation orienté objet et typage}
+
+Indépendamment des systèmes de calculs formels, divers modèles plus
+pratiques ont été développé au cours de la seconde moitié du vingtième
+siècle. Notamment, la programmation orienté objet \index{programmation
+  orienté objet} a été introduite par Ole-Johan Dahl \index{Ole-Johan
+  Dahl} et Kristen Nygaard \index{Kristen Nygaard} dans \index{Simula
+  I} au cours des années soixante. Ce langage avait pour but de
+permettre le développement de simulation à événements discrets. Ce
+paradigme de pensée s'est progressivement développé jusqu'à être
+massivement adopté par la majorité des langages de programmation au
+cours des années quatre-vingt dix. L'adoption massive du C++ (Bjarne
+Stroustrup \index{Bjarne Stroustrup}, 1983) a participé à la
+démocratisation de la POO.
+
+
+La POO introduit la classe comme élément unitaire permettant la
+conception d'un programme informatique. Alors qu'auparavant, une
+séparation stricte était observée entre les données et les
+algorithmes, une classe est un élément du langage regroupant à ces
+deux éléments. Les algorithmes fournit par une classe sont alors
+appelés ``méthodes'' tandis que les données prennent le nom
+``d'attributs''. Cette réunification des données et des traitements
+sur les données s'inscrit pleinement dans la lignée de la vision
+informatique introduite par Von Neumann et l'architecture portant son
+nom. L'innovation clé de cette architecture a été de permettre la
+transmission sur un même bus des instructions composant un programme
+ainsi que des données sur lesquelles les instructions vont
+s'appliquer. On peut donc dire que la classe a poussé la réunification
+algorithmes/données jusqu'à la conception interne des logiciels.
+
+\begin{mydef}\label{def:chap1_type}
+  Un type peut soit être un type fondamental noté $\iota$, soit un
+  type fonctionnel, soit un type de classe. En pratique, il existe
+  plusieurs types fondamentaux: réels, entiers, booléens mais le
+  nombre de types de base ne change en rien les règles de typage.
+\end{mydef}
+
+\begin{mydef}\label{def:chap1_class}
+  Soit $\tau$ un type de classe. $\tau$ est défini par $a \in \mathfrak{A}_\tau$
+  l'ensemble des attributs -- données -- de la classe et $m \in
+  \mathfrak{M}_\tau$ l'ensemble des méthodes de la classe.
+
+  \emph{Notation:} on notera $\tau.a$ l'attribut $a$ de la classe $\tau$ et
+  $\tau.m$ la méthode $m$ de la classe $\tau$. Afin d'éviter les ambiguïtés,
+  l'ensemble des symboles composant les éléments $\mathfrak{A}_\tau$ et
+  $\mathfrak{M}_\tau$ sont disjoints.
+\end{mydef}
+
+\begin{mydef}\label{def:chap1_method}
+  Soit $\mathfrak{M}_\tau$ l'ensemble des méthodes d'une classe. Une
+  méthode $m$ du type de classe $\tau$ est une variable de type $\tau
+  \rightarrow \tau'$ où $\tau'$ est un type quelconque.
+
+  \emph{Notation:} L'application de la méthode $m$ de la classe $\tau$
+  devrait s'écrire $a.m \tau$ où $a \vdash \tau$. Dans la mesure où
+  l'on sait que $m \in \mathfrak{M}_\tau$, on peut se passer
+  d'appliquer explicitement le premier argument du type fonctionnel et
+  directement écrire $\tau.m$ pour signifier l'application de la
+  méthode $m$.
+\end{mydef}
+
+\begin{mydef}\label{def:chap1_attribute}
+  Soit $\mathfrak{A}_\tau$ l'ensemble des attributs d'une classe. Un
+  attribut $a$ du type de classe $\tau$ est une variable de type
+  $\tau'$ quelconque à l'exception des types fonctionnels prenant un
+  type $\tau$ en argument.
+\end{mydef}
+
+
+\begin{myexample}\label{ex:chap1_class}
+  Soit $A$ une classe définie par:
+
+  \begin{equation}
+    A \equiv \{ \underbrace{\{ \text{foo} \vdash \iota
+      \}}_{\text{attribut}}, \underbrace{\{ \text{bar} \vdash A
+      \Rightarrow \iota, \text{baz} \vdash A \Rightarrow \iota
+      \}}_{\text{méthodes}} \}
+  \end{equation}
+
+  $A$ possède un attribut et deux arguments. D'après la définition de
+  $A$ et les
+  Définitions~\ref{def:chap1_method}~et~\ref{def:chap1_attribute}, on
+  a:
+
+  \begin{equation}
+    a \vdash A \Rightarrow a.\text{foo} \vdash \iota
+  \end{equation}
+
+  \begin{equation}
+    a \vdash A \Rightarrow a.\text{bar} \vdash A \Rightarrow \iota
+  \end{equation}
+\end{myexample}
+
+
+Cette représentation permet de pouvoir offrir une vue d'ensemble
+intégrant à la fois des données structurées et l'ensemble des
+opérations possibles sur ces dernières. Auparavant, la séparation de
+ces deux éléments rendait plus difficile la construction d'une vision
+globale: on ne pouvait, par définition, pas connaître la liste des
+opérations définies sur un groupe de données. Soit $\tau$ un type de
+classe, l'ensemble des fonctions prenant $\tau$ en entrée n'est pas
+connu lors de la compilation car il peut être augmenté à tout moment
+d'un nouvel élément en définissant une nouvelle routine. Il convient
+donc de documenter la liste des opérations disponibles.
+
+Inversement, il est souvent nécessaire d'augmenter le comportement
+d'une classe en y ajoutant de nouvelles données et/ou de nouveaux
+algorithmes. La POO modélise ce processus au travers de l'héritage de
+classe. Soit $\tau_1$ un type de classe, $\tau_2$ un type de classe
+héritant de $\tau_1$. On dit également que $\tau_2$ est un sous-type
+de $\tau_1$, et est noté sous la forme:
+
+\begin{equation}
+  \tau_2 <: \tau_1
+\end{equation}
+%
+%
+Cette notion, proche de celle d'inclusion en théorie des ensembles,
+permet de définir des familles de types interchangeables.
+%
+%
+\begin{mydef}\label{chap1_oo_app}
+  Soit $\Gamma$ un contexte de type. $\tau_1$, $\tau_2$, $\tau_3$
+  trois types appartenant à ce contexte. La règle de typage des
+  applications en programmation orienté objet est alors:
+
+
+  \begin{equation}
+    u~v~\text{bien formé} \Rightarrow u \vdash \tau_1 \rightarrow
+    \tau_2 \wedge \tau_3 <: \tau_1
+  \end{equation}
+
+  Dès lors que $tau_3$ est un sous-type de $\tau_1$, les fonctions
+  prenant en argument une variable de type $\tau_1$ acceptent
+  également les arguments de type $\tau_3$.
+\end{mydef}
+%
+\begin{mydef}\label{chap1_method_typing}
+  Soit $\Gamma$ un contexte de type. $\tau_1$, $\tau_2$ deux types.
+
+  On dit que $\tau_2 <: \tau_1$ si et seulement si:
+
+  \begin{equation}
+    \tau_2 <: \tau_1 \Longleftrightarrow \mathfrak{A_{\tau_1}} \subset
+    \mathfrak{A_{\tau_2}} \wedge \mathfrak{M_{\tau_1}} \subset
+    \mathfrak{M_{\tau_2}}
+  \end{equation}
+\end{mydef}
+%
+Un sous-type se doit de contenir au moins tous les attributs et
+méthodes de la classe dont elle hérite afin d'interdire la réécriture
+vers des termes syntaxiquement faux. Le ``principe de substitution de
+Liskov''\index{principe de substitution de
+  Liskov}~\citep{Liskov94familyvalues} définit, de manière équivalente,
+la relation de sous-typage sous l'énonce suivant:
+%
+\begin{mydef}\label{chap1_liskov}
+  Si $q(x)$ est une propriété démontrable pour tout objet $x$ de type
+  $T$, alors $q(y)$ est vraie pour tout objet $y$ de type $S$ tel que
+  $S$ est un sous-type de $T$.
+\end{mydef}
+
+
+La Définition~\ref{chap1_method_typing} introduit implicitement la
+notion de polymorphisme d'héritage\index{polymorphisme!polymorphisme
+  d'héritage}. Le polymorphisme\index{polymorphisme} est la capacité
+pour un type fonctionnel de ne pas accepter en entrée un type unique,
+mais une famille de types. Le polymorphisme le plus simple pouvant
+être défini est la surcharge\index{surcharge}. Ce méchanisme autorise
+la création de fonctions se réécrivant vers des $\lambda$-termes
+différents selon le type de l'argument d'entrée. La formalisation de
+ce système est décrit dans~\citep{Castagna95acalculus}.
+
+Une autre forme de polymorphisme est le polymorphisme d'héritage. Si
+$\tau_1$ et $\tau_2$ sont deux types tels que $\tau_2 <: \tau_1$ et
+qu'il existe une méthode $m$ dans $\tau_1$ et $\tau_2$, alors tout
+application de la méthode $m$ à un objet de type $\tau_2$ se réécrira
+vers le $\lambda$-terme $\tau_2.m$. Un sous-type peut donc fournir une
+réécriture alternative d'une fonction afin d'en spécialiser le
+comportement.
+
+La généralisation de cette propriété à toutes les fonctions au lieu
+des méthodes uniquement permets d'obtenir le ``multiple
+dispatch''~\citep{Muschevici2008}. Ce méchanisme est disponible dans
+un nombre assez limité de langages de programmation dont Common
+Lisp. En effet, contrairement à la surcharge, le multiple dispatch
+ainsi que le polymorphisme d'héritage nécessite une résolution à
+l'execution qui peut pénaliser l'implémentation des algorithmes. En
+limitant la résolution dynamique au type du premier argument des
+méthodes, on limite également le coût de la résolution à
+l'execution. Ceci explique en partie l'une des raisons pour lesquelles
+le premier argument des méthodes est omis dans de nombreux langages de
+programmation. On ``masque'' par ce biais, le caractère spécifique de
+la résolution sur le premier argument de la méthode et on peut, une
+fois ce premier argument omis, considérer qu'il n'y a pas de
+résolution dynamique sur les arguments des méthodes.
+
+
+\subsubsection{Types paramétrés et génération de types}
+
+Face au coût induit par la résolution dynamique du polymorphisme par
+héritage, on peut se demander s'il existe un moyen d'arriver au même
+résultat sans ralentir l'execution d'un algorithme. Une solution est
+de générer des types afin de pouvoir déterminer à la compilation la
+résolution des fonctions polymorphes. Ce méchanisme est appelé
+``templates'' en C++ et se formalisent en $\lambda$-calcul sous la
+forme de types paramétrés.
+
+
+\begin{mydef}\label{chap1_parametrized_type}
+  Un type paramétré est une fonction d'ordre supérieure $\text{type}
+  \Rightarrow \text{type}$.
+
+  \emph{Notation:} Soit $\tau$ un type paramétré. Le type $\tau$
+  paramétré par $\alpha$ est dénoté $\tau_\alpha$. Il représente
+  l'application du type $\alpha$ à la fonction d'ordre supérieure
+  $\tau$.
+\end{mydef}
+
+Les types paramétrés permettent de définir un nouveau type de
+polymorphisme, le polymorphisme
+paramétré.\index{polymorphisme!polymorphisme paramétré} Ce
+polymorphisme peut se formaliser en rendant les méthodes des classes
+paramétrées dépendante du paramètre de classe.
+
+En pratique, ce type de polymorphisme est particulièrement intéressant
+car il n'induit pas de coût à l'execution.
+
+
+\subsection{Modélisation informatique du problème}
+
 test
 
-
-\section[FIXME]{De la dif\-ficulté à passer d'un paradigme uni\-que à une implémentation unifiée}
-
-test
 
 \subsection{Solveurs disponibles}
 
