@@ -469,7 +469,7 @@ algorithmes/données jusqu'à la conception interne des logiciels.
   \begin{equation}
     A \equiv \{ \underbrace{\{ \text{foo} \vdash \iota
       \}}_{\text{attribut}}, \underbrace{\{ \text{bar} \vdash A
-      \Rightarrow \iota, \text{baz} \vdash A \Rightarrow \iota
+      \Rightarrow \iota, \text{baz} \vdash A \rightarrow \iota
       \}}_{\text{méthodes}} \}
   \end{equation}
 
@@ -483,7 +483,7 @@ algorithmes/données jusqu'à la conception interne des logiciels.
   \end{equation}
 
   \begin{equation}
-    a \vdash A \Rightarrow a.\text{bar} \vdash A \Rightarrow \iota
+    a \vdash A \Rightarrow a.\text{bar} \vdash A \rightarrow \iota
   \end{equation}
 \end{myexample}
 
@@ -625,7 +625,80 @@ car il n'induit pas de coût à l'execution.
 
 \subsection{Modélisation informatique du problème}
 
-test
+La section précédente a introduit le formalismes et les outils que
+nous allons utiliser pour poser le problème de manière formelle.
+
+
+Un solveur est un algorithme qui prend en entrée un problème
+d'optimisation et qui calcule un point dans l'espace des solutions.
+Nous allons noter $\iota$ le type primitif représentant un point dans
+l'espace des solutions et $\tau_{\text{prob}}$ le type représentant le
+problème d'optimisation. Nous allons voir dans la section suivante
+comment ce type est habituellement défini, introduire une
+paramétrisation alternative du problème fournie par RobOptim et enfin
+montrer quelles avancées cette nouvelle modélisation engendre.  Nous
+allons travailler en utilisant un solveur générique qui sera dénoté:
+
+
+\begin{equation}
+  \text{solv} \vdash \tau_{\text{prob}} \rightarrow \iota
+\end{equation}
+
+
+La vision habituellement implémentée consiste à définir un unique type
+$\tau_{\text{prob}}$ dédié à un solveur précis. L'approche proposée
+ici consiste, à la place, à définir une famille de types formées par
+des classes, sous-classes éventuellement paramétrées pour tenter
+d'exprimer la totalité de la théorie de l'optimisation numérique sous
+la forme d'une et une seule modélisation.
+
+
+\subsubsection{De la fonction\ldots au type fonctionnel?}
+
+
+Naïvement, on pourrait penser qu'il n'y a rien de plus simple à
+modéliser qu'une fonction mathématique. En effet, les types
+fonctionnels ne sont-ils pas une transcription directe des fonctions
+mathématiques habituelles? On aurait donc, à première vue:
+
+\begin{equation}
+  \begin{array}{ccccc}
+    f & : & \tau_1 & \rightarrow & \tau_2\\
+    ~ & ~ & x      & \mapsto     & f(x)
+  \end{array}
+  \xhookrightarrow{\text{devient}}
+  f \vdash \tau_1 \rightarrow \tau_2
+\end{equation}
+
+Cette modélisation convient, bien sûr, mais ne permet pas de ranger
+les catégories en fonction selon leur nature: continue,
+différentiable, etc.
+
+En effet, pouvoir accéder au gradient de $f$ est primordial, mais
+implémenter une fonction $\mathbf{\nabla}(f)$ est difficile car dans
+de nombreux langages, dont celui utilisé par RobOptim -- C++ --, les
+fonctions ne sont pas des objets de premier ordre et leur manipulation
+est, de fait, mal-aisée.
+
+Afin de pouvoir associer des méta-données aux fonctions, une
+représentation naturelle est l'utilisation d'une hiérarchie de classe.
+
+Le critère choisi est la classe de la fonction: $\mathcal{C}^0$,
+$\mathcal{C}^1$, \ldots à une nuance près. En effet, si une fonction
+de classe $\mathcal{C}^n$ est déclarée, elle doit non seulement être
+dérivable $n$ fois et continue $n+1$ fois, mais les valeurs des $n$
+fonctions dérivées doivent pouvoir être calculées.
+
+La classe de fonction associée à la possibilité de pouvoir calculer
+les gradients est un facteur très important lors de l'évaluation du
+``niveau'' de difficulté d'un problème d'optimisation. Dès lors,
+regrouper les fonctions selon ce critère semble être un choix
+raisonnable.
+
+
+limites: differentiation d'une var, explosion combinatoire du nombre
+de types si plusieurs criteres
+
 
 
 \subsection{Solveurs disponibles}
