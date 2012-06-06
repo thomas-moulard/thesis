@@ -204,7 +204,7 @@ détaillé dans le Tableau~\ref{tbl:chap1_solver}.
 \hline
 \textit{Classe de problème} & \textit{Fonction de coût} & \textit{Contraintes}\\
 \hline
-\textbf{Moindres carrés linéaires} & $\sum_{i \in \{1, 2, \ldots, n\}} (r_i - \mathbf{x}_i)^2$ où les $r_i$ sont des constantes & non \\
+\textbf{Moindres carrés linéaires} & $\sum_{i \in \{1, 2, \dotsc, n\}} (r_i - \mathbf{x}_i)^2$ où les $r_i$ sont des constantes & non \\
 \hline
 \textbf{LQP} \small{(opt. quadratique linéaire)} & quadratique & linéaire \\
 \hline
@@ -749,7 +749,7 @@ raisonnable.
 
   On définit de sorte une famille de types formant une hiérarchie de
   classe sous la forme d'une peigne où $\mathcal{C}^n <:
-  \mathcal{C}^{n-1} <:~\ldots~<: \mathcal{C}^1 <: \mathcal{C}^0$.
+  \mathcal{C}^{n-1} <: \dotsc <: \mathcal{C}^1 <: \mathcal{C}^0$.
 
   A partir de $\mathcal{C}^2$, on remarquera que la méthode
   $\text{gradient}$ est surchargée selon le nombre d'argument. Avec un
@@ -792,14 +792,14 @@ les types de fonctions des contraintes.
 
 
 \begin{mydef}\label{def:chap1_prob}
-  Soit $\tau_{\text{prob}(\tau_1, \tau_2, \tau_3, \ldots)}$ tel que
-  $\tau_i <: \text{Fonction}$, $i \in \{1, \ldots, n\}$ par:
+  Soit $\tau_{\text{prob}(\tau_1, \tau_2, \tau_3, \dotsc)}$ tel que
+  $\tau_i <: \text{Fonction}$, $i \in \{1, \dotsc, n\}$ par:
 
   \begin{equation}
   \begin{split}
-    \tau_{\text{prob}(\tau_1, \tau_2, \tau_3, \ldots)} \equiv
+    \tau_{\text{prob}(\tau_1, \tau_2, \tau_3, \dotsc)} \equiv
     \{ \{ & \text{coût} \vdash \tau_1,\\
-    & \text{contraintes} \vdash [\cup_{i \in \{2, \ldots, n\}} \tau_i],\\
+    & \text{contraintes} \vdash [\cup_{i \in \{2, \dotsc, n\}} \tau_i],\\
     & \text{bornes\_contraintes\_min} \vdash [\iota], \\
     & \text{bornes\_contraintes\_max} \vdash [\iota] \},\\
     & \{ \} \}\\
@@ -808,7 +808,7 @@ les types de fonctions des contraintes.
 
   Un problème d'optimisation est constitué d'une fonction de coût de
   type $\tau_1$ et un ensemble de fonctions pouvant être de type
-  $\tau_i$, $i \in \{2, \ldots, n\}$. Cet ensemble de fonctions
+  $\tau_i$, $i \in \{2, \dotsc, n\}$. Cet ensemble de fonctions
   associé à un ensemble d'intervalles permettent de définir des
   contraintes égalité ou inégalité. Soit $\text{contraintes}_i$ la
   $i$-ème contrainte du problème, on a:
