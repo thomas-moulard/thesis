@@ -12,9 +12,10 @@
 
 \subsection{Introduction à l'optimisation numérique}
 
-La robotique s'appuie sur différents outils mathématiques pour
-résoudre les problèmes auxquels elle se trouve confrontée. Parmi ces
-outils, l'optimisation numérique figure à une place de choix.
+\lettrine[lines=2, lraise=0.1, nindent=0em, slope=-.5em]%
+{L}{a} robotique s'appuie sur différents outils mathématiques
+pour résoudre les problèmes auxquels elle se trouve confrontée. Parmi
+ces outils, l'optimisation numérique figure à une place de choix.
 
 
 L'optimisation numérique est une branche des mathématiques permettant
@@ -631,13 +632,14 @@ nous allons utiliser pour poser le problème de manière formelle.
 
 Un solveur est un algorithme qui prend en entrée un problème
 d'optimisation et qui calcule un point dans l'espace des solutions.
-Nous allons noter $\iota$ le type primitif représentant un point dans
-l'espace des solutions et $\tau_{\text{prob}}$ le type représentant le
-problème d'optimisation. Nous allons voir dans la section suivante
-comment ce type est habituellement défini, introduire une
-paramétrisation alternative du problème fournie par RobOptim et enfin
-montrer quelles avancées cette nouvelle modélisation engendre.  Nous
-allons travailler en utilisant un solveur générique qui sera dénoté:
+Nous allons noter $\iota$ le type primitif représentant une partie des
+réels et $[\iota]$ une liste de zéro, un ou plusieurs variables de
+type $\iota$. $\tau_{\text{prob}}$ le type représentant le problème
+d'optimisation. Nous allons voir dans la section suivante comment ce
+type est habituellement défini, introduire une paramétrisation
+alternative du problème fournie par RobOptim et enfin montrer quelles
+avancées cette nouvelle modélisation engendre.  Nous allons travailler
+en utilisant un solveur générique qui sera dénoté:
 
 
 \begin{equation}
@@ -694,6 +696,135 @@ les gradients est un facteur très important lors de l'évaluation du
 ``niveau'' de difficulté d'un problème d'optimisation. Dès lors,
 regrouper les fonctions selon ce critère semble être un choix
 raisonnable.
+
+\begin{mydef}\label{def:chap1_fcn}
+  Soit $f$ une fonction mathématique continue dont on ne sait pas
+  calculer la dérivée. Cette catégorie de fonctions est définie par la
+  classe $\text{Fonction}$ définit par:
+
+  \begin{equation}
+    \text{Fonction} \equiv \{ \underbrace{\{ \#\text{entrée} \vdash
+      \iota \}}_{\text{attributs}}, \underbrace{\{ \text{calcule}
+      \vdash [\iota] \rightarrow \iota \}}_{\text{méthode}} \}
+  \end{equation}
+
+  L'attribut $\#\text{entrée}$ la cardinalité de l'espace d'entrée de
+  la fonction et la méthode $\text{calcule}$ permets d'évaluer la
+  fonction en un point. Nous ne traiterons ici que les fonctions dont
+  l'espace de sortie est de cardinalité $1$. En effet, les fonctions
+  dont l'espace de sortie sont de cardinalité $n$ peuvent être
+  facilement représentables par $n$ fonctions dont l'espace de sortie
+  est de taille $1$.
+\end{mydef}
+
+\begin{mydef}\label{def:chap1_derivfcn}
+  Soit $f$ une fonction mathématique continue et dont on sait calculer
+  la dérivée une fois. Cette catégorie de fonctions est définie par la
+  classe $\text{FonctionDérivable}$ définit par:
+
+  \begin{equation}
+    \text{FonctionDérivable} \equiv \{ \{ \}, \{ \text{gradient}
+    \vdash [\iota] \rightarrow [\iota] \} \} <: \text{Fonction}
+  \end{equation}
+
+  Le type $\text{FonctionDérivable}$ hérite du type $\text{Fonction}$
+  et fournit, de surcroît, la méthode $\text{gradient}$ permettant
+  d'évaluer le gradient de la fonction en un point.
+\end{mydef}
+
+\begin{mydef}\label{def:chap1_nderivfcn}
+  Soit $f$ une fonction mathématique continue et dont on sait calculer
+  la dérivée $n$ fois. Cette catégorie de fonctions est définie par la
+  famille de classe $\text{Fonction}_n$ définit par:
+
+  \begin{equation}
+    \text{Fonction}_n \equiv
+    \left\{
+    \begin{array}{l l}
+      \text{Fonction} & \quad \text{si $n = 0$}\\
+      \text{FonctionDérivable} & \quad \text{si $n = 1$}\\
+      \{ \{ \}, \{ \text{gradient} \vdash \iota \rightarrow [\iota] \rightarrow [\iota] \} \} <: \text{Fonction}_{n-1} & \quad \text{si $n > 1$}\\
+    \end{array} \right.
+  \end{equation}
+
+  On définit de sorte une famille de types formant une hiérarchie de
+  classe sous la forme d'une peigne où $\mathcal{C}^n <:
+  \mathcal{C}^{n-1} <:~\ldots~<: \mathcal{C}^1 <: \mathcal{C}^0$.
+
+  A partir de $\mathcal{C}^2$, on remarquera que la méthode
+  $\text{gradient}$ est surchargée selon le nombre d'argument. Avec un
+  argument de type $[\iota]$, le gradient est évalue en un point. Avec
+  deux arguments $o \vdash \iota$ et $\mathbf{x} \vdash [\iota]$, on
+  aura pour $o \leq n$ le résultat de l'évaluation de la dérivée d'ordre
+  $o$.
+\end{mydef}
+
+
+Cette hiérarchie de classe est le c\oe ur de la modélisation
+informatique des problèmes d'optimisation car elle permets d'exprimer
+à la fois la fonction de coût et les contraintes éventuellement
+présentes dans un problème. Il suffit alors à l'utilisateur souhaitant
+définir sa fonction $F$ de le faire hériter du type adéquat de la
+famille $\text{Fonction}_n$.
+
+Cette approche sous forme de hiérarchie linéaire de classes en forme
+de peignes à toutefois des inconvénients qui seront détaillés dans la
+dernière section de ce chapitre.
+
+
+\subsubsection{Des problèmes divers, un type unique}
+
+
+Nous avons donc toute une famille de types définissant des fonctions
+mathématiques: non seulement les $\text{Fonction}_n$ qui modélisent
+les interfaces de notre programme, mais aussi tous les types
+correspondant aux fonctions présentes dans un problème d'optimisation
+particulier.
+
+La question est désormais comment modéliser une ``classe'' de problème
+d'optimisation numérique de manière générique tout en assurant une
+sûreté maximum par typage.
+
+La proposition réalisée ici est de définir une famille de types
+$\tau_{\text{prob}}$ paramétré par $n > 0$ type(s). Le premier définit
+le type de la fonction de coût tandis que tous les autres définissent
+les types de fonctions des contraintes.
+
+
+\begin{mydef}\label{def:chap1_prob}
+  Soit $\tau_{\text{prob}(\tau_1, \tau_2, \tau_3, \ldots)}$ tel que
+  $\tau_i <: \text{Fonction}$, $i \in \{1, \ldots, n\}$ par:
+
+  \begin{equation}
+  \begin{split}
+    \tau_{\text{prob}(\tau_1, \tau_2, \tau_3, \ldots)} \equiv
+    \{ \{ & \text{coût} \vdash \tau_1,\\
+    & \text{contraintes} \vdash [\cup_{i \in \{2, \ldots, n\}} \tau_i],\\
+    & \text{bornes\_contraintes\_min} \vdash [\iota], \\
+    & \text{bornes\_contraintes\_max} \vdash [\iota] \},\\
+    & \{ \} \}\\
+  \end{split}
+  \end{equation}
+
+  Un problème d'optimisation est constitué d'une fonction de coût de
+  type $\tau_1$ et un ensemble de fonctions pouvant être de type
+  $\tau_i$, $i \in \{2, \ldots, n\}$. Cet ensemble de fonctions
+  associé à un ensemble d'intervalles permettent de définir des
+  contraintes égalité ou inégalité. Soit $\text{contraintes}_i$ la
+  $i$-ème contrainte du problème, on a:
+
+  \begin{equation}
+    \text{bornes\_contraintes\_min}_i \leq \text{contraintes}_i \leq
+    \text{bornes\_contraintes\_max}_i
+  \end{equation}
+
+  On notera que construire une contrainte égalité revient à spécifier
+  une borne minimum et maximum identique.
+\end{mydef}
+
+
+\subsubsection{Le chaînon manquant: le solveur}
+
 
 
 limites: differentiation d'une var, explosion combinatoire du nombre
