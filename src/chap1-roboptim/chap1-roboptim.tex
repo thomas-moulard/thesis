@@ -538,7 +538,7 @@ permet de définir des familles de types interchangeables.
   On dit que $\tau_2 <: \tau_1$ si et seulement si:
 
   \begin{equation}
-    \tau_2 <: \tau_1 \Longleftrightarrow \mathfrak{A_{\tau_1}} \subset
+    \tau_2 <: \tau_1 \Leftrightarrow \mathfrak{A_{\tau_1}} \subset
     \mathfrak{A_{\tau_2}} \wedge \mathfrak{M_{\tau_1}} \subset
     \mathfrak{M_{\tau_2}}
   \end{equation}
@@ -642,7 +642,7 @@ avancées cette nouvelle modélisation engendre.  Nous allons travailler
 en utilisant un solveur générique qui sera dénoté:
 
 
-\begin{equation}
+\begin{equation}\label{eq:chap1_prob_type}
   \text{solv} \vdash \tau_{\text{prob}} \rightarrow \iota
 \end{equation}
 
@@ -823,22 +823,204 @@ les types de fonctions des contraintes.
 \end{mydef}
 
 
+La Définition~\ref{def:chap1_prob} permet donc de modéliser un
+problème d'optimisation numérique via l'utilisation d'un type
+paramétré générique. Cette modélisation couvre une large partie des
+problèmes d'optimisation avec ou sans contrainte tout en fournissant
+une interface unique. Nous sommes donc dans un cas où l'utilisateur
+peut définir son problème de manière naturelle, sans avoir à partir
+d'un solveur qui impose son formalisme spécifique.
+
+
 \subsubsection{Le chaînon manquant: le solveur}
+
+
+Evidemment, il ne saurait être question de terminer cette section sans
+revenir une dernière fois sur le c\oe ur et l'âme du système: le
+solveur. Dans la section précédente, nous avons construit un type
+paramétré qui satisfait les contraintes énoncées au début de cette
+section, voire l'\'Equation~\ref{eq:chap1_prob_type}.
+
+
+En effet, on peut construire un type paramétré par le type de problème
+permettant de modéliser un solveur.
+
+\begin{mydef}\label{def:chap1_solver}
+  Soit $\text{Solveur}_{\tau}$ une classe paramétrée par un type $\tau$
+  tel que $\exists n, \exists \tau_1, \dotsc, \tau_n, \tau <:
+  \text{Problème}_{\tau_1, \dotsc, \tau_n}$ et défini par:
+
+  \begin{equation}
+    \text{Solveur}_{\tau} \equiv \{ \{ \}, \{ \text{résoud} \vdash
+    \tau \rightarrow [\iota] \} \}
+  \end{equation}
+\end{mydef}
+
+La Définition~\ref{def:chap1_solver} fournit la dernière famille de
+types indispensables à la modélisation d'un problème d'optimisation
+numérique. Nous allons désormais nous attacher à montrer que diverses
+classes de problèmes d'optimisation peuvent être exprimées via cette
+modélisation unique.
+
+
+\section{Exemples de formalisation de classes de problème}
+
+
+Afin d'illustrer de démontrer que le formalisme décrit dans la section
+précédente peut réellement permettre de décrire des problèmes
+d'optimisation de manière efficace et générique, nous allons
+construire les types représentant trois classes de problèmes en
+utilisant les familles de types décrites dans la section
+précédente. Les trois classes choisies sont:
+
+\begin{itemize}
+\item moindres carrés linéaires
+\item optimisation non-linéaire: fonction de coût non-linéaire,
+  contraintes linéaires ou non-linéaires. Le gradient des fonctions
+  doit pouvoir être évalué.
+\item optimisation non-linéaire: fonction de coût non-linéaire,
+  contraintes linéaires ou non-linéaires. Le hessien\index{hessien}
+  des fonctions doit pouvoir être évalué (dérivée d'ordre 2).
+\end{itemize}
+
+
+\subsection{Moindres carrés linéaires}
+
+Les moindres carrés linéaires utilisent une fonction de coût suivant
+une structure très particulière. Proposer un type modélisant cette structure est possible:
+
+\begin{mydef}\label{ex:chap1_linearfct}
+  Soit $\text{FonctionLinéaire}$ un type tel que
+  \mbox{$\text{FonctionLinéaire} <: \text{Fonction}_2$}.
+\end{mydef}
+
+Nous avons ici choisi de faire dériver les fonctions linéaires du type
+$\text{Fonction}_2$. Cela ne correspond pas à la réalité mathématique
+dans la mesure où une fonction linéaire est infiniment dérivable, la
+dérivée étant nulle à partir de la second dérivation. Il n'est pas
+possible d'exprimer cet état de fait au regard de la modélisation
+adoptée ce qui représente une limite du modèle de typage proposé. En
+pratique, les fonctions plus de deux fois dérivables ne présentent pas
+d'intérêt particulier et cette limite ne pose donc pas de problèmes en
+pratique.
+
+\begin{mydef}\label{ex:chap1_leastsquarefct}
+  Soit $\text{MoindreCarré}$ un type tel que
+  \mbox{$\text{MoindreCarré} <: \text{FonctionLinéaire}$}.
+
+  Pour rappel, la fonction s'exprime mathématiquement sous la forme:
+
+  \begin{equation}
+    \sum_{i \in \{1, 2, \dotsc, n\}} (r_i - \mathbf{x}_i)^2
+  \end{equation}
+  \ldots où les $r_i$ sont des constantes.
+
+  Cette fonction peut se modéliser par le type suivant:
+  \begin{equation}
+    \text{MoindreCarré} \equiv \{ \{ r \vdash [\iota] \}, \{ \} \} <: \text{FonctionLinéaire}
+  \end{equation}
+  où l'attribut $r$ représente les $r_i$ de l'équation précédente.
+\end{mydef}
+
+
+Une fois ces types définis, il ne reste plus qu'à instantier les types
+paramétrés avec un ensemble de paramètres adéquats.
+
+\begin{myexample}\label{ex:chap1_leastsquare}
+  Paramétrisation proposée:
+  \begin{description}
+  \item[Fonction de coût] $\text{MoindreCarré}$
+  \item[Contraintes] non
+  \item[Problème] $\text{Problème}_{\text{prob}(\text{MoindreCarré})}$
+  \end{description}
+\end{myexample}
+
+
+\subsection{Optimisation non-linéaire (gradient uniquement)}
+
+Nous allons traiter ici la classe de problèmes suivante: la fonction
+de coût est non-linéaire et les contraintes séparées en deux types
+distincts: linéaires ou non-linéaires.
+
+\begin{myexample}\label{ex:chap1_cfsqp}
+  Afin de pouvoir décrire cette classe de problème, la paramétrisation des types choisie est la suivante:
+  \begin{description}
+  \item[Fonction de coût] $\text{Fonction}_1$
+  \item[Contraintes linéaires] $\text{FonctionLinéaire}$
+  \item[Contraintes non-linéaires] $\text{Fonction}_1$
+  \item[Problème] $\text{Problème}_{\text{prob}(\text{Fonction}_1, \text{FonctionLinéaire}, \text{Fonction}_1)}$
+  \end{description}
+\end{myexample}
+
+\subsection{Optimisation non-linéaire (gradient et hessien)}
+
+Si l'on définit la même classe de problème mais en ajoutant la
+possibilité de pouvoir évaluer les hessiens des fonctions
+non-linéaires, on obtient la paramétrisation suivante.
+
+\begin{myexample}\label{ex:chap1_ipopt}
+  Paramétrisation proposée:
+  \begin{description}
+  \item[Fonction de coût] $\text{Fonction}_2$
+  \item[Contraintes linéaires] $\text{FonctionLinéaire}$
+  \item[Contraintes non-linéaires] $\text{Fonction}_2$
+  \item[Problème] $\text{Problème}_{\text{prob}(\text{Fonction}_2, \text{FonctionLinéaire}, \text{Fonction}_2)}$
+  \end{description}
+\end{myexample}
+
+
+\section{Discussion}
+
+
+Dans les sections précédentes, un formalisme permettant de représenter
+de manière unifiée les problèmes d'optimisation numérique a été
+présenté. On peut se demander quel apport l'utilisation d'un paradigme
+unique peut apporter. Dans la plupart des cas, les utilisateurs de
+solveurs numériques partent d'un outil existant et tentent de
+modéliser le problème à résoudre de sorte qu'il puisse être soluble
+par l'outil choisi. Cette approche est criticable car chaque problème
+possède une difficulté intrinsèque et l'on devrait au contraire
+pouvoir dans un premier temps modéliser son problème puis choisir le
+solveur adéquat une fois la modélisation correctement effectuée. De
+plus, le travail de recherche comporte, par nature, une grande part de
+prototypage rapide où pouvoir tester de nouvelles approches rapidement
+est important. Dans ce type de situation, utiliser le solveur le plus
+avancé de l'\'Etat de l'Art n'est pas toujours nécessaire et l'on peut
+éventuellement choisir à dessin un solveur ``trop'' puissant pour le
+problème à résoudre et sous-optimal en terme de temps de
+calcul. Inversement, il est courant qu'après avoir commencé un travail
+de recherche, on se rende compte qu'un solveur équivalent plus rapide
+ou présentant de meilleures caractéristiques existe. Dans ce cas, il
+est plus simple de l'intégrer à un formalisme existant plutôt que de
+devoir adapter son problème à un logiciel alors qu'algorithmiquement
+parlant il n'existe pas de différence notable. Pour terminer, il est
+arrivé que l'on commence tout d'abord par poser un problème robotique
+pour s'apercevoir qu'il serait bien mieux traité à l'aider d'un
+solveur dédié. Il est courant donc de devoir écrire un nouveau
+solveur, ou modifier un solveur existant, afin de pouvoir rendre le
+traitement du problème plus rapide. Dans ce cas également, un
+formalisme unique présente de nombreux avantages, notamment en terme
+de temps de développement.
+
+
 
 
 
 limites: differentiation d'une var, explosion combinatoire du nombre
-de types si plusieurs criteres
+de types si plusieurs criteres méthodes virtuelles, union de types,
+interfaces
+
+passage d'une classe de problème à un autre pas directe, il faut reconstruire type problème avec les bons types
 
 
 
-\subsection{Solveurs disponibles}
+\section{RobOptim: une suite logicielle pour l'optimisation numérique en robotique}
 
-test
 
-\subsection{Motivation}
 
-test
+FIXME FIXME FIXME
+
+
 
 
 \section{Architecture logicielle de Roboptim}
