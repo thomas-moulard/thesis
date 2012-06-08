@@ -705,7 +705,7 @@ raisonnable.
   \begin{equation}
     \text{Fonction} \equiv \{ \underbrace{\{ \#\text{entrée} \vdash
       \iota \}}_{\text{attributs}}, \underbrace{\{ \text{calcule}
-      \vdash [\iota] \rightarrow \iota \}}_{\text{méthode}} \}
+      \vdash \text{Fonction} \rightarrow[\iota] \rightarrow \iota \}}_{\text{méthode}} \}
   \end{equation}
 
   L'attribut $\#\text{entrée}$ la cardinalité de l'espace d'entrée de
@@ -724,7 +724,7 @@ raisonnable.
 
   \begin{equation}
     \text{FonctionDérivable} \equiv \{ \{ \}, \{ \text{gradient}
-    \vdash [\iota] \rightarrow [\iota] \} \} <: \text{Fonction}
+    \vdash \text{FonctionDérivable} \rightarrow [\iota] \rightarrow [\iota] \} \} <: \text{Fonction}
   \end{equation}
 
   Le type $\text{FonctionDérivable}$ hérite du type $\text{Fonction}$
@@ -738,13 +738,15 @@ raisonnable.
   famille de classe $\text{Fonction}_n$ définit par:
 
   \begin{equation}
+  \begin{split}
     \text{Fonction}_n \equiv
     \left\{
     \begin{array}{l l}
       \text{Fonction} & \quad \text{si $n = 0$}\\
       \text{FonctionDérivable} & \quad \text{si $n = 1$}\\
-      \{ \{ \}, \{ \text{gradient} \vdash \iota \rightarrow [\iota] \rightarrow [\iota] \} \} <: \text{Fonction}_{n-1} & \quad \text{si $n > 1$}\\
+      \{ \{ \}, \{ \text{gradient} \vdash \text{Fonction}_n \rightarrow \iota \rightarrow [\iota] \rightarrow [\iota] \} \} <: \text{Fonction}_{n-1} & \quad \text{si $n > 1$}\\
     \end{array} \right.
+  \end{split}
   \end{equation}
 
   On définit de sorte une famille de types formant une hiérarchie de
@@ -852,7 +854,7 @@ permettant de modéliser un solveur.
 
   \begin{equation}
     \text{Solveur}_{\tau} \equiv \{ \{ \}, \{ \text{résoud} \vdash
-    \tau \rightarrow [\iota] \} \}
+    \text{Solveur}_{\tau} \rightarrow \tau \rightarrow [\iota] \} \}
   \end{equation}
 \end{mydef}
 
@@ -890,8 +892,8 @@ Les moindres carrés linéaires utilisent une fonction de coût suivant
 une structure très particulière. Proposer un type modélisant cette structure est possible:
 
 \begin{mydef}\label{ex:chap1_linearfct}
-  Soit $\text{FonctionLinéaire}$ un type tel que
-  \mbox{$\text{FonctionLinéaire} <: \text{Fonction}_2$}.
+  Soit $\text{FonctionLinéaire}$ un type tel que:
+  $$\text{FonctionLinéaire} <: \text{Fonction}_2$$
 \end{mydef}
 
 Nous avons ici choisi de faire dériver les fonctions linéaires du type
@@ -906,7 +908,7 @@ pratique.
 
 \begin{mydef}\label{ex:chap1_leastsquarefct}
   Soit $\text{MoindreCarré}$ un type tel que
-  \mbox{$\text{MoindreCarré} <: \text{FonctionLinéaire}$}.
+  $$\text{MoindreCarré} <: \text{FonctionLinéaire}$$
 
   Pour rappel, la fonction s'exprime mathématiquement sous la forme:
 
@@ -968,6 +970,8 @@ non-linéaires, on obtient la paramétrisation suivante.
   \end{description}
 \end{myexample}
 
+FIXME:  méthodes virtuelles, union de types, interfaces
+
 
 \section{Discussion}
 
@@ -1003,22 +1007,138 @@ formalisme unique présente de nombreux avantages, notamment en terme
 de temps de développement.
 
 
+Cette modélisation présente toutefois un certain nombre de limites qui
+peuvent être divisées en deux: les limites intrinsèques de la
+modélisation et celles qui ont été imposées par le langage de
+programmation choisi pour l'implémentation des algorithmes, à savoir
+le C++. Ces dernières seront abordées dans la section
+FIXME. Concernant les limites de la modélisation, différents éléments
+sont difficiles à modéliser.
 
 
+La première limite se présente quand les variables d'optimisations
+appartiennent à des espaces possédant des structures différentes. Un
+exemple commun en robotique est le mouvement 2d sur un plan en
+translation et rotation. Trois variables caractérisent ce mouvement:
+$x$, $y$ et $\theta$. Les deux premières décrivent un point dans
+l'espace euclidien tandis que la dernière représente une rotation et
+appartient donc au groupe spécial orthogonal en deux dimensions
+$SO(2)$. La représentation des éléments de cet espace utilisant des
+réels est, par nature, discontinue à $2\pi$. En choisissant un type
+unique pour représenter les variables d'optimisation, nous perdons la
+possibilite de réaliser un traitement spécifique selon l'espace
+mathématique auquel appartient la variable
+d'optimisation. Malheureusement, définir plusieurs types pour définir
+des élements de différents groupes mathématiques est difficile. En
+effet, l'ensemble des variable d'optimisations n'est alors plus un
+tableau de réels mais un tuple contenant des éléments des types
+différents. Il faut encore alors trouver un moyen de définir les
+opérations de groupe de manière efficace afin que le solveur puisse
+utiliser les opérations adéquates pour opérer sur le groupe tout en
+préservant ces caractéristiques. Ce problème est bien plus visible
+lorsque l'on travailler sur des rotations en trois dimensions,
+$SO(3)$, pour lequel de nombreuses représentations existent. Par
+exemple si l'on considérer les quaternions, on souhaite en général
+conserver un quaternion unitaire ce qui induit une contrainte
+supplémentaire qu'il faut pouvoir insérer dans le problème. La
+différentiation également suit des règles particulières qui
+représentent une branche des mathématiques appelée géométrie
+différentielle.
 
-limites: differentiation d'une var, explosion combinatoire du nombre
-de types si plusieurs criteres méthodes virtuelles, union de types,
-interfaces
+La seconde limite concerne la représentation des fonctions. En effet,
+le parti a été de se limiter à la représentation des fonctions de
+$[\iota] \rightarrow \iota$ soit pour les réels de $\mathrm{R}^n
+\rightarrow \mathrm{R}$. Ce choix de conception a été pour garder la
+taille des résultats calculés sous contrôle. En effet, pour une
+fonction quelconque, la représentation des dérivées partielles se fait
+sous la forme d'une matrice jacobienne, puis d'un tenseur d'ordre 3
+pour les hessiens. Les tenseurs sont rarement utilisés par les
+solveurs car ces objets de très grande taille sont lourds à
+manipuler. Qui plus est, il n'est pas toujours nécessaire d'évaluer
+toutes les valeurs des matrices ou tenseurs représentant les dérivées
+partielles d'une fonction et de ce fait, découper une fonction à
+valeurs vectorielles en plusieurs fonctions scalaires peut avoir du
+sens afin de limiter les calculs effectués.
 
-passage d'une classe de problème à un autre pas directe, il faut reconstruire type problème avec les bons types
 
+La troisième limite est liée à la définition des types paramétrés. Il
+n'existe pas, a priori, de hiérarchie de classe entre deux types
+résultant d'un même type paramétré. Prenons par exemple le cas de
+l'optimisation non-linéaire avec ou sans hessien: on a donc deux
+classes de problèmes relié par une relation d'ordre qui semble
+naturelle: si l'on a la possibilité de calculer les hessiens, on
+devrait pouvoir le donner à la fois aux solveurs nécessitant les
+hessiens, mais également à ceux qui ne les utilise pas. La classe où
+l'évaluation des hessiens est possible est donc une classe plus
+``facile'' que la classe où l'on n'a que des gradients. On peut,
+évidemment, transformer un problème avec hessien en problème sans
+hessien mais ce n'est pas aussi simple que ce à quoi on pourrait
+s'attendre: soit $\tau$ un type paramétré et $\tau_1$ $\tau_2$ tel que
+$\tau_2 <: \tau_1$, on n'a pas $\tau_{\tau_2} <:
+\tau_{\tau_1}$. Autrement dit, les fonctions dérivent les unes des
+autres pour former une hiérarchie de classes interchangeables, mais
+pas les problèmes! Pour changer de solveur, il faut donc changer
+instantier un type de problème différent et ensuite le passer au
+nouveau solveur. Cela représente généralement un travail court et
+facile, mais qui peut désarçonner les utilisateurs peu adeptes des
+langages de programmation utilisant des règles de typage complexe.
+
+
+Face à la liste de ces critiques, on peut s'apercevoir qu'un élément
+manquant, car dépassant le cadre de ce travail, est l'absence de
+système de calcul formet sous-jacent. Développer un tel système tout
+en préservant un typage fort est un tâche hardue et complexe; de ce
+fait, un compromis entre utilisabilité et effot de modélisation a été
+trouvé pour permettre la réalisation de ce travail. Comme tout
+compromis, il handicape parfois l'expression de certains problèmes
+dont on aurait souhaité gardé une formalisation plus proche de leurs
+natures mathématiques véritable.
 
 
 \section{RobOptim: une suite logicielle pour l'optimisation numérique en robotique}
 
 
+Cette formalisation a été implémentée sous la forme d'une suite
+logicielle pour l'optimisation numérique en robotique. Le langage
+choisi pour l'implémentation est le C++. Ce langage a la particularité
+d'être multi-paradigme dont un très fort support à la fois de la
+programmation orienté objet mais également de la méta-programmation,
+c'est à dire la génération de familles de types via l'utilisation des
+``templates''. Ce dernier point a été abondamment utilisé pour
+permettre de fournir un infrastructure de calcul sans impacter la
+performance des solveurs sous-jacents. En effet, il n'y a pas de coût
+à l'execution induit par l'utilisation des templates\footnote{A
+  l'exception de quelques phénomènes impactant à la marge certains
+  méchanismes de résolution dynamique. On pensera par exemple aux
+  transtypages dynamiques ralentis par la prolifération des types
+  engendrés par les méchanismes de méta-programmation.} contrairement
+à l'utilisation de certaines techniques de programmation orienté objet
+comme les méthodes virtuelles. En effet, comme expliqué dans la
+section précédente, les méthodes virtuelles nécessitent une résolution
+et leur appel est donc plus coûteux qu'une fonction
+simple~\citep{driesen1996direct}.
 
-FIXME FIXME FIXME
+
+RobOptim est une suite logicielle dont les composants peuvent être
+divisés en trois groupes:
+\begin{description}
+\item[le noyau] fournissant les interfaces et les types nécessaires à
+  l'implémentation de la formalisation décrite précédemment,
+\item[les solveurs] implémentant les algorithmes de résolution pour un ou plusieurs,
+\item[les couches ``métier''] dédiées à la robotique et fournissant
+  des fonctions régulièrement utilisées pour résoudre des problèmes
+  d'optimisation. En particulier, le problème choisi pour montrer
+  l'intérêt de cette approche concerne l'optimisation de trajectoire
+  de marche pour un robot humanoïde ce qui a motivé le développement
+  d'un ensemble d'outils pour l'optimisation de trajectoires.
+\end{description}
+
+\begin{figure}
+  \begin{center}
+    \includegraphics{src/chap1-roboptim/roboptim-architecture.pdf}
+  \end{center}
+  \caption{Architecture logicielle de RobOptim}
+\end{figure}
 
 
 
