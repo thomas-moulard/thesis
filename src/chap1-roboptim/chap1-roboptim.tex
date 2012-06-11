@@ -1140,29 +1140,443 @@ divisés en trois groupes:
   \caption{Architecture logicielle de RobOptim}
 \end{figure}
 
+\subsection{RobOptim core et ses plug-ins}
+
+Le noyau de RobOptim fournit la modélisation mathématique des
+fonctions, la classe définissant les problèmes d'optimisation ainsi
+que les interfaces pour les solveurs. Le noyau, toutefois, ne contient
+aucun algorithme de résolution. Ce paquet principal contient également
+les outils mathématiques utiles pour résoudre les problèmes. Par
+exemple, on peut augmenter le niveau de différentiabilité d'une
+fonction via l'utilisation d'une méthode numérique se fondant sur la
+méthode des différences finies. Cette méthode permet d'évalue la
+dérivée d'une fonction en tirant des points aux alentours d'un point
+de référence pour évaluer la courbure de la fonction aux alentours de
+ce point. Plusieurs stratégies sont implémentées tirant deux ou cinq
+points selon les cas. Cette fonctionnalité est implémentée via
+l'utilisation du ``Design Pattern'' décorateur tel que décrit dans le
+livre de référence~\citep{design.pattern}. Ce motif de conception a la
+particularité d'augmenter les capacités d'une classe sans en altérer
+le comportement propre. Dans ce cas, cette classes paramétrée prend un
+type de fonction en entrée, en hérite, tout en fournissant un niveau
+de calcul supplémentaire des dérivées. D'autres outils permettent de
+combiner des fonctions: les sommer, soustraire, multiplier entre elles
+ou bien encore les combiner. Un autre décorateur fournit également un
+cache afin d'éviter d'avoir à effectuer une nouvelle fois des calculs
+lourds qui ont déjà été demandé précédemment.
+
+Au delà de la définition des fonctions, le noyau fournit l'interface
+pour les solveurs. Deux solutions sont alors possibles: soit se lier à
+une ou des bibliothèques tierces fournissant des algorithmes de
+résolution, soit utiliser le système de plug-in permettant d'en
+charger à l'execution. L'objectif de ce système est de pouvoir
+complètement déléguer au système la résolution d'un problème: il y a
+un certain nombre de solveurs disponibles sur le système et l'on
+pourrait ainsi, avoir une sélection automatique de l'algorithme
+adéquat en fonction du type de problème en entrée. En pratique, ce
+méchanisme permet simplement de pouvoir changer de solveur pendant
+l'execution du programme.
+
+
+\subsection{Les solveurs}
+
+
+Il est important d'insister sur le fait que ce travail n'a pas pour
+but d'écrire un nouveau solveur ou bien de tenter d'apporter des
+améliorations à une ou des approches existantes. La littérature du
+domaine est foisonante et bénéficie d'un effort de recherche
+important. Toutefois, l'objectif final de ce travail reste la
+possibilité de pouvoir utiliser dans un même paradigme plusieurs
+solveurs de types différents. Des plug-ins RobOptim ont été écrit pour
+trois solveurs:
+%
+\begin{description}
+\item[CMinPack] solveur permettant de résoudre des problèmes de type
+  moindre carrés linéaires,
+\item[CFSQP] solveur pour les problèmes non-linéaires, contraintes
+  égalités et inégalités, calcul du gradient requis,
+\item[IPOPT] solveur pour les problèmes non-linéaires, contraintes
+  égalités et inégalités, calcul du gradient et hessien
+  requis\footnote{Une version alternative qui ne nécessite pas le
+    calcul du hessien est également fournis par le paquet logiciel.}.
+\end{description}
+
+Ces solveurs sont disponibles sous la forme de plug-in pour RobOptim
+core et peuvent être chargés dynamiquement dans n'importe quel
+problème d'optimisation RobOptim.
+
+
+\subsection{Optimisation de trajectoires avec RobOptim}
+
+Un paradigme de programmation unifié permet également d'unifier les
+outils de développement. En effet, le développement de bibliothèques
+de fonctions de coût et de contraintes prend tout son sens une fois
+que l'on a pu montrer que la même architecture est utilisable quelque
+soit la structure du problème à résoudre. De ce constat, RobOptim
+s'est enrichi d'une couche propre à la robotique, l'optimisation de
+trajectoires.
+
+Cette couche définit des trajectoires robotiques sous forme de
+splines, c'est à dire de courbes paramétrées par des points de
+contrôle. Il est alors naturel de tenter de vouloir altérer ces points
+de contrôle afin de rafiner le comportement de la trajectoire: tenter
+de minimiser le temps nécessaire pour réaliser le mouvement, ou
+l'énergie ou tout autre critère adéquat.
+
+Cette bibliotèque fournit des bornes sur les vitesses du système à la
+fois pour la vitesse de rotation et les vitesses linéaires. Le
+problème d'optimisation de trajectoires est un problème semi-infini
+dans la mesure où un souhait raisonnable est, par exemple, de borner
+la vitesse du robot à tout moment de la trajectoire. Malheureusement,
+la résolution de ce type de problèmes dans le cas général est
+difficile et la technique la plus couramment utilisée reste une
+discrétisation temporelle des contraintes. Ces stratégies présente
+l'inconvénient d'augmenter très largement le nombre du contrainte du
+problème. De plus, le pas de discrétisation est difficile à évaluer et
+a un très fort impact sur la vitesse de résolution. Enfin, si on
+ajoute la possibilité d'accélérer ou de décélérer la trajectoire au
+problème, le solveur peut tenter de changer la paramétrisation
+temporelle afin de placer toutes les contraintes au début du mouvement
+et pouvoir, par exemple, passer au travers d'un obstacle. Un tel
+comportement peut être éviter en attachant la contrainte non pas à un
+moment temporel donné mais plutôt à un point de la trajectoire
+indépendamment de sa paramétrisation temporelle. Il suffit pour cela
+de se donner une échelle fixe, de 0 à 1, représentant respectivement
+le début et la fin de la trajectoire, et permettant aux contraintes de
+se déplacer avec la reparamétrisation de la trajectoire. La
+discrétisation de contraintes utilisant ce type de représentation est
+supporté par RobOptim et permet de simplifier la résolution de
+problèmes d'optimisation de trajectoires.
+
+
+\section{Scénaro d'utilisation: écriture d'une application robotique complexe}
+
+
+Afin d'illustrer les propos des sections précédentes, nous allons
+désormais nous attacher à résoudre un problème de robotique avec le
+paradigme de RobOptim. L'exemple choisi est un problème de robotique
+humanoïde. Une stratégie possible pour pouvoir générer une trajectoire
+de marche est de tout d'abord générer un ensemble d'empreintes de pas
+et ensuite de générer un mouvement tel que le robot place
+successivement ses pieds dans les empreintes de pas générées tout en
+conservant son équilibre. Si cette stratégie est adoptée, le problème
+initial se ramène à trouver une pile de pas appropriée pour passer
+d'un point A à un point B. Ce dernier problème se ramène lui-même à
+trouver le mouvement sans collision dans le plan d'une boîte en
+rotation et translation. Une fois cette trajectoire trouvée, il suffit
+de placer les pas le long de la trajectoire de la boîte pour obtenir
+la pile de pas souhaitée.
+
+
+Pour planifier le mouvement de la boîte, nous avons choisi d'utiliser
+un algorithme aléatoire de type RRT -- Rapidly exploring Random Tree
+--. Cet arbre va tenter d'échantillonner l'espace $\mathrm{R}^2 \times
+S^1$ des translations et rotation en deux dimensions tout en validant
+que les configurations tirées ne violent pas de contraintes ainsi que
+le chemin amenant du n\oe ud le plus proche au nouveau n\oe ud
+tiré. Malheureusement, cette méthode rend des trajectoires rarement
+réalistes et qui ne sont pas toujours acceptables. Il est donc courant
+d'utiliser une méthode probabiliste pour trouver un premier chemin
+évitant les collisions qui est ensuite améliorée dans une deuxième
+passe réalisée par un algorithme d'optimisation. C'est cette seconde
+passe que nous avons choisi d'exprimer dans le paradigme de RobOptim.
+
+
+\subsection{Définition de la trajectoire et fonction de coût}
+
+\subsection{B-Splines et courbes paramétrées}
+
+Comme indiqué dans la section précédente, les trajectoires sont
+définies sous la forme d'une spline cubique. Une spline est une courbe
+paramétrée qui est définie comme une combinaison linéaire d'une
+famille de fonctions de base. Les deux définitions ci-dessous
+permettent de calculer analytiquement ces courbes et sont tirées
+de~\citep{algo.3d}
+
+\begin{mydef}\label{def:chap1_coxdeboor}
+  Soit $n \in \mathrm{N}$, le nombre de points de contrôles. Soit $k
+  \geq 1$, le degré des polynômes considérés. Soit $T = (t_0, \dotsc,
+  t_{n+k-1})$ un vecteur appelé, vecteur nodal avec $t_0 \geq \dotsc
+  \geq t_{n+k-1}$. Les valeurs $t_i$ sont appelés noeuds. Les
+  fonctions de base $N_{i,k}$ que nous allons définir, et donc les
+  courbes B-splines que nous construirons ensuite, sont les
+  polynomiales sur chaque intervalle $[t_i,t_{i+1}]$, pour $i =
+  0,\dotsc,n-2$.
+
+  La fonction $N_{i,k}$ est définie par récurrence, comme suit:
+
+  Pour $i = 0, \dotsc, n+k-2$, on pose:
+
+  \begin{equation}
+    N_{i,1}(t) = \left\{
+  \begin{array}{l l}
+    1 & \quad \text{si $t_i \leq t \leq t_{i+1}$ et $i = 0$ ou $t \neq t_i$} \\
+    0 & \quad \text{sinon} \\
+  \end{array} \right.
+  \end{equation}
+
+  Pour $r \geq 2$ et pour $i = 0, \dotsc, n + k - 1 - r$, on a la
+  formule de récurrence:
+
+  \begin{equation}
+    N_{i,r}(t) = \frac{t - t_i}{t_{i+r-1}-t_i} N_{i,r-1}(t) +
+    \frac{t_{i+r} - t}{t_{i+r} - t_{i+1}} N_{i+1,r-1}(t)
+  \end{equation}
+
+  La formule permettant de calculer les $N_{i,r}$ à partir des
+  $N_{j,r-1}$ s'appelle la formule de Cox-de-Boor. Lorsque les
+  dénominateurs de la formule s'annulent, on pose $\frac{0}{0} =
+  0$. C'est le cas lorsque plusieurs n\oe uds $t_i$ sont confondus.
+
+\end{mydef}
+
+\begin{mydef}\label{def:chap1_spline}
+  FIXME
+\end{mydef}
 
 
 
-\section{Architecture logicielle de Roboptim}
+Les variables d'optimisation consiste en le vecteur de paramètres d'une
+trajectoire temps minimal tel qu'illustré par la \autoref{fig:param}.
 
-test
+\begin{figure}[htbp]
+  \begin{center}
+\definecolor{LightGreen}{rgb}{0,.75,0}
+\definecolor{DarkGreen}{rgb}{0,.25,0}
+\begin{tabular}{|l|l l l|l|l l l|}
+  \hline
+  \textcolor{red}{$\lambda$}
+  & \textcolor{LightGreen}{$x_0$}
+  & \textcolor{LightGreen}{$y_0$}
+  & \textcolor{LightGreen}{$\theta_0$}
+  & \ldots
+  & \textcolor{DarkGreen}{$x_n$}
+  & \textcolor{DarkGreen}{$y_n$}
+  & \textcolor{DarkGreen}{$\theta_n$} \\
+  \hline
+\end{tabular}
+  \end{center}
+  \caption{Variables d'optimisation du problème. \label{fig:param}}
+\end{figure}
 
-\section{Scénarii d'utilisation}
+\subsubsection{Fonction de coût}
 
-test
+L'approche choisie consiste a garder une fonction de coût simplifiée
+au maximum: l'évaluation de la fonction de coût retourne simplement le
+facteur d'accélération de la trajectoire temps minimal.
 
-\subsection[FIXME]{\'Ecriture d'une application robotique complexe: optimiser la trajectoire de marche pour un robot humanoïde}
+\begin{eqnarray}
+Cost (x) & = & (1, 0, \ldots, 0) x
+\end{eqnarray}
 
-test
 
-\subsection{Intégration d'un solveur tiers et extensibilité de RobOptim}
+En pratique, cela signifie que le solveur va tenter de trouver un
+vecteur de paramètre permettant une vitesse d'exécution du mouvement
+maximum. Il s'agira donc de saturer la contrainte de vitesse tout en
+continuant a satisfaire la contrainte sur les obstacles. La
+\autoref{fig:speed} montre le processus de saturation d'une contrainte
+sur la vitesse dans le cadre d'une spline unidimensionnelle.
 
-test
+\begin{figure}[htbp]
+  \begin{center}
+\includegraphics[width=\linewidth]{src/chap1-roboptim/time-optimization.png}
+  \end{center}
+  \caption{Saturation de la contrainte vitesse. \label{fig:speed}}
+\end{figure}
 
-\section{Discussions}
 
-test
+\subsection{Contraintes}
+
+\subsubsection{Contrainte sur la vitesse}
+
+
+Le but de la contrainte sur les vitesses est double: garder une
+trajectoire utilisable et privilégier la marche en avant par rapport a
+la marche sur le cote. Outre l'aspect anthropomorphique, quand le
+robot marche en pas chasses, il glisse ce qui résulte en un décalage
+entre l'environnement réel et virtuel.
+
+
+Les contraintes sur les vitesses s'appliquent soit au pied gauche,
+soit au pied droit du robot (\autoref{fig:boxoptim}).
+
+
+La formulation de la contrainte est:
+
+\begin{eqnarray}
+SpeedConstraint(x) & = & \frac{1}{2} (\alpha v_f^2 + \beta v_{orth}^2)
+\end{eqnarray}
+
+$v_f$ et $v_{orth}$ étant respectivement les vitesses frontales et
+orthogonales du pied considéré.  $\alpha$ et $\beta$ déterminent à
+quel point la marche vers l'avant ou la marche latérale doit être
+préférée. Durant la phase expérimentale, les valeurs utilisées ont été
+$\alpha = 1$ et $\beta = 2$.
+
+
+Le calcul de la contrainte se fait en deux étapes:
+\begin{itemize}
+\item calcul de la vitesse du pied gauche et droit à partir de la
+vitesse du robot,
+\item calcul des vitesses frontales et orthogonales séparément.
+\end{itemize}
+
+
+Le calcul de la vitesse des pieds est réalisée en utilisant le torseur
+exprimant le champs des vitesses d'un solide:
+
+\begin{eqnarray*}
+\vec{v_{left}} & = & \vec{v} + \vec{\Omega} \wedge \vec{CL}\\
+\vec{v} & = & \left(
+\begin{array}{c}
+  \dot{x}\\
+  \dot{y}\\
+  0
+\end{array}
+\right)\\
+\vec{\Omega} & = & \left(
+\begin{array}{c}
+  0\\
+  0\\
+  \dot{\theta}
+\end{array}
+\right)\\
+\vec{CL} & = & \left(
+\begin{array}{c}
+  -sin~\theta ~ \frac{\Delta feet}{2}\\
+  -cos~\theta ~ \frac{\Delta feet}{2}
+\end{array}
+\right)\\
+%
+\vec{v_{left}} & = & \left(
+\begin{array}{c}
+  \dot{x} - \dot{\theta} ~ cos~\theta ~ \frac{\Delta feet}{2}\\
+  \dot{y} - \dot{\theta} ~ sin~\theta ~ \frac{\Delta feet}{2}
+m\end{array}
+\right)
+\end{eqnarray*}
+
+$\vec{CL}$ est le vecteur entre $C$ et $L$, respectivement le centre
+de la boite englobante du robot et le cendre de son pied
+gauche. $\Delta feet$ est la distance séparant ses deux pieds, il
+s'agit d'un paramètre connu du problème.
+
+
+En remplaçant $\vec{CL}$ par $\vec{CR}$ ou $R$ est le centre du pied
+droit, on peut calculer la vitesse du pied droit:
+
+\begin{eqnarray*}
+\vec{v_{right}} & = & \left(
+\begin{array}{c}
+  \dot{x} + \dot{\theta} ~ cos~\theta ~ \frac{\Delta feet}{2}\\
+  \dot{y} + \dot{\theta} ~ sin~\theta ~ \frac{\Delta feet}{2}
+\end{array}
+\right)
+\end{eqnarray*}
+
+
+On peut en déduire la formule générale en ajoutant un paramètre $\epsilon$ valant $-1$
+pour le pied gauche et $1$ pour le pied droit:
+
+\begin{eqnarray}
+\vec{v_{foot}} & = & \left(
+\begin{array}{c}
+  \dot{x} + \epsilon ~ \dot{\theta} cos~\theta ~ \frac{\Delta feet}{2}\\
+  \dot{y} + \epsilon ~ \dot{\theta} sin~\theta ~ \frac{\Delta feet}{2}
+\end{array}
+\right)
+\end{eqnarray}
+
+
+Une fois la vitesse des pieds calcules, on déduit a partir des formules de vitesse de la section précédente:
+
+\begin{eqnarray}
+\vec{v_{f}} & = & \vec{v} . \left(
+\begin{array}{c}
+  cos~\theta\\
+  sin~\theta
+\end{array}
+\right)\\
+\vec{v_{orth}} & = & \vec{v} . \left(
+\begin{array}{c}
+  -sin~\theta\\
+  cos~\theta
+\end{array}
+\right)
+\end{eqnarray}
+
+Cette contrainte force donc le robot à réaliser un mouvement naturel
+(c'est à dire en privilégiant la marche en avant) et suffisamment lent
+pour être jouable sur le robot. Afin d'être certain que la contrainte
+est vérifiée en permanence, le temps est discrétisé et on ajoute la
+contrainte pour tous les pas de temps.
+
+\begin{figure}[htbp]
+  \begin{center}
+\includegraphics[width=5cm]{src/chap1-roboptim/box-optimization.pdf}
+  \end{center} \caption{Vitesses séparéees du pied gauche et du pied
+  droit. \label{fig:boxoptim}}
+\end{figure}
+\FloatBarrier
+
+
+\subsubsection{Contrainte sur les obstacles}
+
+
+Les contraintes sur les obstacles se définissent naturellement: on
+souhaite simplement maintenir une distance minimale entre le robot et
+chaque obstacle a tout moment. Comme avec la contrainte précédente, on
+discrétise le temps afin de vérifier régulièrement la contrainte.
+
+La contrainte est la suivante:
+
+\begin{eqnarray}
+\forall j,  Distance(R, O_j) \geq d_{min}
+\end{eqnarray}
+
+$d_{min}$ est moitié de la dimension la plus grande de la boite englobante.
+
+
+\subsection{Construction du problème et résolution}
+
+FIXME
+
+
+\subsection{Résultats expérimentaux}
+
+
+Ce problème d'optimisation a donné des résultats probants comme le
+montre la \autoref{fig:obstacle}. Cependant, un pré-traitement
+utilisant une méthode d'optimisation géométrique a été nécessaire afin
+d'éviter de faire démarrer le solveur d'une trajectoire trop
+sous-optimale. Cela engendre un temps de calcul très long et parfois
+des trajectoires inattendues a cause de minima locaux. Cependant, dans
+tous les cas, la résolution du problème reste encore trop long pour
+pouvoir en généraliser l'usage: diminuer le temps de résolution est
+toujours un problème important. Si de nombreuses optimisations
+informatique sont encore possible, elles restent encore à implémenter.
+
+
+\begin{figure}[htbp]
+  \begin{center}
+\includegraphics[width=\linewidth]{src/chap1-roboptim/straight-line-obstacle.png}
+  \end{center} \caption{Exemple d'optimisation d'une trajectoire en
+  présence d'obstacles. \label{fig:obstacle}}
+\end{figure}
+
+
+Une trajectoire résultant d'un problème d'optimisation a également été
+exécuté sur le robot avec succès \autoref{fig:demo}. Il s'agissait
+d'aller du point $(0, 0, \pi/2)$ vers le point $(0, 3, -\pi/2)$. La
+trajectoire optimisée comporte une rotation de 180 degrés pendant que
+le robot continue à avancer.
+
 
 \section{Conclusion}
 
 test
+
+
+
+
+
