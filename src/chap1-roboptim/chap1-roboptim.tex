@@ -36,7 +36,7 @@ coût. Intuitivement, on peut se représenter cette fonction comme un
 indicateur de la ``qualité'' de la solution trouvée. Une solution
 présentant un coût fort sera donc peu satisfaisante tandis qu'une
 solution présentant un coût faible sera, elle, très attrayante. Tout
-le raisonement est ensuite fondé sur la linéarité -- au moins locale!
+le raisonnement est ensuite fondé sur la linéarité -- au moins locale!
 -- de cette fonction de coût. Plus simplement, près d'une mauvaise
 solution, il n'y aura que des solutions légèrement meilleures et
 légèrement pires, mais jamais trop différentes. De ce fait, il
@@ -61,7 +61,7 @@ est acceptable. Prenons un exemple: pour aller d'un point $A$ à un
 point $B$ le plus rapidement possible, se déplacer avec une vitesse
 infinie est sans aucun doute la solution optimale. Cependant, une
 telle réponse ne présente guère d'intérêt dans la mesure où aucun
-système physique ne sera en mesure de l'executer.
+système physique ne sera en mesure de l'exécuter.
 
 
 Deux stratégies peuvent alors être choisies. La première est
@@ -79,7 +79,7 @@ négligeable. La fonction de coût n'a alors plus aucune justification
 physique et ses variations peuvent devenir de plus en plus difficiles
 à analyser pour le solveur.  Une seconde solution consiste à ajouter
 des contraintes au problème. Ces contraintes sont exprimées sous la
-forme d'équation ou d'inéquation déterminant si une solution donnée
+forme d'équations ou d'inéquations déterminant si une solution donnée
 est une solution acceptable. En robotique, des contraintes très
 courantes sont les bornes sur les butées articulaires. Il est rare sur
 un robot que les axes puissent bouger de manière totalement libre. De
@@ -128,7 +128,7 @@ L'optimisation numérique a pour objectif de développer des stratégies
 minimisant les valeurs de la fonction $f$.
 
 
-En absence d'argument fort tel que la convexité de $f$ ainsi que des
+En absence d'arguments fort tel que la convexité de $f$ ainsi que des
 contraintes $c_i, i \in \xi \cup \nu$, la solution $\mathbf{x}$
 fournie par le solveur peut être un minimum local \index{minimum
   local}.
@@ -224,11 +224,11 @@ plusieurs problèmes à la suite tout en se souvenant de son état
 interne afin de pouvoir gagner en temps de calcul lorsque le nouveau
 problème est très proche du problème précédemment résolu. Cette
 situation intervient notamment lorsque l'on optimise une trajectoire
-tout en l'executant. L'optimisation se déroule pour différents
+tout en l'exécutant. L'optimisation se déroule pour différents
 instants proches dans le temps pour lesquels l'évolution de l'état du
 robot est minime. Une autre caractéristique est la capacité, pour un
 solveur, de pouvoir être interrompu à n'importe quelle itération tout
-en guarantissant que la solution actuelle, bien qu'incomplète,
+en garantissant que la solution actuelle, bien qu'incomplète,
 respecte la totalité des contraintes du problème. Ce comportement est
 important lorsque l'optimisation est lancée dans un contexte où les
 contraintes temporelles sont fortes, telle que dans le contrôleur
@@ -308,7 +308,7 @@ langages modernes.
 
 Lors du développement de l'informatique, les langages de programmation
 ont tout d'abord été de simples outils permettant de représenter du
-code machine de manière succinte et plus facilement lisible par les
+code machine de manière succincte et plus facilement lisible par les
 humains. Cependant, avec la complexification croissante des
 applications informatiques, vérifier la correction des programmes est
 rapidement devenu un enjeu critique. Pour se faire, les langages de
@@ -549,7 +549,7 @@ méthodes de la classe dont elle hérite afin d'interdire la réécriture
 vers des termes syntaxiquement faux. Le ``principe de substitution de
 Liskov''\index{principe de substitution de
   Liskov}~\citep{Liskov94familyvalues} définit, de manière équivalente,
-la relation de sous-typage sous l'énonce suivant:
+la relation de sous-typage sous l'énoncé suivant:
 %
 \begin{mydef}\label{chap1_liskov}
   Si $q(x)$ est une propriété démontrable pour tout objet $x$ de type
@@ -563,7 +563,7 @@ notion de polymorphisme d'héritage\index{polymorphisme!polymorphisme
   d'héritage}. Le polymorphisme\index{polymorphisme} est la capacité
 pour un type fonctionnel de ne pas accepter en entrée un type unique,
 mais une famille de types. Le polymorphisme le plus simple pouvant
-être défini est la surcharge\index{surcharge}. Ce méchanisme autorise
+être défini est la surcharge\index{surcharge}. Ce mécanisme autorise
 la création de fonctions se réécrivant vers des $\lambda$-termes
 différents selon le type de l'argument d'entrée. La formalisation de
 ce système est décrit dans~\citep{Castagna95acalculus}.
@@ -578,14 +578,14 @@ comportement.
 
 La généralisation de cette propriété à toutes les fonctions au lieu
 des méthodes uniquement permets d'obtenir le ``multiple
-dispatch''~\citep{Muschevici2008}. Ce méchanisme est disponible dans
+dispatch''~\citep{Muschevici2008}. Ce mécanisme est disponible dans
 un nombre assez limité de langages de programmation dont Common
 Lisp. En effet, contrairement à la surcharge, le multiple dispatch
 ainsi que le polymorphisme d'héritage nécessite une résolution à
-l'execution qui peut pénaliser l'implémentation des algorithmes. En
+l'exécution qui peut pénaliser l'implémentation des algorithmes. En
 limitant la résolution dynamique au type du premier argument des
 méthodes, on limite également le coût de la résolution à
-l'execution. Ceci explique en partie l'une des raisons pour lesquelles
+l'exécution. Ceci explique en partie l'une des raisons pour lesquelles
 le premier argument des méthodes est omis dans de nombreux langages de
 programmation. On ``masque'' par ce biais, le caractère spécifique de
 la résolution sur le premier argument de la méthode et on peut, une
@@ -597,9 +597,9 @@ résolution dynamique sur les arguments des méthodes.
 
 Face au coût induit par la résolution dynamique du polymorphisme par
 héritage, on peut se demander s'il existe un moyen d'arriver au même
-résultat sans ralentir l'execution d'un algorithme. Une solution est
+résultat sans ralentir l'exécution d'un algorithme. Une solution est
 de générer des types afin de pouvoir déterminer à la compilation la
-résolution des fonctions polymorphes. Ce méchanisme est appelé
+résolution des fonctions polymorphes. Ce mécanisme est appelé
 ``templates'' en C++ et se formalisent en $\lambda$-calcul sous la
 forme de types paramétrés.
 
@@ -621,7 +621,7 @@ polymorphisme peut se formaliser en rendant les méthodes des classes
 paramétrées dépendante du paramètre de classe.
 
 En pratique, ce type de polymorphisme est particulièrement intéressant
-car il n'induit pas de coût à l'execution.
+car il n'induit pas de coût à l'exécution.
 
 
 \subsection{Modélisation informatique du problème}
@@ -837,11 +837,11 @@ d'un solveur qui impose son formalisme spécifique.
 \subsubsection{Le chaînon manquant: le solveur}
 
 
-Evidemment, il ne saurait être question de terminer cette section sans
+Évidemment, il ne saurait être question de terminer cette section sans
 revenir une dernière fois sur le c\oe ur et l'âme du système: le
 solveur. Dans la section précédente, nous avons construit un type
 paramétré qui satisfait les contraintes énoncées au début de cette
-section, voire l'\'Equation~\ref{eq:chap1_prob_type}.
+section, voire l'Équation~\ref{eq:chap1_prob_type}.
 
 
 En effet, on peut construire un type paramétré par le type de problème
@@ -853,7 +853,7 @@ permettant de modéliser un solveur.
   \text{Problème}_{\tau_1, \dotsc, \tau_n}$ et défini par:
 
   \begin{equation}
-    \text{Solveur}_{\tau} \equiv \{ \{ \}, \{ \text{résoud} \vdash
+    \text{Solveur}_{\tau} \equiv \{ \{ \}, \{ \text{résous} \vdash
     \text{Solveur}_{\tau} \rightarrow \tau \rightarrow [\iota] \} \}
   \end{equation}
 \end{mydef}
@@ -888,23 +888,25 @@ précédente. Les trois classes choisies sont:
 
 \subsection{Moindres carrés linéaires}
 
-Les moindres carrés linéaires utilisent une fonction de coût suivant
-une structure très particulière. Proposer un type modélisant cette structure est possible:
+Les moindres carrés linéaires\index{moindres carrés linéaires}
+utilisent une fonction de coût suivant une structure très
+particulière. Proposer un type modélisant cette structure est
+possible:
 
 \begin{mydef}\label{ex:chap1_linearfct}
   Soit $\text{FonctionLinéaire}$ un type tel que:
   $$\text{FonctionLinéaire} <: \text{Fonction}_2$$
 \end{mydef}
 
-Nous avons ici choisi de faire dériver les fonctions linéaires du type
-$\text{Fonction}_2$. Cela ne correspond pas à la réalité mathématique
-dans la mesure où une fonction linéaire est infiniment dérivable, la
-dérivée étant nulle à partir de la second dérivation. Il n'est pas
-possible d'exprimer cet état de fait au regard de la modélisation
-adoptée ce qui représente une limite du modèle de typage proposé. En
-pratique, les fonctions plus de deux fois dérivables ne présentent pas
-d'intérêt particulier et cette limite ne pose donc pas de problèmes en
-pratique.
+Nous avons ici choisi de faire dériver les fonctions
+linéaires\index{fonction linéaire} du type $\text{Fonction}_2$. Cela
+ne correspond pas à la réalité mathématique dans la mesure où une
+fonction linéaire est infiniment dérivable, la dérivée étant nulle à
+partir de la second dérivation. Il n'est pas possible d'exprimer cet
+état de fait au regard de la modélisation adoptée ce qui représente
+une limite du modèle de typage proposé. En pratique, les fonctions
+plus de deux fois dérivables ne présentent pas d'intérêt particulier
+et cette limite ne pose donc pas de problèmes en pratique.
 
 \begin{mydef}\label{ex:chap1_leastsquarefct}
   Soit $\text{MoindreCarré}$ un type tel que
@@ -989,7 +991,7 @@ solveur adéquat une fois la modélisation correctement effectuée. De
 plus, le travail de recherche comporte, par nature, une grande part de
 prototypage rapide où pouvoir tester de nouvelles approches rapidement
 est important. Dans ce type de situation, utiliser le solveur le plus
-avancé de l'\'Etat de l'Art n'est pas toujours nécessaire et l'on peut
+avancé de l'État de l'Art n'est pas toujours nécessaire et l'on peut
 éventuellement choisir à dessin un solveur ``trop'' puissant pour le
 problème à résoudre et sous-optimal en terme de temps de
 calcul. Inversement, il est courant qu'après avoir commencé un travail
@@ -1022,43 +1024,43 @@ exemple commun en robotique est le mouvement 2d sur un plan en
 translation et rotation. Trois variables caractérisent ce mouvement:
 $x$, $y$ et $\theta$. Les deux premières décrivent un point dans
 l'espace euclidien tandis que la dernière représente une rotation et
-appartient donc au groupe spécial orthogonal en deux dimensions
-$SO(2)$. La représentation des éléments de cet espace utilisant des
-réels est, par nature, discontinue à $2\pi$. En choisissant un type
-unique pour représenter les variables d'optimisation, nous perdons la
-possibilite de réaliser un traitement spécifique selon l'espace
-mathématique auquel appartient la variable
-d'optimisation. Malheureusement, définir plusieurs types pour définir
-des élements de différents groupes mathématiques est difficile. En
-effet, l'ensemble des variable d'optimisations n'est alors plus un
-tableau de réels mais un tuple contenant des éléments des types
-différents. Il faut encore alors trouver un moyen de définir les
-opérations de groupe de manière efficace afin que le solveur puisse
-utiliser les opérations adéquates pour opérer sur le groupe tout en
-préservant ces caractéristiques. Ce problème est bien plus visible
-lorsque l'on travailler sur des rotations en trois dimensions,
+appartient donc au groupe spécial orthogonal\index{groupe spécial
+  orthogonal $SO(n)$} en deux dimensions $SO(2)$. La représentation
+des éléments de cet espace utilisant des réels est, par nature,
+discontinue à $2\pi$. En choisissant un type unique pour représenter
+les variables d'optimisation, nous perdons la possibilite de réaliser
+un traitement spécifique selon l'espace mathématique auquel appartient
+la variable d'optimisation. Malheureusement, définir plusieurs types
+pour définir des élements de différents groupes mathématiques est
+difficile. En effet, l'ensemble des variable d'optimisations n'est
+alors plus un tableau de réels mais un tuple contenant des éléments
+des types différents. Il faut encore alors trouver un moyen de définir
+les opérations de groupe de manière efficace afin que le solveur
+puisse utiliser les opérations adéquates pour opérer sur le groupe
+tout en préservant ces caractéristiques. Ce problème est bien plus
+visible lorsque l'on travailler sur des rotations en trois dimensions,
 $SO(3)$, pour lequel de nombreuses représentations existent. Par
 exemple si l'on considérer les quaternions, on souhaite en général
 conserver un quaternion unitaire ce qui induit une contrainte
 supplémentaire qu'il faut pouvoir insérer dans le problème. La
-différentiation également suit des règles particulières qui
+différenciation également suit des règles particulières qui
 représentent une branche des mathématiques appelée géométrie
-différentielle.
+différentielle\index{géométrie différentielle}.
 
 La seconde limite concerne la représentation des fonctions. En effet,
 le parti a été de se limiter à la représentation des fonctions de
-$[\iota] \rightarrow \iota$ soit pour les réels de $\mathrm{R}^n
-\rightarrow \mathrm{R}$. Ce choix de conception a été pour garder la
+$[\iota] \rightarrow \iota$ soit pour les réels de $\mathbb{R}^n
+\rightarrow \mathbb{R}$. Ce choix de conception a été pour garder la
 taille des résultats calculés sous contrôle. En effet, pour une
 fonction quelconque, la représentation des dérivées partielles se fait
-sous la forme d'une matrice jacobienne, puis d'un tenseur d'ordre 3
-pour les hessiens. Les tenseurs sont rarement utilisés par les
-solveurs car ces objets de très grande taille sont lourds à
-manipuler. Qui plus est, il n'est pas toujours nécessaire d'évaluer
-toutes les valeurs des matrices ou tenseurs représentant les dérivées
-partielles d'une fonction et de ce fait, découper une fonction à
-valeurs vectorielles en plusieurs fonctions scalaires peut avoir du
-sens afin de limiter les calculs effectués.
+sous la forme d'une matrice jacobienne\index{jacobienne}, puis d'un
+tenseur d'ordre 3 pour les hessiens. Les tenseurs\index{tenseur} sont
+rarement utilisés par les solveurs car ces objets de très grande
+taille sont lourds à manipuler. Qui plus est, il n'est pas toujours
+nécessaire d'évaluer toutes les valeurs des matrices ou tenseurs
+représentant les dérivées partielles d'une fonction et de ce fait,
+découper une fonction à valeurs vectorielles en plusieurs fonctions
+scalaires peut avoir du sens afin de limiter les calculs effectués.
 
 
 La troisième limite est liée à la définition des types paramétrés. Il
@@ -1086,9 +1088,9 @@ langages de programmation utilisant des règles de typage complexe.
 
 Face à la liste de ces critiques, on peut s'apercevoir qu'un élément
 manquant, car dépassant le cadre de ce travail, est l'absence de
-système de calcul formet sous-jacent. Développer un tel système tout
-en préservant un typage fort est un tâche hardue et complexe; de ce
-fait, un compromis entre utilisabilité et effot de modélisation a été
+système de calcul formel sous-jacent. Développer un tel système tout
+en préservant un typage fort est un tâche ardue et complexe; de ce
+fait, un compromis entre utilisabilité et effort de modélisation a été
 trouvé pour permettre la réalisation de ce travail. Comme tout
 compromis, il handicape parfois l'expression de certains problèmes
 dont on aurait souhaité gardé une formalisation plus proche de leurs
@@ -1102,12 +1104,13 @@ Cette formalisation a été implémentée sous la forme d'une suite
 logicielle pour l'optimisation numérique en robotique. Le langage
 choisi pour l'implémentation est le C++. Ce langage a la particularité
 d'être multi-paradigme dont un très fort support à la fois de la
-programmation orienté objet mais également de la méta-programmation,
-c'est à dire la génération de familles de types via l'utilisation des
+programmation orienté objet mais également de la
+méta-programmation\index{méta-programmation}, c'est à dire la
+génération de familles de types via l'utilisation des
 ``templates''. Ce dernier point a été abondamment utilisé pour
 permettre de fournir un infrastructure de calcul sans impacter la
 performance des solveurs sous-jacents. En effet, il n'y a pas de coût
-à l'execution induit par l'utilisation des templates\footnote{A
+à l'exécution induit par l'utilisation des templates\footnote{À
   l'exception de quelques phénomènes impactant à la marge certains
   méchanismes de résolution dynamique. On pensera par exemple aux
   transtypages dynamiques ralentis par la prolifération des types
@@ -1119,18 +1122,19 @@ et leur appel est donc plus coûteux qu'une fonction
 simple~\citep{driesen1996direct}.
 
 
-RobOptim est une suite logicielle dont les composants peuvent être
-divisés en trois groupes:
+RobOptim\index{RobOptim} est une suite logicielle dont les composants
+peuvent être divisés en trois groupes:
 \begin{description}
-\item[le noyau] fournissant les interfaces et les types nécessaires à
+\item[le noyau\index{noyau}] fournissant les interfaces et les types nécessaires à
   l'implémentation de la formalisation décrite précédemment,
 \item[les solveurs] implémentant les algorithmes de résolution pour un ou plusieurs,
-\item[les couches ``métier''] dédiées à la robotique et fournissant
-  des fonctions régulièrement utilisées pour résoudre des problèmes
-  d'optimisation. En particulier, le problème choisi pour montrer
-  l'intérêt de cette approche concerne l'optimisation de trajectoire
-  de marche pour un robot humanoïde ce qui a motivé le développement
-  d'un ensemble d'outils pour l'optimisation de trajectoires.
+\item[les couches ``métier''\index{couche métier}] dédiées à la
+  robotique et fournissant des fonctions régulièrement utilisées pour
+  résoudre des problèmes d'optimisation. En particulier, le problème
+  choisi pour montrer l'intérêt de cette approche concerne
+  l'optimisation de trajectoire de marche pour un robot humanoïde ce
+  qui a motivé le développement d'un ensemble d'outils pour
+  l'optimisation de trajectoires.
 \end{description}
 
 \begin{figure}
@@ -1147,15 +1151,17 @@ fonctions, la classe définissant les problèmes d'optimisation ainsi
 que les interfaces pour les solveurs. Le noyau, toutefois, ne contient
 aucun algorithme de résolution. Ce paquet principal contient également
 les outils mathématiques utiles pour résoudre les problèmes. Par
-exemple, on peut augmenter le niveau de différentiabilité d'une
+exemple, on peut augmenter le niveau de différenciabilité d'une
 fonction via l'utilisation d'une méthode numérique se fondant sur la
 méthode des différences finies. Cette méthode permet d'évalue la
 dérivée d'une fonction en tirant des points aux alentours d'un point
 de référence pour évaluer la courbure de la fonction aux alentours de
 ce point. Plusieurs stratégies sont implémentées tirant deux ou cinq
 points selon les cas. Cette fonctionnalité est implémentée via
-l'utilisation du ``Design Pattern'' décorateur tel que décrit dans le
-livre de référence~\citep{design.pattern}. Ce motif de conception a la
+l'utilisation du ``Design Pattern''\index{Design Pattern (motif de
+  conception)} décorateur\index{Design Pattern (motif de
+  conception)!Visiteur} tel que décrit dans le livre de
+référence~\citep{design.pattern}. Ce motif de conception a la
 particularité d'augmenter les capacités d'une classe sans en altérer
 le comportement propre. Dans ce cas, cette classes paramétrée prend un
 type de fonction en entrée, en hérite, tout en fournissant un niveau
@@ -1168,14 +1174,14 @@ lourds qui ont déjà été demandé précédemment.
 Au delà de la définition des fonctions, le noyau fournit l'interface
 pour les solveurs. Deux solutions sont alors possibles: soit se lier à
 une ou des bibliothèques tierces fournissant des algorithmes de
-résolution, soit utiliser le système de plug-in permettant d'en
-charger à l'execution. L'objectif de ce système est de pouvoir
-complètement déléguer au système la résolution d'un problème: il y a
-un certain nombre de solveurs disponibles sur le système et l'on
-pourrait ainsi, avoir une sélection automatique de l'algorithme
+résolution, soit utiliser le système de plug-in\index{plug-in}
+permettant d'en charger à l'execution. L'objectif de ce système est de
+pouvoir complètement déléguer au système la résolution d'un problème:
+il y a un certain nombre de solveurs disponibles sur le système et
+l'on pourrait ainsi, avoir une sélection automatique de l'algorithme
 adéquat en fonction du type de problème en entrée. En pratique, ce
 méchanisme permet simplement de pouvoir changer de solveur pendant
-l'execution du programme.
+l'exécution du programme.
 
 
 \subsection{Les solveurs}
@@ -1191,11 +1197,11 @@ solveurs de types différents. Des plug-ins RobOptim ont été écrit pour
 trois solveurs:
 %
 \begin{description}
-\item[CMinPack] solveur permettant de résoudre des problèmes de type
+\item[CMinPack\index{CMinPack}] solveur permettant de résoudre des problèmes de type
   moindre carrés linéaires,
-\item[CFSQP] solveur pour les problèmes non-linéaires, contraintes
+\item[CFSQP\index{CFSQP}] solveur pour les problèmes non-linéaires, contraintes
   égalités et inégalités, calcul du gradient requis,
-\item[IPOPT] solveur pour les problèmes non-linéaires, contraintes
+\item[IPOPT\index{IPOPT}] solveur pour les problèmes non-linéaires, contraintes
   égalités et inégalités, calcul du gradient et hessien
   requis\footnote{Une version alternative qui ne nécessite pas le
     calcul du hessien est également fournis par le paquet logiciel.}.
@@ -1217,13 +1223,14 @@ s'est enrichi d'une couche propre à la robotique, l'optimisation de
 trajectoires.
 
 Cette couche définit des trajectoires robotiques sous forme de
-splines, c'est à dire de courbes paramétrées par des points de
-contrôle. Il est alors naturel de tenter de vouloir altérer ces points
-de contrôle afin de rafiner le comportement de la trajectoire: tenter
-de minimiser le temps nécessaire pour réaliser le mouvement, ou
-l'énergie ou tout autre critère adéquat.
+splines\index{spline}, c'est à dire de courbes
+paramétrées\index{courbe paramétrée} par des points de
+contrôle\index{point de contrôle}. Il est alors naturel de tenter de
+vouloir altérer ces points de contrôle afin de rafiner le comportement
+de la trajectoire: tenter de minimiser le temps nécessaire pour
+réaliser le mouvement, ou l'énergie ou tout autre critère adéquat.
 
-Cette bibliotèque fournit des bornes sur les vitesses du système à la
+Cette bibliothèque fournit des bornes sur les vitesses du système à la
 fois pour la vitesse de rotation et les vitesses linéaires. Le
 problème d'optimisation de trajectoires est un problème semi-infini
 dans la mesure où un souhait raisonnable est, par exemple, de borner
@@ -1261,8 +1268,8 @@ et ensuite de générer un mouvement tel que le robot place
 successivement ses pieds dans les empreintes de pas générées tout en
 conservant son équilibre. Si cette stratégie est adoptée, le problème
 initial se ramène à trouver une pile de pas appropriée pour passer
-d'un point A à un point B. Ce dernier problème se ramène lui-même à
-trouver le mouvement sans collision dans le plan d'une boîte en
+d'un point $A$ à un point $B$. Ce dernier problème se ramène lui-même
+à trouver le mouvement sans collision dans le plan d'une boîte en
 rotation et translation. Une fois cette trajectoire trouvée, il suffit
 de placer les pas le long de la trajectoire de la boîte pour obtenir
 la pile de pas souhaitée.
@@ -1270,8 +1277,8 @@ la pile de pas souhaitée.
 
 Pour planifier le mouvement de la boîte, nous avons choisi d'utiliser
 un algorithme aléatoire de type RRT -- Rapidly exploring Random Tree
---. Cet arbre va tenter d'échantillonner l'espace $\mathrm{R}^2 \times
-S^1$ des translations et rotation en deux dimensions tout en validant
+--. Cet arbre va tenter d'échantillonner l'espace $\mathbb{R}^2 \times
+SO(1)$ des translations et rotation en deux dimensions tout en validant
 que les configurations tirées ne violent pas de contraintes ainsi que
 le chemin amenant du n\oe ud le plus proche au nouveau n\oe ud
 tiré. Malheureusement, cette méthode rend des trajectoires rarement
@@ -1287,15 +1294,15 @@ passe que nous avons choisi d'exprimer dans le paradigme de RobOptim.
 \subsection{B-Splines et courbes paramétrées}
 
 Comme indiqué dans la section précédente, les trajectoires sont
-définies sous la forme d'une spline cubique. Une spline est une courbe
-paramétrée qui est définie comme une combinaison linéaire d'une
-famille de fonctions de base. Les deux définitions ci-dessous
-permettent de calculer analytiquement ces courbes et sont tirées
-de~\citep{algo.3d}
+définies sous la forme d'une courbe paramétrée. Ce type de courbe
+appelé B-spline\index{spline!B-spline} est définie comme une
+combinaison linéaire d'une famille de fonctions de base. Les deux
+définitions ci-dessous permettent de calculer analytiquement ces
+courbes et sont tirées de~\citep{algo.3d}
 
 \begin{mydef}\label{def:chap1_coxdeboor}
-  Soit $n \in \mathrm{N}$, le nombre de points de contrôles. Soit $k
-  \geq 1$, le degré des polynômes considérés. Soit $T = (t_0, \dotsc,
+  Soit $n \in \mathbb{N}$, le nombre de points de contrôles. Soit $k
+  \geq 1$, le degré des polynômes considérés. Soit $\Xi = (t_0, \dotsc,
   t_{n+k-1})$ un vecteur appelé, vecteur nodal avec $t_0 \geq \dotsc
   \geq t_{n+k-1}$. Les valeurs $t_i$ sont appelés noeuds. Les
   fonctions de base $N_{i,k}$ que nous allons définir, et donc les
@@ -1303,7 +1310,8 @@ de~\citep{algo.3d}
   polynomiales sur chaque intervalle $[t_i,t_{i+1}]$, pour $i =
   0,\dotsc,n-2$.
 
-  La fonction $N_{i,k}$ est définie par récurrence, comme suit:
+  La fonction $N_{i,k}$ est définie par récurrence\index{récurrence},
+  comme suit:
 
   Pour $i = 0, \dotsc, n+k-2$, on pose:
 
@@ -1324,22 +1332,45 @@ de~\citep{algo.3d}
   \end{equation}
 
   La formule permettant de calculer les $N_{i,r}$ à partir des
-  $N_{j,r-1}$ s'appelle la formule de Cox-de-Boor. Lorsque les
-  dénominateurs de la formule s'annulent, on pose $\frac{0}{0} =
-  0$. C'est le cas lorsque plusieurs n\oe uds $t_i$ sont confondus.
+  $N_{j,r-1}$ s'appelle la formule de Cox-de-Boor\index{Cox-de-Boor
+    (formule de)}. Lorsque les dénominateurs de la formule s'annulent,
+  on pose $\frac{0}{0} = 0$. C'est le cas lorsque plusieurs n\oe uds
+  $t_i$ sont confondus.
 
 \end{mydef}
 
 \begin{mydef}\label{def:chap1_spline}
-  FIXME
+  Soit maintenant $P_0, \dotsc, P_{n-1}$ des points de contrôle. La
+  courbe B-spline Q d'ordre $n$ et de degré $k - 1$ aillant $\Xi$ pour
+  vecteur nodal et les $P_i$ pour points de contrôle s'exprime comme:
+
+  \begin{equation}
+    \left\{
+    \begin{array}{ccc}
+      Q : [t_{k-1},t_n] & \rightarrow & \mathbb{R}^3\\
+      t & \mapsto & Q(t) = \sum_{i=0}^{n-1} P_i N_{i,k}(t)
+    \end{array}
+    \right.
+  \end{equation}
+
+  La courbe Q s'exprime donc comme une somme des fonctions $N_{i,k}$,
+  pondérée par les points de contrôle.
 \end{mydef}
 
 
+Dans notre application, nous avons choisi d'utiliser des B-splines
+uniforme de degré 3. Une B-spline est dîte uniforme lorsque les
+intervalles temporels entre les points de contrôle définis par le
+vecteur nodal $\Xi$ est constant entre chaque point de contrôle. Dans
+notre cas, cette valeur sera dénotée $\lambda$ et fera parti des
+variables d'optimisation. Les autres variables d'optimisation sont les
+points de contrôle eux-mêmes, soit trois variables par point de
+contrôle: $(x,y) \in \mathbb{R}^2$ la position du robot dans le plan
+et $\theta \in S^1$ l'orientation du robot. Le vecteur de variables
+d'optimisation ainsi constitué est illustra par
+la~\autoref{tbl:param}.
 
-Les variables d'optimisation consiste en le vecteur de paramètres d'une
-trajectoire temps minimal tel qu'illustré par la \autoref{fig:param}.
-
-\begin{figure}[htbp]
+\begin{table}[htbp]
   \begin{center}
 \definecolor{LightGreen}{rgb}{0,.75,0}
 \definecolor{DarkGreen}{rgb}{0,.25,0}
@@ -1356,26 +1387,28 @@ trajectoire temps minimal tel qu'illustré par la \autoref{fig:param}.
   \hline
 \end{tabular}
   \end{center}
-  \caption{Variables d'optimisation du problème. \label{fig:param}}
-\end{figure}
+  \caption{Variables d'optimisation du problème. \label{tbl:param}}
+\end{table}
 
 \subsubsection{Fonction de coût}
 
-L'approche choisie consiste a garder une fonction de coût simplifiée
-au maximum: l'évaluation de la fonction de coût retourne simplement le
-facteur d'accélération de la trajectoire temps minimal.
+
+La paramétrisation choisit permet d'accélérer la courbe. En effet,
+plus la valeur de $\lambda$ décroît plus la courbe est
+accélérée. L'objectif est alors simplement de tenter de réaliser le
+mouvement le plus vite possible. On réalise alors une optimisation
+temps minimal\index{temps minimal} utilisant la fonction de coût
+suivante:
 
 \begin{eqnarray}
-Cost (x) & = & (1, 0, \ldots, 0) x
+\text{Coût}(\mathbf{x}) & = & (1, 0, \dotsc, 0)^T \mathbf{x}
 \end{eqnarray}
 
-
-En pratique, cela signifie que le solveur va tenter de trouver un
-vecteur de paramètre permettant une vitesse d'exécution du mouvement
-maximum. Il s'agira donc de saturer la contrainte de vitesse tout en
-continuant a satisfaire la contrainte sur les obstacles. La
-\autoref{fig:speed} montre le processus de saturation d'une contrainte
-sur la vitesse dans le cadre d'une spline unidimensionnelle.
+Dans les faits, le solveur va progressivement saturer les contraintes
+en accélérant la courbe. En particulier jusqu'à ce que la contrainte
+de vitesse détaille ci-dessous soit saturée. La~\autoref{fig:speed}
+montre le processus de saturation d'une contrainte sur la vitesse dans
+le cadre d'une spline unidimensionnelle.
 
 \begin{figure}[htbp]
   \begin{center}
@@ -1389,132 +1422,46 @@ sur la vitesse dans le cadre d'une spline unidimensionnelle.
 
 \subsubsection{Contrainte sur la vitesse}
 
+\index{Contrainte!de vitesse}
+Le but de la contrainte sur les vitesses est double: s'assurer de la
+correction de la trajectoire générée tout en privilégiant la marche en
+avant par rapport à la marche sur le côté. Outre l'aspect
+anthropomorphique, les robots humanoïdes ont un comportement dégradé
+quand ils marchent ``en crabe''. L'espace accessible par les jambes
+est réduit dans cette direction et la conception des semelles du robot
+ont tendance à le faire glisser dans ce cas. Les contraintes sur les
+vitesses sont dupliquées afin de s'appliquer à la fois au pied gauche
+et au pied droit. La formulation de la contrainte pour tous les points
+de la trajectoire $t$ et pour chaque pied est:
 
-Le but de la contrainte sur les vitesses est double: garder une
-trajectoire utilisable et privilégier la marche en avant par rapport a
-la marche sur le cote. Outre l'aspect anthropomorphique, quand le
-robot marche en pas chasses, il glisse ce qui résulte en un décalage
-entre l'environnement réel et virtuel.
+\begin{equation}
+  \begin{split}
+  \forall t, \forall \text{pied} \in \{\text{gauche}, \text{droite}\}, &\\
+  \text{ContrainteVitesse}_{(t,\text{pied})}(\mathbf{x}) & =
+  (\frac{v_{\text{pied}}^{x}}{v_{\text{max}}^{x}})^2 +
+  (\frac{v_{\text{pied}}^{y}}{v_{\text{max}}^{y}})^2 - 1
+  \end{split}
+\end{equation}
 
+$v_{\text{pied}}^{x}$ et $v_{\text{pied}}^{y}$ étant respectivement
+les vitesses frontales et orthogonales du pied
+considéré. $v_{\text{max}}^x$ et $v_{\text{max}}^y$ respectivement les
+vitesses frontales et orthogonales maximum du robot. Plus le ratio
+$\frac{v_{\text{max}}^x}{v_{\text{max}}^y}$ est élevé, plus le robot
+privilégiera la marche en avant pendant l'optimisation au détriment de
+la vitesse d'exécution du mouvement.
 
-Les contraintes sur les vitesses s'appliquent soit au pied gauche,
-soit au pied droit du robot (\autoref{fig:boxoptim}).
-
-
-La formulation de la contrainte est:
-
-\begin{eqnarray}
-SpeedConstraint(x) & = & \frac{1}{2} (\alpha v_f^2 + \beta v_{orth}^2)
-\end{eqnarray}
-
-$v_f$ et $v_{orth}$ étant respectivement les vitesses frontales et
-orthogonales du pied considéré.  $\alpha$ et $\beta$ déterminent à
-quel point la marche vers l'avant ou la marche latérale doit être
-préférée. Durant la phase expérimentale, les valeurs utilisées ont été
-$\alpha = 1$ et $\beta = 2$.
-
-
-Le calcul de la contrainte se fait en deux étapes:
-\begin{itemize}
-\item calcul de la vitesse du pied gauche et droit à partir de la
-vitesse du robot,
-\item calcul des vitesses frontales et orthogonales séparément.
-\end{itemize}
-
-
-Le calcul de la vitesse des pieds est réalisée en utilisant le torseur
-exprimant le champs des vitesses d'un solide:
-
-\begin{eqnarray*}
-\vec{v_{left}} & = & \vec{v} + \vec{\Omega} \wedge \vec{CL}\\
-\vec{v} & = & \left(
-\begin{array}{c}
-  \dot{x}\\
-  \dot{y}\\
-  0
-\end{array}
-\right)\\
-\vec{\Omega} & = & \left(
-\begin{array}{c}
-  0\\
-  0\\
-  \dot{\theta}
-\end{array}
-\right)\\
-\vec{CL} & = & \left(
-\begin{array}{c}
-  -sin~\theta ~ \frac{\Delta feet}{2}\\
-  -cos~\theta ~ \frac{\Delta feet}{2}
-\end{array}
-\right)\\
-%
-\vec{v_{left}} & = & \left(
-\begin{array}{c}
-  \dot{x} - \dot{\theta} ~ cos~\theta ~ \frac{\Delta feet}{2}\\
-  \dot{y} - \dot{\theta} ~ sin~\theta ~ \frac{\Delta feet}{2}
-m\end{array}
-\right)
-\end{eqnarray*}
-
-$\vec{CL}$ est le vecteur entre $C$ et $L$, respectivement le centre
-de la boite englobante du robot et le cendre de son pied
-gauche. $\Delta feet$ est la distance séparant ses deux pieds, il
-s'agit d'un paramètre connu du problème.
-
-
-En remplaçant $\vec{CL}$ par $\vec{CR}$ ou $R$ est le centre du pied
-droit, on peut calculer la vitesse du pied droit:
-
-\begin{eqnarray*}
-\vec{v_{right}} & = & \left(
-\begin{array}{c}
-  \dot{x} + \dot{\theta} ~ cos~\theta ~ \frac{\Delta feet}{2}\\
-  \dot{y} + \dot{\theta} ~ sin~\theta ~ \frac{\Delta feet}{2}
-\end{array}
-\right)
-\end{eqnarray*}
-
-
-On peut en déduire la formule générale en ajoutant un paramètre $\epsilon$ valant $-1$
-pour le pied gauche et $1$ pour le pied droit:
-
-\begin{eqnarray}
-\vec{v_{foot}} & = & \left(
-\begin{array}{c}
-  \dot{x} + \epsilon ~ \dot{\theta} cos~\theta ~ \frac{\Delta feet}{2}\\
-  \dot{y} + \epsilon ~ \dot{\theta} sin~\theta ~ \frac{\Delta feet}{2}
-\end{array}
-\right)
-\end{eqnarray}
-
-
-Une fois la vitesse des pieds calcules, on déduit a partir des formules de vitesse de la section précédente:
-
-\begin{eqnarray}
-\vec{v_{f}} & = & \vec{v} . \left(
-\begin{array}{c}
-  cos~\theta\\
-  sin~\theta
-\end{array}
-\right)\\
-\vec{v_{orth}} & = & \vec{v} . \left(
-\begin{array}{c}
-  -sin~\theta\\
-  cos~\theta
-\end{array}
-\right)
-\end{eqnarray}
-
-Cette contrainte force donc le robot à réaliser un mouvement naturel
-(c'est à dire en privilégiant la marche en avant) et suffisamment lent
-pour être jouable sur le robot. Afin d'être certain que la contrainte
-est vérifiée en permanence, le temps est discrétisé et on ajoute la
-contrainte pour tous les pas de temps.
+Cette contrainte impose à la vitesse des pieds de rester dans une
+ellipse allongée vers l'avant. Cette contraine impose un mouvement
+privilégiant la marche en avant et s'assure que le mouvement des pieds
+est suffisamment lent pour pouvoir être jouée sur le robot. Afin
+d'être certain que la contrainte est vérifiée en permanence, le temps
+est discrétisé et on ajoute la contrainte pour tous les pas de temps.
 
 \begin{figure}[htbp]
   \begin{center}
-\includegraphics[width=5cm]{src/chap1-roboptim/box-optimization.pdf}
-  \end{center} \caption{Vitesses séparéees du pied gauche et du pied
+\includegraphics[width=5cm]{src/chap1-roboptim/speed-constraint-arrows.png}
+  \end{center} \caption{Vitesses séparées du pied gauche et du pied
   droit. \label{fig:boxoptim}}
 \end{figure}
 \FloatBarrier
@@ -1522,61 +1469,105 @@ contrainte pour tous les pas de temps.
 
 \subsubsection{Contrainte sur les obstacles}
 
-
+\index{Contrainte!d'évitement des obstacles}
 Les contraintes sur les obstacles se définissent naturellement: on
-souhaite simplement maintenir une distance minimale entre le robot et
-chaque obstacle a tout moment. Comme avec la contrainte précédente, on
-discrétise le temps afin de vérifier régulièrement la contrainte.
-
-La contrainte est la suivante:
+souhaite maintenir une distance minimale entre le robot et chaque
+obstacle à tout moment. Comme avec la contrainte précédente, on
+discrétise le temps afin de vérifier régulièrement la contrainte le
+long de la trajectoire. La contrainte en tous points de la trajectoire
+$t$ et pour tous les obstacles est la suivante:
 
 \begin{eqnarray}
-\forall j,  Distance(R, O_j) \geq d_{min}
+\forall t, \forall j, \text{Distance}(\mathcal{R}(t), \mathcal{O}_j) \geq d_{\min}
 \end{eqnarray}
 
-$d_{min}$ est moitié de la dimension la plus grande de la boite englobante.
+$\mathcal{R}$ représente ici la position du robot et $\mathcal{O}_j$
+la position de l'obstacle $j$ de l'environnement. $d_{min}$ représente
+une distance de sécurité déterminée empiriquement entre les obstacles
+et le robot.
 
 
-\subsection{Construction du problème et résolution}
-
-FIXME
+\subsection{Résolution et résultats expérimentaux}
 
 
-\subsection{Résultats expérimentaux}
-
-
-Ce problème d'optimisation a donné des résultats probants comme le
-montre la \autoref{fig:obstacle}. Cependant, un pré-traitement
-utilisant une méthode d'optimisation géométrique a été nécessaire afin
-d'éviter de faire démarrer le solveur d'une trajectoire trop
-sous-optimale. Cela engendre un temps de calcul très long et parfois
-des trajectoires inattendues a cause de minima locaux. Cependant, dans
-tous les cas, la résolution du problème reste encore trop long pour
-pouvoir en généraliser l'usage: diminuer le temps de résolution est
-toujours un problème important. Si de nombreuses optimisations
-informatique sont encore possible, elles restent encore à implémenter.
-
+La fonction de coût est une fonction linéaire mais les contraintes
+sont non-linéaires. Il est nécessaire de définir des types RobOptim
+pour ces fonctions, le type de problème associé:
+$\text{Problème}_{\text{FonctionLinéaire}, \text{Fonction}_1}$. Le
+gradient analytique a été déterminé pour toutes les fonctions afin
+d'accélérer les calculs. Les calculs des fonctions et des gradients
+associés sont détaillés dans FIXME. La~\autoref{fig:obstacle} montre
+un exemple de chemin optimisé par le solveur CFSQP en simulation et
+la~\autoref{fig:results} un exemple d'application sur le
+robot. Le~\autoref{tbl:benchmarks} illustre les temps de calcul
+rencontrés sur deux scénarios.
 
 \begin{figure}[htbp]
   \begin{center}
-\includegraphics[width=\linewidth]{src/chap1-roboptim/straight-line-obstacle.png}
-  \end{center} \caption{Exemple d'optimisation d'une trajectoire en
+\includegraphics[width=.8\linewidth]{src/chap1-roboptim/straight-line-obstacle.png}
+\includegraphics[width=.8\linewidth]{src/chap1-roboptim/optim-length.png}
+  \end{center} \caption{Exemples d'optimisation d'une trajectoire en
   présence d'obstacles. \label{fig:obstacle}}
 \end{figure}
 
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width=\linewidth]{src/chap1-roboptim/two-chairs.png}
+    \includegraphics[width=\linewidth]{src/chap1-roboptim/hrp2-two-chairs.png}
+  \end{center}
+ \caption{Résultat expérimental sur le robot humanoïde
+   HRP-2. \label{fig:results}}
+\end{figure}
 
-Une trajectoire résultant d'un problème d'optimisation a également été
-exécuté sur le robot avec succès \autoref{fig:demo}. Il s'agissait
-d'aller du point $(0, 0, \pi/2)$ vers le point $(0, 3, -\pi/2)$. La
-trajectoire optimisée comporte une rotation de 180 degrés pendant que
-le robot continue à avancer.
+\begin{table}
+  \begin{center}
+    \begin{tabular}{|c|l l l|l|}
+      \hline \bf Scenarii & Planification & Optimisation &
+      \emph{Calcul complet}\\ \hline \bf Passage entre deux chaises &
+      8.58s & 47.22s & \emph{2 min 05.55 s}\\ \hline \bf Salle
+      réaliste avec de nombreux obstacles & 4.14 s & 1 min 9.35 s &
+      \emph{4 min 5.11 s}\\ \hline
+    \end{tabular}
+  \end{center}
+  \caption{Temps de calculs. Le temps de calcul complet comprends la
+    planification, l'optimisation et la phase de génération de
+    mouvement corps complet.\label{tbl:benchmarks}}
+\end{table}
 
 
 \section{Conclusion}
 
-test
-
-
-
-
-
+Ce chapitre a été dédié a la conception d'une modélisation orienté
+objet pour la résolution de problèmes d'optimisation numériques ainsi
+qu'à son implémentation, la suite logicielle RobOptim. Après avoir
+observé les solveurs disponibles sur le marché, on peut facilement
+s'apercevoir de l'écart considérable entre d'un côté la théorie
+mathématique et son implémentation en pratique. En pratique, chaque
+solveur vient avec son formalisme, ses interfaces et force ses
+utilisateurs à apprendre une nouvelle formalisation pour chaque
+nouveau solveur utilisé. De ce fait, réaliser des comparaisons est
+mal-aisé, l'apprentissage inutilement difficile et les interfaces
+souvent peu claires ou mal documentées. En fournissant un point
+d'entrée pour plusieurs algorithmes, il n'y a qu'une interface et un
+paradigme à expliquer ce qui présente un gain net vis-à-vis de
+l'approche habituelle. De plus, de nombreux outils sont utiles en
+optimisation tout en étant décorrélé de l'algorithme de résolution. Le
+calcul des gradients par différence finies est un bon exemple. Dans
+RobOptim, il a été intégré à la fois pour pouvoir éviter d'avoir à
+calculer les gradients de manière analytique mais il peut également
+servir à vérifier le gradient analytique. Du point de vue logiciel,
+l'accent a été mis sur la création d'un ensemble de bibliothèques
+logicielles simples à utiliser et assurant la correction du problème
+posé. Cette correction passe par l'utilisation d'un système de typage
+fort permettant de détecter à la compilation les problèmes qui peuvent
+se poser. En effet, RobOptim interdit, à la compilation, la
+construction d'un problème invalide: si certains gradients sont
+manquants ou bien si certains types de fonction sont incorrects, la
+compilation du fichier échouera car les contraintes de typage ne
+seront pas respectées. Malgré ce système de typage imposant des règles
+strictes, une grande flexibilité a été gardée dans le choix de
+l'algorithme qui peut s'effectuer à l'exécution. Le système de plug-in
+de RobOptim permettant de charger les algorithmes dynamiquement
+pendant l'exécution du programme. La suite logicielle a été validée
+sur un exemple réel de robotique qu'est l'optimisation de trajectoire
+de marche pour un robot humanoïde.
