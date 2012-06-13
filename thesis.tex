@@ -79,6 +79,10 @@ pdfproducer = {Thomas Moulard}
 % Generate index.
 \makeindex
 
+% Custom commands.
+\newcommand{\transformation}[2]{%
+\ensuremath{{}^{#1}\!\text{M}_{#2}}}
+
 \begin{document}
 \bibliographystyle{plainnat}
 %

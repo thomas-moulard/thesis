@@ -176,11 +176,73 @@ on peut considérer: $\mathbf{x} = [x, y, r_z] \in \text{SE}(2)$ pour
 déterminer la position du robot dans l'espace. $\mathcal{C}$
 représente alors l'espace des configurations et
 $\mathcal{C}_{\text{int}}$ est l'espace des configurations
-correspondant aux degrés de liberté internes uniquement.
+correspondant aux degrés de liberté internes uniquement. Ce découpage
+peut sembler arbitaire au premier abord mais prend son sens quand on
+considère quels degrés de liberté peuvent dériver suite à des erreurs
+de modélisation ou d'exécution: la position du robot dans le plan peut
+s'avérer fausse et doit être estimée et corrrigée constamment alors
+que les degrés de liberté $[z, r_x, r_y]$ ne peuvent pas subir de
+dérives durant le mouvement. Le problème de la correction des erreurs
+est détaillé plus loin dans ce chapitre et le problème de la
+localisation d'un robot humanoïde est abordée dans le chapitre
+suivant.
 
+
+Une fois cette chaîne cinématique définie, on peut y attacher les
+informations concernant les corps du robot, leur réalité physique:
+forme et information inertielles en particulier. La forme est stoquée
+sous la forme d'une soupe de polygones réalisant une approximation de
+la forme originale du corps du robot. Quant aux informations
+inertielles, elles consistent en le poids du corps, la position de son
+centre de masse et sa matrice d'inertie.
+
+
+\subsection{Cinématique directe et inverse}
+
+A partir de la structure définie dans la section précédente, la
+première opération que l'on souhaite pouvoir réaliser est pouvoir
+déterminer la position des corps du robot en fonction de la
+configuration de ce dernier. Cette opération, appelée calcul de la géométrie directe, consiste en la fonction suivante:
+\begin{equation}
+  \text{GéométrieDirecte}_{\mathcal{C}}(q) = \{
+  \transformation{\mathcal{W}}{\mathcal{J}_0}, \dotsc,
+  \transformation{\mathcal{W}}{\mathcal{J}_n} \}
+\end{equation}
+
+La notation $\transformation{\mathcal{A}}{\mathcal{B}}$ représente la
+transformation qui donne la position du repère $\mathcal{B}$ relative
+au repère $\mathcal{A}$. L'intéret de cette représentation est de pouvoir assembler les transformations facilement, en effet, on a:
+
+\begin{equation}
+  \transformation{\mathcal{A}}{\mathcal{C}} = \transformation{\mathcal{A}}{\mathcal{B}} \transformation{\mathcal{B}}{\mathcal{C}}
+\end{equation}
+%FIXME: pas de sens sans definir le ops, ici multiplication matricielle
+
+
+La géométrie directe donne donc la position de tous les corps dans le
+repère monde. Dans la section précédente, on a défini un joint comme
+la position du repère attaché au joint suivant par rapport à la
+position du joint actuel.
+
+\begin{mydef}
+Soit $\mathcal{F}_0, \dotsc, \mathcal{F}_n$ les repères associés
+respectivement aux joints $\mathcal{J}_0, \dotsc, \mathcal{J}_n$ et
+$\mathbf{q}_0, \dotsc, \mathbf{q}_n$ les degrés de liberté de chacun
+des joints, on a:
+\begin{equation}
+  \transformation{\mathcal{W}}{\mathcal{F}_i} = \prod_{j} \transformation{\mathcal{F}_j}{\mathcal{F}_{j-1}}
+\end{equation}
+\end{mydef}
+FIXME: formule KO
+
+
+cinematique inverse
 
 
 \subsection{Mouvements dynamiques d'un corps dans l'espace}
+
+memo florent
+
 \subsection{Génération d'une trajectoire de marche}
 \subsection{Exécution d'une trajectoire}
 \subsection{Limites de l'approche naïve}
