@@ -199,6 +199,8 @@ centre de masse et sa matrice d'inertie.
 
 \subsection{Cinématique directe et inverse}
 
+\subsubsection{Cinématique directe}
+
 A partir de la structure définie dans la section précédente, la
 première opération que l'on souhaite pouvoir réaliser est pouvoir
 déterminer la position des corps du robot en fonction de la
@@ -224,28 +226,117 @@ repère monde. Dans la section précédente, on a défini un joint comme
 la position du repère attaché au joint suivant par rapport à la
 position du joint actuel.
 
-\begin{mydef}
-Soit $\mathcal{F}_0, \dotsc, \mathcal{F}_n$ les repères associés
-respectivement aux joints $\mathcal{J}_0, \dotsc, \mathcal{J}_n$ et
-$\mathbf{q}_0, \dotsc, \mathbf{q}_n$ les degrés de liberté de chacun
-des joints, on a:
+\begin{mydef}\label{def:chap2-geomdirect}
+Soit $\mathcal{J}_n$ un joint de l'arbre cinématique et $\Delta =
+\{\mathcal{J}_0, \dotsc, \mathcal{J}_n\}$ le chemin dans l'arbre de la
+racine au noeud $\mathcal{J}_n$. Soit $\mathbf{q}_i$ les degrés de
+liberté du joint $\mathcal{J}_i$. La position du joint $\mathcal{J}_n$
+dans le repère monde est:
 \begin{equation}
-  \transformation{\mathcal{W}}{\mathcal{F}_i} = \prod_{j} \transformation{\mathcal{F}_j}{\mathcal{F}_{j-1}}
+  \transformation{\mathcal{W}}{\mathcal{F}_i} = \prod_{j \in \Delta} \mathcal{J}_j (\mathbf{q}_j)
 \end{equation}
 \end{mydef}
-FIXME: formule KO
 
 
-cinematique inverse
+\subsubsection{Cinématique inverse}
 
+La Définition~\autoref{def:chap2-geomdirect} permet de construire la
+position de tous les corps du robot dans le repère monde attaché au
+joint racine de la structure. Cependant, lors de la conception d'un
+problème robotique, il est courant de vouloir, par exemple,
+positionner un effecteur du robot -- un préhenseur par exemple -- à un
+endroit particulier de l'espace Euclidien. Dans ce cas, le problème
+inverse doit être résolu: trouver une configuration telle qu'un corps
+particulier du robot atteigne une position donnée. Ce problème est
+appelé géométrie inverse.
+
+
+Une difficulté de ce problème est que l'on doit inverser une équation
+dont le nombre de variables correspond au nombre de degrés de liberté
+du robot et dépend évidemment de sa structure. Si l'on souhaite
+positionner un corps à un endroit précis en rotation et translation,
+six variables sont nécessaires. De ce fait, selon le nombre de degrés
+de liberté du système et la position à atteindre, 0, 1 ou une infinité
+de solutions peuvent exister. La résolution analytique n'étant pas
+toujours possible, les outils numériques ont montré leur capacité à
+résoudre efficacement ce problème. Une technique de résolution
+possible sera détaillée dans la section~FIXME.
+
+FIXME: vitesse des corps
 
 \subsection{Mouvements dynamiques d'un corps dans l'espace}
 
-memo florent
+La géométrie et cinématique permettent de calculer la vitesse de corps
+dans l'espace indépendamment de leur réalité physique. Cependant, ce
+n'est pas suffisant pour pouvoir générer un mouvement complexe: le
+poids des corps du robot, leurs propriétés inertielles ainsi les
+forces exercées s'appliquant au robot doivent être prises en compte
+pour pouvoir donner un mouvement qui n'est pas seulement viable dans
+un monde sans physique, mais également dans le monde réel où les lois
+de la physique s'appliquent.
+
+Pour se faire, nous allons commencer par rappeler les notions de
+mécanique nécessaire à la génération de mouvements et les différents
+modèles simplifiés utilisés en robotique humanoïde. Tout l'enjeu de la
+robotique humanoïde se joue ici: d'un côté on ne peut ignorer la
+physique pour générer un mouvement de marche mais de l'autre le coût
+important de la résolution des modèles de la physique classique
+Newtonienne empêche l'écriture de contrôleurs suffisamment rapides
+pour pouvoir fonctionner en temps réel sur un robot. Il y a ici un
+compromis à trouver qui fait toute la richesse de la robotique
+humanoïde: quelles simplifications adopter? quels calculs peuvent être
+réalisés à l'avance, une fois pour toute, et quels calculs doivent
+être fait en ligne? Nous allons tout d'abord nous attacher à rappeler
+les lois de la mécanique classique avant de nous intéresser aux
+différentes simplifications qui permettent de rendre le problème
+tractable.
+
+
+\subsubsection{Quelques éléments de mécanique}
+\paragraph{Lois fondamentales de la mécanique}
+
+\begin{mydef}(Relation fondamentale de la dynamique)\\
+  Tout point de masse $m$ de position $M$ soumis à un ensemble de
+  forces dont la somme est $\vect{F}$ est mû par un mouvement
+  d'accélération $\gamma$ donnée par la relation suivante:
+  \begin{equation}\label{eq:newton}
+    \vect{F} = m \ddot{\vect{x}}
+  \end{equation}
+\end{mydef}
+
+\begin{mydef}(Principe d'action-réaction)\\
+  Soient $P_1$ et $P_2$ deux points de masses respectives $m_1$ et
+  $m_2$. Si $\vect{F}_{1/2}$ est la force exercée par $P_1$ sur $P_2$ et
+  $\vect{F}_{2/1}$ la force exercée par $P_2$ sur $P_1$, alors:
+  \begin{equation}\label{eq:reaction}
+    \vect{F}_{1/2} = -\vect{F}_{2/1}
+  \end{equation}
+\end{mydef}
+
+\begin{mydef}(Principe de colinéarité)\\
+  Soient $P_1$ et $P_2$ deux
+  points de masses respectives $m_1$ et $m_2$. La force $\vect{F}_{1/2}$
+  exercée par $P_1$ sur $P_2$ est colinéaire au vecteur $\vec{P_1P_2}$
+\end{mydef}
+
+
+
+\paragraph{Systèmes de points}
+\paragraph{Torseurs}
+\paragraph{Torseur cinétique}
+\paragraph{Cas des solides}
+
+\subsubsection{ZMP}
+\paragraph{Définition du ZMP}
+\paragraph{Le ZMP comme critère d'équilibre}
+\paragraph{Mouvement de marche dynamique}
 
 \subsection{Génération d'une trajectoire de marche}
+
 \subsection{Exécution d'une trajectoire}
+
 \subsection{Limites de l'approche naïve}
+
 
 \section{État de l'Art}
 
