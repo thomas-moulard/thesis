@@ -17,4 +17,5 @@
 *.ilg
 *.temp
 *.make
+thesis.*.gnuplot
 thesis.pdf

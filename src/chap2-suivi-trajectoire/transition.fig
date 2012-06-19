@@ -1,0 +1,2 @@
+set terminal png
+plot [0:1][0.5:2.5] 1 t 'start value', 2 t 'desired value', -2. * 1 * x * x * x + 3 * 1 * x * x + 1 t 'transition'

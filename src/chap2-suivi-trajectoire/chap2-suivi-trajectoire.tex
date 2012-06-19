@@ -319,28 +319,1851 @@ tractable.
   exercée par $P_1$ sur $P_2$ est colinéaire au vecteur $\vec{P_1P_2}$
 \end{mydef}
 
-
-
 \paragraph{Systèmes de points}
+
+\begin{mydef}(Moment d'un vecteur en un point)\\
+  Soit $\vect{V}$ un vecteur de point d'application $M$. Le moment en
+  un point $O$ de $\vect{V}$ est défini par le produit vectoriel
+  suivant:
+  $$
+  \moment{\vect{V}}{O} = \vec{OM} \crossprod \vect{V}
+  $$
+\end{mydef}
+
+Dans toute cette section, $(P_i)_{i=1,...,n}$ est un système de points de masses respectives $m_i$,
+de positions respectives $M_i$, de vitesses respectives $\vi$ et d'accélérations respectives $\gammai$.
+
+Pour chaque point $P_i$, on peut écrire la relation fondamentale de la
+dynamique~(\ref{eq:newton}) en distinguant les forces internes
+$\vect{F}_{j/i}$ appliquées par les autres points du système et les
+forces externes $\vect{F}^{ext}_{i}$
+issues de causes externes au système:
+$$
+\sum_{j=1, j\not=i}^n \vect{F}_{j/i} + \vect{F}^{ext}_{i} = m_i
+\gammai
+$$
+On peut également écrive le moment de chaque membre de cette égalité
+en un point $O$:
+$$
+\sum_{j=1, j\not=i}^n \vec{OM_i}\crossprod \vect{F}_{j/i} +
+\vec{OM_i}\crossprod\vect{F}^{ext}_{i} = m_i \vec{OM_i}\crossprod \gammai
+$$
+En sommant les deux égalités précédentes pour tous les points du
+système, les termes relatifs aux forces internes s'annulent par les
+principes d'action-réaction et de colinéarité. En effet, si on
+considère deux points $P_i$ et $P_j$ du systèmes les forces relatives
+à ces deux points vérifient:
+$$
+\vect{F}_{i/j} + \vect{F}_{j/i} = 0
+$$
+et
+\begin{eqnarray*}
+\vec{OM_i}\crossprod \vect{F}_{j/i} + \vec{OM_j}\crossprod
+\vect{F}_{i/j}&=&
+\vec{OM_i}\crossprod \vect{F}_{j/i} - \vec{OM_j}\crossprod
+\vect{F}_{j/i} \\
+&=&
+\vec{M_{j}M_{i}} \crossprod \vect{F}_{j/i} \\
+&=& 0
+\end{eqnarray*}
+La dernière égalité découle du principe de colinéarité.
+Il en résulte les égalités suivantes:
+\begin{eqnarray}
+\label{eq:1}
+\sum_{i=1}^n \vect{F}^{ext}_{i} &=& \sum_{i=1}^n m_i \gammai \\
+\label{eq:2}
+\sum_{i=1}^n \vec{OM_i}\crossprod\vect{F}^{ext}_{i}
+&=& \sum_{i=1}^n m_i \vec{OM_i}\crossprod \gammai
+\end{eqnarray}
+
+\begin{mydef}(Centre de masse)\\
+  Soit $G$ le centre de masse et $M$ la
+  masse totale du système de
+  points:
+  $$
+  G = \frac{1}{M}\sum_{i=1}^{n} m_i M_i
+  $$
+\end{mydef}
+
+En dérivant deux fois cette égalité, on en déduit l'accélération du
+centre de masse du système:
+$$
+\gammaG = \frac{1}{M}\sum_{i=1}^{n} m_i \gammai
+$$
+Cette expression injectée dans (\ref{eq:1}) nous donne la propriété
+suivante bien connue: la somme des forces appliquées à un système est
+égale à la masse du système que multiplie l'accélération de son centre
+de masse.
+$$
+\sum_{i=1}^n \vect{F}^{ext}_{i} = M \gammaG \\
+$$
+Cette propriété découle de la relation fondamentale de la dynamique et
+du principe d'action-réaction.
+
+
 \paragraph{Torseurs}
+
+\begin{mydef} (Torseur)\\
+  Un torseur est un champ de vecteurs $\vect{M}$ qui vérifie la propriété
+  suivante: il existe un vecteur $\vect{R}$ tel que pour tout couple de
+  points $O$ et $P$ la relation suivante soit satisfaite:
+  $$
+  \vect{M}_O = \vect{M}_P + \vec{OP} \crossprod \vect{R}
+  $$
+  $\vect{R}$ est unique. Il est appelé la {\em résultante} du torseur
+  noté:
+  $$
+  \left\{\vect{M}_O|\vect{R}\right\}_{O}
+  $$
+\end{mydef}
+
+\begin{myexample} (Le torseur des vitesses d'un solide)\\
+  Le champ de vecteurs des vitesses d'un solide est un torseur dont la
+  résultante est le vecteur vitesse de rotation généralement noté
+  $\vec{\omega}$.
+\end{myexample}
+
+\begin{myexample} (Le champ des moments des forces extérieures sur un système)\\
+  Si l'on considère le système de points $P_i$ soumis à des forces
+  extérieures $\vect{F}_i^{ext}$, on définit le moment de ces forces en
+  un point $O$ par:
+  $$
+  \moment{}{O} = \sum_{i=1}^{n} \vec{OM_i}\crossprod \vect{F}_i^{ext}
+  $$
+  On vérifie alors aisément que ce champ de moment est un torseur dont
+  la résultante est la somme des $\vect{F}_i^{ext}$. En
+  effet,
+  \begin{eqnarray*}
+    \moment{}{O} &=& \sum_{i=1}^{n} \vec{OM_i}\crossprod \vect{F}_i^{ext}
+    =\sum_{i=1}^{n} (\vec{OP}+\vec{PM_i})\crossprod \vect{F}_i^{ext} \\
+    &=& \sum_{i=1}^{n} \vec{OP}\crossprod \vect{F}_i^{ext} +
+    \vec{PM_i}\crossprod \vect{F}_i^{ext} \\
+    &=& \moment{}{P} + \vec{OP} \crossprod \sum_{i=1}^{n} \vect{F}_i^{ext}
+  \end{eqnarray*}
+\end{myexample}
+
+
 \paragraph{Torseur cinétique}
+
+Le torseur cinétique d'un système de points est le champ, noté $\vec{\sigma}$, des
+moments de quantités de mouvement du système:
+$$
+\vec{\sigma}_{O} = \sum_{i=1}^n \vec{OM_i} \crossprod m_i \vi
+$$
+La résultante du torseur cinétique est la quantité de mouvement du
+système:
+$$
+\vect{P} = \sum_{i=1}^n m_i \vi
+$$
+Si $O$ est un point fixe, on peut dériver la relation suivante
+pour obtenir:
+\begin{eqnarray*}
+  \dot{\vec{\sigma}}_O &=& \sum_{i=1}^n \vi \crossprod m_i \vi + \vec{OM_i}
+  \crossprod m_i \gammai \\
+  &=& \sum_{i=1}^n \vec{OM_i} \crossprod m_i \gammai
+\end{eqnarray*}
+Cette dernière égalité nous permet d'énoncer la propriété suivante:
+\begin{property}
+  la dérivée du moment cinétique d'un système de points par rapport à un
+  point fixe est égale au
+  moment des forces extérieures par rapport à ce point sur le système:
+  \begin{equation}\label{eq:newton3}
+    \dot{\vec{\sigma}}_0 = \moment{\vect{F}^{ext}}{O}
+  \end{equation}
+
+  La dérivée de la résultante cinétique est égale à la résultante des
+  forces extérieures:
+  \begin{equation}\label{eq:newton2}
+    \dot{\vect{P}} = \sum_{i=1}^n \vect{F}_i^{ext}
+  \end{equation}
+
+\end{property}
+
+\textbf{Remarque:} il est aisément vérifiable que la propriété du
+moment cinétique est valide également au centre de masse même si
+celui-ci n'est pas fixe:
+$$
+\dot{\vec{\sigma}}_G = \moment{\vect{F}^{ext}}{G}
+$$
+
 \paragraph{Cas des solides}
 
+Un solide est un ensemble d'atomes considérés comme des masses
+ponctuelles. Les efforts que ces points exercent les uns sur les
+autres respectent les principes d'action-réaction et de colinéarité.
+Un approximation courante consiste à considérer les solides comme des milieux
+continus. Cela a pour conséquence de remplacer les sommes par des
+intégrales dans les résultats précédents.
+
+\begin{mydef} (Torseur cinétique)\\
+
+Dans le cas d'un solide, la résultante cinétique ou quantité de
+mouvement devient:
+$$
+P = \int_S \vect{v}_M dm(M)
+$$
+où $dm(M)$ est la mesure de densité massique et $\vect{v}$ le champ
+des vitesses qui rappelons le est un torseur:
+$$
+\vect{v}_M = \vG + \vec{MG}\crossprod \vec{\omega}
+$$
+Il en résulte que:
+\begin{eqnarray*}
+P &=& \int_S (\vG + \vec{MG}\crossprod \vec{\omega}) dm(M) \\
+&=& M\vG + \int_S (\vec{MG}) dm(M)\crossprod \vec{\omega} \\
+&=& M\vG
+\end{eqnarray*}
+par définition du centre de masse.
+\end{mydef}
+
+Le moment cinétique au centre de masse s'écrit:
+\begin{eqnarray*}
+\vec{\sigma}_G &=& \int_S \vec{GM}\crossprod \vect{v}_M dm(M)\\
+&=& \int_S \vec{GM}\crossprod (\vG+\vec{\omega}\crossprod\vec{GM})dm(M)\\
+&=& \int_S \vec{GM}dm(M)\crossprod\vG +
+\int_S \vec{GM}\crossprod(\vec{\omega}\crossprod\vec{GM})dm(M)\\
+&=& \int_S \vec{GM}\crossprod(\vec{\omega}\crossprod\vec{GM})dm(M)\\
+\end{eqnarray*}
+par définition du centre de masse.
+
+\textbf{Remarque:} Il est intéressant de remarquer les deux points
+suivants:
+\begin{enumerate}
+  \item L'opérateur $\hat{J}$ qui à $\vec{\omega}$ associe $\vec{\sigma}_G$
+    est linéaire. Sa matrice dans toute base orthonormée est
+    symétrique positive définie.
+  \item  $\vec{\omega}$ et $\vec{\sigma}_G$ ne sont en général pas colinéaires.
+\end{enumerate}
+
+
 \subsubsection{ZMP}
+
+\begin{figure}
+  \centerline {
+    \input{zmp.pdftex_t}
+  }
+  \caption{L'équilibre statique du pied implique que le torseur des
+    efforts extérieurs: l'effet de la gravité, la réaction du sol et
+    l'action du robot sur le pied s'annule.}
+  \label{fig:zmp}
+\end{figure}
+
+Nous considérons maintenant un robot humanoïde muni de deux pieds
+plats en phase de simple contact. La définition et l'analyse du ZMP
+reposent sur la condition de stabilité du pied du robot en contact avec
+le sol supposé horizontal.
+
+Considérons donc le pied en contact avec le sol. Les actions
+extérieures appliquées sur ce pied sont (Figure~\ref{fig:zmp}):
+\begin{enumerate}
+  \item l'action du robot privé de son pied sur la cheville,
+    représentée par le torseur:
+    $$
+    \left\{\vect{M}^{robot}_A | \vect{R}^{robot} \right\}_{A}
+    $$
+    où $A$ est le centre de l'articulation de la cheville.
+  \item l'action de la gravité sur le pied représentée par le torseur
+    $$
+    \left\{\vect{0} | m \vect{g} \right\}_{G}
+    $$
+    où $G$ est le centre de masse du pied, $\vect{g}$ le vecteur
+    d'accélération due à la gravité et $m$ la masse du pied.
+  \item l'action du sol sur le pied représentée par le torseur
+    $$
+    \left\{\vect{M}^{ground}_O | \vect{R}^{ground} \right\}_{G}
+    $$
+    où $O$ est l'origine du repère supposée appartenir au plan du sol.
+\end{enumerate}
+L'hypothèse de stabilité du pied sur le sol s'exprime donc par 6
+équations qui lient les résultantes et moments ci-dessus. En supposant
+connus le poids et le centre de masse du pied, l'action du robot sur
+le pied, on peut en déduire l'action du sol sur le pied puis vérifier
+que cette action est possible étant donné que les efforts de contact
+du sol sur le pied ont une composante verticale positive.
+Ecrivons ces équations:
+\begin{eqnarray*}
+  \vect{R}^{robot}+ m \vect{g}+ \vect{R}^{ground} &=& 0 \\
+  \vect{M}^{robot}_A + \vec{OA}\crossprod\vect{R}^{robot}
+  +\vec{OG}\crossprod m\vect{g} + \vect{M}^{ground}_O &=& 0
+\end{eqnarray*}
+Ainsi l'action du sol sur le pied est donnée par:
+\begin{eqnarray*}
+  \vect{R}^{ground} &=& -\vect{R}^{robot} - m \vect{g} \\
+  \vect{M}^{ground}_O &=& -\vect{M}^{robot}_A - \vec{OA}\crossprod\vect{R}^{robot}
+  - \vec{OG}\crossprod m\vect{g}
+\end{eqnarray*}
+
 \paragraph{Définition du ZMP}
+
+Le ZMP est le point du sol en lequel les composantes horizontales du
+moment du sol sur le pied sont nulles. Nous le notons $Z$. Exprimons
+le moment des actions du sol sur le pied en $Z=(Z_x,Z_y,0)$:
+\begin{eqnarray*}
+\vect{M}_Z^{ground} &=& \vect{M}_O^{ground} + \vec{ZO}\crossprod
+\vect{R}^{ground} \\
+&=& \left(\begin{array}{c} M^{ground}_{O\,x} \\ M^{ground}_{O\,y} \\ M^{ground}_{O\,z}
+\end{array}\right)
++
+\left(\begin{array}{c} -Z_x \\ -Z_y \\ 0
+\end{array}\right)
+\crossprod
+\left(\begin{array}{c} R^{ground}_x \\ R^{ground}_y \\ R^{ground}_z
+\end{array}\right) \\
+&=&
+\left(\begin{array}{c}
+M^{ground}_{O\,x} - Z_y R^{ground}_z\\
+M^{ground}_{O\,y} + Z_x R^{ground}_z \\
+M^{ground}_{O\,z} + Z_y R^{ground}_x - Z_x R^{ground}_y
+\end{array}\right)
+\end{eqnarray*}
+L'annulation des deux premières composantes donne lieu à deux
+équations dont les inconnues sont $Z_x$ et $Z_y$. Ce système
+d'équations est régulier si et seulement si la composante $R^{ground}_z$
+est non-nulle, hypothèse raisonnable dans la phase de simple support
+du robot. Les coordonnées du ZMP sont dans ce cas:
+$$
+ZMP =
+\left(\begin{array}{c}
+-\frac{M^{ground}_{O\,y}}{R^{ground}_z} \\
+\frac{M^{ground}_{O\,x}}{R^{ground}_z} \\
+0
+\end{array}\right)
+$$
+\subsection{Pourquoi le ZMP doit-il rester dans le polygone support ?}
+
+Pour répondre à cette question, nous modélisons l'action du sol sur le
+pied par un champ de forces défini dans la partie $S$ du plan
+correspondant à la zone de contact du pied. Nous notons
+$$
+\vect{F}(x,y) = \left(\begin{array}{c}
+f_x(x,y) \\ f_y(x,y) \\ f_z(x,y)
+\end{array}\right)
+$$
+la force du sol sur le pied au point de coordonnées $(x,y,0)$. Le moment des actions du sol sur le pied au
+ZMP s'exprime donc de la façon suivante:
+\begin{eqnarray*}
+\vect{M}^{ground}_{ZMP} = \int_S \vec{Z_{mp}M} \crossprod \vect{f}(x,y) dS(M)
+\end{eqnarray*}
+où $dS(M)$ est une mesure surfacique.
+Les composantes horizontales de ce moment s'écrivent:
+\begin{eqnarray}\label{eq:3}
+  \int_S (y-Z_y)f_z(x,y) dx dy &=& 0 \\
+  \label{eq:4}
+  \int_S (Z_x-x)f_z(x,y) dx dy &=& 0 \\
+\end{eqnarray}
+Supposons que le ZMP soit en dehors de l'enveloppe convexe de la
+surface d'appui (non-nécessairement polygonale). Alors, il existe une
+droite qui sépare le ZMP de la surface d'appui. Au prix d'un
+changement de repère, on peut supposer que cette droite est l'axe
+$O\vec{y}$ du repère, que $Z_x < 0$ et que tous les points de la surface
+d'appui ont des abscisses positives. Le terme $(Z_x-x)$ de l'intégrale
+de l'équation~(\ref{eq:4}) est donc uniformément négatif sur $S$ et
+donc (\ref{eq:4}) ne peut être satisfaite que si $f_z$ est
+uniformément nulle, condition exclue par nos hypothèses.
+
+Ainsi, une condition nécessaire de stabilité du pied sur le sol est
+que le ZMP soit dans l'enveloppe convexe de la surface d'appui.
+
+
 \paragraph{Le ZMP comme critère d'équilibre}
+
+La position du ZMP peut également être calculée à partir de la dérivée du moment cinétique et de la résultante cinétique du robot.
+Exprimons les équations de la dynamique~(\ref{eq:newton3}) et (\ref{eq:newton2}) au centre de masse du robot:
+\begin{eqnarray*}
+m\dot{\vect{v}}_G &=& \vect{R}^{ground} + m \vect{g} \\
+\dot{\sigma}_G &=& \vect{M}_G^{ground}
+\end{eqnarray*}
+Exprimons maintenant le moment des forces du sol sur le robot en un point $Z=(x_Z, y_Z, 0)$ du sol:
+\begin{eqnarray*}
+\vect{M}_Z^{ground} &=& \vect{M}_G^{ground} + \vec{ZG} \crossprod (\vect{R}^{ground}) \\
+&=& \dot{\sigma}_G + m \vec{ZG} \crossprod (\dot{\vect{v}}_G - m\vect{g})
+\end{eqnarray*}
+En notant $\sigma_G = ({\sigma}_x, {\sigma}_y, {\sigma}_z)$ et $(x_G, y_G, z_G)$ la position du centre de masse, l'équation précédente s'écrit:
+\begin{eqnarray*}
+\vect{M}_Z^{ground} &=& \left(\begin{array}{lll}
+\dot{\sigma}_x\ +\ m\ (y_G - y_Z)\ (\ddot{z}_G + g)\ -\ m\ z_G\ \ddot{y}_G \\
+\dot{\sigma}_y\ +\ m\ z_G\ \ddot{x}_G\ -\ m\ (x_G-x_Z)\ (\ddot{z}_G + g) \\
+\dot{\sigma}_z\ +\ m\ (x_G - x_Z)\ \ddot{y}_G\ -\ m\ (y_G-y_Z)\ \ddot{x}_G
+\end{array}\right)
+\end{eqnarray*}
+Pour exprimer les coordonnées du ZMP, il suffit de résoudre le système d'équations obtenu en annulant les composantes $x$ et $y$ de $\vect{M}_Z^{ground}$.
+Nous obtenons alors:
+\begin{eqnarray*}
+x_{ZMP} &=& x_G - \frac{\dot{\sigma}_y\ +\ m\ z_G\ \ddot{x}_G}{m\ (\ddot{z}_G + g)} \\
+y_{ZMP} &=& y_G + \frac{\dot{\sigma}_x\ -\ m\ z_G\ \ddot{y}_G}{m\ (\ddot{z}_G + g)}
+\end{eqnarray*}
+
 \paragraph{Mouvement de marche dynamique}
+
+\begin{figure}
+  \centerline{
+    \input{dynamics.pdftex_t}
+  }
+  \caption{Efforts internes et externes exercés sur le robot.}
+  \label{fig:dynamics}
+\end{figure}
+
+Dans cette section, nous établissons les équations de mouvement
+dynamique d'un robot en phase de simple appui sur le sol, composé d'un
+corps ${\cal B}$, d'une jambe ${\cal L}$, d'un tibia ${\cal S}$ et
+d'un pied ${\cal F}$ et représenté sur la figure~\ref{fig:dynamics}.
+Pour simplifier, nous supposons que ${\cal L}$ et ${\cal S}$ ont une masse
+nulle. Nous notons ${\cal R}=(O,\vec{x},\vec{y},\vec{z})$ un repère
+fixe de l'environnement.
+
+Les différents efforts en présence sont les suivants:
+\begin{itemize}
+  \item $\vect{R}^{\cal B}$ la résultante du corps sur la jambe,
+  \item $\vect{M}^{\cal B}_C$ le moment  appliqué par le
+    corps sur la jambe en $C$,
+  \item $\vect{R}^{\cal L}$ la résultante de la jambe sur le tibia,
+  \item $\vect{M}^{\cal L}_B$ le moment  appliqué par la
+    jambe sur le tibia en $B$,
+  \item $\vect{R}^{\cal S}$ la résultante du tibia sur le pied,
+  \item $\vect{M}^{\cal S}_A$ le moment  appliqué par le
+    tibia sur le pied en $A$,
+  \item $\vect{R}^{ground}$ la résultante du sol sur le pied,
+  \item $\vect{M}^{ground}_O$ le moment appliqué par le sol sur le pied en $O$.
+\end{itemize}
+
+\subparagraph{Efforts sur la jambe et sur le tibia.}
+En isolant successivement les corps ${\cal L}$ et ${\cal S}$ et en
+écrivant les équations de la dynamiques pour ces corps, nous obtenons
+les relations suivantes:
+\begin{eqnarray}
+  \label{eq:resultante-L}
+  \vect{R}^{\cal B} - \vect{R}^{\cal L} &=& 0 \\
+  \label{eq:resultante-S}
+  \vect{R}^{\cal L} - \vect{R}^{\cal S} &=& 0 \\
+  \label{eq:moment-L}
+  \vect{M}^{\cal B}_C + \vec{BC}\crossprod \vect{R}^{\cal B} -
+  \vect{M}^{\cal L}_B &=& 0 \\
+  \label{eq:moment-S}
+  \vect{M}^{\cal L}_B + \vec{AB}\crossprod \vect{R}^{\cal L} -
+  \vect{M}^{\cal S}_A &=& 0
+\end{eqnarray}
+
+\subparagraph{Efforts sur le corps du robot.}
+Les efforts qui s'appliquent sur le corps du robot sont la gravité et
+les efforts de la jambe. Ces efforts donnent lieu aux deux équations
+suivantes:
+\begin{eqnarray}\label{eq:resultante-B}
+m \vec{\gamma}_G &=& m\vect{g} - \vect{R}^{\cal B} \\
+\label{eq:moment-B}
+\frac{d\vec{\sigma}_G}{dt} &=& -\vec{GC}\crossprod \vect{R}^{\cal B} - \vect{M}^{\cal B}_C
+\end{eqnarray}
+
+Les équations~(\ref{eq:resultante-L}) et ~(\ref{eq:resultante-S})
+représentent les résultantes des efforts exercés sur ${\cal L}$ et
+${\cal S}$ respectivement. Elles permettent de conclure à l'égalité
+des résultantes suivantes que nous notons $\vect{R}$:
+$$
+\vect{R}^{\cal B} = \vect{R}^{\cal L} = \vect{R}^{\cal S} = \vect{R}
+$$
+Les équations~(\ref{eq:moment-L}) et
+(\ref{eq:moment-S}) représentent les moments en $B$ et $A$ des efforts
+sur les corps ${\cal L}$ et ${\cal S}$ respectivement.
+
+En notant $\theta_{\cal B}$,$\theta_{\cal L}$,$\theta_{\cal S}$ et
+$\theta_{\cal F}$ respectivement l'orientation du corps par rapport à
+l'axe $\vec{z}$, les angles relatifs de ${\cal L}$ par rapport à ${\cal B}$, de
+${\cal S}$ par rapport à ${\cal L}$ de ${\cal F}$ par rapport à ${\cal
+  S}$, et $l_{\cal B}$, $l_{\cal L}$, $l_{\cal S}$ les distance entre
+$G$ et $C$, entre $B$ et $C$ et entre $A$ et $B$, nous avons les égalités suivantes:
+$$
+\vec{BC} =
+\left(\begin{array}{c}
+-l_{\cal L} \sin(\theta_{\cal B}+\theta_{\cal L}) \\
+0\\
+l_{\cal L} \cos(\theta_{\cal B}+\theta_{\cal L})
+\end{array}\right)
+\ \ \ \
+\vec{AB} =
+\left(\begin{array}{c}
+-l_{\cal S} \sin(\theta_{\cal B}+\theta_{\cal L}+\theta_{\cal S}) \\
+0\\
+l_{\cal S} \cos(\theta_{\cal B}+\theta_{\cal L}+\theta_{\cal S})
+\end{array}\right)
+$$
+\subparagraph{Position de $G$ et moment cinétique de ${\cal B}$.}
+Les coordonnées de $G$ sont données par les relations suivantes:
+\begin{eqnarray}
+  \label{eq:xG}
+  x_G &=& x_A -l_{\cal S} \sin(\theta_{\cal B}+\theta_{\cal
+    L}+\theta_{\cal S}) -l_{\cal L} \sin(\theta_{\cal B}+\theta_{\cal
+    L}) -l_{\cal B} \sin(\theta_{\cal B}) \\
+  \label{eq:zG}
+  z_G &=& z_A + l_{\cal S} \cos(\theta_{\cal B}+\theta_{\cal
+    L}+\theta_{\cal S}) + l_{\cal L} \cos(\theta_{\cal B}+\theta_{\cal
+    L}) + l_{\cal B} \cos(\theta_{\cal B})
+\end{eqnarray}
+A partir de maintenant, nous notons $\Theta = (\theta_{\cal B},
+\theta_{\cal L}, \theta_{\cal S})$ un paramétrage de la configuration
+du robot. Le moment cinétique du corps ${\cal B}$ s'écrit:
+\begin{equation}\label{eq:sigma-G}
+\vec{\sigma}_G = \hat{J}(\Theta) \vec{\omega}_{\cal B}
+\end{equation}
+où $\hat{J}(\Theta)$ est l'opérateur d'inertie de ${\cal B}$ dans
+la configuration $\Theta$ et $\vec{\omega}_{\cal B} = \dot{\theta}_{\cal B}\vec{y}$ est le vecteur rotation du corps ${\cal B}$. La matrice de $\hat{J}(\theta_{\cal B})$
+dans la base $(\vec{x},\vec{y},\vec{z})$ a pour expression:
+$$
+\left(\begin{array}{ccc}
+\cos\theta_{\cal B} & 0 & -\sin\theta_{\cal B} \\
+0 & 1 & 0 \\
+\sin\theta_{\cal B} & 0 & \cos\theta_{\cal B}
+\end{array}\right)
+J_0
+\left(\begin{array}{ccc}
+\cos\theta_{\cal B} & 0 & \sin\theta_{\cal B} \\
+0 & 1 & 0 \\
+-\sin\theta_{\cal B} & 0 & \cos\theta_{\cal B}
+\end{array}\right)
+$$
+où $J_0$ la matrice de $\hat{J}(0)$ dans la base $(\vec{x},\vec{y},\vec{z})$.
+
+\subparagraph{Accélération du centre de masse.}
+En dérivant~(\ref{eq:xG}) et (\ref{eq:zG}), on obtient une expression
+de la forme:
+\begin{eqnarray}
+\label{eq:vG}
+\vect{v}_G &=& M(\Theta) \dot{\Theta}
+\end{eqnarray}
+où
+$$
+M(\Theta) =
+\left(\begin{array}{ccc}
+z_A-z_G & z_A-z_C & z_A-z_B \\
+0 & 0 & 0 \\
+x_G-x_A & x_C-x_A & x_B-x_A
+\end{array}\right)
+$$
+est une matrice qui dépend de la configuration du robot.
+En dérivant~(\ref{eq:vG}) on obtient:
+\begin{eqnarray}
+\label{eq:gammaG}
+\vec{\gamma}_G = M(\Theta)\ddot{\Theta} + \dot{M}(\Theta,\dot{\Theta})\dot{\Theta}
+\end{eqnarray}
+avec
+{\tiny
+$$
+\begin{array}{l}
+\dot{M}(\Theta,\dot{\Theta})=\\
+\left(\begin{array}{ccc}
+(x_A-x_G)\dot{\theta}_{\cal B}+(x_A-x_C)\dot{\theta}_{\cal
+  L}+(x_A-x_B)\dot{\theta}_{\cal S} &
+(x_A-x_C)(\dot{\theta}_{\cal B}+\dot{\theta}_{\cal L}) +
+(x_A-x_B)(\dot{\theta}_{\cal S}) &
+(x_A-x_B)(\dot{\theta}_{\cal B}+\dot{\theta}_{\cal
+  L}+\dot{\theta}_{\cal S}) \\
+0 & 0 & 0 \\
+(z_A-z_G)\dot{\theta}_{\cal B}+(z_A-z_C)\dot{\theta}_{\cal
+  L}+(z_A-z_B)\dot{\theta}_{\cal S} &
+(z_A-z_C)(\dot{\theta}_{\cal B}+\dot{\theta}_{\cal L}) +
+(z_A-z_B)(\dot{\theta}_{\cal S}) &
+(z_A-z_B)(\dot{\theta}_{\cal B}+\dot{\theta}_{\cal
+  L}+\dot{\theta}_{\cal S}) \\
+\end{array}\right)
+\end{array}
+$$
+}
+D'après~(\ref{eq:resultante-B}), nous pouvons écrire:
+\begin{eqnarray}\label{eq:R-1}
+\vect{R} &=& m(\vect{g} -\vec{\gamma}_G) \\
+\label{eq:R-2}
+&=& m(\vect{g} - M(\Theta)\ddot{\Theta} - \dot{M}(\Theta,\dot{\Theta})\dot{\Theta})
+\end{eqnarray}
+En dérivant~(\ref{eq:sigma-G}), nous obtenons une expression de la
+forme:
+$$
+\frac{d\vec{\sigma}_G}{dt} = \hat{J}(\Theta) \frac{d\vec{\omega}_{\cal
+    B}}{dt} + \dot{\hat{J}}(\Theta,\dot{\Theta})\vec{\omega}_{\cal B}
+$$
+Grâce à~(\ref{eq:moment-B}), nous pouvons écrire la relation
+suivante:
+\begin{eqnarray}\label{eq:moment-C-1}
+\vect{M}^{\cal B}_C &=& -\vec{GC}\crossprod \vect{R} -
+\frac{d\vec{\sigma}_G}{dt} \\
+\label{eq:moment-C-2}
+&=& -\vec{GC}\crossprod \vect{R} -
+\hat{J}(\Theta) \ddot{\theta}_{\cal B} \vec{z} -
+\dot{\hat{J}}(\Theta,\dot{\Theta})\dot{\theta}_{\cal B} \vec{z}
+\end{eqnarray}
+En rassemblant les équations~(\ref{eq:R-2}) et (\ref{eq:moment-C-2})
+et en utilisant les relations~(\ref{eq:moment-L}) et
+(\ref{eq:moment-S}), nous arrivons au système suivant:
+\begin{eqnarray}
+\vect{R}&=& m(\vect{g} - M(\Theta)\ddot{\Theta} - \dot{M}(\Theta,\dot{\Theta})\dot{\Theta})\\
+\vect{M}^{\cal B}_C&=& -\vec{GC}\crossprod \vect{R} -
+\hat{J}(\Theta) \ddot{\theta}_{\cal B} \vec{z} -
+\dot{\hat{J}}(\Theta,\dot{\Theta})\dot{\theta}_{\cal B} \vec{z}\\
+\vect{M}^{\cal L}_B &=& \vect{M}^{\cal B}_C + \vec{BC}\crossprod \vect{R}  \\
+\vect{M}^{\cal S}_A &=&\vect{M}^{\cal L}_B + \vec{AB}\crossprod \vect{R}
+\end{eqnarray}
+
+\subparagraph{Conclusion.} Etant donnée une trajectoire du système sous
+la forme de l'évolution de $\Theta$ au cours du temps, les quatre
+équations précédentes permettent de calculer
+\begin{itemize}
+  \item la réaction du tibia sur le pied $\vect{R}$,
+  \item le moment $\vect{M}^{\cal B}_C$ appliqué sur la jambe par le moteur de
+    l'articulation de la hanche,
+  \item le moment $\vect{M}^{\cal L}_B$ appliqué sur le tibia par le
+    moteur de l'articulation du genou,
+    \item le moment $\vect{M}^{\cal S}_A$ appliqué sur le pied par le
+      moteur de l'articulation de la cheville.
+\end{itemize}
+Les efforts du tibia sur le pied permettent ensuite de calculer la
+position du ZMP et de vérifier que le mouvement est admissible.
+
 
 \subsection{Génération d'une trajectoire de marche}
 
+La section précédente a construit incrémentalement, à partir des lois
+fondamentales de la dynamique, les relations nécessaires pour pouvoir
+générer une trajectoire de marche pour un robot humanoïde. Il s'agit
+désormais de choisir une stratégie de résolution qui ne soit non
+seulement correcte, mais qui puisse être mise en place sur le robot
+pour générer une trajectoire de marche stable.
+
+\paragraph{Énoncé du problème}
+
+La tâche à résoudre peut être énoncée ainsi: le robot doit aller du
+point $A$ au point $B$ de façon à préserver son équilibre. La
+stratégie la plus utilisée consiste en les étapes suivantes:
+\begin{enumerate}
+\item Planifier une série de points d'appuis, c'est à dire d'emprunte
+  de pas reliant les deux points. Les techniques classiques de
+  planification de mouvement tel que la programmation dynamique -- A*
+  -- ou bien encore les algorithmes probabilistes type RRT peuvent
+  être utilisés dans ce cadre. En sortie, nous avons donc une suite
+  d'empreintes de pas pour les deux pieds du robot annoté d'un moment
+  de début et d'un moment de fin. Les moments où les deux pieds du
+  robot sont au sol sont appelés phase de double support et les
+  moments où un seul pied est au sol les phase de simple support.
+\item Le ZMP est alors utilisé comme critère de stabilité, on définit
+  alors une trajectoire de ZMP telle qu'à tout moment le ZMP est dans
+  l'enveloppe convexe des points de contacts. Une heuristique simple
+  consiste à partir de la projection du centre de masse au sol au
+  temps initial -- le ZMP et le centre de masse sont confondus à
+  l'arrêt --, puis de passer le ZMP sous la cheville du pied gauche,
+  réaliser un pas avec le pied droit, passer le ZMP sous la cheville
+  du pied droit, réaliser un pas avec le pied gauche, etc. Il en
+  ressort une trajectoire de référence pour le ZMP définie par une
+  ligne brisée.
+\item À partir de la trajectoire du ZMP, une trajectoire du centre de
+  masse du robot doit être calculée. La section suivante détaillera
+  ensuite comment suivre cette trajectoire du centre de masse pendant
+  la marche.
+\end{enumerate}
+
+Le problème reste alors la troisisème étape: comment passer d'une
+trajectoire de ZMP à une trajectoire de centre de masse tout en
+préservant les contraintes temps réel qui sont inhérantes au contrôle
+d'un système robotique.
+
+\paragraph{De la réalité physique à un modèle calculatoire tractable}
+
+Tout d'abord, rappelons la formule du ZMP:
+
+\begin{equation}
+\left(
+\begin{array}{cc}
+x_{\text{ZMP}}\\
+y_{\text{ZMP}}
+\end{array}
+\right) = \left(
+\begin{array}{cc}
+x_G - \frac{\dot{\sigma}_y\ +\ m\ z_G\ \ddot{x}_G}{m\ (\ddot{z}_G + g)}\\
+y_G + \frac{\dot{\sigma}_x\ -\ m\ z_G\ \ddot{y}_G}{m\ (\ddot{z}_G + g)}
+\end{array}
+\right)
+\end{equation}
+
+$x_G$, $y_G$, $z_G$ étant la position du centre de masse dans
+l'espace, $\sigma$ le moment d'inertie du centre de masse, $m$ la
+masse totale du robot et $g$ la constante de gravité. L'objectif ici
+est de déduire $x_{G}$ à partir du $x_{ZMP}$ choisi. La résolution
+d'une telle équation est malheureusement difficile car il n'existe pas
+de solution analytique et les solutions numériques sont lentes et
+nécessitent l'évaluation de plusieurs grandeurs dont le calcul du
+moment d'inertie autour du centre de masse.
+
+Cependant, cette équation peut devenir linéaire au prix des hypothèses suivantes:
+\begin{itemize}
+\item Moment d'inertie du centre de masse négligeable: $\dot{\sigma}_x = \dot{\sigma}_y = 0$
+\item Hauteur du centre de masse constante: $z_G$ constant, $\ddot{z_G} = 0$
+\end{itemize}
+
+Ces hypothèses nous permettent d'obtenir les relations linéaires suivantes:
+\begin{eqnarray*}
+x_{\text{ZMP}} &=& x_G - \frac{z_G}{g} \ddot{x}_G\\
+y_{\text{ZMP}} &=& y_G - \frac{z_G}{g} \ddot{y}_G
+\end{eqnarray*}
+
+Ce modèle dît du ``Pendule Inverse Linéarisé'' pose le problème sous
+la forme d'une équation différentielle non-homogène du second
+ordre. La résolution explicite d'une telle équation est possible et
+peut s'exprimer sous la forme suivante:
+
+\begin{equation}
+  \mathbf{x}(t) = \cosh(\sqrt{\frac{g}{z_G}}.t) . \mathbf{V} + \sinh(\sqrt{\frac{g}{z_G}}.t) . \mathbf{W} + \mathbf{r}(t)
+\end{equation}
+
+$\mathbf{V}$ et $\mathbf{W}$ étant des constantes déterminées par les
+conditions aux limites du système, à savoir que le centre de masse
+atteigne la position fixée au début et à la fin avec une vitesse
+nulle. $\textbf{r}(t)$ est un polynôme d'ordre 3, tout comme la
+trajectoire du ZMP et dont les coefficients sont entièrement
+déterminés par elle. Les valeurs de $\mathbf{V}$ et $\mathbf{W}$ sont
+déterminées par les conditions aux limites du système:
+
+\begin{equation}
+  \left(
+  \begin{array}{c}
+    \mathbf{x}_x(0)\\
+    \mathbf{x}_y(0)
+  \end{array}
+  \right) = \left(
+  \begin{array}{c}
+    \mathbf{V}_x + \mathbf{r}_x(0)\\
+    \mathbf{V}_y + \mathbf{r}_y(0)
+  \end{array}
+  \right)
+\end{equation}
+
+\begin{equation}
+  \left(
+  \begin{array}{c}
+    \dot{x}(0)\\
+    \dot{y}(0)
+  \end{array}
+  \right) = \left(
+  \begin{array}{c}
+    \frac{g}{z_G} . \mathbf{W}_x + \dot{\mathbf{r}}_x(0)\\
+    \frac{g}{z_G} . \mathbf{W}_y + \dot{\mathbf{r}}_y(0)
+  \end{array}
+  \right)
+\end{equation}
+
+Ces quatre variables nous permettent de pouvoir déterminer la position
+et vitesse initiale du centre de masse. On a alors:
+
+\begin{equation}
+  \left(
+  \begin{array}{c}
+    \mathbf{V}_x\\
+    \mathbf{V}_y
+  \end{array}
+  \right) = \left(
+  \begin{array}{c}
+    \mathbf{x}_x(0) - \mathbf{r}_x(0)\\
+    \mathbf{x}_y(0) - \mathbf{r}_y(0)\\
+  \end{array}
+  \right)
+\end{equation}
+
+\begin{equation}
+  \left(
+  \begin{array}{c}
+    \mathbf{W}_x\\
+    \mathbf{W}_y
+  \end{array}
+  \right) = \left(
+  \begin{array}{c}
+    \frac{z_G}{g}(\dot{\mathbf{x}}_x(0) - \dot{\mathbf{r}}_x(0))\\
+    \frac{z_G}{g}(\dot{\mathbf{x}}_y(0) - \dot{\mathbf{r}}_y(0))
+  \end{array}
+  \right)
+\end{equation}
+
+Cependant, nous n'avons pas de variable libre supplémentaire qui nous
+permettrait de contraindre la position et vitesse finale ($t=T$) de la
+trajectoire du centre de masse. Une stratégie pour contourner le
+problème peut être alors de remarquer qu'un changement de
+$\dot{\mathbf{x}}(0)$ fait varier $\mathbf{x}(T)$ de façon
+monotone. Il est alors possible de réaliser une recherche par
+dichotomie sur les valeurs de $\dot{\mathbf{x}}(0)$ afin de
+contraindre la position finale du centre de masse. Dans la mesure où
+l'on peut également adapter la longueur du pas $T$, il est possible de
+choisir $T$ telle que les vitesses initiales et finales du centre de
+masse peuvent être négligées et la trajectoire du centre de masse
+considérée $\mathcal{C}^2$ sur la totalité de la trajectoire de
+marche.
+
+
+Cette stratégie de calcul a pour avantage d'être simple à comprendre
+et à implémenter mais également peu coûteuse en terme de temps de
+calcul. Elle a été développée par Nicolas Perrin dans~FIXME. Les
+limites de cette approche se situent dans les nombreuses hypothèses
+limitantes du modèle simplifié ainsi que par la recherche dichotomique
+des paramètres adaptés pour assurer la continuité de la trajectoire de
+centre de masse.
+
+
 \subsection{Exécution d'une trajectoire}
 
-\subsection{Limites de l'approche naïve}
+
+La section précédente a montré comment générer, à partir d'une
+séquence d'empreintes de pas, une trajectoire de centre de masse qui
+assure la stabilité du robot. Une fois cette trajectoire associée aux
+trajectoires des pieds, on obtient une représentation une
+représentation d'une trajectoire de marche. Cette représentation est
+avantageuse car elle ne fixe pas directement la position des corps du
+robot, il est alors encore possible de déplacer le haut du corps pour,
+par exemple, aller saisir un objet. Ce type de tâche étant typiquement
+définie comme un asservissement sur la donnée d'un capteur, il est
+nécessaire de pouvoir découpler ce qui relève de la planification et
+donc d'un processus lent et ce qui relève de l'asservissement capteur,
+c'est à dire d'un comportement réactif. On peut alors se demander,
+comment passer d'une série de trajectoires à une commande pouvant être
+envoyée aux actionneurs du système.
+
+
+Ce problème peut se résoudre en tant que problème d'optimisation:
+l'objectif serait de minimiser la vitesse des actionneurs tout en
+ajoutant des contraintes pour suivre les trajectoire de référence. On
+pourrait imaginer avoir trois contraines pour la trajectoire du centre
+de masse et des deux pieds. Il est alors possible d'ajouter encore une
+contrainte, pour atteindre un objet à saisir avec la main, par
+exemple.
+
+
+C'est à ce moment qu'une différenciation s'opère entre d'un côté les
+stratégies d'optimisation numériques classiques et les stratégies
+d'optimisation adaptées à la robotique de l'autre. Les problèmes que
+la robotique traite possèdent deux caractistiques qui les rend
+spécifique:
+\begin{enumerate}
+\item Ils n'admettent pas toujours une solution: il est possible
+  l'objet soit trop loin pour pouvoir être atteint.
+\item Les contraintes du problème ont une importance variable: suivre
+  les trajectoires de référence sur les pieds et le centre de masse
+  est critique car ces contraintes permettent d'assurer la stabilité
+  du robot. Échouer la saisie d'un objet est comparativement beaucoup
+  moins important car il sera toujours possible de retenter la saisie
+  sans que cela mette le système dans une situation critique.
+\end{enumerate}
+
+Enfin, le suivi de trajectoire et la génération de la commande doit
+être réalisée à une fréquence fixe. Le solveur doit donc pouvoir
+réaliser une itération durant un tour de la boucle temps réel ce qui
+impose des limitations très strictes sur la complexité des calculs
+pouvant être réalisé. Face à ces particularités, la stratégie de
+résolution adoptée ici est celle de la ``pîle de tâches''.
+
+
+\subsubsection{Tâche et pile de tâches}
+
+\paragraph{Tâche}
+
+L'objectif d'un contrôleur est de pouvoir calculer la commande à
+envoyer aux actionneurs qui va réaliser un certain nombre d'objectifs
+assignés au robot. Habituellement, il est mal aisé d'exprimer ses
+objectifs directement dans l'espace des commandes du système. À la
+place, nous pouvons exprimer ces objectifs sous forme de tâche. Chaque
+tâche vît dans un espace qui lui est propre et adapté à la contrainte
+que l'on souhaite exprimer. Par exemple, dans le cas d'un
+asservissement visuel, l'espace de la tâche sera l'espace image
+2d. Une tâche d'asservissement visuel sera alors de réaliser un
+mouvement tel qu'un ensemble de points de l'image puisse atteindre une
+position prédéfinie.
+
+\begin{mydef}
+Une tâche est une fonction calculant l'erreur entre l'état courant
+d'une amer noté $s$ et un état de référence pré-défini de cet amer
+noté $s*$:
+
+\begin{equation}
+  \mathbf{e} = \mathbf{s} - \mathbf{s}^{*}
+\end{equation}
+
+L'objectif est donc de réaliser la tâche, c'est à dire de ramener
+l'erreur calculée par la tâche à zéro. L'erreur d'une tâche peut être
+de dimension supérieure à 1, dans ce cas l'objectif est de ramener
+toutes les composantes du vecteur d'erreur à $0$. La définition de
+l'opérateur de comparaison entre les deux états est dépendant de
+l'espace de la tâche.
+\end{mydef}
+
+\paragraph{Jacobien}
+
+La résolution d'une tâche passe par l'utilisation du jacobien de la
+tâche. Ce dernier est noté:
+
+\begin{equation}
+  \mathbf{J}_i = \frac{\partial \mathbf{e}_i}{\partial \mathbf{q}}
+\end{equation}
+
+Il lie l'espace des vitesses de la tâche à l'espace des vitesses
+articulaires du robot via la relation:
+
+\begin{equation}
+  \dot{\mathbf{e}}_i = \mathbf{J}_i \dot{\mathbf{q}}
+\end{equation}
+
+
+\paragraph{Pile de tâches}
+
+On peut calculer la vitesse articulaire du robot en inversant la
+relation précédente:
+
+\begin{equation}
+  \dot{\mathbf{q}} = \mathbf{J}_1^{+} \dot{\mathbf{e}}_1^{*} + \mathbf{P}_1 \mathbf{z}
+\end{equation}
+
+$\mathbf{J}_1^{+}$ est la pseudo-inverse de $\mathbf{J}_1$ ou inverse
+des moindre carrés de $\mathbf{J}_1$. $\dot{\mathbf{e}}_1$, la
+consigne, est le mouvement souhaité dans l'espace de la
+tâche. $\mathbf{P}_1$ est le projecteur vectoriel sur le noyau du
+jacobien $\mathbf{J}_1$ et $\mathbf{z}$ un vecteur quelconque. Le
+projecteur est défini par:
+
+\begin{equation}
+  \mathbf{P}_1 = \mathbf{I} - \mathbf{J}_1^{+} \mathbf{J}_1
+\end{equation}
+
+Ce projecteur assure que quelque soit le vecteur $\mathbf{z}$ choisi,
+il ne pourra pas interférer sur la réalisation de la consigne
+$\dot{\mathbf{e}}_1$. Par exemple, on peut prendre:
+
+\begin{equation}
+  \mathbf{z} = \mathbf{J}_2^{+} \dot{\mathbf{e}}_2^{*}
+\end{equation}
+
+Dans ce cas, on aboutît à une commande telle que l'on essaie d'abord
+de réaliser la consigne $\dot{\mathbf{e}}_1^{*}$ puis
+$\dot{\mathbf{e}}_2^{*}$, sans perturber la réalisation de la première
+tâche. Ce pile de tâche possède deux niveaux de priorité, mais peut
+être généralisée à autant de niveaux de priorité que souhaité. Ce
+méchanisme de résolution est particulièrement adapté dans la mesure où
+l'on va d'abord résoudre la tâche de priorité la plus haute pour
+ensuite tenter de réaliser les secondes tâches avec les degrés de
+liberté restants. Si le problème n'est pas soluble dans sa totalité,
+les tâches possédant les priorités les plus élevées seront réalisées
+d'abord.
+
+
+Différentes solutions sont possibles pour calculer la consigne, la
+plus simple consiste à utiliser une régulation proportionnelle:
+
+\begin{equation}
+  \mathbf{s}_1^{*} = -\lambda (\mathbf{s}_1 - \mathbf{s}_1{*})
+\end{equation}
+
+$\lambda$ étant le gain du régulateur proportionnel.
+
+
+\subsection{Limites de la boucle ouverte}
+
+
+Le schéma de contrôle consistant à simplement suivre une trajectoire
+planifiée n'est pas toujours satisfaisante. En effet, les nombreuses
+hypothèses réalisées dans le cadre de l'utilisation de modèles
+linéaires pour la marche entretiennent un flou entre les mouvements
+stables et instables sur une plate-forme donnée. En effet, les
+hypothèses tell que négliger les moments autour du centre de masse,
+supposer un sol plan, ne sont jamais respectées en réalité. Il faut
+donc pouvoir apprécier ce qui est une entorse ``acceptable'' aux
+hypothèses sur lequel le raisonnement a été effectué. Il en découle
+une grande part de ``savoir-faire'' dans l'implémentation d'un
+algorithme de marche fiable. Et même avec ce savoir-faire, l'écart
+entre le modèle et la réalité est telle qu'il met souvent en péril la
+réalisation de tâches complexes. Lors de l'utilisation d'un modèle
+linéaire, l'erreur de positionnement du robot peut augmenter d'un ou
+deux centimètres par pas. Dès lors, prendre un objet ou interagir avec
+un humain se révèle impossible après un déplacement de quelques mètres
+sans un méchanisme de compensation adapté. Inversement, l'utilisation
+d'un modèle physique réaliste aboutît à des temps de calcul
+importants, trop long pour pouvoir être utilisé pour s'asservir sur un
+capteur notamment. La recherche d'un compromis entre réactivité,
+fiabilité et précision est un réel enjeu pour la robotique humanoïde.
+
+
+\subsection{Conclusion}
+
+Cette section propose une stratégie de génération de mouvement pour
+les robots humanoïdes de l'État de l'Art. Nous sommes parti des
+fondements de la robotique avec la définition d'un arbre cinématique,
+de la cinématique directe et inverse pour ensuite détailler comment
+les relations fondamentales de la physique ont permis de définir des
+modèles de génération de mouvement tractables pour le calcul de
+trajectoire de référence pour la marche. On a enfin montré que ces
+trajectoires pouvaient être suivies via un contrôleur temps réel
+reposant sur le paradigme de la pile des tâches. L'utilisation de
+tâches permet la conception de contrôleurs versatiles, pouvant être
+étendu facilement par la définition de nouvelles tâches. Cette
+stratégie globale relève de nombreux travaux du domaine réalisés qui
+seront détaillés dans la section suivante.
+
 
 
 \section{État de l'Art}
 
+\subsection{Travaux de référence en robotique}
+\subsection{Modèles pour la marche dynamique}
+\subsection{Contrôleurs pour robots humanoïdes}
+\subsection{Exécution de trajectoires asservies}
+
+
+
+
 \section{Correction de mouvement temps réel}
+\subsection{Trajectory following: from mobile robots to humanoids}
+
+
+Le problème du suivi de trajectoire a été largement étudié et
+l'utilisation d'une technique classique de la littérature robotique
+telle que celle illustrée par la figure~\ref{fig:system} semble
+naturel. Cependant, nous allons montrer qu'appliquer les stratégies de
+la robotique mobile n'est pas sufffisant pour réaliser un suivi de
+trajectoire référencé capteur sur un robot humanoïde.
+
+
+La figure~\ref{fig:system} montre comment peut fonctionner un
+contrôleur réalisant un asservissement capteur pour le suivi de
+trajectoire sur un robot mobile. Un système de localisation externe
+fournie une appréciation de la position du robot qui permet de
+déformer continuement la trajectoire de référence
+$\gamma$. L'estimation de la position du robot par le système de
+localisation est dénoté $\hat{\mathbf{x}}$. De cette estimation, une
+erreur sur le positionnement peut être calculée et ajoutée composante
+par composante à la trajectoire de référence en utilisant, par
+exemple, un proportionnel, c'est à dire $k_x$, $k_y$, $k_{r_z}$ sur la
+figure.
+
+
+\begin{figure}[ht!]
+  \begin{center}
+    \begin{tikzpicture}[x=.40\textwidth,y=2.5cm]
+
+      \path node (plus) at (-0.45,0) [shape=rectangle,draw,color=white]
+            {\color{black} $\bigoplus$};
+
+      \path node (robot) at (-0.15,0)
+            [shape=rectangle,draw,label=3:$\hat{\mathbf{x}}$] {robot};
+
+      \path node (errorcomp) at (-0.15,0.6)
+            [shape=rectangle,draw,label=185:$\mathbf{\delta \mathbf{x}}$]
+            {$\begin{array}{c} 
+                k_x (x^{ref} - \hat{x})\\
+                k_y (y^{ref} - \hat{y})\\
+                k_{r_z} (r_z^{ref} - \hat{r_z})\end{array}$};
+
+      \draw[-] (-0.45,0.6) -- (errorcomp.west);
+      \draw[->] (-0.45,0.6) -- (-0.45,0.07);
+
+      \draw[->] (0.1,0.6) -- (errorcomp.east);
+      \draw[-] (0.1,0.6) -- (0.1,0.);
+      \draw[->] (robot.east) -- (0.2,0.);
+
+      \draw[->] (-0.45,0.) -- (robot.west);
+
+      \draw[->] (-0.6,0.) -- (-0.474,0.) node [above left]
+           {$\mathbf{\dot{\mathbf{x}^{\text{ref}}}}$};
+
+      \draw[->] (-0.6,0.8) -- (errorcomp.160) node [above left]
+           {$\mathbf{x}^{\text{ref}}$};
+    \end{tikzpicture}
+  \end{center}
+  \caption{Correction de trajectoire pour un robot type base
+    mobile. $\mathbf{x}^{\text{ref}} = (x^{\text{ref}},
+    y^{\text{ref}}, r_z^{\text{ref}})$, $\mathbf{\dot{x}^{\text{ref}}}
+    = (\dot{x}^{\text{ref}}, \dot{y}^{\text{ref}},
+    \dot{r_z}^{\text{ref}})$ et $\mathbf{\hat{x}} = (\hat{x}, \hat{y},
+    \hat{r_z})$ sont respectivment la position et vitesse du robot
+    dans le plan et dans la réalité. La commande planifiée
+    $\mathbf{\dot{x}}$ est corrigée en sommant $\delta \mathbf{x}$ une
+    correction déterminée par l'erreur de positionnement d'un point de
+    référence du robot entre le plan et la position donnée par le
+    système de localisation. \label{fig:system}}
+\end{figure}
+
+Si l'on appliquait ce système à un robot humanoïde, il mettrait à jour
+une trajectoire de référence, celle du centre de masse, par
+exemple. Tant que le robot a au moins un pied au sol, le bassin est
+contrôlable localement ce qui permet d'appliquer la correction en
+modifiant la valeur de degrés de liberté de la jambe.
+
+
+\paragraph{Stabilité de la trajectoire corrigée}
+
+
+Contrairement aux robots mobiles, les trajectoires stables pour un
+robot humanoïde sont peu nombreuses en proportion. Tout l'enjeu de la
+génération d'une trajectoire pour un robot humanoïde est d'assurer sa
+stabilité. Il faut donc vérifier que la correction de la trajectoire
+initiale ne viendra pas compromettre cette stabilité. Comme nous
+l'avons vu dans la section précédente, il faut corriger la trajectoire
+sans faire sortir le ZMP du polygône support:
+
+\begin{equation} \label{eq:zmp2}
+  \mathbf{z} = \mathbf{x}  - \frac{z_c}{g} \ddot{\mathbf{x}}
+\end{equation}
+
+La linéarité de l'équation signifie que perturber le center masse par
+une fonction \mbox{$\delta \mathbf{x}$} dépendant du temps perturbe le
+ZMP de manière linéaire:
+
+\begin{equation} \label{eq:zmpperturbation}
+\begin{split}
+  \mathbf{z'} &= (\mathbf{x} + \mathbf{\delta x}) - \frac{z_c}{g} .
+  \frac{d^2 (\mathbf{x} + \mathbf{\delta x})}{d t^2}\\
+  &= \mathbf{x} - \frac{z_c}{g} \ddot{\mathbf{x}} +
+  \underbrace{\mathbf{\delta x} - \frac{z_c}{g} \ddot{\mathbf{\delta
+        x}}}_{\text{perturbation induite}}
+\end{split}
+\end{equation}
+
+En utilisant le modèle linéaire, il est possible d'étudier comment
+modifier la trajectoire du centre de masse pour assurer l'équilibre de
+la trajectoire.
+
+De plus, il est possible d'effectuer le raisonnement en utilisant le
+modèle linéaire sur la perturbation uniquement. On peut donc utiliser
+un algorihtme de génération de mouvement hors-ligne coûteux et
+raffiner le mouvement en temps réel via la méthode proposée dans la
+section suivante. L'intérêt est de pouvoir combiner à la fois des
+trajectoires qui sont trop dynamiques pour pouvoir utiliser le modèle
+linéaire tout en considérant localement que les équations sont
+linéaires pour ajuster localement la trajectoire.
+
+
+\paragraph{Singularités des trajectoires corrigées}
+
+
+Dans la mesure où le bassin d'un robot humanoïde n'est que locallement
+actionable, il est primordial de générer des corrections qui
+n'introduisent pas de singularités durant le mouvement. Typiquement,
+un écart trop important entre les points de contact et la trajectoire
+du centre de masse -- souvent proche du bassin -- peut provoquer des
+singularités. Il est donc nécessaire non seulement de corriger le
+positionnement du bassin, mais également de déformer les points de
+contacts afin d'éviter les singularités. Dans le cas contraire, on
+observerait une ``dérive'' du bassin qui s'éloignerait progressivement
+des empreintes de pas planifiées.
+
+Il apparaît donc clairement qu'une solution naïve inspirée de la
+robotique mobile n'est pas une solution viable. Dès lors, corriger la
+trajectoire d'un robot humanoïde pour pouvoir s'asservir sur un
+capteur demande une approche originale qui sera détaillée dans la
+section suivante. Le schéma de contrôle proposé tient compte de ces
+deux problèmes afin de fournir une approche adaptée à la locomotion
+bipède.
+
+\section{Suivi de trajectoire pour la robotique humanoïde}\label{closedloop}
+
+
+Cette section propose un contrôleur pour le suivi de trajectoire
+boucle-fermée pour les robots humanoïdes qui prend en compte leurs
+particularités.
+
+Suivre une trajectoire asservie consiste à exécuter une trajectoire
+pré-calculée tout en s'assurant que les erreurs d'exécution sont bien
+compensées. Un tel système se divise en quatre composants:
+
+\begin{enumerate}
+\item un générateur de trajectoire,
+\item un système de localisation fournissant une estimation de la position du robot,
+\item un système d'estimation de l'erreur calculant l'écart entre la
+  position actuelle du robot et celle à laquelle il est censé se
+  trouver,
+\item et un composant générant une trajectoire mise à jour permettant
+  de réduire l'écart constaté.
+\end{enumerate}
+
+
+The trajectory generator provides two reference data: the footstep
+sequence, a set of footsteps $S_i$ such as \mbox{$0 \leq i \leq
+  n^{\text{step}}$} and a whole-body trajectory \mbox{$\gamma(t \in
+  [t_{\text{min}}, t_{\text{max}}]) \in \mathcal{C}$}. One advantage
+of the proposed control scheme is to alter the future footstep
+positions to avoid singularities. Given a known perturbation of the
+footstep sequence, it is then possible to deduce the correction that
+should be applied to the feet and center of mass trajectories. Once
+those trajectories are computed, inverse geometry can be used to
+regenerate the joints trajectories.
+
+
+One iteration of the control loop is described by
+Algorithm~\ref{fig:control_loop} and can be summarized as:
+\begin{enumerate}
+\item estimate the robot position,
+\item compute the position error \mbox{$\delta \mathbf{x}$},
+\item filter the error to avoid perturbing too much the initial
+  trajectory and to absorb localization noise,
+\item recompute the next steps positions to compensate execution
+  errors and make sure the feet will land on the planned position,
+\item check if the recomputed next step is feasible,
+\item regenerate smooth trajectories for the feet, center of mass and
+  ZMP.
+\item regenerate the joints trajectories. This step is denoted by
+  \mbox{$\gamma \bigoplus \delta \gamma$} in the algorithm. The
+  \mbox{$\gamma \bigoplus \delta \gamma$} operation returns $\gamma$
+  altered by the rigid transformation \mbox{$\delta \gamma$}. $\delta
+  \gamma$ is the perturbation applied to the whole-body trajectory and
+  is not directly computed as the inverse geometry is directly applied
+  on the updated body positions.
+\end{enumerate}
+
+
+\begin{algorithm}
+  \begin{algorithmic}
+    \REQUIRE {$\gamma$, $t_{\text{current}}, t_{\text{next\_correction}}$}
+    \ENSURE {$\gamma$, $t_{\text{current}}, t_{\text{next\_correction}}$}
+    \IF {$\gamma(t_{\text{current}})$ is double support \AND
+      $t_{\text{current}} \geq t_{\text{next\_correction}}$}
+    \STATE estimate robot position $\mathbf{\hat{x}}$
+    \STATE compute robot position error $\delta \mathbf{x}$
+    \STATE compute offset $\delta \gamma$ absorbing the execution
+    error $\delta \mathbf{x}$
+    \IF {the perturbation $\delta \gamma$ can be applied}
+    \STATE $\forall t \in [t_{\text{current}}, t_{\text{max}}],
+    \gamma(t) \leftarrow \gamma(t) \bigoplus \delta \gamma(t)$
+    \STATE $t_{\text{next\_correction}} \leftarrow t_{\text{current}} + 2 T_{\text{step}}$
+    \ENDIF
+    \ENDIF
+    \STATE $\mathbf{q} \leftarrow \gamma(t_{\text{current}})$
+    \STATE $t_{\text{current}} \leftarrow t_{\text{current}} + \Delta t$
+  \end{algorithmic}
+  \caption{Control loop at time $t_{\text{current}}$ achieving a
+    closed-loop following of trajectory $\gamma$ (next correction will
+    be applied at
+    $t_{\text{next\_correction}}$). \label{fig:control_loop}}
+\end{algorithm}
+
+
+First, the robot position $\hat{\mathbf{x}}$ is perceived. The
+localization system will not be detailed in this paper, see
+\cite{08ijhr.stasse, 06humanoids.thompson} for instance for more
+details. Although common limitations of these systems are taken into
+account. The precision of the robot estimation does not decrease over
+time, but can vary during the execution. This produces a noise which
+may perturb the control scheme. The localization system can also fail
+to provide an estimation or even sometimes provide aberrant values.
+
+Secondly, an error $\mathbf{\delta \mathbf{x}}$ is computed by
+comparing the planned and estimated position of the tracked reference
+body. A threshold is applied to this value to bound the applied
+corrections. In practice, it also filters out outliers and the noise
+that the localization system may introduce in the system.
+
+
+\begin{figure}[ht!]
+  \begin{center}
+    \begin{tikzpicture}[x=.40\textwidth,y=2.5cm]
+      \def\w{0.3}
+      \def\h{0.35}
+
+      \def\ws{0.05}
+      \def\hs{0.2}
+
+      \def\noisex{0.01}
+      \def\noisey{0.3}
+
+      \foreach \dy in {0., 1.}
+               {
+                 \draw[pattern=dots,rounded corners]
+                 (0.,0.25+\dy) rectangle (0.+\w,0.25+\dy+\h);
+
+                 \draw[rotate=-10,rounded corners]
+                 (\noisex,0.25+\noisey + \dy) rectangle
+                 (\noisex+\w,0.25+\noisey+\dy+\h);
+
+                 % left step planned
+                 \filldraw[pattern=north east lines] (
+                 0. + 0.1   * \w,
+                 0.5 + \dy + 0.225 * \h)
+                 rectangle (
+                 0. + 0.1   * \w + \ws,
+                 0.5 + \dy + 0.225 * \h + \hs);
+
+                 % right step planned
+                 \filldraw[pattern=north east lines] (
+                 0. + 0.75 * \w,
+                 \dy + 0.225  * \h)
+                 rectangle (
+                 0. + 0.75  * \w + \ws,
+                 \dy + 0.225 * \h + \hs);
+
+                 % left step real
+                 \draw[rotate=-10] (
+                 \noisex + 0.1   * \w,
+                 0.5 + \noisey + \dy + 0.225 * \h)
+                 rectangle (
+                 \noisex + 0.1   * \w + \ws,
+                 0.5 + \noisey + \dy + 0.225 * \h + \hs);
+
+                 % right step real
+                 \draw[rotate=-10] (
+                 \noisex + 0.75 * \w,
+                 \noisey + \dy + 0.225  * \h)
+                 rectangle (
+                 \noisex + 0.75  * \w + \ws,
+                 \noisey + \dy + 0.225 * \h + \hs);
+               }
+
+               \draw[smooth,-,thick]
+               (0.75 * \w + \ws/2.,\h/2.) --
+               (0.75 * \w + \ws/2.,1.+\h/2.)
+               node[midway,left]
+               {
+                 $\gamma$
+               };
+
+               \draw[smooth,rounded corners=1ex,-,thick]
+               (0.75 * \w + \ws/2. + 0.03,0.15+\h/2. + 0.15) --
+               (0.75 * \w + \ws/2. + 0.03 + 0.03,0.15+\h/2. + 0.15 + 0.4) --
+               (0.75 * \w + \ws/2.,1.+\h/2.)
+               node[at start,right]
+               {
+                 $\gamma \bigoplus \delta \gamma$
+               };
+
+               \draw[smooth,rounded corners=1ex,<->,thick]
+               (-0.02, 0.25+0.45) --
+               (-0.03, 0.25+0.35) --
+               (-0.02, 0.25+0.25)
+               node[at start,left]
+               {
+                 $\Delta r_z$
+               };
+
+               \draw[smooth,rounded corners=1ex,<->,thick]
+               (-0.02, 0.25+0.) --
+               (-0.02, 0.25+0.15)
+               node[midway,left]
+               {
+                 $\Delta x$
+               };
+
+               \draw[smooth,rounded corners=1ex,<->,thick]
+               (0., 0.25-0.1) --
+               (0.03, 0.25-0.1)
+               node[midway,below]
+               {
+                 $\Delta y$
+               };
+
+               \path node (txt1) at (0.075+\w,0.25+0.)
+                     [shape=rectangle,draw,color=white]
+                     {\color{black} $\mathbf{x}$};
+
+               \path node (txt1) at (0.08+\w,0.25+0.3)
+                     [shape=rectangle,draw,color=white]
+                     {\color{black} $\mathbf{\hat{x}}$};
+
+    \end{tikzpicture}
+  \end{center}
+  \caption{Correction of the next step due to a position error. Dotted
+    rectangles are the planned positions $\mathbf{x}$ of the robot
+    waist and feet before and after the next step. Non-dotted
+    rectangles corresponds to the robot localization
+    $\mathbf{\hat{x}}$. Error w.r.t to axis X, Y and yaw rotation is
+    \mbox{$(\Delta x, \Delta y, \Delta r_z) = \delta \mathbf{x}$,
+      $\gamma$} the reference trajectory and $\delta \gamma$ the
+    corrected trajectory reaching the planned
+    step. \label{fig:footstepreplan}}
+\end{figure}
+%
+%
+%
+Then, the relative position of the next footstep w.r.t. to the current
+one is changed to compensate the perceived
+error. Fig.~\ref{fig:footstepreplan} illustrates this process.
+%
+%
+From this point, smooth trajectories can be regenerated for feet and
+center of mass. To ensure smoothness, the trajectory correction is
+progressively applied during the next two steps. To finish, joint
+values are recomputed using these new reference trajectories.
+%
+%
+%
+Additionally, a test is added to check that a correction can be
+computed for the current time $t_{\text{current}}$. A correction can
+be applied if no correction is being applied,
+i.e.\ \mbox{$t_{\text{current}} \geq t_{\text{next\_correction}}$} and if the
+robot is in the double support phase. Indeed starting a correction in
+the middle of a step would be dangerous and starting a correction
+while another correction is being applied would lead to erroneous
+results.
+%
+%
+Previous works such as \cite{04humanoids.harada, 07icra.morisawa} aim
+at allowing sudden changes in the robot trajectory. The proposed
+control scheme is different and aim at following as closely as
+possible a preplanned trajectory.
+%
+%
+%\vspace{0.3cm}
+\paragraph{Estimation of the position error}
+%
+We make the assumption that an external system provides
+\mbox{$\hat{\mathbf{x}} \in \text{SE}(2)$}, an estimation of the
+current robot position.
+%
+If $\mathbf{x} \in \text{SE}(2)$ is the robot planned position and
+$\hat{\mathbf{x}} \in \text{SE}(2)$ the robot localization, the
+position error is defined by: $\mathbf{\delta x} = \mathbf{x} . \hat{\mathbf{x}}^{-1}$\label{eq:errorpos}
+%
+%\begin{equation} \label{eq:errorpos}
+%  \mathbf{\delta x} = \mathbf{x} . \hat{\mathbf{x}}^{-1}
+%\end{equation}
+%
+%In Eq. (\ref{eq:errorpos}), $\mathbf{\delta x}(t)$ can be
+In the previous equation, $\mathbf{\delta x}(t)$ can be
+interpreted as the planned robot position with respect to the current
+robot position at time $t$. By consequence, at the beginning of the
+trajectory $t_{\text{min}}$, the error is always equal to zero: $\delta \mathbf{x}(t_{\text{min}}) = 0$ \label{eq:errorpos_prop}
+%
+%\begin{equation} \label{eq:errorpos_prop}
+%  \delta \mathbf{x}(t_{\text{min}}) = 0
+%\end{equation}
+%
+%\vspace{0.3cm}
+\paragraph{Footstep sequence modification}
+%
+%
+Given a position error of the waist, it is possible to alter the
+remaining steps in the footstep sequence to absorb this offset.
+%
+The purpose of this step is to take into consideration that the
+previous step has not been executed correctly, leading to a different
+relative position than the one which has been initially planned. To
+cancel the error, the next footsteps positions will be modified
+so that the robot will step in the planned locations.
+%
+%
+The footstep positions are \mbox{$S \in
+  \text{SE}(2)^{n^\text{step}}$}. Let consider $\mathbf{\delta {x}}$,
+the current position error, \mbox{$S^{\text{future}} \subset S$} the
+steps which have not been played yet. The footstep positions will be
+changed according to the following computation: $\forall s \in S^{\text{future}}, s \gets \mathbf{\delta {x}} . s$ \label{eq:footstepmodif}
+%
+%\begin{equation} \label{eq:footstepmodif}
+%  \forall s \in S^{\text{future}}, s \gets \mathbf{\delta {x}} . s
+%\end{equation}
+%
+%
+%\vspace{0.3cm}
+\paragraph{Whole-body trajectories modification}
+%
+A new placement of the next feet has been computed. It is now necessary
+to modify the two feet and the center of mass trajectories
+synchronously to reach the corrected foot prints.
+%
+The correction is computed by considering the simplified model
+introduced in section \ref{problem}. Hence, no hypothesis is done on
+the strategy used to plan the reference trajectories. One interest of
+this approach is to totally dissociate the planning and correction
+algorithms. To compute a small perturbation the simplified model is
+sufficient. It allows extremely reactive correction without
+compromising the overall trajectory quality.
+%
+%
+The linearized inverse pendulum model allows the computation of the
+center of mass trajectory $\mathbf{c}(t)$ given a ZMP trajectory
+$\mathbf{z}(t)$ by solving Eq.~(\ref{eq:zmp1}). Considering $\mathbf{r}$ a
+polynomial depending only of $\mathbf{z}$, $(V_x, V_y, W_x, W_y)$ free
+parameters used to constrain the initial position and velocity of the
+center of mass, a general following form of a polynomial center of
+mass trajectory is:
+%
+\begin{equation} \label{eq:zmpsol}
+  \mathbf{c}(t) = \cosh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{V} + \sinh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{W} + \mathbf{r}(t)
+\end{equation}
+%
+Given the formulation in Eq.~(\ref{eq:zmpsol}), it is possible to
+continuously modify the center of mass trajectory to make it follow
+\mbox{$\bar{\mathbf{z}}(t)$} the corrected trajectory. This new
+trajectory can be expressed as the sum of two polynomials:
+%
+\begin{equation} \label{eq:zmpsolcor}
+  \bar{\mathbf{c}}(t) = \cosh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{V} +
+  \sinh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{W} + \mathbf{r}(t) + \mathbf{\Delta}(t)
+\end{equation}
+%
+To apply smoothly the correction from $t_1$ to $t_2$, several
+constraints expressed in Eq.~\ref{eq:cst} have to be respected.
+$\delta \mathbf{x}_x$ and $\delta \mathbf{x}_y$ are respectively the
+$x$ and $y$ components of the 2d rigid transformation $\delta
+\mathbf{x}$.
+%
+\begin{equation}
+\begin{aligned}
+  \mathbf{\Delta}(t_1) &= \frac{\partial \mathbf{\Delta}}{\partial t}(t_1) = \frac{\partial
+    \mathbf{\Delta}}{\partial t}(t_2) = 0\\
+  \mathbf{\Delta}(t_2) &= \left(
+  \begin{array}{c}
+    \delta \mathbf{x}_x \\
+    \delta \mathbf{x}_y
+  \end{array}
+  \right)
+\end{aligned}
+\label{eq:cst}
+\end{equation}
+%
+\begin{figure}[ht!]
+  \begin{center}
+
+    \begin{tikzpicture}[x=.40\textwidth,y=2.cm]%FIXME 2.5
+      \def\xmin{0.}
+      \def\xmax{1.}
+      \def\ymin{0.5}
+      \def\ymax{2.5}
+
+      % grid
+      \draw[style=help lines, ystep=.5, xstep=.25] (\xmin,\ymin) grid
+      (\xmax,\ymax);
+
+      % axes
+      \draw[->] (\xmin,\ymin) -- (\xmax,\ymin) node[right] {$t$};
+      \draw[->] (\xmin,\ymin) -- (\xmin,\ymax) node[above]
+           {$\mathbf{\Delta}(t)$};
+
+      % xticks and yticks
+      \node at (0.05, \ymin) [below] {start};
+      \node at (0.95, \ymin) [below] {end};
+
+      \draw[color=black, domain=\xmin:\xmax] plot[id=cur]
+      function{1} node [right] {initial};
+
+      \draw[color=black, domain=\xmin:\xmax] plot[id=des]
+      function{2} node [right] {desired};
+
+      \draw[color=black, domain=\xmin:\xmax] plot[id=trans]
+      function{-2. * x * x * x + 3 * x * x + 1} node [below] {};
+
+    \end{tikzpicture}
+  \end{center}
+  \caption{Polynomial curve $\mathbf{\Delta}(t)$ providing a smooth
+    transition between feet and center of mass
+    trajectories. \label{fig:transition}}
+\end{figure}
+%
+These four constraints determine the polynomial four parameters
+leading to the curve illustrated by Fig.~\ref{fig:transition}.
+%
+%
+\begin{figure}[ht!]
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{axis}[
+          xlabel=time ($\mathrm{s}$),
+          ylabel=$x$ position ($\mathrm{m}$),
+          no markers
+          ]
+
+        \addplot[
+          mark=x,
+          red
+        ] table[
+          x expr=(\thisrowno{0}-0)*0.005
+        ] {dat/feet_follower_feet-follower-com.dat};
+        \label{com}
+        \addplot[
+          mark=x,
+          red,
+          line width=1.25pt
+        ] table[
+          x expr=(\thisrowno{0}-0)*0.005,
+          y expr=\thisrowno{1}-0.
+        ] {dat/feet_follower_correction-com.dat};
+        \label{comcorr}
+
+        \addplot[
+          mark=*,
+          blue,
+          loosely dashed
+        ] table[
+          x index=0,
+          y index=4,
+          x expr=(\thisrowno{0}-0)*0.005
+        ] {dat/feet_follower_feet-follower-left-ankle.dat};
+        \label{lf}
+
+        \addplot[
+          mark=*,
+          blue,
+          line width=1.25pt,
+          loosely dashed
+        ] table[
+          x index=0,
+          y index=4,
+          x expr=(\thisrowno{0}-0)*0.005,
+          y expr=\thisrowno{4}-0.
+        ] {dat/feet_follower_correction-left-ankle.dat};
+        \label{lfcorr}
+
+        \addplot[
+          mark=triangle*,
+          green,
+          dashed
+        ] table[
+          x index=0,
+          y index=4,
+          x expr=(\thisrowno{0}-0)*0.005
+        ] {dat/feet_follower_feet-follower-right-ankle.dat};
+        \label{rf}
+
+        \addplot[
+          mark=triangle*,
+          green,
+          dashed,
+          line width=1.25pt
+        ] table[
+          x index=0,
+          y index=4,
+          x expr=(\thisrowno{0}-0)*0.005,
+          y expr=\thisrowno{4}-0.
+        ] {dat/feet_follower_correction-right-ankle.dat};
+        \label{rfcorr}
+      \end{axis}
+    \end{tikzpicture}
+  \end{center}
+  \caption{Evolution, during two steps, of the $x$ position of the
+    center of mass~(\ref{com}), left foot~(\ref{lf}) and right foot
+    (\ref{rf}). Bold curve depicts a step a $0.3 \mathrm{m}$
+    forward. Dashed curve depicts the center of mass~(\ref{comcorr}),
+    left foot~(\ref{lfcorr}) and right foot~(\ref{rfcorr})
+    trajectories with a correction of $0.05 \mathrm{m}$ in the forward
+    direction. \label{fig:traj}}
+\end{figure}
+%
+%
+This reshapes the center of mass trajectory by taking advantage of the
+linear formulation of the simplified model. Additionally, the feet
+trajectories are modified to reach the corrected positions at the end
+of the step. The smooth correction is also obtained by using a third
+degree polynomial with similar constraints: initial position remains
+as before, the goal position must fit the corrected position and the
+velocity of the correction is equal to zero at the beginning and the
+end of the transition. Fig.~\ref{fig:traj} compares resulting
+trajectories before and after the correction.
+%
+%
+These three corrections must be executed in the correct order: as
+stated before a correction is computed during a double support phase
+and applied during the next two steps. We will make the assumption,
+without any loss of generality, that the next flying foot is the left
+one. In that case the correction of the left foot is progressively
+applied during the single support phase. During the ZMP shift of this
+step, the center of mass correction is also applied. Then, during the
+next step, the correction of the right foot is applied. The timeline
+of the correction is illustrated by Fig.~\ref{fig:traj}.
+%
+%
+%\vspace{0.3cm}
+\paragraph{Error thresholding and new step feasibility}
+%
+%
+Correction does not compromise the robot stability. However, any
+correction is not feasible due to the robot mechanical limits and
+auto-collision. Therefore, it is important to bound corrections in
+order to avoid producing infeasible steps. It is also important to
+validate new steps w.r.t to auto-collision.
+%
+%
+The base hypothesis is that the reference trajectory which has been
+computed off-line is safe i.e.\ stable and without any
+auto-collision. By consequence, the goal is to determine how much this
+initial trajectory can be modified without compromising its safety.
+%
+First, a maximum error has been determined empirically. The maximum
+lateral perturbation is $\pm 0.04 \mathrm{m}$ , the maximum forward
+perturbation $\pm 0.05 \mathrm{m}$ and the maximum angular
+perturbation is $\pm 0.1 \mathrm{rad}$ every two steps.
+%
+\begin{figure}[ht!]
+  \begin{center}
+    \begin{tikzpicture}[x=.40\textwidth,y=2.5cm]
+      \def\w{0.3}
+      \def\h{0.25}
+
+      \def\ws{0.05}
+      \def\hs{0.2}
+
+      \def\noisex{0.01}
+      \def\noisey{0.3}
+
+      % left step planned
+      \filldraw[pattern=north east lines] (
+      0. + 0.1   * \w,
+      0. + 0.225 * \h)
+      rectangle (
+      0. + 0.1   * \w + \ws,
+      0. + 0.225 * \h + \hs);
+      \filldraw[pattern=north east lines] (
+      0. + 0.1   * \w,
+      1. + 0.225 * \h)
+      rectangle (
+      0. + 0.1   * \w + \ws,
+      1. + 0.225 * \h + \hs);
+
+
+      % right step planned
+      \filldraw[pattern=north east lines] (
+      0. + 0.75 * \w,
+      0. + 0.225  * \h)
+      rectangle (
+      0. + 0.75  * \w + \ws,
+      0. + 0.225 * \h + \hs);
+
+      \filldraw[pattern=north east lines] (
+      0. + 0.75 * \w,
+      1. + 0.225  * \h)
+      rectangle (
+      0. + 0.75  * \w + \ws,
+      1. + 0.225 * \h + \hs);
+
+
+      \foreach \dy in {0., 1.}
+               {
+                 \draw[pattern=dots,rounded corners] (0.,\dy)
+                 rectangle (0.+\w,\dy+\h);
+               }
+
+               % valid 1
+               \filldraw[pattern=north east lines,rotate=-10] (
+               0. + 0.75 * \w,
+               1. + 0.225  * \h)
+               rectangle (
+               0. + 0.75  * \w + \ws,
+               1. + 0.225 * \h + \hs);
+
+               % valid 2
+               \filldraw[pattern=north east lines,rotate=10] (
+               0. + 0.75 * \w + 0.1,
+               1. + 0.225  * \h)
+               rectangle (
+               0. + 0.75  * \w + \ws + 0.1,
+               1. + 0.225 * \h + \hs);
+
+
+               % invalid 1
+               \filldraw[color=black,rotate=10] (
+               0. + 0.75 * \w,
+               1. + 0.225  * \h)
+               rectangle (
+               0. + 0.75  * \w + \ws,
+               1. + 0.225 * \h + \hs);
+
+               % invalid 2
+               \filldraw[color=black,rotate=-10] (
+               0. + 0.75 * \w - 0.12,
+               1. + 0.225  * \h)
+               rectangle (
+               0. + 0.75  * \w + \ws - 0.12,
+               1. + 0.225 * \h + \hs);
+
+               % arrow
+               \draw[smooth,-,thick]
+               (0.75 * \w + \ws/2.,\h/2.) --
+               (0.75 * \w + \ws/2.,1.+\h/2.)
+               node[midway,left]
+               {
+                 $\gamma$
+               };
+
+               \path node (txt1) at (0.375+\w,0.2)
+                     [shape=rectangle,draw,color=white]
+                     {\color{black} current position};
+
+               \path node (txt1) at (0.375+\w,1.2)
+                     [shape=rectangle,draw,color=white]
+                     {\color{black} position after the step};
+    \end{tikzpicture}
+  \end{center}
+  \caption{Validation of the recomputed next step. Waist position is
+    symbolized by dotted rectangle, valid steps by hashed rectangles
+    and invalid steps by black rectangles.
+    \label{fig:stepvalid}}
+\end{figure}
+%
+%
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=\textwidth]{src/chap2-suivi-trajectoire/demo.jpg}
+  \end{center}
+  \caption{HRP-2 walking in a cluttered environment while avoiding
+    obstacles. The final position is reached with a precision of $\pm
+    3\mathrm{cm}$. The final error is the consequence of both noise in
+    the robot position estimation and drifts in the two last steps
+    which happen too late to be not compensated. \label{fig:scenario}}
+\end{figure}
+%
+%
+%
+Secondly, the new step is validated. The decision is based on the
+relative movement of the first corrected foot. Let consider that, for
+instance, the next moving foot is the left one. The original left foot
+position is \mbox{$s \in \text{SE}(2)$}, the new corrected left foot
+position is \mbox{$s' \in \text{SE}(2)$}. The relative position of the
+original and new foot is computed. If the $y$ component of the result
+is positive, the new step is accepted. In practice, it means that the
+step is ``pushed'' away and will not induce an auto-collision. On the
+opposite, with the right foot, the step is accepted if the $y$
+component is negative.
+%
+%
+If a correction is invalidated, another one is computed during the
+next double support phase. In practice, the estimated error during the
+next step will be close to the current estimation, in particular the
+sign (i.e. direction) of the error will remain the same. As the flying
+foot will change the delayed correction has a high probability of
+being accepted.
+%
+%
+This naive system has been empirically validated. However, it prevents
+some valid corrected steps. In the future, this will be replaced by a
+fast on-line steps validation algorithm described by
+\cite{10icra.perrin}.
+
+\section{Résultats expérimentaux}\label{exp}
+
+
+The proposed method has been validated on HRP-2 using the following
+scenarii: the robot walks in a narrow and constrained environment
+while stepping over obstacles. The trajectory length is
+$2.5\mathrm{m}$ and is executed in approximately $40\mathrm{s}$.
+%
+%
+This setup demonstrates that the execution using this control scheme
+is precise and reliable. The robot reaches its goal position with an
+error of a few centimeters whereas open loop control schemes is off by
+more than a meter. Moreover, the control scheme is reliable: during
+the movement, the localization precision can change, the robot
+position tracking can fail\ldots The control scheme is designed to be
+robust toward these situations.
+%
+%
+This experiment uses the pattern generator described by
+\cite{10icra.perrin} and the stack of tasks formalism
+\cite{09icar.mansard} to implement the control scheme. The pattern
+generator provides reference trajectories for the center of mass and
+the feet. Trajectory following tasks for these particular bodies are
+then inserted into the control framework. Computing the control such
+as the tasks are satisfied is then realized by the solver.
+%
+%
+This experiment video is available on the
+web (\mbox{\url{http://youtu.be/cUZ0nNiPs70}}). Fig.~\ref{fig:scenario}
+provides an overview of the scenario: the robot starts on the right
+side and walks toward the left side.
+%
+%
+%The final position precision depends on the localization precision and
+%the steps difficulty. In the proposed scenario, there is no occlusion
+%in order to ensure us a good localization. On the opposite, the long
+%steps as the one executed on this movement are prone to large
+%execution errors.
+In this context, the planned final position is
+reached with a precision of $\pm 2 \mathrm{cm}$. This trajectory has
+been executed five times consecutively with any obstacle collision.
+Using a different footsteps sequence with smaller steps, the planned
+position can be reached with an error lower than $1 \mathrm{cm}$.
+
+
 \subsection{De la génération à l'exécution, de la simulation à la réalité}
 \subsection{Architecture naïve, boucle ouverte, d'exécution}
 \subsection{Fermeture de la boucle d'exécution}

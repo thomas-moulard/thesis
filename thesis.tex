@@ -11,9 +11,10 @@
 \usepackage{mathtools}
 \usepackage{amssymb}
 \usepackage{amsthm}
+\usepackage{amsfonts}
 \usepackage{mathtools}
 \usepackage{makeidx}
-\usepackage{graphicx}
+\usepackage[pdftex]{graphicx}
 \usepackage{url}
 \usepackage{epigraph}
 \usepackage{hyperref}
@@ -31,8 +32,16 @@
 \usepackage{colortbl}
 \usepackage{placeins}
 
-\usepackage{tikz}
+\usepackage{algorithmic, algorithm}
+
+\usepackage{tikz, pgfplots}
 \usepackage{tikz-qtree}
+
+\usetikzlibrary{patterns}
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
 
 
 % Setup pdf meta-data.
@@ -72,6 +81,14 @@ pdfproducer = {Thomas Moulard}
 % Add definition definition.
 \newtheorem{mydef}{Définition}
 \newtheorem{myexample}{Exemple}
+
+\newtheorem{theorem}{Théorème}
+\newtheorem{definition}{Définition}
+\newtheorem{lemma}[theorem]{Lemme}
+\newtheorem{corollary}[theorem]{corollaire}
+\newtheorem{property}[theorem]{Propriété}
+
+%\newenvironment{proof}{\noindent {\bf Démonstration~:}}{\hfill $\Box$\vspace{2mm}\par}
 
 \newcommand\vect[1]{\textbf{#1}}
 \newcommand\moment[2]{{\cal M}_{#2}^{#1}}
