@@ -963,7 +963,15 @@ d'un système robotique.
 
 \paragraph{De la réalité physique à un modèle calculatoire tractable}
 
-Tout d'abord, rappelons la formule du ZMP:
+
+Le modèle décrit ici permet de passer des équations fondamentales de
+la physique, correctes mais trop lourds pour être utilisables sur un
+robot humanoïde devant posséder un comportement réactif, c'est à dire
+ajuster son comportement au sein du contrôleur temps réel réalisant
+l'exécution sur une trajectoire de référence. Cette approche est
+décrite en détail dans~\cite{10icra.perrin} mais nous rappelerons ici
+les grandes lignes de ces travaux. Tout d'abord, rappelons la formule
+du ZMP:
 
 \begin{equation}
 \left(
@@ -1149,7 +1157,7 @@ Enfin, le suivi de trajectoire et la génération de la commande doit
 réaliser une itération durant un tour de la boucle temps réel ce qui
 impose des limitations très strictes sur la complexité des calculs
 pouvant être réalisé. Face à ces particularités, la stratégie de
-résolution adoptée ici est celle de la ``pîle de tâches''.
+résolution adoptée ici est celle de la ``pile de tâches''.
 
 
 \subsubsection{Tâche et pile de tâches}
@@ -1250,7 +1258,9 @@ plus simple consiste à utiliser une régulation proportionnelle:
   \mathbf{s}_1^{*} = -\lambda (\mathbf{s}_1 - \mathbf{s}_1{*})
 \end{equation}
 
-$\lambda$ étant le gain du régulateur proportionnel.
+$\lambda$ étant le gain du régulateur proportionnel. Les détails du
+solveur et de l'architecture utilisée dans le cadre de ces travaux
+sont détaillés dans~\cite{09icar.mansard}.
 
 
 \subsection{Limites de la boucle ouverte}
@@ -1344,7 +1354,7 @@ figure.
 
       \path node (errorcomp) at (-0.15,0.6)
             [shape=rectangle,draw,label=185:$\mathbf{\delta \mathbf{x}}$]
-            {$\begin{array}{c} 
+            {$\begin{array}{c}
                 k_x (x^{ref} - \hat{x})\\
                 k_y (y^{ref} - \hat{y})\\
                 k_{r_z} (r_z^{ref} - \hat{r_z})\end{array}$};
@@ -1472,80 +1482,75 @@ compensées. Un tel système se divise en quatre composants:
 \end{enumerate}
 
 
-The trajectory generator provides two reference data: the footstep
-sequence, a set of footsteps $S_i$ such as \mbox{$0 \leq i \leq
-  n^{\text{step}}$} and a whole-body trajectory \mbox{$\gamma(t \in
-  [t_{\text{min}}, t_{\text{max}}]) \in \mathcal{C}$}. One advantage
-of the proposed control scheme is to alter the future footstep
-positions to avoid singularities. Given a known perturbation of the
-footstep sequence, it is then possible to deduce the correction that
-should be applied to the feet and center of mass trajectories. Once
-those trajectories are computed, inverse geometry can be used to
-regenerate the joints trajectories.
+Le générateur de trajectoires fournit deux données de référence: la
+séquence d'empreintes de pas, c'est à dire un ensemble de $S_i$ tel
+que \mbox{$0 \leq i \leq n^{\text{pas}}$} et une trajectoire du haut
+du corps \mbox{$\gamma(t \in [t_{\text{min}}, t_{\text{max}}]) \in
+  \mathcal{C}$}. Un avantage du schéma de contrôle proposé est que la
+position des empreintes de pas peut être altéré pour s'assurer que la
+trajectoire reste faisable. En partant d'une modification de la pile
+de pas, on peut déformer la trajectoire du centre de masse pour
+s'assurer que la trajectoire reste stable. Les trajectoires de
+référence portent sur des points du corps du robot et ne contiennent
+pas directement les valeurs articulaires. La pile de tâche a donc pour
+tâche de résoudre la cinématique inverse en temps réel lors de la
+résolution du problème d'optimisation.
 
+Une itération de la boucle de contrôle est décrite par l'algorithme~\ref{fig:control_loop} et peut être résumée aux étapes suivantes:
 
-One iteration of the control loop is described by
-Algorithm~\ref{fig:control_loop} and can be summarized as:
 \begin{enumerate}
-\item estimate the robot position,
-\item compute the position error \mbox{$\delta \mathbf{x}$},
-\item filter the error to avoid perturbing too much the initial
-  trajectory and to absorb localization noise,
-\item recompute the next steps positions to compensate execution
-  errors and make sure the feet will land on the planned position,
-\item check if the recomputed next step is feasible,
-\item regenerate smooth trajectories for the feet, center of mass and
-  ZMP.
-\item regenerate the joints trajectories. This step is denoted by
-  \mbox{$\gamma \bigoplus \delta \gamma$} in the algorithm. The
-  \mbox{$\gamma \bigoplus \delta \gamma$} operation returns $\gamma$
-  altered by the rigid transformation \mbox{$\delta \gamma$}. $\delta
-  \gamma$ is the perturbation applied to the whole-body trajectory and
-  is not directly computed as the inverse geometry is directly applied
-  on the updated body positions.
+\item estimation de la position du robot,
+\item calcule de l'erreur de positionnement \mbox{$\delta \mathbf{x}$},
+\item filtrage de l'erreur calculée par un filtre passe-bas afin de
+  borner la déformation maximum et absorber d'éventuelles erreurs de
+  localisation,
+\item recalculer les prochains pas de façon à aborber l'erreur de positionnement du robot,
+\item vérifier si le prochain pas est réalisable,
+\item regénérer des trajectoires continues pour les pieds, le ZMP et le centre de masse,
+\item recalculer les valeurs articulaires via la pile de tâches
 \end{enumerate}
 
 
 \begin{algorithm}
   \begin{algorithmic}
-    \REQUIRE {$\gamma$, $t_{\text{current}}, t_{\text{next\_correction}}$}
-    \ENSURE {$\gamma$, $t_{\text{current}}, t_{\text{next\_correction}}$}
-    \IF {$\gamma(t_{\text{current}})$ is double support \AND
-      $t_{\text{current}} \geq t_{\text{next\_correction}}$}
-    \STATE estimate robot position $\mathbf{\hat{x}}$
-    \STATE compute robot position error $\delta \mathbf{x}$
-    \STATE compute offset $\delta \gamma$ absorbing the execution
-    error $\delta \mathbf{x}$
-    \IF {the perturbation $\delta \gamma$ can be applied}
-    \STATE $\forall t \in [t_{\text{current}}, t_{\text{max}}],
+    \REQUIRE {$\gamma$, $t_{\text{maintenant}}, t_{\text{prochain}}$}
+    \ENSURE {$\gamma$, $t_{\text{maintenant}}, t_{\text{prochain}}$}
+    \IF {$\gamma(t_{\text{maintenant}})$ est en double support \AND
+      $t_{\text{maintenant}} \geq t_{\text{prochain}}$}
+    \STATE estimer la position du robot $\mathbf{\hat{x}}$
+    \STATE calculer l'erreur de positionnement $\delta \mathbf{x}$
+    \STATE calculer la déformation $\delta \gamma$ permettant de
+    corriger l'erreur de positionnement $\delta \mathbf{x}$
+    \IF {la correction $\delta \gamma$ peut être appliquée}
+    \STATE $\forall t \in [t_{\text{maintenant}}, t_{\text{max}}],
     \gamma(t) \leftarrow \gamma(t) \bigoplus \delta \gamma(t)$
-    \STATE $t_{\text{next\_correction}} \leftarrow t_{\text{current}} + 2 T_{\text{step}}$
+    \STATE $t_{\text{prochain}} \leftarrow t_{\text{maintenant}} + 2 T_{\text{step}}$
     \ENDIF
     \ENDIF
-    \STATE $\mathbf{q} \leftarrow \gamma(t_{\text{current}})$
-    \STATE $t_{\text{current}} \leftarrow t_{\text{current}} + \Delta t$
+    \STATE $\mathbf{q} \leftarrow \gamma(t_{\text{maintenant}})$
+    \STATE $t_{\text{maintenant}} \leftarrow t_{\text{maintenant}} + \Delta t$
   \end{algorithmic}
-  \caption{Control loop at time $t_{\text{current}}$ achieving a
-    closed-loop following of trajectory $\gamma$ (next correction will
-    be applied at
-    $t_{\text{next\_correction}}$). \label{fig:control_loop}}
+  \caption{Boucle de contrôle au temps $t_{\text{maintenant}}$ réalisant
+    un suivi de trajectoire boucle-fermée de la trajectoire $\gamma$
+    (la prochaine correction sera appliquée au temps
+    $t_{\text{prochain}}$). \label{fig:control_loop}}
 \end{algorithm}
 
+Tout d'abord, la position du robot $\hat{\mathbf{x}}$ est
+déterminée. Une large littérature concernant la localisation robotique
+existe \cite{08ijhr.stasse, 06humanoids.thompson} et les spécificités
+de la localisation d'un robot humanoïde seront abordées dans le
+prochain chapitre. Les limites habituelles de la localisation sont la
+perte du suivi résultant dans l'absence de localisation pendant un
+moment plus ou moins long ou bien la présence de bruit, voire de
+valeures aberrrantes dans l'estimation fournie.
 
-First, the robot position $\hat{\mathbf{x}}$ is perceived. The
-localization system will not be detailed in this paper, see
-\cite{08ijhr.stasse, 06humanoids.thompson} for instance for more
-details. Although common limitations of these systems are taken into
-account. The precision of the robot estimation does not decrease over
-time, but can vary during the execution. This produces a noise which
-may perturb the control scheme. The localization system can also fail
-to provide an estimation or even sometimes provide aberrant values.
-
-Secondly, an error $\mathbf{\delta \mathbf{x}}$ is computed by
-comparing the planned and estimated position of the tracked reference
-body. A threshold is applied to this value to bound the applied
-corrections. In practice, it also filters out outliers and the noise
-that the localization system may introduce in the system.
+Deuxièmement, une erreur $\mathbf{\delta \mathbf{x}}$ est calculée en
+comparant la position planifiée et la position estimée du corps de
+référence. Un seuil est appliqué pour borner la correction pouvant
+être appliquée. En pratique, ce filtrage permet de limiter l'influence
+du bruit de localisation ainsi que les valeurs aberrantes lorsque la
+localisation échoue.
 
 
 \begin{figure}[ht!]
@@ -1664,149 +1669,135 @@ that the localization system may introduce in the system.
     corrected trajectory reaching the planned
     step. \label{fig:footstepreplan}}
 \end{figure}
-%
-%
-%
-Then, the relative position of the next footstep w.r.t. to the current
-one is changed to compensate the perceived
-error. Fig.~\ref{fig:footstepreplan} illustrates this process.
-%
-%
-From this point, smooth trajectories can be regenerated for feet and
-center of mass. To ensure smoothness, the trajectory correction is
-progressively applied during the next two steps. To finish, joint
-values are recomputed using these new reference trajectories.
-%
-%
-%
-Additionally, a test is added to check that a correction can be
-computed for the current time $t_{\text{current}}$. A correction can
-be applied if no correction is being applied,
-i.e.\ \mbox{$t_{\text{current}} \geq t_{\text{next\_correction}}$} and if the
-robot is in the double support phase. Indeed starting a correction in
-the middle of a step would be dangerous and starting a correction
-while another correction is being applied would lead to erroneous
-results.
-%
-%
-Previous works such as \cite{04humanoids.harada, 07icra.morisawa} aim
-at allowing sudden changes in the robot trajectory. The proposed
-control scheme is different and aim at following as closely as
-possible a preplanned trajectory.
-%
-%
-%\vspace{0.3cm}
-\paragraph{Estimation of the position error}
-%
-We make the assumption that an external system provides
-\mbox{$\hat{\mathbf{x}} \in \text{SE}(2)$}, an estimation of the
-current robot position.
-%
-If $\mathbf{x} \in \text{SE}(2)$ is the robot planned position and
-$\hat{\mathbf{x}} \in \text{SE}(2)$ the robot localization, the
-position error is defined by: $\mathbf{\delta x} = \mathbf{x} . \hat{\mathbf{x}}^{-1}$\label{eq:errorpos}
-%
-%\begin{equation} \label{eq:errorpos}
-%  \mathbf{\delta x} = \mathbf{x} . \hat{\mathbf{x}}^{-1}
-%\end{equation}
-%
-%In Eq. (\ref{eq:errorpos}), $\mathbf{\delta x}(t)$ can be
-In the previous equation, $\mathbf{\delta x}(t)$ can be
-interpreted as the planned robot position with respect to the current
-robot position at time $t$. By consequence, at the beginning of the
-trajectory $t_{\text{min}}$, the error is always equal to zero: $\delta \mathbf{x}(t_{\text{min}}) = 0$ \label{eq:errorpos_prop}
-%
-%\begin{equation} \label{eq:errorpos_prop}
-%  \delta \mathbf{x}(t_{\text{min}}) = 0
-%\end{equation}
-%
-%\vspace{0.3cm}
-\paragraph{Footstep sequence modification}
-%
-%
-Given a position error of the waist, it is possible to alter the
-remaining steps in the footstep sequence to absorb this offset.
-%
-The purpose of this step is to take into consideration that the
-previous step has not been executed correctly, leading to a different
-relative position than the one which has been initially planned. To
-cancel the error, the next footsteps positions will be modified
-so that the robot will step in the planned locations.
-%
-%
-The footstep positions are \mbox{$S \in
-  \text{SE}(2)^{n^\text{step}}$}. Let consider $\mathbf{\delta {x}}$,
-the current position error, \mbox{$S^{\text{future}} \subset S$} the
-steps which have not been played yet. The footstep positions will be
-changed according to the following computation: $\forall s \in S^{\text{future}}, s \gets \mathbf{\delta {x}} . s$ \label{eq:footstepmodif}
-%
-%\begin{equation} \label{eq:footstepmodif}
-%  \forall s \in S^{\text{future}}, s \gets \mathbf{\delta {x}} . s
-%\end{equation}
-%
-%
-%\vspace{0.3cm}
-\paragraph{Whole-body trajectories modification}
-%
-A new placement of the next feet has been computed. It is now necessary
-to modify the two feet and the center of mass trajectories
-synchronously to reach the corrected foot prints.
-%
-The correction is computed by considering the simplified model
-introduced in section \ref{problem}. Hence, no hypothesis is done on
-the strategy used to plan the reference trajectories. One interest of
-this approach is to totally dissociate the planning and correction
-algorithms. To compute a small perturbation the simplified model is
-sufficient. It allows extremely reactive correction without
-compromising the overall trajectory quality.
-%
-%
-The linearized inverse pendulum model allows the computation of the
-center of mass trajectory $\mathbf{c}(t)$ given a ZMP trajectory
-$\mathbf{z}(t)$ by solving Eq.~(\ref{eq:zmp1}). Considering $\mathbf{r}$ a
-polynomial depending only of $\mathbf{z}$, $(V_x, V_y, W_x, W_y)$ free
-parameters used to constrain the initial position and velocity of the
-center of mass, a general following form of a polynomial center of
-mass trajectory is:
-%
+
+
+Ensuite, la position du prochain pas est modifée afin de compenser
+l'erreur calculée. La figure~\ref{fig:footstepreplan} illustre cette étape.
+
+
+À partir de ce moment, il est possible de regénérer des trajectoires
+pour les pieds et le centre de masse. Afind d'assurer la continuité de
+la solution, la correction de la trajectoire est appliquée
+progessivement durant les deux prochain pas. Pour finir, la résolution
+des tâches calcule les nouvelles valeurs articulaires.
+
+
+Avant de commencer une correction, un test est effectué pour
+déterminer si une correction est possible au moment courant
+$t_{\text{maintenant}}$. Une correction ne peut commencer que si le
+robot est en double support et qu'aucune autre correction n'est en
+cours de réalisation, c'est à dire \mbox{$t_{\text{maintenant}} \geq
+  t_{\text{prochain}}$}. En effet, corriger de nouveau alors que la
+correction précédente n'est pas totalement appliquée conduit à
+corriger une partie de l'erreur de localisation plusieurs fois.
+
+
+Les travaux précédents tel que \cite{04humanoids.harada,
+  07icra.morisawa} ont pour but de permettre des changements soudains
+dans la trajectoire des pieds -- et donc du centre de masse -- tout en
+préservant l'équilibre du robot. Le schéma de contrôle proposé a pour
+but, au contraire, de rester aussi proche que possible du plan initial
+et ne servent donc pas le même objectif.
+
+
+\paragraph{Estimation de l'erreur de positionnement}
+
+Nous faisons l'hypothèse ici que le système fournit
+\mbox{$\hat{\mathbf{x}} \in \text{SE}(2)$}, une estimation de la
+position actuelle du robot.
+
+Si $\mathbf{x} \in \text{SE}(2)$ est la position planifiée du robot et
+$\hat{\mathbf{x}} \in \text{SE}(2)$ sa localisation estimée, l'erreur
+est définie par:
+
+\begin{equation}\label{eq:errorpos}
+  \mathbf{\delta x} = \mathbf{x} . \hat{\mathbf{x}}^{-1}
+\end{equation}
+
+Dans l'équation précédente, $\mathbf{\delta x}(t)$ peut être
+interprété comme la position du robot planifiée par rapport à la
+position du robot estimée. Le délai induit par le système de
+localisation fait que l'estimation du robot doit être comparé à la
+position dans le plan au même moment. On obtient alors une erreur sur
+le positionnement à un moment du passé mais qui peut être utilisé sans
+problème. On peut raisonnablement estimer que l'erreur de
+positionnement croît avec le temps et qu'on ne compensera donc
+l'erreur qu'en partie mais on évitera une trop grande divergence entre
+le plan et la réalité. On estime également que l'erreur de
+positionnement initial est toujours nul:
+
+\begin{equation}\label{eq:errorpos_prop}
+\delta \mathbf{x}(t_{\text{min}}) = 0
+\end{equation}
+
+\paragraph{Modification de la séquence de pas}
+
+Étant donné une erreur de localisation d'un corps de référence, le
+bassin en général, il est possible d'altérer la pile de pas restante à
+exécuter pour absorber cette erreur.
+
+L'objectif de cette étape est donc de faire en sorte de déformer la
+suite du mouvement pour que le robot pose ses pieds aux endroits
+planifiés.
+
+Les empreintes de pas sont \mbox{$S \in
+  \text{SE}(2)^{n^\text{pas}}$}. Considérons $\mathbf{\delta {x}}$,
+l'erreur de positionnement courant, et \mbox{$S^{\text{futur}} \subset
+  S$} les pas restant encore à réaliser. Les empreintes de pas futures
+seront déformées en utilisant la relation suivante:
+
+\begin{equation}\label{eq:footstepmodif}
+  \forall s \in S^{\text{future}}, s \gets \mathbf{\delta {x}} . s
+\end{equation}
+
+\paragraph{Modification des trajectoires de référence}
+
+De nouvelles positions pour les points d'appui ont été calculés. Il
+est donc désormais nécessaire de modifier la trajectoire des deux
+pieds ainsi que du centre de masse pour pouvoir corriger le
+positionnement des deux pieds dans le futur.
+
+La correction de la trajectoire du centre de masse est calculée en
+utilisant le modèle simplifié introduit précédemment FIXME. De fait,
+aucune hypothèse n'est faite pour réaliser la correction et en
+particulier le générateur de trajectoire n'est jamais mis à
+contribution pour regénérer les trajectoires de référence. C'est là la
+différence majeure qui différencie cette approche de la
+replanification. Ces approches se fondent sur un recalcul complet des
+trajectoires de marche régulier en changeant la position du robot à
+partir de l'estimation de sa position. Si cette approche est adaptée
+lorsque la planification a un coût peu important, comme sur les bases
+mobiles, elle ne l'est pas dans le cadre de la robotique humanoïde où
+les algorithmes de génération de mouvement ont un coût
+important. L'hypothèse proposée ici est qu'utiliser un modèle
+linéarisé pour réaliser de petites corrections perturbe peu la
+trajectoire et ne compromet pas la qualité du résultat de manière
+significative.
+
+
+Supposons que le modèle linéaire a été utilisé pour générer le
+mouvement, la résolution analytique nous donne l'équation suivante,
+déjà détaillée dans la section précédente:
+
 \begin{equation} \label{eq:zmpsol}
-  \mathbf{c}(t) = \cosh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{V} + \sinh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{W} + \mathbf{r}(t)
+  \mathbf{x}(t) = \cosh(\sqrt{\frac{g}{z_G}}.t) . \mathbf{V} + \sinh(\sqrt{\frac{g}{z_G}}.t) . \mathbf{W} + \mathbf{r}(t)
 \end{equation}
-%
-Given the formulation in Eq.~(\ref{eq:zmpsol}), it is possible to
-continuously modify the center of mass trajectory to make it follow
-\mbox{$\bar{\mathbf{z}}(t)$} the corrected trajectory. This new
-trajectory can be expressed as the sum of two polynomials:
-%
-\begin{equation} \label{eq:zmpsolcor}
-  \bar{\mathbf{c}}(t) = \cosh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{V} +
-  \sinh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{W} + \mathbf{r}(t) + \mathbf{\Delta}(t)
-\end{equation}
-%
-To apply smoothly the correction from $t_1$ to $t_2$, several
-constraints expressed in Eq.~\ref{eq:cst} have to be respected.
-$\delta \mathbf{x}_x$ and $\delta \mathbf{x}_y$ are respectively the
-$x$ and $y$ components of the 2d rigid transformation $\delta
-\mathbf{x}$.
-%
-\begin{equation}
-\begin{aligned}
-  \mathbf{\Delta}(t_1) &= \frac{\partial \mathbf{\Delta}}{\partial t}(t_1) = \frac{\partial
-    \mathbf{\Delta}}{\partial t}(t_2) = 0\\
-  \mathbf{\Delta}(t_2) &= \left(
-  \begin{array}{c}
-    \delta \mathbf{x}_x \\
-    \delta \mathbf{x}_y
-  \end{array}
-  \right)
-\end{aligned}
-\label{eq:cst}
-\end{equation}
-%
+
+
+Dans la section précédente, nous avons déplacé les pas
+futurs. L'objectif est donc de raccrocher la trajectoire de ZMP à la
+nouvelle pile de pas. Cependant, contrairement aux pas qui sont des
+données discrètes, les trajectoires doivent être raccordées
+continuement. Pour se faire, nous avons choisi un polynôme de degré
+trois à valeurs réelles auquel quatre contraintes ont été imposées,
+voire Fig.~\ref{fig:transition}. Ce polynôme est dénoté
+$\Delta_\alpha(t)$ où $\alpha$ est la valeur du polynôme à $t=T$. Les
+contraintes sont donc:
+
 \begin{figure}[ht!]
   \begin{center}
 
-    \begin{tikzpicture}[x=.40\textwidth,y=2.cm]%FIXME 2.5
+    \begin{tikzpicture}[x=.9\textwidth]
       \def\xmin{0.}
       \def\xmax{1.}
       \def\ymin{0.5}
@@ -1825,32 +1816,87 @@ $x$ and $y$ components of the 2d rigid transformation $\delta
       \node at (0.05, \ymin) [below] {start};
       \node at (0.95, \ymin) [below] {end};
 
-      \draw[color=black, domain=\xmin:\xmax] plot[id=cur]
-      function{1} node [right] {initial};
+      \draw[color=black,domain=\xmin:\xmax] plot[id=cur] function{1}
+      node [right] {initial};
 
-      \draw[color=black, domain=\xmin:\xmax] plot[id=des]
-      function{2} node [right] {desired};
+%      \draw[color=black, domain=\xmin:\xmax] plot[id=des]
+%      function{2} node [right] {desired};
 
-      \draw[color=black, domain=\xmin:\xmax] plot[id=trans]
-      function{-2. * x * x * x + 3 * x * x + 1} node [below] {};
+%      \draw[color=black, domain=\xmin:\xmax] plot[id=trans]
+%      function{-2. * x * x * x + 3 * x * x + 1} node [below] {};
 
     \end{tikzpicture}
   \end{center}
-  \caption{Polynomial curve $\mathbf{\Delta}(t)$ providing a smooth
-    transition between feet and center of mass
-    trajectories. \label{fig:transition}}
+  \caption{Courbe polynomiale $\mathbf{\Delta}(t)$ réalisant une
+    transition continue lors de la mise à jour des
+    trajectoires. \label{fig:transition}}
 \end{figure}
-%
-These four constraints determine the polynomial four parameters
-leading to the curve illustrated by Fig.~\ref{fig:transition}.
-%
-%
+
+\begin{enumerate}
+\item $\forall t \leq 0, \Delta_\alpha(t) = 0$
+\item $\forall t \leq 0, \dot{\Delta_\alpha}(t) = 0$
+\item $\forall t \geq T, \Delta_\alpha(t) = \alpha$
+\item $\forall t \geq T, \dot{\Delta_\alpha}(t) = 0$
+\end{enumerate}
+
+En pratique, $T$ représente la durée d'un pas. Ce polynôme sera
+utilisé pour fournir des transitions continues, composante par
+composante, aux différentes trajectoires de référence. Qui plus est,
+les quatres contraintes contraignent totalement ce polynôme de degré
+trois pour lequel il existe donc une unique solution sur l'intervalle
+$[0,T]$. Les valeurs extérieures étant définies par les contraintes
+directement. On notera enfin que même si ce polynôme est à valeur dans
+$\mathbb{R}$ quand $\alpha \in \mathbb{R}$, on peut aussi bien le
+définir sur $\mathbb{R}^n$, $n \in \mathbb{N}^+$ à condition que
+$\alpha \in \mathbb{R}^n$.
+
+
+Une fois ce polynôme défini, il est possible de rattacher la
+trajectoire de ZMP en sommant à la trajectoire de référence du ZMP, le
+polynôme $\mathbf{\Delta}_{\mathbf{\delta {x}}}(t)$. La résolution du
+système est alors le suivant:
+
+\begin{equation} \label{eq:zmpsolcor}
+  \bar{\mathbf{c}}(t) = \cosh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{V} +
+  \sinh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{W} + \mathbf{r}(t) + \mathbf{\Delta}_{\mathbf{\delta {x}}}(t)
+\end{equation}
+
+En effet, la substitution de variable $\mathbf{r}(t)$ par
+$\mathbf{r}(t) + \mathbf{\Delta}_{\mathbf{\delta {x}}}(t)$ ne change
+que le second membre de l'équation homogène et ne perturbe pas la
+solution générale.
+
+L'équation précédente réalise une correction à $t=0$. Evidemment, ce
+n'est pas toujours le cas. En pratique, une correction est commencée
+tous les deux pas, lorsque le robot est en double support. Si l'on a
+corrigé trois fois la trajectoire à $t_1$, $t_2$ et $t_3$, la
+trajectoire est alors:
+
+\begin{equation} \label{eq:zmpsolcor2}
+  \bar{\mathbf{c}}(t) = \cosh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{V} +
+  \sinh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{W} + \mathbf{r}(t) +
+  \mathbf{\Delta}_{\mathbf{\delta {x}}(t_1)}(t-t_1) +
+  \mathbf{\Delta}_{\mathbf{\delta {x}}(t_2)}(t-t_2) +
+  \mathbf{\Delta}_{\mathbf{\delta {x}}(t_3)}(t-t_3)
+\end{equation}
+
+$\mathbf{\delta {x}}(t)$ étant l'erreur de localisation au temps
+$t$. Plus généralement, on obtient donc la relation suivante où
+$t_{\text{correction}}$ est l'ensemble des temps où une correction a
+été appliquée:
+
+\begin{equation} \label{eq:zmpsolcor2}
+  \bar{\mathbf{c}}(t) = \cosh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{V} +
+  \sinh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{W} + \mathbf{r}(t) +
+  \sum_{t_i \in t_{\text{correction}}} \mathbf{\Delta}_{\mathbf{\delta {x}}(t_i)}(t-t_i)
+\end{equation}
+
 \begin{figure}[ht!]
   \begin{center}
-    \begin{tikzpicture}
+    \begin{tikzpicture}[x=.9\textwidth]
       \begin{axis}[
-          xlabel=time ($\mathrm{s}$),
-          ylabel=$x$ position ($\mathrm{m}$),
+          xlabel=temps ($\mathrm{s}$),
+          ylabel= position en $x$ ($\mathrm{m}$),
           no markers
           ]
 
@@ -1921,59 +1967,65 @@ leading to the curve illustrated by Fig.~\ref{fig:transition}.
       \end{axis}
     \end{tikzpicture}
   \end{center}
-  \caption{Evolution, during two steps, of the $x$ position of the
-    center of mass~(\ref{com}), left foot~(\ref{lf}) and right foot
-    (\ref{rf}). Bold curve depicts a step a $0.3 \mathrm{m}$
-    forward. Dashed curve depicts the center of mass~(\ref{comcorr}),
-    left foot~(\ref{lfcorr}) and right foot~(\ref{rfcorr})
-    trajectories with a correction of $0.05 \mathrm{m}$ in the forward
-    direction. \label{fig:traj}}
+  \caption{Évolution, pendante deux pas, de la position en $x$ du
+    centre de masse~(\ref{com}), du pied gauche~(\ref{lf}) et du pied
+    droit~(\ref{rf}). La courbe en gras illustre un pas de $0.3
+    \mathrm{m}$ en avant. Les courbes en pointillé illustre la
+    position du centre de masse~(\ref{comcorr}), pied
+    gauche~(\ref{lfcorr}) et pied droit~(\ref{rfcorr}) après un pas de
+    $0.05 \mathrm{m}$ en avant, soit une correction de $0.02
+    \mathrm{m}$. \label{fig:traj}}
 \end{figure}
-%
-%
-This reshapes the center of mass trajectory by taking advantage of the
-linear formulation of the simplified model. Additionally, the feet
-trajectories are modified to reach the corrected positions at the end
-of the step. The smooth correction is also obtained by using a third
-degree polynomial with similar constraints: initial position remains
-as before, the goal position must fit the corrected position and the
-velocity of the correction is equal to zero at the beginning and the
-end of the transition. Fig.~\ref{fig:traj} compares resulting
-trajectories before and after the correction.
-%
-%
-These three corrections must be executed in the correct order: as
-stated before a correction is computed during a double support phase
-and applied during the next two steps. We will make the assumption,
-without any loss of generality, that the next flying foot is the left
-one. In that case the correction of the left foot is progressively
-applied during the single support phase. During the ZMP shift of this
-step, the center of mass correction is also applied. Then, during the
-next step, the correction of the right foot is applied. The timeline
-of the correction is illustrated by Fig.~\ref{fig:traj}.
-%
-%
-%\vspace{0.3cm}
-\paragraph{Error thresholding and new step feasibility}
-%
-%
-Correction does not compromise the robot stability. However, any
-correction is not feasible due to the robot mechanical limits and
-auto-collision. Therefore, it is important to bound corrections in
-order to avoid producing infeasible steps. It is also important to
-validate new steps w.r.t to auto-collision.
-%
-%
-The base hypothesis is that the reference trajectory which has been
-computed off-line is safe i.e.\ stable and without any
-auto-collision. By consequence, the goal is to determine how much this
-initial trajectory can be modified without compromising its safety.
-%
-First, a maximum error has been determined empirically. The maximum
-lateral perturbation is $\pm 0.04 \mathrm{m}$ , the maximum forward
-perturbation $\pm 0.05 \mathrm{m}$ and the maximum angular
-perturbation is $\pm 0.1 \mathrm{rad}$ every two steps.
-%
+
+
+L'équation précédente définit comment déformer la trajectoire du
+centre de masse. La déformation de la trajectoire des pieds est
+directe, en utilisant le polynôme $\mathbf{\Delta}$ pour assurer que
+les trajectoires de chaque pas terminent bien à la position prévue
+dans la pile de pas modifiée. Cependant, un dernier point reste à
+traiter: la synchronisation temporelle de la correction du pied
+gauche, droit et du centre de masse. Elle est réalisée en deux temps:
+le premier pied qui bouge et le centre de masse sont d'abord corrigé
+puis le deuxième pied est ensuite corrigé pendant sa phase de
+vol. Évidemment, il n'est pas possible de déplacer un pied au sol d'où
+la nécessité d'utiliser deux pas pour corriger complètement la
+trajectoire. On remarquera que la modification synchronisée de la
+trajectoire du centre de masse et de la trajectoire du premier pas
+permet d'assurer que le ZMP reste à tout moment dans le polygone
+support. En effet, la trajectoire du ZMP étant déformée d'autant que
+la trajectoire du centre de masse, ce dernier termine à une position
+équivalente à la fin du pas, relativement au pas aillant effectué le
+mouvement. La Figure~\ref{fig:traj} illustre ces trois corrections
+synchronisées.
+
+
+\paragraph{Filtrage de l'erreur et faisabilité du prochain pas}
+
+
+La correction ne compromet pas la stabilité du robot. Cependant, la
+correction n'est pas toujours réalisable car l'espace d'accesibilité
+du pied est fini à la fois à cause de sa géométrie et des éventuelles
+auto-collisions pouvant se produire -- une jambe pouvant entrer en
+collision avec la seconde --. De ce fait, il est important de borner
+les corrections pour éviter les auto-collisions.
+
+
+Les hypothèses de travail sont que la trajectoire de référence est
+elle-même stable et sans collision. Par conséquence, l'objectif est
+alors de savoir quelles sont les bornes à partir desquelles il n'est
+plus possible de corriger le mouvement.
+
+
+La première étape a été de déterminer une enveloppe dans laquelle les
+corrections sont réalisables géométriquement parlant -- la cinématique
+inverse des jambes est soluble --. La perturbation latérale maximum
+est de $\pm 0.04 \mathrm{m}$, la perturbation frontale, quant à elle,
+est de $\pm 0.05 \mathrm{m}$ et la perturbation angulaire maximum est
+de $\pm 0.1 \mathrm{rad}$ tous les deux pas. Ces valeurs correspondent
+à une borne sur la valeur $\mathbf{\delta {x}}$, l'erreur de
+positionnement du robot.
+
+
 \begin{figure}[ht!]
   \begin{center}
     \begin{tikzpicture}[x=.40\textwidth,y=2.5cm]
@@ -2067,107 +2119,144 @@ perturbation is $\pm 0.1 \mathrm{rad}$ every two steps.
 
                \path node (txt1) at (0.375+\w,0.2)
                      [shape=rectangle,draw,color=white]
-                     {\color{black} current position};
+                     {\color{black} position actuelle};
 
-               \path node (txt1) at (0.375+\w,1.2)
+               \path node (txt1) at (0.375+\w,1.3)
                      [shape=rectangle,draw,color=white]
-                     {\color{black} position after the step};
+                     {\color{black} position après le pas};
     \end{tikzpicture}
   \end{center}
-  \caption{Validation of the recomputed next step. Waist position is
-    symbolized by dotted rectangle, valid steps by hashed rectangles
-    and invalid steps by black rectangles.
+  \caption{Validation du pas recalculé. La position du bassin est
+    symbolisée par le rectangle en pointillé. Les pas valides sont
+    hachurés tandis que les pas invalides sont de couleur noire.
     \label{fig:stepvalid}}
 \end{figure}
-%
-%
+
+
 \begin{figure}
   \begin{center}
     \includegraphics[width=\textwidth]{src/chap2-suivi-trajectoire/demo.jpg}
   \end{center}
-  \caption{HRP-2 walking in a cluttered environment while avoiding
-    obstacles. The final position is reached with a precision of $\pm
-    3\mathrm{cm}$. The final error is the consequence of both noise in
-    the robot position estimation and drifts in the two last steps
-    which happen too late to be not compensated. \label{fig:scenario}}
+  \caption{HRP-2 marchant dans un environnement extrêmement encombré
+    tout en évitant des obstacles. La précision finale est atteinte
+    avec une précision de $\pm 3\mathrm{cm}$. L'erreur finale est la
+    conséquence du bruit impactant l'estimation de la position du
+    robot ainsi que de la dérive accumulée sur la fin de la
+    trajectoire qu'il n'est pas possible de corriger, faute de
+    temps. \label{fig:scenario}}
 \end{figure}
-%
-%
-%
-Secondly, the new step is validated. The decision is based on the
-relative movement of the first corrected foot. Let consider that, for
-instance, the next moving foot is the left one. The original left foot
-position is \mbox{$s \in \text{SE}(2)$}, the new corrected left foot
-position is \mbox{$s' \in \text{SE}(2)$}. The relative position of the
-original and new foot is computed. If the $y$ component of the result
-is positive, the new step is accepted. In practice, it means that the
-step is ``pushed'' away and will not induce an auto-collision. On the
-opposite, with the right foot, the step is accepted if the $y$
-component is negative.
-%
-%
-If a correction is invalidated, another one is computed during the
-next double support phase. In practice, the estimated error during the
-next step will be close to the current estimation, in particular the
-sign (i.e. direction) of the error will remain the same. As the flying
-foot will change the delayed correction has a high probability of
-being accepted.
-%
-%
-This naive system has been empirically validated. However, it prevents
-some valid corrected steps. In the future, this will be replaced by a
-fast on-line steps validation algorithm described by
-\cite{10icra.perrin}.
+
+
+Ensuite, le nouveau pas est validé. La décision se fonde sur le
+raisonnement géométrique suivant: le pied d'HRP-2 ne peut pas entre en
+collision avec lui-même. Par conséquent, les seuls collisions
+possibles sont qu'un pied entre en collision avec le second. De ce
+fait, si l'on ignore les configurations rares du type, ``le robot
+croise les jambes en marchant'', possibles mais aux limites des
+capacités articulaires des jambes, on peut tenir le raisonnement
+suivant: on peut toujours déplacer un pas du pied gauche vers la
+gauche sans entrer en collision et un pas du pied droit vers la droite
+sans entraîner de collision. De même on peut toujours faire tourner la
+structure vers l'extérieur sans provoquer de collisions. L'heuristique
+suivante est donc utilisée pour valider les pas. Elle est, évidemment,
+sous-optimale mais est sûr et a un coût en temps de calcul quasi nul.
+
+
+Si la correction est invalidée pour une des deux raisons précédemment
+décrites, elle est alors abandonnée. À la prochaine phase de double
+support, une nouvelle correction sera calculée et une nouvelle phase
+de validation sera tentée. Dans la mesure où l'erreur de
+positionnement croît lentement, il y a alors deux cas:
+\begin{itemize}
+\item Dans le premier, le signe de l'erreur de positionnement
+  $\mathbf{\delta {x}}$ a changé, ce qui signifie que l'erreur de
+  localisation était faible et qu'il n'était pas critique de la
+  corrige maintenant,
+\item Dans le second, le signe de l'erreur reste constant et il sera
+  possible de corriger l'erreur car la direction dans laquelle la
+  correction est possible s'inverse en passant d'un pas avec le pied
+  gauche à un pas avec le pied droit.
+\end{itemize}
+
+Ce système empirique a été validé avec succès sur le robot HRP-2. Un
+objectif pour le futur est de remplacer cet heuristique par une
+validation complète de la trajectoire de pas modifiée. Une stratégie
+telle que celle décrite dans~\cite{10icra.perrin} pourrait alors être
+envisagée.
 
 \section{Résultats expérimentaux}\label{exp}
 
 
-The proposed method has been validated on HRP-2 using the following
-scenarii: the robot walks in a narrow and constrained environment
-while stepping over obstacles. The trajectory length is
-$2.5\mathrm{m}$ and is executed in approximately $40\mathrm{s}$.
-%
-%
-This setup demonstrates that the execution using this control scheme
-is precise and reliable. The robot reaches its goal position with an
-error of a few centimeters whereas open loop control schemes is off by
-more than a meter. Moreover, the control scheme is reliable: during
-the movement, the localization precision can change, the robot
-position tracking can fail\ldots The control scheme is designed to be
-robust toward these situations.
-%
-%
-This experiment uses the pattern generator described by
-\cite{10icra.perrin} and the stack of tasks formalism
-\cite{09icar.mansard} to implement the control scheme. The pattern
-generator provides reference trajectories for the center of mass and
-the feet. Trajectory following tasks for these particular bodies are
-then inserted into the control framework. Computing the control such
-as the tasks are satisfied is then realized by the solver.
-%
-%
-This experiment video is available on the
-web (\mbox{\url{http://youtu.be/cUZ0nNiPs70}}). Fig.~\ref{fig:scenario}
-provides an overview of the scenario: the robot starts on the right
-side and walks toward the left side.
-%
-%
-%The final position precision depends on the localization precision and
-%the steps difficulty. In the proposed scenario, there is no occlusion
-%in order to ensure us a good localization. On the opposite, the long
-%steps as the one executed on this movement are prone to large
-%execution errors.
-In this context, the planned final position is
-reached with a precision of $\pm 2 \mathrm{cm}$. This trajectory has
-been executed five times consecutively with any obstacle collision.
-Using a different footsteps sequence with smaller steps, the planned
-position can be reached with an error lower than $1 \mathrm{cm}$.
+La méthode proposée a été validée sur la plate-forme HRP-2 grâce au
+scénario suivant: le robot doit naviguer dans un environnement
+particulièrment contraint tout en enjambant des obstacles. La longueur
+de la trajectoire est approximativement de $2.5\mathrm{m}$ et est
+exécutée en environ $40\mathrm{s}$.
 
 
-\subsection{De la génération à l'exécution, de la simulation à la réalité}
-\subsection{Architecture naïve, boucle ouverte, d'exécution}
-\subsection{Fermeture de la boucle d'exécution}
+Ce scénario démontre que l'utilisation de ce schéma de contrôle permet
+une navigation fiable. Le robot atteint l'objectif fixé avec une
+précision de quelques centimètres tandis que le positionnement final
+en utilisant un schéma de contrôle en boucle ouverte a une erreur
+d'environ un mètre. De plus, ce schéma de contrôle est robuste aux
+pertes de suivi et à des estimations peu précises par le système de
+localisation. En effet, l'expérience s'appuie sur un système de
+capture de mouvement pour localiser le robot. Ces derniers sont
+extrêmement précis -- précision au millimètre dans les cas favorables
+-- mais nécessitent un environnement dégagé ce qui n'est pas le cas
+ici. Les marqueurs posés sur le pied sont parfois oclus par les
+obstacles ce qui fait varier la précision durant le mouvement. Ce
+comportement ne perturbe pas le schéma de correction qui peut
+atteindre la position finale sans problème.
 
-\section{Résultats expérimentaux}
 
-\section{Prospectives}
+La vidéo de l'expérience est disponible sur internet:
+\mbox{\url{http://youtu.be/cUZ0nNiPs70}}. La figure~\ref{fig:scenario}
+fournit un aperçu de l'expérience réalisée. Le robot part de la droite
+et marche au travers des obstacles jusqu'à arriver à son but, sur la
+partie gauche de l'image.
+
+Dans ce contexte, la précision atteinte est de $\pm 2
+\mathrm{cm}$. Cette trajectoire a été jouée cinq fois consécutivement
+sans donner lieu à une collision avec un obstacle ou à une
+auto-collision. En utilisant un mouvement réalisant de plus petits
+pas, la précision peut atteindre $1 \mathrm{cm}$. Les petits pas
+nécessitent une accélération moindre du haut du corps et les effets
+dynamiques mal modélisés par le modèle linéaire se font moins
+ressentir, il en découle une erreur de positionnement des empreintes
+de pas plus faible. L'algorithme de correction pour sa part dispose de
+davantage de pas pour pouvoir réaliser des corrections. Ces deux
+facteurs jouant pour améliorer la précision du suivi de trajectoire.
+
+
+\section{Conclusion}\label{conclusion}
+
+
+Cette section est divisée en deux et sert deux objectifs distincts. La
+première partie est une introduction à la robotique humanoïde et
+explique, en partant des relations fondamentales de la physique,
+certains résultats récent de la littérature afin de fournir tous les
+outils permettant de réaliser une tâche de locomotion pour un robot
+humanoïde. Les robots humanoïdes alliant à la fois sous-actionnement
+et redondance nécessite des stratégies adaptées afin de pouvoir
+générer des mouvements dans un temps raisonnable. En effet, le
+problème en robotique humanoïde n'a jamais été de prévoir le mouvement
+et la dynamique de corps dont les mouvements relatives sont
+contraints. Ces équation fondamentales de la physique sont connues
+depuis longtemps. Le véritable enjeu est de trouver des modèles
+calculatoires adaptés permettant un compromis idéal entre réalisme,
+expressivité et réactivité. Différents outils de l'État de l'Art ont
+été détaillé et sont assemblés pour former une plate-forme robotique
+cohérente. La seconde partie propose un contrôleur pour le suivi de
+trajectoire boucle-fermée afin d'autoriser la navigation de précision
+pour le robot humanoïde HRP-2. Cette section montre la barrière à
+franchir pour passer d'une trajectoire simulée qui semble réalisable à
+une application robotique fonctionnelle où la réalité physique et
+l'incertitude d'exécution inhérente à la robotique réelle jouent un
+rôle prépondérant. Nous avons essayé de montrer que des mouvements
+complexes nécessitent des algorithmes complexes qui seront difficile,
+même à terme, à passer dans les contrôleurs temps réels des robots. De
+ce fait, si l'on veut pouvoir dépasser la simple marche dans un sol
+plan, il faudra sans doute passer par des stratégies d'adaptation
+locales et réactives du plan plutôt que par une replanification
+globale, ce que les approches récentes tendent à réaliser.
