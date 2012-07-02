@@ -1817,13 +1817,13 @@ contraintes sont donc:
       \node at (0.95, \ymin) [below] {end};
 
       \draw[color=black,domain=\xmin:\xmax] plot[id=cur] function{1}
-      node [right] {initial};
+      node [right] {position initiale};
 
-%      \draw[color=black, domain=\xmin:\xmax] plot[id=des]
-%      function{2} node [right] {desired};
+      \draw[color=black, domain=\xmin:\xmax] plot[id=des]
+      function{2} node [right] {position désirée};
 
-%      \draw[color=black, domain=\xmin:\xmax] plot[id=trans]
-%      function{-2. * x * x * x + 3 * x * x + 1} node [below] {};
+      \draw[color=black, domain=\xmin:\xmax] plot[id=trans]
+      function{-2. * x * x * x + 3 * x * x + 1} node [below] {};
 
     \end{tikzpicture}
   \end{center}

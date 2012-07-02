@@ -9,5 +9,129 @@
 \clearpage
 
 \section{Problématique}
+
+Le chapitre précédent a introduit la possibilité d'asservir une
+trajectoire de marche sur un robot humanoïde. Cependant, les tâches
+accomplies par les robots humanoïdes ne se limitent pas à la
+locomotion et il est intéressant de se demander s'il est possible de
+combiner aux tâches de navigation d'autres tâches asservies par les
+données capteurs afin de réaliser des comportements complexes. De
+manière indirecte, la question qui se pose ici est celle de la limite
+à placer entre d'une part raisonnement numérique et d'autre part
+raisonnement logique. Ce problème récurrent de la robotique et pour
+lequel il n'existe pas, de consensus au sein de la communauté trouve
+ici une solution élégante. En effet, un contrôleur fondé sur le
+paradigme de la pile de tâche ne se limite pas à une description
+d'objectifs ou de contraintes robotiques dans des espaces plus
+naturels que l'espace des configurations ou l'espace cartésien, il
+ouvre surtout la voie à des méchanismes de supervision décidant à quel
+moment insérer telle ou telle tâche à un niveau de priorité donné. La
+pile de tâche réalise donc la jonction entre d'une part, le monde du
+calcul numérique puisque la finalité du système est de calculer la
+commande du système et d'autre part le monde de la logique dans lequel
+les utilisateurs humains souhaitent exprimer leur \emph{desiderata} au
+système robotique: va jusqu'à la cuisine, apportes moi la bouteille,
+ouvres la porte, etc. Il est clair que ce type d'ordre nécessite la
+résolution d'abstractions et que la logique mathématique semble être
+un moyen particulièrement adapté pour y parvenir. Ces méchanismes de
+décision de haut niveau sont appelés ``superviseurs'' et ont pour
+objectif d'instantier et d'orchestrer tous les composants d'une
+architecture robotique. Dans le cadre de notre architecture, il faut
+donc pouvoir instantier des piles de tâches à partir d'une description
+de haut niveau des ordres passés au robot. Ce chapitre propose un
+langage de description des tâches permettant de faire le lien entre
+représentation logique et représentation numérique.
+
+
+Nous allons commencer par détailler l'état de l'Art et en particulier
+les autres travaux aillant trait aux architectures robotiques haut
+niveau et à l'ordonnancement de tâches ainsi que plus généralement aux
+applications robotiques complexes. Dans un second temps, le langage de
+description sera décrit et quelques scénarii types seront
+démontrés. Enfin, nous nous concentrerons sur les problèmes
+d'asservissement posés par les robots humanoïdes avant de conclure.
+
+
 \section{\'Etat de l'Art}
-\section{Localisation d'un robot humanoïde}
+
+\section{Description d'un mouvement robotique complexe}
+\subsection{Primitive de mouvement}
+\subsection{Langage de description}
+\subsection{Primitive de locomotion}
+\subsection{Primitive de manipulation}
+\subsection{Asservissement sur un capteur et fermeture de la boucle}
+
+\section{Scénarii de mouvements}
+\subsection{Locomotion simple}
+
+\begin{figure}
+  \begin{center}
+\begin{verbatim}
+duration: 200 # durée complète du mouvement (secondes)
+
+# Éléments de mouvement
+motion:
+  # Primitive de locomotion
+  - walk:
+      interval: [0, 200] # Date de début et de fin de la primitive
+
+      # Pile de pas
+      footsteps:
+      - {x: 0.15, y: -0.19, theta: 0., slide1: 0., slide2: -0.76}
+      - {x: 0.15, y: +0.19, theta: 0.1, slide1: -1.00, slide2: -0.76}
+      # etc.
+\end{verbatim}
+  \end{center}
+  \caption{Plan de mouvement pour une séquence de marche non-asservie.}
+\end{figure}
+
+\subsection{Locomotion asservie}
+
+\begin{figure}
+  \begin{center}
+\begin{verbatim}
+duration: 200 # durée complète du mouvement (secondes)
+
+# correction maximum autorisée sur un pas (x, y en mètre, theta en radians)
+maximum-correction-per-step: {x: 0.02, y: 0.02, theta: 0.05}
+
+# Éléments de mouvement
+motion:
+  # Primitive de locomotion
+  - walk:
+      interval: [0, 200] # Date de début et de fin de la primitive
+
+      # Pile de pas
+      footsteps:
+      - {x: 0.15, y: -0.19, theta: 0., slide1: 0., slide2: -0.76}
+      - {x: 0.15, y: +0.19, theta: 0.1, slide1: -1.00, slide2: -0.76}
+      # etc.
+
+# Asservissement des tâches
+control:
+  # Asservissement via le système de capture de mouvements.
+  - mocap:
+      weight: 1.
+      tracked-body: left-ankle
+      perceived-body: left-foot
+\end{verbatim}
+  \end{center}
+  \caption{Plan de mouvement pour une séquence de marche asservie sur
+    un système de localisation -- ici un système de capture de
+    mouvement --.}
+\end{figure}
+
+
+\subsection{Scénario complexe avec tâche d'atteinte et asservissement corps complet}
+
+\section{De la difficulté à localiser un robot humanoïde}
+\subsection{Forces et limites du robot humanoïde HRP-2}
+\subsection{Vision pour la robotique humanoïde}
+\paragraph{Difficultés classiques de la vision}
+\paragraph{Stabilisation de la tête}
+\paragraph{Pourquoi un robot n'est pas une caméra volante}
+\paragraph{Résultats de la localisation utilisant la vision sur le robot humanoïde HRP-2}
+
+\section{Résultats}
+
+\section{Conclusion}

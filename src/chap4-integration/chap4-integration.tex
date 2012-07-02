@@ -8,7 +8,392 @@
   text text text text}{Some Author}
 \clearpage
 
+
+Ce chapitre est dédié à la conception d'architectures robotiques
+complexes permettant la validation de nouveaux algorithmes robotiques.
+Les précédentes chapitres ont montré une progression d'une approche
+qui est dédiée purement à la génération de trajectoires via
+l'utilisation d'outils d'optimisation numérique vers un l'exécution de
+scénarios dont la complexité a augmenté incrémentalement. Ce passage
+de la génération de trajectoire sans ``conscience'' de ce qu'est un
+système évoluant dans le monde réel vers une application robotique
+réelle ne va pas sans la nécessité d'intégrer et de maîtriser une
+grande variété d'algorithmes et de technologies tout en les utilisant
+conjointement afin de finalement, atteindre un objectif de haut
+niveau. Ce chapitre va donc décrire l'architecture qui a été mise en
+place sur le robot humanoïde HRP-2 afin de réaliser un ensemble de
+scénario expérimentaux, certains faisant partie intégrante des
+chapitres précédents et d'autres étant le résultat de travaux de
+recherche disjoints mais prenant appui sur l'architecture développée
+ici. Ce chapitre tente également de fournir des conseils et une
+méthodologie pour la conception d'applications robotiques. Une partie
+de la méthodologie décrite dans ce chapitre est issue des
+recommandations classsiques de l'ingénierie logicielle mais il est
+également nécessaire de prendre en considération les particularités de
+la robotique.
+
 \section{Architecture}
+
+
+Les systèmes robotiques complexes peuvent être décomposé en trois
+grandes parties:
+
+\begin{enumerate}
+\item La couche de perception qui analyse l'environnement autour du
+  robot et construit un modèle du monde,
+\item La couche de décision qui va tenter de résoudre la tâche donnée
+  au système tout en prenant en compte l'état actuel du monde,
+\item La couche action qui va utiliser les capacités du robot pour
+  réaliser la tâche proprement dite. En particulier, les capacités
+  d'actionnement du robot sont ici utilisées pour impacter le monde
+  environnant.
+\end{enumerate}
+
+
+Cette architecture largement décrite par la littérature est encore
+d'actualité pour les robots humanoïdes. En effet, cette catégorisation
+est issue de la présence dans un système robotique de boucles lentes
+et de boucles rapides. Typiquement, la prise de décision est un
+processus lent -- qui peut prendre plusieurs secondes --, la
+planification de mouvements est un exemple de ce type de processus. Au
+contraire, la couche action contrôlant les actionneurs nécessite le
+plus souvent d'être extrêmement réactive et impose des contraintes
+importantes en terme de temps réel. Il faut pouvoir garantir que la
+boucle de contrôle peut être évaluée à une fréquence donnée ce qui
+contraint à la fois le type d'algorithmes pouvant être exécuté dans
+cette boucle ainsi que le volume de donnée pouvant être traité. Enfin,
+la couche de perception est elle, en général plus lente que le
+contrôle et dépendante de la vitesse à laquelle les capteurs du robot
+peuvent fonctionner. Qui plus est, il arrive parfois que les capteurs
+acquièrent des données plus vite qu'elles sont traitées et certains
+données sont alors ignorées silencieusement. On a donc ici trois types
+de comportements extrêmement différents.
+
+
+Les couches perception et décision nécessitent une grande puissance de
+calcul pour pouvoir assurer une réactivité suffisante. Cette puissance
+de calcul est parfois déportée sur un ordinateur spécifique. Par
+exemple dans le cadre du robot HRP-2, deux ordinateurs sont
+embarqués. Le premier est dédié à la boucle de contrôle temps réel et
+est relié aux actionneurs tandis que le second est relié aux capteurs
+-- ici les caméras embarquées -- et support les algorithmes de
+décision et de perception.
+
+
+Afin de découpler les algorithmes robotiques, chaque algorithme est
+implémenté au sein d'un composant robotique. En pratique, un composant
+robotique est un processus -- c'est à dire un programme indépendant --
+pouvant communiquer avec un ou plusieurs autres composants. La
+distribution des calculs sur plusieurs ordinateurs rend nécessaire la
+définition d'un protocole de transmission des données afin de pouvoir
+assurer une bonne interprétation de ces dernières au sein d'un
+environnement informatique hétérogène. Un exemple est la
+représentation des nombres au sein des architectures informatique: une
+architecture peut être dîte ``big endian'' ou ``little indian'' selon
+l'ordre dans lequel les bits représentants le nombre sont
+enregistrés. Dans une architecture ``big endian'' les nombres aillant
+les poids les plus forts sont contenus en mémoire en premier tandis
+que les architectures ``little endian'' adoptent un ordre inverse. Ce
+type de problème rend nécessaire la définition d'un modèle de
+communication entre composants.
+
+
+Les architectures robotiques autorisent généralement la communication
+entre deux composants, ou n\oe uds, soit sous une forme discrète, soit
+sous une forme continue. La forme discrète est appelée ``service'' et
+se modélise sous la forme d'un appel de fonction distant. Un
+algorithme est généralement divisé en fonctions, ces dernières formant
+des blocs logiques pouvant être combinés entre eux pour réaliser des
+comportements de plus haut niveau. Les services fournissent un moyen
+d'appeler une fonction qui ne sera non pas exécutée au sein du
+processus courant mais dans un autre processus, voire sur un autre
+ordinateur de manière transparente. La difficulté résidant dans le
+passage des arguments et la transmission du résultat. Il est
+nécessaire que cette fonction soit défini selon des règles
+particulières afin de s'asssurer que les données peuvent être
+correctement transmises via la réseau sans compromettre leur
+intégrité. Cette phase dîte de ``sérialisation'' assurer le
+fonctionnement de ces méchanismes dans des environnements
+informatiques hétérogènes. La seconde forme de communication sert à
+modéliser des flux de donnée continus et est appelé ``topic''. Dans ce
+cas, le premier composant communique a un ou plusieurs autres des
+données mises à jour régulièrement. De la même façon, un processus de
+sérialisation est nécessaire pour assurer que les données peuvent être
+transmises même si un ou plusieurs autres composants ne font pas parti
+du même processus ou ne sont pas exécutés sur le même ordinateur.
+
+
+De nombreux outils logiciels implémentent ces méchanismes sous
+différentes formes. Le choix réalisé sur le robot humanoïde HRP-2 a
+été d'utiliser ROS -- Robotics Operating System --, un projet
+communautaire initié par la société californienne Willow Garage. Le
+méchanisme de communication ainsi qu'une grande partie de la
+modélisation du processus de perception se fonde sur les outils
+développés dans le cadre de ce projet. Les sections suivantes vont
+détailler les différents composants fonctionnant sur le robot
+humanoïde HRP-2.
+
+
+
+\subsection{Contrôle}
+
+Sous le terme de ``contrôle'' est désigné le composant robotique
+chargé de calculer la commande qui sera envoyée aux actionneurs. Il
+est impératif que cette ordre déterminant le prochain état que les
+servo-moteurs du systèmes vont s'efforcer d'atteindre, soit envoyé à
+une fréquence fixe. Sur le robot humanoïde HRP-2, la fréquence de la
+boucle de contrôle est de 200 Hz, il faut donc que la boucle de
+contrôle ne mette pas plus de 5ms pour être évaluée. Les noyaux des
+systèmes d'exploitation multi-tâches ne fournissent pas de garantie
+forte sur la réactivité des logiciels exécutés. Il est donc nécessaire
+d'utiliser des noyaux dédiés afin d'assurer que la boucle de contrôle
+soit exécutée en permanence à la fréquence voulue. Ces contraintes
+impliquent que les composants de contrôle se doivent d'être aussi
+minimaux que possible et sont souvant monolitiques. À ce sujet, les
+contrôleurs robotiques partagent une grande ressemblance avec les
+noyaux des systèmes d'exploitation. Ils assurent également la sûreté
+du système: une mauvaise commande envoyée aux moteurs peut, très
+souvent, entraîner la destruction des actionneurs.
+
+Dans le cas de systèmes robotiques complexes, il est courant d'avoir
+plusieurs contrôleurs exécutés successivement au sein de la boucle de
+contrôle. Ainsi l'architecture d'HRP-2 se fonde sur un système de
+plug-in permettant de charger des contrôleurs ``à chaud''. Chaque
+contrôleur est alors modélisé par une machine à état très simple FIXME
+FIG. Le contrôleur passe alors dans les états suivants:
+
+\begin{itemize}
+\item Initialisation sans contrainte de temps réel
+\item Initialisation avec contrainte de temps réel
+\item Exécution
+\item Destruction avec contrainte de temps réel
+\item Destruction sans contrainte de temps réel
+\end{itemize}
+
+Le passage d'un état à l'autre se réalisant dans l'ordre, avec un
+bouclage sur la phase d'exécution autant qu'il est nécessaire.
+
+
+L'architecture de contrôle est divisée en trois contrôleurs:
+\begin{description}
+\item[Pile de tâches] À partir d'un ensemble de tâche, la résolution
+  de la pile de tâche est calculée dans la boucle de contrôle afin de
+  calculer la commande à envoyer aux moteurs. HRP-2 étant commandé en
+  position, la commande envoyée correspond à la position articulaire
+  des différents joints du système.
+\item[Stabilisateur] HRP-2 intègre un méchanisme d'absorption passif
+  des chocs appelé ``silent blocks''. Ce système passif intègre au
+  niveau des chevilles une compliance difficile à modélisée et à
+  prendre en compte dans le calcul de la commande. La centrale
+  inertielle du robot permettant d'estimant l'attitude du bassin, le
+  stabilisateur peut déduire l'état des flexbilités des chevilles et,
+  à l'aide des capteurs de force placés dans les cheville, réaliser un
+  asservissement bas-niveau sur la trajectoire du ZMP désiré. Ce
+  méchanisme permet de compenser la modélisation sommaire de la
+  dynamique réalisée, par exemple, par l'utilisation du modèle
+  simplifié du ZMP ainsi que des éventuelles erreur de modélisation de
+  la structure du robot. Ce système compense les erreurs de suivi du
+  ZMP en modifiant les valeurs des articulations des jambes du robot.
+\item[Communication] Le dernier élément communique vers l'extérieurs
+  les informations lié au contrôle du robot tel que les commandes
+  envoyées, réellements exécutées -- c'est à dire après stabilisation
+  --, ainsi que les sorties des capteurs tels que la centrale
+  inertielle et les capteurs de forces placés aux chevilles et
+  poignets du robot.
+\end{description}
+
+
+On notera que pour le dernier contrôleur, la communication réseau
+étant implémentée en TCP/IP, il n'est pas possible de garantir le
+temps pris par l'envoi des données et il est donc impossible d'envoyer
+des données en TCP/IP sans compromettre la boucle temps réel. Cette
+partie est donc divisée en plusieurs fils d'exécution non-bloquants
+afin de garantir la sûreté du système. En pratique, chaque ``topic''
+permettant la communication de données vers l'extérieur publie les
+données dans un fil d'exécution séparé et non temps-réel. Le fil
+d'exécution temps réel lui tente de copier la donnée vers une variable
+lue par ce fil d'exécution. Si ce dernier est en train d'y accéder et
+qu'elle n'est pas accessible, un verrou protège l'accès à la ressource
+et la publication de la donnée pour ce tour de boucle est ignorée. En
+pratique, la communication vers l'extérieur est réalisée à 20Hz. En
+moyenne, une donnée sur dix est donc envoyée afin d'éviter d'engorger
+le système.
+
+
+En terme de conception, les composants nécessitant un rafraichissement
+à une vitesse supérieure doivent être intégré à la boucle de
+contrôle. Pour les autres données, il faut pouvoir, via le schéma de
+calcul, pouvoir utiliser les informations temporelles attachées aux
+données capteur envoyées pour gérer de manière consistante le retard
+inhérent à toute donnée provenant d'une architecture distribuée.
+
+
+\subsection{Vision}
+
+
+La vision est l'élément central de la perception sur un robot
+humanoïde. Elle est caractérisée par une particularité qui détermine
+tous les traitements qui lui sont affectés: les caméras produisent des
+quantités de données extrêmement importantes. De ce fait, il est
+important d'éviter de réaliser des traitements inutiles et il faut
+également éviter au maximum les copies. Le traitement des images est
+souvent réalisé en série: on acquiert une image, on la convertit, on
+la rectifie et puis on chercher à en tirer des informations de plus
+haut niveau. Ces traitements en série se modélisent particulièrement
+bien sous la forme d'un tuyau dans lequel les images passent les unes
+après les autres. La stratégie classique de la robotique tend alors à
+dédier un composant par traitement afin de garder un système
+modulaire, mais la taille des données rend cela difficile. En effet,
+si chaque composant vit dans un processus différent, il est nécessaire
+de passer par des méchanismes de mémoire partagée afin d'éviter les
+copies en mémoire. ROS a choisit une seconde stratégie en offrant la
+possibilité d'agglomorer plusieurs composants dans un seul
+processus. La sérialisation devient donc totalement inutile au prix
+d'une plus grande complexité dans l'écriture des n\oe uds et d'une
+forme d'insécurité: si un problème advient dans n'importe lequel de
+ces composants, il provoquera l'arrêt de la totalité du
+système. Cependant, les traitements étant effectués en série, devoir
+relancer tous les traitements en cas de panne n'amène pas de perte
+significante de qualité de service.
+
+
+Nous allons donc désormais nous attacher à développer les différents
+composants de vision qui ont été utilisé sur le robot HRP-2 et
+aggloméré dans la chaîne de traitement des images du robot.
+
+
+\paragraph{Acquisition des images}
+
+L'acquisition des images est réalisée par un composant communiquant
+avec le pilote FireWire. Les quatre caméras du robot sont des Flea2 du
+fabriquant PointGrey. Ces caméras sont reliées à un FireWire
+IEEE 1394b. Les limitations du bus ne permettent pas l'acquisition des
+données sur les quatre caméras simultanément, on peut donc passer de
+la paire de caméras grand angle à la seconde paire de caméras. La
+première paire est dédiée à la perception de l'environnement au
+détriment de la précision tandis que la seconde dispose d'un champ
+plus resserré, adapté à la manipulation fine d'objets notamment.
+
+Les images acquises utilisent un encodage de Bayer. Cet encodage,
+nommé du nom de son inventeur, Bryce E. Bayer chercheur au sein de la
+société Kodak, réalise l'encodage d'images couleurs sur 8 bits au lieu
+des 24 bits habituellement nécessaires pour représenter les trois
+canaux utilisés pour encoder les trois couleurs primaires: rouge, vert
+et bleu. Cet encodage encode la couleur verte sur 50\% du volume de
+donnée totale tandis que bleu et rouge représentent 25\% chacun. Cette
+prépondérence du vert est fondé sur la plus grande sensibilité au vert
+des cônes, les photorécepteurs présents au fond de l'\oe il.
+
+
+\paragraph{Traitements des images}
+
+Une fois les images acquises, il est important de les convertir dans
+un espace colorimétrique adapté à leur traitement. La première étape
+est donc de dématricer les images encodées en Bayer vers des images
+monochromatiques ou couleurs 24 bits dans l'espace RGB habituel. Dès
+maintenant, un branchement s'effectue entre les traitements utilisant
+les images couleurs et les traitements utilisant les informations de
+luminance uniquement. Afin de fournir une expérience unifiée, les deux
+``topics'' sont créés, mais les traitement ne sont effectués qu'à
+partir du moment où au moins un client se connecte à ce dernier. On
+peut donc offrir une large palette de possibilités sans mettre à mal
+les performances du système. Le dématriçage des images encodées en
+Bayer reconstruit les couleurs manquantes en interpolant grace à la
+couleur des pixels adjacents. Plusieurs techniques aillant des coûts
+de calcul différents existent selon les cas: interpolation bilinéaire,
+interpolation bicubique ou bien encore rééchantillonage de Lanczos.
+
+
+La seconde étape consiste à rectifier les images. Nous nous
+intéresserons d'abord au cas de la rectification monoculaire. Dans ce
+cas, l'objectif de ce procédé est de se ramener au cas de la caméra
+parfaite dîte ``pinhole'' -- ou sténopé en français -- où la
+projection du point 3d $P$ sur le plan image donne un point 2d $p$ qui
+correspond parfaitement à la projection de ce dernier en passant par
+le point focal de la caméra $C$: $p_x = P_x / P_z$ et $p_y = P_y /
+P_z$ où $P_x, P_y, P_z$ sont les coordonnées du point dans l'espace 3d
+et $p_x, p_y$ les coordonées 2d du point $p$ dans le plan image. Ce
+n'est pas jamais totalement le cas en réalité: le plan image n'est pas
+un plan parfait, l'axe optique n'est jamais exactement au centre de la
+caméra et les objectifs réalisent une distorsion des rayons lumineux
+captés. Pour pouvoir raisonner sur ce modèle idéal, on va donc traiter
+l'image afin qu'elle puisse être considérée comme provenant d'un
+capteur idéal aillant le comportement d'un sténopé, à la différence de
+la caméra réelle. Il faut pour cela calibrer la caméra et identifier
+ses paramètres intrinsèques: $(u_0, v_0)$ la position de l'axe optique
+dans l'image, $(p_x, p_y)$ la taille des pixels permettant de réaliser
+la conversion des pixels vers les mètres et un ensemble de paramètres
+permettent d'identifier la distorsion de l'image originale. Plusieurs
+modèles sont décrits par la littérature, mais dans notre cas une
+estimation de la distorsion radiale est suffisante pour compenser
+l'utilisation d'un objectif grand angle.
+
+
+Le processus de calibration est réalisé en utilisant une mire que l'on
+place à différents endroits relativement à la caméra. Connaissant la
+taille des points et leur écartement, on peut alors, via la résolution
+d'un problème type moindre carrés linéaires, réaliser une estimation
+des paramètres intrinsèque des caméras du système.
+
+Une fois de plus, ce traitement est disponible dans deux variantes
+différentes: monochromatique et couleur.
+
+
+\paragraph{Vision stéréoscopique}
+
+
+Le dernier traitement concernait la vision monoculaire. Il est
+courant, en robotique, d'avoir recours à la vision stéréoscopique afin
+de pouvoir reconstruire la profondeur d'un objet visible dans les deux
+caméras. Il est alors nécessaire d'estimer la transformation relative
+entre les deux caméras afin de pouvoir rectifier l'image de la seconde
+image de la paire de caméras stéréo. Via ce processus, les images de
+deux caméras sont prises par des capteurs virtuels dans les plans
+images sont coplanaires. On peut alors faire en sorte que la
+projection d'un point 3d se fasse sur la même ligne tant sur la caméra
+de gauche que sur la caméra de droite. Le problème de l'appariement
+des points se ramène alors à une problème unidimensionnel de
+complexité moindre permettant la construction d'une carte de
+profondeur. Cette carte est disponible sous la forme d'un topic, mais
+les données de profondeur sont également disponibles sous la forme
+d'un nuage de points. Dans ce dernier, on associe à chaque point la
+couleur du pixel correspondant dans l'image. Ce topic est
+particulièrement utile lorsque l'on souhaite utiliser des algorihtmes
+de traitements de nuages de points 3d tel que PCL -- la Point Cloud
+Library --.
+
+
+Une fois de plus, la totalité du processus de vision peut fonctionner
+dans un processus unique afin d'éviter les copies. Cette architecture,
+également adoptée sur le robot PR2 de Willow Garage, fournit donc un
+compromis intéressant entre rapidité, souplesse d'utilisation et
+modularité.
+
+
+\subsection{Capture de mouvement}
+\subsection{Diagnostics et sûreté}
+
 \section{Simulation transparente}
+\subsection{Simulation physique}
+\subsection{Simulation des capteurs}
+
 \section{Modélisation unifiée d'un système robotique}
+\subsection{Description d'un robot}
+\paragraph{Joints}
+\paragraph{Liens}
+\paragraph{Capteurs}
+
+\subsection{Modélisation des préhenseurs du robot HRP-2}
+\subsection{Adaptation du modèle pour le contrôleur temps réel}
+\subsection{Adaptation du modèle pour la planification}
+
 \section{Applications robotiques complexes}
+\subsection{Mise en place d'une application complexe}
+\subsection{Difficultés récurrentes}
+\subsection{Bonnes pratiques pour la robotique}
+\subsection{Comment évaluer la qualité d'une application robotique?}
+
+
+\section{Conclusion}
+
+
