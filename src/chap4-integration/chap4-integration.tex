@@ -8,8 +8,8 @@
   text text text text}{Some Author}
 \clearpage
 
-
-Ce chapitre est dédié à la conception d'architectures robotiques
+\lettrine[lines=2, lraise=0.1, nindent=0em, slope=-.5em]%
+{C}{e} chapitre est dédié à la conception d'architectures robotiques
 complexes permettant la validation de nouveaux algorithmes robotiques.
 Les précédentes chapitres ont montré une progression d'une approche
 qui est dédiée purement à la génération de trajectoires via
@@ -371,26 +371,370 @@ modularité.
 
 
 \subsection{Capture de mouvement}
+
+Une alternative à la vision embarquée est l'utilisation des systèmes
+de capture de mouvement. Ces derniers, à l'origine destiné à étudier
+les mouvements humains, ont été largement détournés afin de pouvoir
+suivre les mouvements d'objets autour du robot et s'abstraire des
+difficultés propres à la perception en robotique.
+
+
+Un composant réalisant l'interface entre d'une part, le système de
+capture de mouvement, et l'architecture robotique a été écrit. Ce
+dernier permet de suivre les mouvements de plusieurs objets
+simultanéments et publie une estimation de leur pose via le système de
+``topics'' précédemment décrit.
+
+
 \subsection{Diagnostics et sûreté}
 
+L'utlisation d'un robot humanoïde de grande taille présente toujours
+un risque, et ce dernier tend à croître quand l'architecture devient
+plus complexe et intègre des composants moins fiable. Pour se faire,
+il est donc nécessaire d'avoir un moyen de pouvoir obtenir un état
+complet du système de manière unifiée. Ce dernier est disponible sur
+le robot et est illustré par la figure FIXME. De plus, il est
+nécessaire à tout moment de pouvoir avoir un retour si le mouvement
+exécuté présente le risque d'endommager le robot. Ces risques se
+divisent en différentes catégories:
+\begin{description}
+\item[Endommagement des capteurs] Les capteurs de forces sont conçus
+  pour résister à un impact de 1000N au plus. Il est recommandé de ne
+  pas aller au-delà de 800N par mesure de sécurité. Les autres
+  capteurs ne présentent pas de risque particulier.
+\item[Endommagement des actionneurs] Les actionneurs peuvent fournir
+  un couple maximal. Au delà de ce dernier, il risque de chauffer de
+  manière trop importante et d'être rendu inopérant. On peut donc
+  fixer une borne ``raisonnable'' qui ne devrait jamais être
+  dépassé. Évidemment, ceci ne représente qu'une approximation très
+  simple des capacités maximum des actionneurs. En particulier, un
+  retour sur la température des actionneurs se révélerait être un
+  indicateur intéressant mais n'est malheureusement pas disponible en
+  l'état actuel des capacités du robot.
+\item[Instabilité lors de la locomotion] Il est possible d'estimer la
+  position du ZMP à partir des forces mesurées par les capteurs de
+  force. Cette estimation permet d'avertir l'utilisateur quand le ZMP
+  se rapproche dangereusement de la limite du polygone de
+  sustentation.
+\item[Déviation des horloges des ordinateurs embarqués] Les
+  ordinateurs embarqués synchronisent leurs horloges en utilisant le
+  protocole NTP -- Network Time Protocol --. L'ordinateur dédié à la
+  décision et la perception se synchronize sur un serveur de temps
+  distant. L'utilisation d'un lien wifi et la présence de routeurs
+  intermédiaires rend la synchronisation relativement peu
+  précise. Cependant, le problème n'est pas très grave car le
+  véritable enjeu reste de faire en sorte que les deux PCs embarqués
+  gardent leurs deux horloges synchronisées. Le lien réseau étant
+  direct, la synchronisation relative de ces deux ordinateurs est, au
+  contraire, de très bonne qualité et permet d'assurer la cohérence
+  des données temporelles entre, d'une part, le contrôleur commandant
+  les actionneurs, et d'autre part les composants de décision et de
+  perception.
+\item[Difficultés informatiques d'ordre général] Au delà des problèmes
+  décrits précédemment et qui affectent plus particulièrement les
+  systèmes robotiques, les robots sont également affectés par
+  l'ensemble des problèmes qui peuvent toucher un ordinateur:
+  température excessive du processeur, manque d'espace de stoquage,
+  etc.
+\end{description}
+
+Une des difficultés de la mise en \oe uvre d'un système robotique est
+la nécessité de faire fonctionner un ensemble de technologies
+complexes sachant que le mauvais fonctionnement de n'importe quel
+morceau de l'architecture peut mettre en péril la tâche tout
+entière. Qui plus est, certaines limitations du matériel tel que le
+couple maximum des actionneurs est parfois vérifié, a posteriori. Des
+systèmes de surveillance des valeurs critiques sur les couples, les
+impacts sur les capteurs de force ont donc été mis en place afin
+d'éviter d'endommager le matériel.
+
+
 \section{Simulation transparente}
-\subsection{Simulation physique}
-\subsection{Simulation des capteurs}
+
+
+Une difficulté récurrente en robotique est la lenteur de la
+réalisation des expérimentations: calibrer un robot et réaliser une
+expérience demande beaucoup de temps. Afin d'accélérer au maximum le
+développement et d'assurer la sécurité des expérimentateurs et du
+matériel, une phase de simulation des expérimentations reste cruciale.
+
+
+L'utilisation d'une architecture robotique fondée sur un modèle de
+communication donne ici tout son intérêt: la totalité des capacités du
+matériel, tant au niveau de l'actionnement que des capteurs est
+représenté informatiquement par un ensemble composé de services et de
+``topics''. Tant que le simulateur choisit fournit ce même ensemble de
+canaux de communication, les algorithmes pourront fonctionner
+indiféremment en simulation ou sur le véritable système. Il reste
+alors le plus important: assurer la cohérence entre les capteurs
+simulés en fonction des commandes envoyées aux actionneurs. Pour se
+faire, il est important de disposer d'un moteur physique
+réaliste. Dans le cadre de cette thèse, le simulateur OpenHRP a été
+choisi. En effet, la plupart des simulateurs robotiques -- Gazebo,
+Webots --, utilisent des moteurs physiques primitifs adaptés aux
+robots mobiles ne réalisant pas de mouvements ``dynamiques''. Afin de
+modéliser précisément les interactions entre le pied et le sol, un
+moteur physique disposant d'un modèle de contact convaincant et précis
+est indispensable à la simulation d'un mouvement réalisé par un robot
+humanoïde.
+
+
+Les limitations de la plate-forme sont généralement lié à la
+simulation des caméras, ne pouvant jamais reproduire les difficultés
+inhérentes à la vision par ordinateur: changements d'illumination,
+délai induit par l'acquisition et le transfert des données, erreur de
+calibration de la caméra, etc. La simulation est donc davantage un
+moyen de tester la correction du raisonnement et pas tant un outil
+fiable pour démontrer sa robustesse à la réalité qui diverge toujours
+du modèle calculé.
+
 
 \section{Modélisation unifiée d'un système robotique}
+
+
+La génération de mouvement se fonde sur une connaissance précise des
+capacités physiques des robots. Cette description est généralement
+encodée à l'aide d'un format de fichier permettant de représenter les
+différentes informations caractérisant le système. Une définition
+mathématique du système a été donnée dans le chapitre 2 FIXME. Du
+point de vue informatique, le format de fichier URDF -- Unified Robot
+Description Format --, SRDF -- Semantic Robot Description Format -- et
+RCPDF -- Robot Contact Point Definition Format -- est utilisé pour
+représenter les informations nécessaires à la génération de mouvements
+sur un robot humanoïde. Les deux premiers formats sont le fruit du
+travail de la communauté ROS tandis que le dernier a été développé
+dans le cadre de cette thèse.
+
 \subsection{Description d'un robot}
+
+
+Un robot est un ensemble de corps dont les mouvements relatifs sont
+contraints. La modélisation des contraintes passe par la modélisation
+des articulations reliant deux corps entre eux. Le format URDF définit
+donc deux grands types d'objets: les corps et les joints. Nous allons
+voir quelles informations sont attachées à chaque type d'objet.
+
+\paragraph{Corps}
+
+Un corps est défini par une forme géométrique. Cette forme peut soit
+être définie par une primitive géométrique commune -- sphère,
+cylindre, boîte -- ou bien via un modèle 3d. Les informations de la
+dynamique du corps sont également encodés: position du centre de masse
+au sein de l'objet ainsi que la matrice d'inertie associée au
+corps. Une représentation alternative de la géométrie du corps
+utilisée pour les calculs des collisions peut également être
+définie. Dans le cas d'HRP-2, une version alternative des modèles des
+corps utilisant une approximation convexe contenant moins de triangle
+est disponible afin de pouvoir accélérer l'évaluation des
+collisions. Une version alternative fondée sur l'utilisation de
+capsules est également utilisée dans FIXME.
+
+
 \paragraph{Joints}
-\paragraph{Liens}
+
+Un joint lie deux corps tout en imposant un ensemble de contraintes au
+mouvement relatif de ces deux éléments. Un joint comporte donc un lien
+vers le corps ``père'' et le corps ``fils'' pour définir sa position
+dans l'arbre cinématique. Dans le cas du joint racine, il peut ne pas
+y avoir de corps ``père'' et dans le cas d'un organe terminal, il peut
+ne pas y avoir de corps ``fils''.
+
+Les joints supportés sont les suivants:
+\begin{description}
+\item[Libre] Ce joint virtuel possède six degrés de liberté et
+  n'impose aucune contrainte.
+\item[Rotation] Ce joint possède un degré de liberté unique et impose
+  un mouvement de rotation autour d'un axe spécifique au joint.
+\item[Translation] Ce joint possède un degré de liberté unique et
+  impose un mouvement de translation le long d'un axe spécifique au
+  joint.
+\item[Planaire] Ce joint possède deux degrés de liberté et impose un
+  mouvement coplanaire à un plan spécifique au joint.
+\item[Fixe] Ce joint ne possède pas de degré de liberté et impose un
+  mouvement rigide entre les deux corps.
+\end{description}
+
+Les degrés de liberté des joints possèdent généralement un minimum et
+maximum qui sont soit le résultat de la conception méchanique du
+joint, soit lié à la géométrie du robot: une valeur différente
+entraînerait immédiatement une auto-collision et il n'est donc pas
+intéressant de considérer ces valeurs. Chaque joint comporte donc ces
+valeurs ainsi qu'une vitesse et une force ou un couple maximum selon
+le type de joint. Enfin la friction statique du joint ainsi que
+l'amortissement utilisé pour la simulation de ce dernier peut
+également être enregistré.
+
+
 \paragraph{Capteurs}
 
+Une fois l'arbre cinématique définit et annoté par les corps du robot
+auquel ils sont attachés, il reste encore un élément clé à spécicier:
+la position des capteurs. Pour se faire des joints fixes définissent
+la position de corps ``virtuels'' sans géométrie permettant de
+spécifier la position de points importants du robot tel les capteurs.
+
+Il n'y a malheureusement pas de description générique de ces derniers
+qui permettrait de ne pas abuser de la structure cinématique du robot.
+
+
 \subsection{Modélisation des préhenseurs du robot HRP-2}
-\subsection{Adaptation du modèle pour le contrôleur temps réel}
-\subsection{Adaptation du modèle pour la planification}
+
+La complexité du processus de génération de mouvements pour un système
+croît avec le nombre de degrés de liberté. Par exemple, HRP-2 est un
+système possédant 40 degrés de liberté dont 10 pour les
+mains. Cependant, tous ces degrés de liberté ne sont pas
+commandables. En effet, chaque main n'est commandée que par un seul
+degré de liberté décrivant le niveau de fermeture de la pince. Ces
+méchanismes sont régulièrement utilisés dans les robots. On peut
+également citer le robot Romeo d'Aldebaran Robotics FIXME qui s'appuie
+sur un méchanisme de commande similaire: un degré de liberté commande
+l'actionnement d'une main complète composé de plusieurs degrés de
+liberté. Pour modéliser un tel système, il est possible d'insérer des
+contraintes et des degrés de liberté ``dépendants'' dans le modèle. On
+peut ainsi insérer une contrainte qui va lier deux degrés
+ensemble. Par exemple dans la définition du joint A, on peut spécifier
+que la valeur du degré de liberté associé dépend de la valeur du degré
+de liberté du joint B:
+
+\begin{equation}
+  \mathbf{X}_B = \alpha_B \mathbf{X}_A + \beta_B
+\end{equation}
+
+Dans l'équation précédente, $\alpha_B$ et $\beta_B$ sont des
+constantes propres au joint B. $\mathbf{X}_A$ et $\mathbf{X}_B$ la
+valeur du degré de liberté associé respectivement aux joints A et B.
+
+
+\subsection{Prise en charge des auto-collisions}
+
+Une auto-collision consiste en la collision de deux corps du
+robot. C'est particulièrement facile sur un humanoïde: les bras et les
+jambes formant quatre chaînes distinctes pouvant entrer en collision
+les unes avec les autres. D'autre cas sont également possibles: par
+exemple la jambe de certains robots HRP-2 peut entrer en collision
+avec le bassin dans certaines configurations. De manière générale,
+toute collision qui requiert le mouvement de plusieurs degrés de
+libertés combinés et qui ne peut donc pas être évitée en spécifiant
+les bornes des degrés de liberté est une auto-collision qui doit être
+prise en compte.
+
+Pour déterminer les auto-collisions, deux stratégies sont
+possibles. L'approche automatique consiste à échantilloner l'espace
+des configurations du robot afin de trouver les corps qui sont soit
+toujours en collision soit jamais en collision. Dans ces deux cas la
+paire de collision est rejetée. Toutes les autres sont ajoutées.  La
+seconde stratégie consiste à forger la liste à la main. Dans le cas où
+les auto-collisions doivent être vérifiées dans la boucle temps réel,
+cette technique est souvent utilisée car les contraintes de temps de
+calcul sont trop fortes pour considérer toutes les paires. On se
+concentre alors sur les cas les plus probables. En particulier,
+certains cas semblent difficile à détecter automatiquement, notamment
+si pour entrer en collision avec le corps A, il faut forcément
+traverser le corps B alors il est inutile de prendre en compte le
+corps A lors de la vérification des autocollisions.
+
+La liste des paires de collision est enregistrée dans un fichier
+séparé utilisant le format SRDF -- Semantics Robot Description Format
+--. Ce fichier stocke également la position de référence du robot dans
+lequel il se situe lors du démarrage des expérimentations.
+
+
+\subsection{Définition des contacts autorisés}
+
+Un défi ouvert pour la robotique humanoïde dans les prochaines années
+est la réalisation de mouvements asservis sur des sols non plans ou
+utilisant des contacts avec d'autres zones du corps que les
+pieds. Pour un robot donné, les contacts sont autorisés à différents
+endroits, typiquement, les mains et les pieds. Il est donc nécessaire
+de définir des ``zones'' où les contacts sont autoriés. Cette
+information n'était pas formalisée jusqu'à présent dans l'architecture
+proposée par ROS et a été le résultat d'un travail réalisé durant
+cette thèse. Le format de fichier RCPDF -- Robots Contact Point
+Description Format -- associe à chaque corps 0, 1 ou plusieurs zones
+de contact. Chaque zone de contact peut être soit représentée par une
+primitive géométrique soit par un modèle 3d. Les normales du modèles
+permettent de définir la direction dans laquelle le contact peut
+s'effectuer. Un contact est valide si la force de réaction de
+l'environnement sur le corps du robot est colinéaire avec la normale
+de la zone de contact mais de direction opposée. Enfin, la force de
+réaction maximale en un point autorisée sur cette zone de contact peut
+être enregistré afin d'assurer que le contact ne va pas compromette
+l'intégrité structurelle du robot. Cette représentation offre une
+formulation générique qui peut être utilisée pour réaliser des prises
+de décisions moins arbitraires que celles qui sont uniquement fondées
+sur l'anthropomorphisme. Par exemple, la force applicable sur les
+mains du robot peut être plus contrainte ce qui peut pousser un
+solveur à faire marcher le robot ``sur ses deux jambes'' sans avoir à
+le lui spécifier de manière directe.
+
+En pratique, ces données sont utilisées dans les algorithmes de marche
+bipèdes et les systèmes de surveillance afin de calculer les tailles
+des semelles du robot -- la zone de contact autorisée sous chaque pied
+-- et, de fait, les contraintes auxquelles sont soumises le ZMP.
+
+
+\subsection{Adaptation du modèle pour le contrôle et la planification}
+
+Instrumenter le modèle pour y incorporer le maximum d'informations est
+intéresant, cependant utiliser la chaîne cinématique pour positionner
+des capteurs pose des problème pratique. En effet, l'évaluation de
+l'arbre est nécessaire pour de nombreux calculs qu'ils soient
+géométriques, cinématiques ou dynamiques, inverses ou direct. La
+complexité de ces algorithmes est donc dépendante de la taille de
+l'arbre et la présence de joints, même fixes, pour positionner les
+capteurs crée un coût supplémentaire qui semble inutile. Une
+proposition est en cours pour modéliser d'une manière plus propre les
+capteurs dans le format URDF mais à l'heure actuelle il semble
+intéressant de pouvoir réaliser des simplifications ou ``élagages'' de
+l'arbre pour pouvoir en retirer les éléments qui ne sont pas
+nécessaires. Dans le cas où les corps que l'on souhaite supprimer sont
+des n\oe uds terminaux de l'arbre sans information dynamiques -- comme
+les capteurs --, alors l'opération peut être réalisée
+directement. Cependant, dans tous les autres cas, il est nécessaire de
+pouvoir calculer la masse et l'inertie équivalente de l'ensemble de
+l'ensemble des corps rendus solidaires par la simplification
+opérée. De fait, ces transformations de l'arbre sont un moyen bien
+plus efficaces d'exprimer les contraintes égalités sur certains degrés
+de liberté que leur insertion en tant que contrainte dans l'algorithme
+de génération de mouvement proprement dit. Les transformations
+dynamiques de l'arbre sont également nécessaire pour adapter la
+géométrie du robot lorsqu'il est nécessaire, par exemple, de réaliser
+une tâche de locomotion en transportant un objet possédant un poids
+non négligeable pouvant interférer dans la dynamique du mouvement.
+
+Le système de représentation du robot peut d'ores et déjà encoder la
+totalité des informations proposées dans cette section mais il n'a pas
+été possible, à l'heure actuelle, d'intégrer le méchanisme de
+transformation de l'arbre aux logiciels de planification et de
+contrôle utilisés sur le robot humanoïde HRP-2.
+
 
 \section{Applications robotiques complexes}
+
+
+L'ensemble des outils décrit dans la section précédente doivent être
+mis en \oe uvre conjointement afin de pouvoir former une architecture
+robotique cohérente. Chaque composant faisant partie d'une
+architecture robotique a beau disposer d'un modèle de communication
+cohérent, sembler parfaitement fonctionner pris à part et malgré tout
+l'assemblage du tout reste une opération délicate: a-t-on suffisamment
+de ressources pour faire fonctionner tous les composants à une vitesse
+raisonnable? A-t-on une bande passante suffisamment importante entre
+les ordinateurs pour communiquer les informations tranmises? Le délai
+de transmission perturbe-t-il l'architecture? La totalité de ces
+questions ajoutées aux difficultés inhérentes au déploiement d'une
+application logicielle distribuée nécessite une grande rigueur dans le
+développement des démonstrations. Nous allons ici développer un
+exemple de scénario puis montrer quel bilan on peut tirer des séries
+d'expérience réalisées durant cette thèse.
+
+
 \subsection{Mise en place d'une application complexe}
+
 \subsection{Difficultés récurrentes}
+
 \subsection{Bonnes pratiques pour la robotique}
+
 \subsection{Comment évaluer la qualité d'une application robotique?}
 
 
