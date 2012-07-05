@@ -11,7 +11,7 @@
 \lettrine[lines=2, lraise=0.1, nindent=0em, slope=-.5em]%
 {C}{e} chapitre est dédié à la conception d'architectures robotiques
 complexes permettant la validation de nouveaux algorithmes robotiques.
-Les précédentes chapitres ont montré une progression d'une approche
+Les précédents chapitres ont montré une progression d'une approche
 qui est dédiée purement à la génération de trajectoires via
 l'utilisation d'outils d'optimisation numérique vers un l'exécution de
 scénarios dont la complexité a augmenté incrémentalement. Ce passage
@@ -39,11 +39,12 @@ Les systèmes robotiques complexes peuvent être décomposé en trois
 grandes parties:
 
 \begin{enumerate}
-\item La couche de perception qui analyse l'environnement autour du
-  robot et construit un modèle du monde,
-\item La couche de décision qui va tenter de résoudre la tâche donnée
-  au système tout en prenant en compte l'état actuel du monde,
-\item La couche action qui va utiliser les capacités du robot pour
+\item La couche de perception\index{perception} qui analyse
+  l'environnement autour du robot et construit un modèle du monde,
+\item La couche de décision\index{décision} qui va tenter de résoudre
+  la tâche donnée au système tout en prenant en compte l'état actuel
+  du monde,
+\item La couche action\index{action} qui va utiliser les capacités du robot pour
   réaliser la tâche proprement dite. En particulier, les capacités
   d'actionnement du robot sont ici utilisées pour impacter le monde
   environnant.
@@ -81,57 +82,60 @@ décision et de perception.
 
 
 Afin de découpler les algorithmes robotiques, chaque algorithme est
-implémenté au sein d'un composant robotique. En pratique, un composant
-robotique est un processus -- c'est à dire un programme indépendant --
-pouvant communiquer avec un ou plusieurs autres composants. La
-distribution des calculs sur plusieurs ordinateurs rend nécessaire la
-définition d'un protocole de transmission des données afin de pouvoir
-assurer une bonne interprétation de ces dernières au sein d'un
-environnement informatique hétérogène. Un exemple est la
-représentation des nombres au sein des architectures informatique: une
-architecture peut être dîte ``big endian'' ou ``little indian'' selon
-l'ordre dans lequel les bits représentants le nombre sont
-enregistrés. Dans une architecture ``big endian'' les nombres aillant
-les poids les plus forts sont contenus en mémoire en premier tandis
-que les architectures ``little endian'' adoptent un ordre inverse. Ce
-type de problème rend nécessaire la définition d'un modèle de
-communication entre composants.
+implémenté au sein d'un composant robotique\index{composant
+  robotique}. En pratique, un composant robotique est un processus --
+c'est à dire un programme indépendant -- pouvant communiquer avec un
+ou plusieurs autres composants. La distribution des calculs sur
+plusieurs ordinateurs rend nécessaire la définition d'un protocole de
+transmission des données afin de pouvoir assurer une bonne
+interprétation de ces dernières au sein d'un environnement
+informatique hétérogène. Un exemple est la représentation des nombres
+au sein des architectures informatique: une architecture peut être
+dîte ``big endian''\index{big endian (architecture)} ou ``little
+indian''\index{little endian (architecture)} selon l'ordre dans lequel
+les bits représentants le nombre sont enregistrés. Dans une
+architecture ``big endian'' les nombres aillant les poids les plus
+forts sont contenus en mémoire en premier tandis que les architectures
+``little endian'' adoptent un ordre inverse. Ce type de problème rend
+nécessaire la définition d'un modèle de communication entre
+composants.
 
 
 Les architectures robotiques autorisent généralement la communication
 entre deux composants, ou n\oe uds, soit sous une forme discrète, soit
-sous une forme continue. La forme discrète est appelée ``service'' et
-se modélise sous la forme d'un appel de fonction distant. Un
-algorithme est généralement divisé en fonctions, ces dernières formant
-des blocs logiques pouvant être combinés entre eux pour réaliser des
-comportements de plus haut niveau. Les services fournissent un moyen
-d'appeler une fonction qui ne sera non pas exécutée au sein du
-processus courant mais dans un autre processus, voire sur un autre
-ordinateur de manière transparente. La difficulté résidant dans le
-passage des arguments et la transmission du résultat. Il est
-nécessaire que cette fonction soit défini selon des règles
-particulières afin de s'asssurer que les données peuvent être
+sous une forme continue. La forme discrète est appelée
+``service''\index{service} et se modélise sous la forme d'un appel de
+fonction distant. Un algorithme est généralement divisé en fonctions,
+ces dernières formant des blocs logiques pouvant être combinés entre
+eux pour réaliser des comportements de plus haut niveau. Les services
+fournissent un moyen d'appeler une fonction qui ne sera non pas
+exécutée au sein du processus courant mais dans un autre processus,
+voire sur un autre ordinateur de manière transparente. La difficulté
+résidant dans le passage des arguments et la transmission du
+résultat. Il est nécessaire que cette fonction soit défini selon des
+règles particulières afin de s'asssurer que les données peuvent être
 correctement transmises via la réseau sans compromettre leur
-intégrité. Cette phase dîte de ``sérialisation'' assurer le
-fonctionnement de ces méchanismes dans des environnements
+intégrité. Cette phase dîte de ``sérialisation''\index{sérialisation}
+assurer le fonctionnement de ces méchanismes dans des environnements
 informatiques hétérogènes. La seconde forme de communication sert à
-modéliser des flux de donnée continus et est appelé ``topic''. Dans ce
-cas, le premier composant communique a un ou plusieurs autres des
-données mises à jour régulièrement. De la même façon, un processus de
-sérialisation est nécessaire pour assurer que les données peuvent être
-transmises même si un ou plusieurs autres composants ne font pas parti
-du même processus ou ne sont pas exécutés sur le même ordinateur.
+modéliser des flux de donnée continus et est appelé
+``topic''\index{topic}. Dans ce cas, le premier composant communique a
+un ou plusieurs autres des données mises à jour régulièrement. De la
+même façon, un processus de sérialisation est nécessaire pour assurer
+que les données peuvent être transmises même si un ou plusieurs autres
+composants ne font pas parti du même processus ou ne sont pas exécutés
+sur le même ordinateur.
 
 
 De nombreux outils logiciels implémentent ces méchanismes sous
 différentes formes. Le choix réalisé sur le robot humanoïde HRP-2 a
-été d'utiliser ROS -- Robotics Operating System --, un projet
-communautaire initié par la société californienne Willow Garage. Le
-méchanisme de communication ainsi qu'une grande partie de la
-modélisation du processus de perception se fonde sur les outils
-développés dans le cadre de ce projet. Les sections suivantes vont
-détailler les différents composants fonctionnant sur le robot
-humanoïde HRP-2.
+été d'utiliser ROS -- Robotics Operating System --\index{ROS}, un
+projet communautaire initié par la société californienne Willow
+Garage\index{Willow Garage}. Le méchanisme de communication ainsi
+qu'une grande partie de la modélisation du processus de perception se
+fonde sur les outils développés dans le cadre de ce projet. Les
+sections suivantes vont détailler les différents composants
+fonctionnant sur le robot humanoïde HRP-2.
 
 
 
@@ -176,25 +180,27 @@ bouclage sur la phase d'exécution autant qu'il est nécessaire.
 
 L'architecture de contrôle est divisée en trois contrôleurs:
 \begin{description}
-\item[Pile de tâches] À partir d'un ensemble de tâche, la résolution
-  de la pile de tâche est calculée dans la boucle de contrôle afin de
-  calculer la commande à envoyer aux moteurs. HRP-2 étant commandé en
-  position, la commande envoyée correspond à la position articulaire
-  des différents joints du système.
-\item[Stabilisateur] HRP-2 intègre un méchanisme d'absorption passif
-  des chocs appelé ``silent blocks''. Ce système passif intègre au
-  niveau des chevilles une compliance difficile à modélisée et à
-  prendre en compte dans le calcul de la commande. La centrale
-  inertielle du robot permettant d'estimant l'attitude du bassin, le
-  stabilisateur peut déduire l'état des flexbilités des chevilles et,
-  à l'aide des capteurs de force placés dans les cheville, réaliser un
-  asservissement bas-niveau sur la trajectoire du ZMP désiré. Ce
-  méchanisme permet de compenser la modélisation sommaire de la
-  dynamique réalisée, par exemple, par l'utilisation du modèle
-  simplifié du ZMP ainsi que des éventuelles erreur de modélisation de
-  la structure du robot. Ce système compense les erreurs de suivi du
-  ZMP en modifiant les valeurs des articulations des jambes du robot.
-\item[Communication] Le dernier élément communique vers l'extérieurs
+\item[Pile de tâches\index{piole de tâches}] À partir d'un ensemble de
+  tâche, la résolution de la pile de tâche est calculée dans la boucle
+  de contrôle afin de calculer la commande à envoyer aux
+  moteurs. HRP-2 étant commandé en position, la commande envoyée
+  correspond à la position articulaire des différents joints du
+  système.
+\item[Stabilisateur\index{stabilisateur}] HRP-2 intègre un méchanisme
+  d'absorption passif des chocs appelé ``silent blocks''\index{silent
+    block}. Ce système passif intègre au niveau des chevilles une
+  compliance difficile à modélisée et à prendre en compte dans le
+  calcul de la commande. La centrale inertielle du robot permettant
+  d'estimant l'attitude du bassin, le stabilisateur peut déduire
+  l'état des flexbilités des chevilles et, à l'aide des capteurs de
+  force placés dans les cheville, réaliser un asservissement
+  bas-niveau sur la trajectoire du ZMP désiré. Ce méchanisme permet de
+  compenser la modélisation sommaire de la dynamique réalisée, par
+  exemple, par l'utilisation du modèle simplifié du ZMP ainsi que des
+  éventuelles erreur de modélisation de la structure du robot. Ce
+  système compense les erreurs de suivi du ZMP en modifiant les
+  valeurs des articulations des jambes du robot.
+\item[Communication] Le dernier élément communique vers l'extérieur
   les informations lié au contrôle du robot tel que les commandes
   envoyées, réellements exécutées -- c'est à dire après stabilisation
   --, ainsi que les sorties des capteurs tels que la centrale
@@ -204,17 +210,18 @@ L'architecture de contrôle est divisée en trois contrôleurs:
 
 
 On notera que pour le dernier contrôleur, la communication réseau
-étant implémentée en TCP/IP, il n'est pas possible de garantir le
-temps pris par l'envoi des données et il est donc impossible d'envoyer
-des données en TCP/IP sans compromettre la boucle temps réel. Cette
-partie est donc divisée en plusieurs fils d'exécution non-bloquants
-afin de garantir la sûreté du système. En pratique, chaque ``topic''
-permettant la communication de données vers l'extérieur publie les
-données dans un fil d'exécution séparé et non temps-réel. Le fil
-d'exécution temps réel lui tente de copier la donnée vers une variable
-lue par ce fil d'exécution. Si ce dernier est en train d'y accéder et
-qu'elle n'est pas accessible, un verrou protège l'accès à la ressource
-et la publication de la donnée pour ce tour de boucle est ignorée. En
+étant implémentée en TCP/IP\index{TCP/IP}, il n'est pas possible de
+garantir le temps pris par l'envoi des données et il est donc
+impossible d'envoyer des données en TCP/IP\index{TCP/IP} sans
+compromettre la boucle temps réel. Cette partie est donc divisée en
+plusieurs fils d'exécution non-bloquants afin de garantir la sûreté du
+système. En pratique, chaque ``topic'' permettant la communication de
+données vers l'extérieur publie les données dans un fil d'exécution
+séparé et non temps-réel. Le fil d'exécution\index{fil d'exécution}
+temps réel lui tente de copier la donnée vers une variable lue par ce
+fil d'exécution. Si ce dernier est en train d'y accéder et qu'elle
+n'est pas accessible, un verrou protège l'accès à la ressource et la
+publication de la donnée pour ce tour de boucle est ignorée. En
 pratique, la communication vers l'extérieur est réalisée à 20Hz. En
 moyenne, une donnée sur dix est donc envoyée afin d'éviter d'engorger
 le système.
@@ -266,67 +273,74 @@ aggloméré dans la chaîne de traitement des images du robot.
 
 L'acquisition des images est réalisée par un composant communiquant
 avec le pilote FireWire. Les quatre caméras du robot sont des Flea2 du
-fabriquant PointGrey. Ces caméras sont reliées à un FireWire
-IEEE 1394b. Les limitations du bus ne permettent pas l'acquisition des
-données sur les quatre caméras simultanément, on peut donc passer de
-la paire de caméras grand angle à la seconde paire de caméras. La
-première paire est dédiée à la perception de l'environnement au
-détriment de la précision tandis que la seconde dispose d'un champ
-plus resserré, adapté à la manipulation fine d'objets notamment.
+fabriquant PointGrey. Ces caméras sont reliées à un FireWire IEEE
+1394b\index{FireWire IEEE 1394b}. Les limitations du bus ne permettent
+pas l'acquisition des données sur les quatre caméras simultanément, on
+peut donc passer de la paire de caméras grand angle à la seconde paire
+de caméras. La première paire est dédiée à la perception de
+l'environnement au détriment de la précision tandis que la seconde
+dispose d'un champ plus resserré, adapté à la manipulation fine
+d'objets notamment.
 
-Les images acquises utilisent un encodage de Bayer. Cet encodage,
-nommé du nom de son inventeur, Bryce E. Bayer chercheur au sein de la
-société Kodak, réalise l'encodage d'images couleurs sur 8 bits au lieu
-des 24 bits habituellement nécessaires pour représenter les trois
-canaux utilisés pour encoder les trois couleurs primaires: rouge, vert
-et bleu. Cet encodage encode la couleur verte sur 50\% du volume de
-donnée totale tandis que bleu et rouge représentent 25\% chacun. Cette
-prépondérence du vert est fondé sur la plus grande sensibilité au vert
-des cônes, les photorécepteurs présents au fond de l'\oe il.
+Les images acquises utilisent un encodage de Bayer\index{Bayer
+  (encodage de)}. Cet encodage, nommé du nom de son inventeur, Bryce
+E. Bayer chercheur au sein de la société Kodak, réalise l'encodage
+d'images couleurs sur 8 bits au lieu des 24 bits habituellement
+nécessaires pour représenter les trois canaux utilisés pour encoder
+les trois couleurs primaires: rouge, vert et bleu. Cet encodage encode
+la couleur verte sur 50\% du volume de donnée totale tandis que bleu
+et rouge représentent 25\% chacun. Cette prépondérence du vert est
+fondé sur la plus grande sensibilité au vert des cônes, les
+photorécepteurs présents au fond de l'\oe il.
 
 
 \paragraph{Traitements des images}
 
 Une fois les images acquises, il est important de les convertir dans
-un espace colorimétrique adapté à leur traitement. La première étape
-est donc de dématricer les images encodées en Bayer vers des images
-monochromatiques ou couleurs 24 bits dans l'espace RGB habituel. Dès
-maintenant, un branchement s'effectue entre les traitements utilisant
-les images couleurs et les traitements utilisant les informations de
-luminance uniquement. Afin de fournir une expérience unifiée, les deux
-``topics'' sont créés, mais les traitement ne sont effectués qu'à
-partir du moment où au moins un client se connecte à ce dernier. On
-peut donc offrir une large palette de possibilités sans mettre à mal
-les performances du système. Le dématriçage des images encodées en
-Bayer reconstruit les couleurs manquantes en interpolant grace à la
-couleur des pixels adjacents. Plusieurs techniques aillant des coûts
-de calcul différents existent selon les cas: interpolation bilinéaire,
-interpolation bicubique ou bien encore rééchantillonage de Lanczos.
+un espace colorimétrique\index{espace colorimétrique} adapté à leur
+traitement. La première étape est donc de dématricer les images
+encodées en Bayer vers des images monochromatiques ou couleurs 24 bits
+dans l'espace RGB habituel. Dès maintenant, un branchement s'effectue
+entre les traitements utilisant les images couleurs et les traitements
+utilisant les informations de luminance uniquement. Afin de fournir
+une expérience unifiée, les deux ``topics'' sont créés, mais les
+traitement ne sont effectués qu'à partir du moment où au moins un
+client se connecte à ce dernier. On peut donc offrir une large palette
+de possibilités sans mettre à mal les performances du système. Le
+dématriçage\index{dématriçage} des images encodées en Bayer
+reconstruit les couleurs manquantes en interpolant grace à la couleur
+des pixels adjacents. Plusieurs techniques aillant des coûts de calcul
+différents existent selon les cas: interpolation bilinéaire,
+interpolation bicubique ou bien encore rééchantillonage de
+Lanczos\index{Lanczos (rééchantillonage de)}.
 
 
 La seconde étape consiste à rectifier les images. Nous nous
-intéresserons d'abord au cas de la rectification monoculaire. Dans ce
-cas, l'objectif de ce procédé est de se ramener au cas de la caméra
-parfaite dîte ``pinhole'' -- ou sténopé en français -- où la
-projection du point 3d $P$ sur le plan image donne un point 2d $p$ qui
-correspond parfaitement à la projection de ce dernier en passant par
-le point focal de la caméra $C$: $p_x = P_x / P_z$ et $p_y = P_y /
-P_z$ où $P_x, P_y, P_z$ sont les coordonnées du point dans l'espace 3d
-et $p_x, p_y$ les coordonées 2d du point $p$ dans le plan image. Ce
-n'est pas jamais totalement le cas en réalité: le plan image n'est pas
-un plan parfait, l'axe optique n'est jamais exactement au centre de la
-caméra et les objectifs réalisent une distorsion des rayons lumineux
-captés. Pour pouvoir raisonner sur ce modèle idéal, on va donc traiter
-l'image afin qu'elle puisse être considérée comme provenant d'un
-capteur idéal aillant le comportement d'un sténopé, à la différence de
-la caméra réelle. Il faut pour cela calibrer la caméra et identifier
-ses paramètres intrinsèques: $(u_0, v_0)$ la position de l'axe optique
+intéresserons d'abord au cas de la rectification\index{rectification}
+monoculaire. Dans ce cas, l'objectif de ce procédé est de se ramener
+au cas de la caméra parfaite dîte
+``pinhole''\index{sténopé}\index{modèle de caméra
+  pinhole|see{sténopé}} -- ou sténopé en français -- où la projection
+du point 3d $P$ sur le plan image donne un point 2d $p$ qui correspond
+parfaitement à la projection de ce dernier en passant par le point
+focal de la caméra $C$: $p_x = P_x / P_z$ et $p_y = P_y / P_z$ où
+$P_x, P_y, P_z$ sont les coordonnées du point dans l'espace 3d et
+$p_x, p_y$ les coordonées 2d du point $p$ dans le plan image. Ce n'est
+pas jamais totalement le cas en réalité: le plan image n'est pas un
+plan parfait, l'axe optique n'est jamais exactement au centre de la
+caméra et les objectifs réalisent une distorsion\index{distorsion} des
+rayons lumineux captés. Pour pouvoir raisonner sur ce modèle idéal, on
+va donc traiter l'image afin qu'elle puisse être considérée comme
+provenant d'un capteur idéal aillant le comportement d'un sténopé, à
+la différence de la caméra réelle. Il faut pour cela calibrer la
+caméra et identifier ses paramètres intrinsèques\index{paramètres
+  intrinsèques (de caméra)}: $(u_0, v_0)$ la position de l'axe optique
 dans l'image, $(p_x, p_y)$ la taille des pixels permettant de réaliser
 la conversion des pixels vers les mètres et un ensemble de paramètres
 permettent d'identifier la distorsion de l'image originale. Plusieurs
 modèles sont décrits par la littérature, mais dans notre cas une
-estimation de la distorsion radiale est suffisante pour compenser
-l'utilisation d'un objectif grand angle.
+estimation de la distorsion radiale\index{distorsion radiale} est
+suffisante pour compenser l'utilisation d'un objectif grand angle.
 
 
 Le processus de calibration est réalisé en utilisant une mire que l'on
@@ -339,7 +353,7 @@ Une fois de plus, ce traitement est disponible dans deux variantes
 différentes: monochromatique et couleur.
 
 
-\paragraph{Vision stéréoscopique}
+\paragraph{Vision stéréoscopique}\index{vision stéréoscopique}
 
 
 Le dernier traitement concernait la vision monoculaire. Il est
@@ -360,14 +374,14 @@ d'un nuage de points. Dans ce dernier, on associe à chaque point la
 couleur du pixel correspondant dans l'image. Ce topic est
 particulièrement utile lorsque l'on souhaite utiliser des algorihtmes
 de traitements de nuages de points 3d tel que PCL -- la Point Cloud
-Library --.
+Library --\index{PCL (Point Cloud Library)}.
 
 
 Une fois de plus, la totalité du processus de vision peut fonctionner
 dans un processus unique afin d'éviter les copies. Cette architecture,
-également adoptée sur le robot PR2 de Willow Garage, fournit donc un
-compromis intéressant entre rapidité, souplesse d'utilisation et
-modularité.
+également adoptée sur le robot PR2\index{PR2 (robot)} de Willow
+Garage, fournit donc un compromis intéressant entre rapidité,
+souplesse d'utilisation et modularité.
 
 
 \subsection{Capture de mouvement}
@@ -731,11 +745,235 @@ d'expérience réalisées durant cette thèse.
 
 \subsection{Mise en place d'une application complexe}
 
+
+Nous allons présenter dans cette section l'architecture de la
+démonstration robotique suivante: le robot HRP-2 doit pouvoir réaliser
+une tâche de locomotion pour se déplacer jusqu'à un meuble dans lequel
+il souhaite déposer un objet -- dans cet exemple une balle rose
+--. Pour se faire, il doit tout d'abord planifier une trajectoire
+corps complet, c'est à dire combinant à la fois locomotion et
+manipulation. Une fois cette trajectoire déterminée, il doit
+l'exécuter tout en corrigeant sa trajectoire afin d'atteindre son
+but. La localisation est réalisée via un système de vision fondé sur
+des techniques de SLAM.
+
+Le système est composé des composants robotiques suivants réparti sur
+deux ordinateurs -- un pour le contrôle et l'autre pour la décision et
+la perception --:
+\begin{description}
+\item[Ordinateur dédié au contrôle]
+  ~\\
+  \begin{description}
+  \item[Contrôle] Ce n\oe ud est composé d'un solveur fondé sur le
+    paradigme de la pile de tâche et d'une infrastructure logicielle
+    utlisant le lange de programmation Python pour insérer et définir
+    des tâches en cours d'exécution. Les références des tâches peuvent
+    être fournies par l'extérieur via des topics. Ce composant fonctionne
+    partiellement en temps réel.
+  \item[Export des informations capteurs et de la
+    commande\footnote{Composant remplacé lors de la simulation par un
+      n\oe ud fournissant les mêmes services dans le monde
+      simulé.}\addtocounter{footnote}{-1}\addtocounter{Hfootnote}{-1}]
+    La commande envoyée au système, la commande après stabilisation et
+    l'état actuel du robot lu sur les encodeurs est publié sous la
+    forme de topics. L'accélération linéaire et la vitesse angulaire
+    du torse du robot est également publié sous la forme d'un
+    topic. Ce composant fonctionne partiellement en temps réel.
+  \end{description}
+
+\item[Ordinateur dédié à la décision et à la perception]
+  ~\\
+  \begin{description}
+  \item[Acquisition des images\footnotemark] Capture les images venant de la paire
+    stéréo grand angle.
+  \item[Conversion de l'espace couleur] Transforme les images encodées
+    en Bayer vers des images monochromatiques.
+  \item[Rectification] Corrige la déformation de l'image liée à
+    l'utilisation de l'objectif grand angle et à la conception de la
+    caméra.
+  \item[SLAM] Réalise une estimation de la position du robot dans le
+    monde.
+  \item[Cinématique directe] À partir de l'état des encodeurs, ce
+    composant recalcule la position relative de tous les corps et les
+    publie sous forme de topics.
+  \item[Évaluation de l'erreur de positionnement] Compare la position
+    voulue du robot dans le plan à un instant $t$ à la position perçue
+    au même instant.
+  \item[Divers] Plusieurs n\oe uds supplémentaires sont chargés de la
+    surveillance des paramètres critiques du robot.
+  \end{description}
+\end{description}
+
+
+Ces composants fournissent chacun des topics et des services qui sont
+détaillées dans les figures FIXME. Les interactions entre les
+composants sont détaillés dans la figure FIXME.
+
+
+Cett architecture a été testée sur le robot humanoïde
+HRP-2. L'architecture a fonctionné correctement mais il n'a pas été
+possible d'atteindre une précision suffisante au sein du système de
+perception pour compenser avec succès la dérive du robot. En effet, le
+SLAM tel que configuré ici a donné une précision de plus ou moins 5cm
+ce qui est insuffisant pour des tâches de locomotions complexe. On
+notera également que la phase de planification n'apparaît pas, elle a
+été réalisée grâce au travail décrit dans FIXME mais sous la forme
+d'une phase hors-ligne. Le chemin est alors enregistré sous la forme
+d'un fichier chargé au début de l'expérimentation.
+
+
 \subsection{Difficultés récurrentes}
+
+La mise en place d'une architecture modulaire pour la robotique sert
+un objectif principal: contenir la complexité en assurant à
+l'utilisateur la possibilité de pouvoir s'abstraire d'une partie des
+traitements sous-jacents, quit à obtenir une solution
+sous-optimale. En effet, l'aggrégation d'outils aussi différents que
+la planification de mouvment, le contrôle, l'asservissement et
+différentes techniques de perception nécessite de pouvoir s'appuyer
+sur des composants aussi automatiques que possible. En particulier,
+concevoir des algorithmes ne nécessitant pas de paramétrage poussé est
+important mais également très difficile. Le paramétrage peut passer
+soit par une phase de calibration -- comme souvent en perception --,
+une phase de construction de carte, par exemple pour la navigation --
+ou le réglage des stratégies adoptées par les algorithmes. Les outils
+de planification nécessitent souvent le réglage de paramètres ce qui
+complexifie leur utilisation. Si l'on ne peut paramétrer le système
+automatiquement, il faut alors tenter de trouver un ensemble de
+paramètres aillant une réalité physique qui puisse permettre à
+l'utilisateur de se construire plus facilement un modèle de
+comportement de l'algorithme.
+
+
+Une seconde difficulté concerne l'interprétation des données. La
+majorité des algorithmes produisent en sortie des données numériques,
+le plus souvent avec un sens physique fort. Prenons par exemple un
+composant réalisant le suivi d'un objet en temps réel: il va alors
+fournir en sortie la position de l'objet dans l'espace Euclidien
+3d. Une ambiguïté se pose alors: par rapport à quel repère référence
+cette donnée est-elle exprimée? La caméra du robot? La racine de sa
+chaîne cinématique? Un point fixe du monde? Face aux nombreux
+disfonctionnements provoqués par ce type de problème, ROS fournit une
+solution clé en main: chaque transformation précise, sous forme de
+chaîne de caractère, de quelle repère à quelle repère cette donnée
+est-elle la transformation. En enregistrant ces données, on acquiert
+également la possibilité de calculer automatiquement des
+transformations d'un repère à un autre. Par exemple si l'on fournit la
+transformation de $A$ à $B$ et de $B$ à $C$, on peut demander la
+transformation de $A$ à $C$ et elle peut être calculée
+automatiquement. Il y a là un véritable gain puisque l'on passe d'une
+implémentation dépendant directement des données des composants auquel
+on est lié vers une requête purement sémantique: ``quelle est la
+position relative de la cheville gauche par rapport au poignet
+droit?''. On se préserve également dans le cas où les composants
+utilisés changeraient le repère de référence entre deux versions. Une
+fois de plus, l'absence de typage ici rend le diagnostic difficile:
+aucune erreur de compilation n'est possible et les erreurs dans les
+valeurs numériques elles-même sont toujours difficile à détecter. On
+notera que le système adopté ici se fonde sur le traitement des chaîne
+de caractère ce qui est plus lent que le recours au typage direct tel
+que proposé dans FIXME.
+
+
+Une troisisème difficulté est la robustesse aux phases
+transitoires. Tout système complexe possède une phase d'initialisation
+dans laquelle le comportement des modules peut être sous-optimales. En
+particulier quand plusieurs composants communiquant ensemble sont
+lancés en même temps, il n'y a aucune garantie que le premier
+composant terminant sont intialisation soit toujours le même. De ce
+fait, un composant peut commencer à attendre des données sur un topic
+avant que le topic ne soit créé par le premier composant. Le protocole
+de communication est extrêmement souple sur ce point et la possibilité
+de pouvoir écouter des topics qui n'existent pas encore simplifiement
+énormément le développement en évitant les erreurs lorsque l'ordre
+d'initialisation change. Par contre, il est alors nécessaire de mettre
+en place, en interne et soit-même, les méchanismes afin d'éviter les
+situations de famine où plusieurs composants s'attendent les uns les
+autres indéfiniment. Cependant, le graphe de communication étant le
+plus souvent un arbre, ce genre de cas reste peu courant.
+
+
+La quatrième difficulté concerne l'initialisation du système. Il est
+souvent difficile de lancer une démonstration en ``un clic'', mais
+plus le nombre d'étapes pour démarrer la démonstration est important,
+plus le risque d'introduire une erreur humaine lors d'une
+expérimentation augmente. Il est important de limiter les opérations
+pour démarrer une démonstration. Un outil utilisé dans le cadre de ce
+travail est un formalisme permettant de décrire informatiquement -- en
+XML\index{XML} --, le graphe formé par l'ensemble des composants
+robotiques ainsi que leurs paramètres respectifs. Ce système réduit
+donc au maximum les erreurs humaines mais certaines difficultés
+persistent: un robot humanoïde utilisant une commande à gains forts
+tel que HRP-2 s'initialise en l'air, puis il doit être posé, le
+système possède donc plusieurs phases transitoires d'initialisation
+qu'il est difficile d'automatiser.
+
+
+Le dernier problème récurrent est la difficulté pour un utilisateur de
+déterminer si le système est dans un état stable et si ce n'est pas le
+cas, arriver à diagnostiquer le système. La section précédente a
+développé un ensemble d'outils permettant de surveiller l'état du
+robot tant au niveau méchanique, informatique que de l'utilisation qui
+en est faite en temps réel -- vérification des couples au niveau des
+actionneurs notamment --. Cependant, les problèmes ne viennent pas que
+de ces composants ``bas-niveau''. Des composants algorithmiques
+peuvent également échouer pour diverses raisons. Pour aider la
+compréhension de l'état du système, le premier élément est d'unifier
+les méchanismes de rapport d'état. En effet, la plupart des
+bibliothèques complexes viennent avec leur système de journalisation
+qui n'est pas toujours adapté. Dans le cadre de cette architecture,
+nous avons la possibilité de pouvoir aggréger les informations dans un
+seul topic qui peut ensuite être observé pour connaître l'évolution du
+système. On a alors la liste des messages envoyés par les différents
+composants dans l'ordre chronologique ce qui n'est pas le cas quand
+chacun fonctionne de manière séparée. Les causes et les conséquences
+sont, dans ce contexte, bien plus faciles à identifier. Le deuxième
+niveau consiste à publier sur le topic de diagnostic l'état du n\oe ud.
+Cela correspond à l'un des états suivants: OK, erreur,
+avertissement auquel on associe des données techniques pour aider au
+diagnostic. Enfin, un service standardisé peut également être fourni
+par un composant pour qu'il tente un auto-diagnostic. Ces méchanismes
+permettent d'aider à la compréhension des erreurs.
+
+
 
 \subsection{Bonnes pratiques pour la robotique}
 
-\subsection{Comment évaluer la qualité d'une application robotique?}
+Cette section détaille la méthodologie à suivre tant pour développer
+un composant robotique que pour développer une architecture robotique
+complète. Pour développer un composant, un exemple de développement
+réalisé pendant cette thèse a été choisi: il s'agit de l'intégration
+d'un logiciel de suivi. Le cycle de développement d'une architecture
+robotique est ensuite détaillé.
+
+
+\subsubsection{Étude de cas: intégration d'un algorithme de suivi}
+
+Le composant dont il est question ici est librement disponible sur
+internet. Il s'agit de la stack ROS
+\texttt{vision\_visp}\footnote{\url{http://www.ros.org/wiki/vision_visp}}
+et plus particulièrement du paquet
+\texttt{visp\_tracker}\footnote{\url{http://www.ros.org/wiki/visp_tracker}}.
+
+L'algorithme de suivi d'objet a été développé au sein de l'équipe
+LAGADIC\footnote{\url{http://www.irisa.fr/lagadic/}} -- INRIA
+Rennes-Bretagne Atlantique et à l'IRISA--. Cet algorithme utilise
+l'asservissement visuel virtuel pour calculer une estimation de la
+pose d'un objet. Le modèle de l'objet est connu et une estimation
+initiale de la position de ce dernier est nécessaire. Une fois cette
+estimation connue, l'algorithme tente de minimiser l'écart entre la
+position des lignes -- bords -- de l'objet dans l'image par rapport à
+la reprojection du modèle de l'objet suivi dans l'image. D'autres
+critères que les lignes peuvent être choisis mais c'est ce dernier
+point qui a été retenu dans nos tests. La résolution de ce problème
+passe par la méthode de Levenberg-Marquardt qui est proche de
+l'algorithme des moindres carrés classiques.
+
+
+\subsubsection{Cycle de développement d'une architecture}
+
+\subsubsection{Discussion}
+
 
 
 \section{Conclusion}
