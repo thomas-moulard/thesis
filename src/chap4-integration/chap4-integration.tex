@@ -955,6 +955,7 @@ internet. Il s'agit de la stack ROS
 et plus particulièrement du paquet
 \texttt{visp\_tracker}\footnote{\url{http://www.ros.org/wiki/visp_tracker}}.
 
+
 L'algorithme de suivi d'objet a été développé au sein de l'équipe
 LAGADIC\footnote{\url{http://www.irisa.fr/lagadic/}} -- INRIA
 Rennes-Bretagne Atlantique et à l'IRISA--. Cet algorithme utilise
@@ -970,9 +971,166 @@ passe par la méthode de Levenberg-Marquardt qui est proche de
 l'algorithme des moindres carrés classiques.
 
 
+Cet algorithme est partie intégrante de ViSP -- Visual Servoing
+Platform
+-- \footnote{\url{http://www.irisa.fr/lagadic/visp/visp.html}}. ViSP
+intègre directement des outils pour acquérir des images à partir de
+caméras ou lire des données pré-enregistrées mais n'est pas un
+composant robotique en lui-même.
+
+
+La première étape a été de concevoir l'interface du composant: topics
+et services. L'information calculée par ce programme est simple à
+définir: il s'agit de la position relative de l'objet suivi par
+rapport à la caméra. On peut donc ajouter un repère supplémentaire à
+l'annuaire de transformations afin de spécifier la position de l'objet
+suivi. Il sera dès lors possible de calculer, par exemple, la position
+relative du poignet par rapport à cet objet pour tenter de
+l'atteindre, s'il existe une chaîne entre de transformations entre ces
+deux repères. En entrée, le problème est plus complexe. Il faut d'une
+part un flux d'image, des informations de calibration, un modèle 3d de
+l'objet à suivre et un jeu de paramètres permettant de régler
+l'algorithme de suivi ainsi qu'une pose intiale.
+
+
+Il est courant de modéliser le comportement des composants robotiques
+sous la forme d'une machine à état. Dans notre cas le composant de
+suivi est dans un état ``non initialisé'' au départ où il reçoit déjà
+des images et des informations de calibration mais ne réalise aucun
+traitement. Un service permet d'initialiser le suivi en fournissant à
+la fois la pose initiale de l'objet, son modèle et les paramètres de
+suivi. Le n\oe passse alors dans un état actif où il réalise le
+suivi. Si le suivi est perdu à un moment ou un autre, le n\oe ud passe
+dans un état ``perdu'' où il tente de réinitialiser le suivi avec la
+dernière position connue. Si une estimation de la position de la
+caméra est disponible, elle va être utilisée pour tenter de fournir
+une estimation de la nouvelle position de l'objet en considérant ce
+dernier statique. À n'importe quel moment le service d'initialisation
+permet de relancer le suivi.
+
+
+Afin de simplifier l'utilisation du n\oe ud, deux programmes
+additionels sont fournis: le premier permet de calculer une pose
+initiale de manière graphique. L'utilisateur peut cliquer sur des
+points de l'objet prédéfinis et dont on connaît la position relative
+en trois dimensions dans l'objet. Cet outil transmet également au
+composant de suivi le modèle de l'objet. Le contexte distributé de
+l'application empêche de passer directement des emplacements de
+fichiers car il n'y a aucune garantie que le composant réalisant le
+suivi et le programme réalisant l'initialisation partage leur système
+de fichier. Le modèle est donc directement transmis sous sa
+représentation textuelle via le réseau. De plus, le composant pouvant
+être lancé à distance, laisser l'utilisateur spécifier le chemin vers
+le modèle sous la forme d'un chemin local est une mauvaise idée car il
+sera tenté d'y insérer le chemin sur sa machine et non sur celle sur
+laquelle le composant va être lancé. Pour se faire, l'emplacement du
+modèle est passé sous la forme d'une URI -- Uniform Resource
+Identifier --~\citep{rfc2396}.
+
+
+Le second outil permet de surveiller l'état du tracking en affichant
+non seulement la reprojection du modèle dans l'image mais surtout
+l'état du suivi des lignes du modèle. L'algorithme pouvant rejeter des
+points pour différentes raisons, cet outil fournit un retour graphique
+de ces informations afin d'aider l'utilisateur à trouver le meilleur
+ensemble de paramètres pour optimiser le suivi.
+
+
+Le dernier point à considérer a été d'intégrer le modèle de
+calibration de ROS à ViSP. En effet, ROS annote chaque image avec les
+paramètres intrinsèques de caméra. Ces données sont exprimées sous
+forme matricielle et doivent être converties avant d'être mises à jour
+dans ViSP ce qui nécessite un traitement simple. L'avantage étant que
+de cette manière, on peut complètement contourner le processus de
+rectification de ViSP qui nécessiterait une calibration spécifique
+pour l'utilisation de ce composant.
+
+
+Les difficultés rencontrées durant cette intégration sont nombreux: il
+a fallu supprimer le code interactif, notamment pour calculer la pose
+initiale qui nécessite de cliquer sur une image. Un tel code ne peut
+pas fonctionner sur le robot. Il a fallu s'abstraire du système de
+fichier local afin de rendre le système facilement distribuable et il
+a fallu trouver une façon de pouvoir exprimer les informations de
+``debug'' de manière minimale. Une solution aurait été de tracer une
+image avec le résultat du suivi, mais les robots étant souvent reliés
+en wifi à la console le controlant, transmettre un tel flot
+d'information n'est pas justifiable. À la place, un topic
+supplémentaire pour les développeur a été ajouté. Le défi est alors
+d'assurer la cohérence des données entre d'un côté les images
+provenant du composant de vision, de la pose provenant du tracker
+ainsi que du topic transportant les informations supplémentaire pour
+les développeurs. Ces informations sont filtrées afin que seul les
+triplets présentant un temps identique soient affichés. En effet, dans
+les précédentes versions, cette synchronisation n'était pas
+réalisée. On avait alors l'impression que le suivi était de mauvaise
+qualité alors que le problème venait simplement de l'affichage. Les
+paramètres de tracking sont également modifiables durant l'exécution
+afin de simplifier la recherche du meilleur paramétrage. Cela ouvre
+également la possibilité pour un composant de plus haut niveau, de
+changer le comportement du logiciel de suivi et réaliser de ce fait,
+une forme de suivi ``supervisé''. On notera qu'une fois de plus, la
+définition des paramètres joue un rôle très important. Ici l'absence
+de sens physique de certains d'entre eux est dommageable: par exemple
+la recherche de la nouvelle pose se fait dans un voisinage qui est
+défini en pixel. En pratique, cela signifie que si l'on se rapproche
+de l'objet, l'absence de reconfiguration de ce paramètre va causer
+l'échec du suivi. Un meilleure paramètre aurait été de passer par une
+borne sur la vitesse maximum de la caméra qui aurait permis d'avoir un
+comportement cohérent quelque soit la distance à l'objet.
+
+
+Au final, ce composant a reçu un accueil favorable de la communauté
+avec plusieurs utilisateurs confirmés dans des laboratoires et
+sociétés tiers. Ces utilisateurs n'avaient pas d'expérience avec les
+techniques d'asservissement visuel avant de tenter d'intégrer ce
+composant et ont réussi à obtenir des résultats satisfaisants dans le
+cadre de leur utilisation si des robots différents, notamment le robot
+REEM de Pal Robotics\footnote{\url{http://www.pal-robotics.com/}}. De
+ce fait l'objectif qui consistait à pouvoir maîtriser la complexité de
+la mise en place d'un tel méchanisme a été rempli au travers des choix
+réalisés ici. Ce composant a pu être utilisé dans le cadre d'une
+architecture robotique distribuée sur deux ordinateurs et
+l'introduction d'une interface au niveau de la componentisation
+robotique a permis au robot HRP-2 de se localiser soit en utilisant ce
+composant, soit en utilisant un composant de SLAM, soit encore le
+système de capture de mouvement de manière transparente. Seul le
+lancement du graphe diffère dans ces trois cas.
+
+
 \subsubsection{Cycle de développement d'une architecture}
 
-\subsubsection{Discussion}
+
+La section précédente a décrit le développement d'un composant en
+particulier, mais concevoir une architecture ne revient pas à
+simplement dupliquer cette approche autant de fois qu'il y a de
+composants nécessaire. Il faut tout d'abord découper le problème en
+composants cohérents, puis assigner ces composants à un ordinateur
+parmi ceux qui équipent le robot et enfin paramétrer chacun des
+composants de manière optimale. Dans la mesure où une approche
+modulaire a pour intérêt principale la réutilisaibilité des
+composants, on sera donc contraint par l'interface des composants
+pré-existants que l'on devra réutiliser, ainsi que par les contraintes
+matérielles de la plate-forme: les caméras d'HRP-2 sont connectées à
+un PC donné donc le composant d'acquisition des images ne peut
+fonctionner que sur ce dernier. Inversement, les commandes sont
+envoyées via une carte connectée au second PC, le composant de
+contrôle ne pourra tourner que sur celui-ci. De plus, le temps réel
+contraint le contrôleur a n'être constitué que d'un seul processus. Le
+dernier élément à prendre en compte est la communication intra-n\oe
+uds: les communications par ``topics'' ou service induisent un retard
+qui doit pouvoir être accepté ou géré convenablement. Un autre élément
+à prendre en compte est la bande-passante disponible entre les
+ordinateurs qui constituent le robot. Il faut s'efforcer de minimiser
+la bande pasante consommée entre les ordinateurs. Pour les composants
+effectuant de l'affichage ou de la surveillance distant le problème
+est souvent encore plus critique dans la mesure où le robot est la
+plupart du temps connecté en wi-fi et dispose donc d'un lien avec une
+bande-passante extrêmement limitée vers l'extérieur. Cette contrainte
+va donc contrainte les composants de perception, la plupart du temps
+gros producteurs et consommateurs de donnée, à se situer sur le même
+hôte. Une fois le traitement des images terminé, le résultat final
+peut être extrêmement léger: trajectoire ou position 3d par exemple.
 
 
 
