@@ -1108,7 +1108,7 @@ composants nécessaire. Il faut tout d'abord découper le problème en
 composants cohérents, puis assigner ces composants à un ordinateur
 parmi ceux qui équipent le robot et enfin paramétrer chacun des
 composants de manière optimale. Dans la mesure où une approche
-modulaire a pour intérêt principale la réutilisaibilité des
+modulaire a pour intérêt principale la réutilisabilité des
 composants, on sera donc contraint par l'interface des composants
 pré-existants que l'on devra réutiliser, ainsi que par les contraintes
 matérielles de la plate-forme: les caméras d'HRP-2 sont connectées à
@@ -1130,10 +1130,59 @@ bande-passante extrêmement limitée vers l'extérieur. Cette contrainte
 va donc contrainte les composants de perception, la plupart du temps
 gros producteurs et consommateurs de donnée, à se situer sur le même
 hôte. Une fois le traitement des images terminé, le résultat final
-peut être extrêmement léger: trajectoire ou position 3d par exemple.
+peut représenter un volume d'information bien plus compact:
+trajectoire ou position 3d par exemple.
 
+
+En considérant la répartition des composants sur les différentes
+machines, il faut déterminer la liste des composants nécessaire. En
+général, on part d'un côté de la liste des capteurs que l'on souhaite
+utiliser, que l'on fait communiquer avec les algorithmes utilisant ces
+données en entrée qui eux même communique avec la partie
+décisionelle. Cette partie étant généralement algorithmique, le
+positionement de ces composants n'est pas soumis à des contraintes
+techniques fortes. Enfin, un composant de contrôle est nécessaire pour
+envoyer les commandes.
+
+
+Une fois les n\oe uds choisis et paramétrés, l'étape suivante est la
+simulation. De nombreux outils permettent de simuler un mouvement
+dynamique dans un monde virtuel. Il est nécessaire ici de remplacer
+les composants réalisant l'acquisition des données capteurs par des
+composants acccédant aux informations équilvalentes simulées et le
+contrôleur par un contrôleur envoyant sa commande au simulateur. Une
+phase supplémentaire de définition du monde est souvent nécessaire.
+
+
+Une fois validée en simulation, l'architecture est portée sur le robot
+proprement dit. On peut alors faire tourner l'architecture sans
+envoyer réellement les commandes aux actionneurs afin de vérifier
+l'accès aux données capteurs, les délais induits par les
+communications entre les hôtes, etc. Enfin, l'architecture peut être
+testée réellement en validant plusieurs scénarii adaptés de difficulté
+croissante. Une fois l'expérience validée, on peut alors changer
+certains composants afin de tester de nouvelles stratégies ce qui fait
+débuter un nouveau cycle comme illustré sur la figure FIXME.
 
 
 \section{Conclusion}
+
+
+Construire une architecture robotique est une tâche ardue, non
+seulement parce qu'elle aggrège des algorithmes complexes, mais
+surtout parce qu'il est nécessaire de considérer la plate-forme
+utilisée et les problèmes techniques qui lui sont propres -- délais,
+puissance de calcul disponible --, afin de construire un ensemble
+fonctionnel. Cette section a donc à la fois présenté comment
+développer un composant robotique puis comment combiner plusieurs
+composants pour réaliser une architecture. Les différentes difficultés
+inhérentes à la conception d'un système complexe ont été passées en
+revue ainsi que les stratégies qui ont été adoptées au cours de ces
+trois années. Il est probable qu'au cours des prochaines années de
+nombreuses architectures robotiques complexes voient le jour sur des
+robots humanoïdes afin de le rendre sensible à l'évolution de
+l'environnement qui les entoure. Un objectif ambitieux pour lequel les
+robots mobiles restent la plate-forme d'expérimentation principale
+dans l'état actuel de la littérature.
 
 
