@@ -54,11 +54,105 @@ d'asservissement posés par les robots humanoïdes avant de conclure.
 
 \section{\'Etat de l'Art}
 
+FIXME
+
 \section{Description d'un mouvement robotique complexe}
+
+
+Décrire le comportement d'une pile de tâche revient à décrire deux
+éléments primordiaux: d'une part les tâches exprimées dans le solveur
+et de l'autre les différents changements d'état de la pile au cours du
+mouvement. Concernant les tâches, il s'agit ici de représenter des
+fonctions mathématiques génériques ne présentant pas de point commun
+permettant une représentation générique de ces dernières. Par exemple
+si l'on se limitait aux fonctions linéaires $\mathbf{A}(t) \mathbf{x}
++ \mathbf{b}(t)$, encoder la matrice $\mathbf{A}$ et le vecteur
+$\mathbf{b}$ serait envisageable pour un ensemble discret de valeur
+$t$ données. Le cas évoqué est trop contraint pour notre problème et
+les modélisations informatiques développées dans le chapitre 1 n'aide
+pas: elles ont pour but de venir fournir un modèle pour l'expression
+d'une fonction mathématique sous la forme d'un algorithme et non pas
+sous la forme d'une donnée structurée pouvant facilement être encodée.
+Le choix a donc été fait de définir un ensemble de tâches permettant
+de réaliser un certain nombre d'actions intéressantes. Rien n'empêche
+alors cet ensemble de ``primitives'' d'être étendu au cours du temps
+mais il nécessite l'extension du modèle de description défini ici.
+
+
+La second partie est la représentation des changements d'état. Un
+changement d'état du solveur survient quand une tâche est: ajoutée,
+supprimée ou bien encore quand sa priorité est modifiée. De manière
+générale les transitions peuvent être soit temporelles -- avance de 5
+mètres puis saisit la poignée de la porte --, soit logique -- si tu es
+à moins de 10 cm de la position finale, arrêtes-toi --. Pour
+comprendre la stratégie choisit, il faut garder à l'esprit que pour
+réaliser un scénario complexe certains comportements seront intégrés
+dans la boucle de temps réel tandis que d'autres -- typiquement les
+informations capteurs -- seront traitées à l'extérieur. Les deux
+catégories d'événements, temporelles ou logiques, ne mettent pas en
+jeu les mêmes méchanismes. Les événéments temporels sont décidés à
+l'avance et doivent être exécutés avec une grande précision pour
+assurer un comportement correct du système tandis que les événéments
+logiques sont le résultat d'un méchanisme de décision externe.
+
+De ce fait, la stratégie adoptée a été de permettre la représentation
+de transitions temporelles dans le modèle de description uniquement
+tandis que l'on considère que les transitions événémentielles, de fait
+plus lentes et difficiles à encoder, sont gérées à l'extérieur du
+contrôleur par un logiciel décisionnel aillant la possibilité de
+regénérer le mouvement s'il devient invalide suite à la réception
+d'une nouvelle donnée capteur. De nombreux logiciels adaptés à cette
+tâche ont été développés tel que
+SMACH\footnote{\url{http://www.ros.org/wiki/smach}}.
+
+
 \subsection{Primitive de mouvement}
-\subsection{Langage de description}
+
+La première tâche a été de définir des primitives de mouvement de
+haut-niveau. Les primitives proposées sont:
+\begin{enumerate}
+\item La locomotion: mouvement synchronisé des deux jambes et du
+  centre de masse du robot pour réaliser un déplacement tout en
+  assurant sa stabilité.
+\item La manipulation et le contact: mouvement réalisant le placement
+  d'une partie spécifiée du robot à un emplacement donné dans l'espace
+  Euclidien. La tâche peut contraindre la position et/ou la rotation
+  du corps à positionner.
+\item Regard ou asservissement visuel: le robot doit maintenir un
+  point dans son champ de vision.
+\end{enumerate}
+
+FIXME tache bas niveau featurepoint6d, etc. def math d'une primitive, où mentionner l'entrée de la correction?
+
 \subsection{Primitive de locomotion}
+
+Une tâche de locomotion est définie intialement comme une série de
+points de contact à réaliser pour atteindre une position
+finale. Chacun des points de contact étant annoté par l'effecteur
+devant réaliser le contact à cet endroit. À partir de ces
+informations, une trajectoire des effecteurs réalisant les appui est
+déduite ainsi que du centre de masse pour préserver l'équilibre
+dynamique du système. Afin de pouvoir utiliser les techniques décrites
+dans le chapitre FIXME, nous nous limiterons à la marche sur un sol
+plat utilisant le pied gauche et le pied droit du robot. Le calcul de
+la trajectoire des effecteurs et du centre de masse est encore un
+problème ouvert à l'heure actuelle. Les modèles simples peuvent être
+embarqués dans les contrôleurs au prix de nombreuses simplifications
+détaillées dans le chapitre précédent tandis que les modèles les plus
+compliqués nécessitent une résolution hors du contrôleurs rendant le
+comportement du système non-réactif. Le chapitre précédent a proposé
+une stratégie pour fusionner les avantages des deux approches. Nous
+considérons ici la totalité de l'approche développée au cours du
+chapitre précédent comme une implémentation d'une primitive de
+locomotion. En particulier, l'erreur de positionnement du robot est
+considérée comme une entrée de la primitive de mouvement.
+
 \subsection{Primitive de manipulation}
+
+
+
+\subsection{Langage de description}
+
 \subsection{Asservissement sur un capteur et fermeture de la boucle}
 
 \section{Scénarii de mouvements}
