@@ -273,7 +273,7 @@ manière continue, la tâche ne génère pas de grandes vitesses
 articulaires malgré le gain important.
 
 
-\subsection{Primitive de manipulation}
+\subsubsection{Primitive de manipulation}
 
 
 La primitive de manipulation est une instance directe de la tâche
@@ -286,7 +286,7 @@ corriger l'erreur de positionnement de la main avec une interpolation
 linéaire pour amener la main à la position désirée.
 
 
-\subsection{Primitive de regard}
+\subsubsection{Primitive de regard}
 
 
 La dernière primitive introduite ici concerne l'asservissement de la
@@ -305,6 +305,11 @@ plan image de la caméra. On a alors la relation suivante:
 \begin{equation}
   \mathbf{m} = \left(
   \begin{array}{c}
+    x\\
+    y
+  \end{array}
+  \right) = \left(
+  \begin{array}{c}
     X / Z\\
     Y / Z
   \end{array}
@@ -319,10 +324,136 @@ Une fois de plus l'erreur se définit par la soustraction usuelle:
 \end{equation}
 
 
-
 \subsection{Langage de description}
 
-\subsection{Asservissement sur un capteur et fermeture de la boucle}
+Le langage de description adopté est le YAML -- Yet Another Markup
+Language --~\citep{yaml}. Le fichier est divisé en trois parties:
+\begin{description}
+\item[En-tête] fournissant les méta-informations sur le mouvement, notamment sa durée en secondes.
+\item[Primitives de mouvement] définissant quelles primitives sont
+  jouées et sur quel intervalle, ainsi que la configuration de chaque
+  primitive.
+\item[Primitives d'asservissement] définissant comment l'erreur de
+  positionnement du robot est estimée au fil du temps.
+\end{description}
+
+
+\subsubsection{Primitive de locomotion}
+
+Une primitive de locomotion est définie par un ensemble de points de
+contacts définis sur la forme d'une pile de pas.
+
+\begin{description}
+\item[Intervalle] Date de début et de fin de la primitive de mouvement.
+\item[Empreinte de pas] Liste des pas à effectuer. Les pas sont
+  considérés comme des éléments de $\text{SE}(2)$ dans la mesure où
+  l'algorithme de génération de pas fait l'hypothèse d'un sol
+  planaire.
+\end{description}
+
+Lors du chargement du plan, la génération des trajectoires de pieds et
+de centre de masse initial est réalisé hors-ligne de manière
+asynchrone. Tant que le calcul n'est pas terminé, il n'est pas
+possible de lancer le mouvement.
+
+
+\subsubsection{Primitive de manipulation}
+
+Une primitive de manipulation est définie par un corps et une position
+6d de référence. L'objectif est de faire coïncider le corps avec la
+position 6d de référence. Cette tâche peut ne considérer que la
+rotation ou la translation.
+
+\begin{description}
+\item[Intervalle] Date de début et de fin de la primitive de manipulation.
+\item[Corps à considérer] Nom du corps à considérer. Des noms
+  génériques ont été définis tels que: cheville gauche, cheville
+  droite, poignet gauche, poignet droit, tête, torse et bassin.
+\item[Consigne] La position de référence vers lequel le corps doit
+  être amené. Il peut être de trois types. Soit statique, le corps
+  doit maintenir sa position initiale, soit fixe dans ce cas le corps
+  doit atteindre un point prédéterminé de l'espace, soit dynamique
+  dans ce cas le corps doit suivre un point mobile.
+\end{description}
+
+
+\subsubsection{Primitive de regard}
+
+La primitive de regard définit comment le robot peut maintenir son
+regard vers un point 3d, éventuellement mobile.
+
+\begin{description}
+\item[Intervalle] Date de début et de fin de la primitive de manipulation.
+\item[Caméra à considérer] Nom de la caméra utilisée. En pratique, la
+  caméra est définie comme un corps ``virtuel'' du robot et l'on peut
+  donc potentiellement aligner n'importe quel partie du corps du robot
+  vers un point donné.
+\item[Consigne] La position de référence vers lequel le corps doit
+  pointer. Il peut être de deux types. Soit fixe, dans ce cas le corps
+  doit pointer vers un point prédéterminé de l'espace, soit dynamique
+  et dans ce cas le corps doit pointer vers un point mobile.
+\end{description}
+
+
+\subsubsection{Asservissement des primitives sur les données capteur}
+
+
+Une fois la séquence de mouvement définie, il faut encore pouvoir
+fermer la boucle sur les données capteur. Dans le cadre d'un mouvement
+complexe, une stratégie intéressante est de pouvoir s'asservir
+successivement sur plusieurs amères afin de planifier \emph{a priori}
+quelle est la ou les amères les plus pertinentes à différents instants.
+
+
+Soit $\mathcal{L}$ un système de localisation. Un système de
+localisation est défini comme une fonction qui à tout instant fournit
+une pose estimée d'un corps de référence du robot, dans notre cas le
+bassin. On a donc:
+
+\begin{equation}
+  \begin{array}{ccc}
+    \mathcal{L} : & \mathrm{R} \rightarrow & \text{SE}(2)\\
+    ~ & t \mapsto & \mathcal{L}(t)
+  \end{array}
+\end{equation}
+
+Au cours du mouvement, $n$ systèmes de localisation fournissent une
+estimation de la pose du robot. Une fois de plus, cette pose est
+théoriquement dans l'espace 3d $\text{SE}(3)$ mais les contraintes
+physiques font que seul trois degrés de liberté doivent être
+réellement estimés: $(x, y, \theta) \in \text{SE}(2)$. Ces trois
+degrés correspondent à la position 2d de la projection du bassin sur
+le sol. De ce fait, l'interpolation de $n$ poses 2d et la moyenne des
+poses à la normalisation de l'angle $\theta$ prêt.
+
+
+On associe à chaque système de localisation une fonction de poids
+déterminant l'influence relative des systèmes de localisation dans
+l'estimation finale de la pose:
+
+\begin{equation}
+  \begin{array}{ccc}
+    m_i : & \mathrm{R} \rightarrow & \mathrm{R}\\
+    ~ & t \mapsto & m_i(t)
+  \end{array}
+\end{equation}
+
+La fusion des données pour l'estimation de la pose est donc le
+barycentre des poses 2d:
+
+\begin{equation}
+  \mathbf{\hat{x}}(t) = \frac{1}{\sum_{i \in n} m_i} \sum_{i \in n} m_i \mathcal{L}_i(t)
+\end{equation}
+
+En pratique, chaque système de localisation est représenté de la façon suivante:
+\begin{description}
+\item[Poids] en fonction du temps. Il peut soit être constant, soit
+  varier dynamiquement.
+\item[Erreur] de positionnement en fonction du temps. Elle est fournie
+  par un système de localisation externe.
+\end{description}
+
+
 
 \section{Scénarii de mouvements}
 \subsection{Locomotion simple}
