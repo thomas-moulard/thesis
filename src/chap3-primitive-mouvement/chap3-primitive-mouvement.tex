@@ -122,7 +122,6 @@ haut-niveau. Les primitives proposées sont:
   point dans son champ de vision.
 \end{enumerate}
 
-FIXME tache bas niveau featurepoint6d, etc. def math d'une primitive, où mentionner l'entrée de la correction?
 
 \subsection{Primitive de locomotion}
 
@@ -147,7 +146,177 @@ chapitre précédent comme une implémentation d'une primitive de
 locomotion. En particulier, l'erreur de positionnement du robot est
 considérée comme une entrée de la primitive de mouvement.
 
+
+\subsubsection{Tâche d'alignement de deux repères}
+
+Cette primitive de mouvement repose principalement sur la définition
+d'une tâche où le solveur doit positionner un corps du robot à un
+endroit précis à la fois en rotation et en translation. C'est cette
+tâche qui va permettre de faire suivre la trajectoire des pieds
+notamment.
+
+
+Soit $\mathbf{M}, \mathbf{M}^{*} \in \text{SE}(3)^2$
+respectivement la position actuelle du corps du robot et la position
+de référence à atteindre. On peut alors définir l'erreur de cette
+tâche comme:
+
+\begin{equation}
+  \mathbf{e} = \mathbf{M} (\mathbf{M}^{*})^{-1}
+\end{equation}
+
+On remarquera que dans l'équation FIXME, $\mathbf{e}$ est un élément
+de $\text{SE}(3)$. Les élements de $\text{SE}(3)$ peuvent s'exprimer
+de nombreuses façons différentes: matrice homogène -- 16 paramètres
+--, translation et quaternion -- 7 paramètres --, vecteur de rotation
+-- 6 paramètres --, etc. Il faut garder à l'esprit qu'une
+paramétrisation minimale de $\text{SE}(3)$ nécessite six
+paramètres. De fait, tout représentation utilisant un espace de
+dimension supérieure vient avec un ensemble de contraintes à respecter
+car tous les éléments de cet espace de dimension supérieur ne peuvent
+faire parti de $\text{SE}(3)$. Par exemple, une matrice homogène a une
+structure bien particulière tel qu'illustré sur la figure FIXME. Quant
+aux quaternions, seuls les quaternions unitaires définissent une
+bijection avec $\text{SO}(3)$, l'espace des rotations dans l'espace
+3d.
+
+De fait, les représentations non minimales ne représentent pas une
+solution acceptable pour représenter notre erreur car elles provoquent
+l'insertion de contraintes supplémentaires inutiles dans le problème
+d'optimisation. Il faut donc choisir pour représenter $\mathbf{e}$ une
+représentation minimale, dans notre cas via une translation et une
+rotation autour d'un axe.
+
+En effet, toute rotation peut être représentée par trois paramètres
+\mbox{$\mathbf{\theta} = (\alpha, \beta, \gamma) \in \mathrm{R}^3$}. Le
+vecteur $(\alpha, \beta, \gamma)$ normalisé représentant l'axe autour
+duquel la rotation s'effectue et la norme du vecteur
+$|\mathbf{\theta}|$ la quantité de rotation réalisée autour de cet
+axe, voir figure FIXME.
+
+Cette représentation est minimale car la translation est représentée
+par trois paramètres et la rotation par trois paramètres:
+
+\begin{equation}
+  \mathbf{e} = \left(
+  \begin{array}{c}
+    t_x\\
+    t_y\\
+    t_z\\
+    \theta_x\\
+    \theta_y\\
+    \theta_z
+  \end{array}
+  \right)
+\end{equation}
+
+En considérant les trois premiers éléments du vecteur d'erreur ou bien
+les trois derniers on peut restreindre la tâche à positioner le corps
+respectivement en translation ou en rotation uniquement.
+
+
+\subsubsection{Tâche de position du centre de masse}
+
+
+Le second type de tâche nécessaire pour définir la primitive de
+locomotion est la tâche de positionnement du centre de masse.
+
+Cette tâche nécessite la connaissance du poids de tous les corps du
+robot $m_i$ où $i \in \mathcal{B}$. $\mathcal{B}$ l'ensemble des corps
+du robot. Le centre de masse du robot est alors défini comme le
+barycentre des centres de masse de chaque corps:
+
+\begin{equation}
+  \mathbf{x} = \frac{1}{\sum_{i \in \mathcal{B}} m_i} \sum_{i \in \mathcal{B}} m_i \mathbf{x}_i
+\end{equation}
+
+$\mathbf{x}$ représentation la position du centre de masse du robot et
+$\mathbf{x}_i$ la position du centre de masse du corps $i$.
+
+L'erreur de positionnement du centre de masse est alors simplement:
+
+\begin{equation}
+  \mathbf{e} = \mathbf{x} - \mathbf{x}^{*}
+\end{equation}
+
+La définition de l'erreur ne posant pas de difficulté ici car
+$\mathbf{x}$ est un élément de $\mathrm{R}^3$.
+
+
+\subsubsection{Définition de la primitive de locomotion}
+
+Une tâche de locomotion est par nature critique: un mauvais suivi de
+la trajectoire de référence du centre de masse ou bien encore de la
+trajectoire des pieds aboutit à une perte de l'équilibre du robot. De
+ce fait, établir une priorité entre ces tâches n'a pas de sens. On
+préférera donc exprimer ces trois tâches -- pied gauche, pied droit et
+centre de masse -- de la façon suivante:
+
+\begin{equation}
+  \mathbf{e} = \mathbf{e}_{\text{pied gauche}} + \mathbf{e}_{\text{pied droit}} + \mathbf{e}_{\text{centre de masse}}
+\end{equation}
+
+Les équations formulées dans cette section peuvent enfin être
+paramétrées par le temps courant $t$ afin de permettre une
+modification de la valeur de référence notée $\mathbf{M}^*$ ou
+$\mathbf{x}^*$ selon les cas et permettre le suivi d'une trajectoire
+plutôt que l'atteinte d'une référence constante.
+
+
+Comme décrit dans le chapitre précédent, l'erreur des tâche décroît
+exponentiellement -- dans le cas où la référence reste constante
+--. Un suivi suffisamment précis de la trajectoire est alors
+réalisable en augmentant suffisamment $\lambda$ le gain associé à la
+tâche. Dans la mesure où l'erreur initiale de cette tâche est nulle --
+le mouvement commence à la position actuelle du robot -- et varie de
+manière continue, la tâche ne génère pas de grandes vitesses
+articulaires malgré le gain important.
+
+
 \subsection{Primitive de manipulation}
+
+
+La primitive de manipulation est une instance directe de la tâche
+d'alignement de repères présentées dans la section précédente. Elle
+est utilisée pour placer la main à un endroit donnée afin de saisir un
+objet. Le déplacement d'un bras du robot ne mettant pas en jeu
+l'équilibre du robot tant qu'elle se déplace peu rapidement et sans
+perturber la tâche de suivi du centre de masse, on peut simplement
+corriger l'erreur de positionnement de la main avec une interpolation
+linéaire pour amener la main à la position désirée.
+
+
+\subsection{Primitive de regard}
+
+
+La dernière primitive introduite ici concerne l'asservissement de la
+trajectoire du robot afin de préserver des amères dans une zones où
+elles sont détectables par les capteurs du robot. Sur le robot HRP-2,
+seul des caméras sont à la disposition des utilisateurs et leur
+placement dans la tête permet naturellement de définir une tâche de
+``regard'' où l'utilisateur souhaite garder un point au centre de
+l'image captée par une caméra du robot.
+
+Soit \mbox{$M = (X, Y, Z) \in \mathrm{R}^3$} un point 3d dont les
+coordonnées sont définies par rapport à la position de la caméra du
+robot et \mbox{$m = (x, y) \in \mathrm{R}^2$} sa projection sur le
+plan image de la caméra. On a alors la relation suivante:
+
+\begin{equation}
+  \mathbf{m} = \left(
+  \begin{array}{c}
+    X / Z\\
+    Y / Z
+  \end{array}
+  \right)
+\end{equation}
+
+
+Une fois de plus l'erreur se définit par la soustraction usuelle:
+
+\begin{equation}
+  \mathbf{e} = \mathbf{m} - \mathbf{m}^*
+\end{equation}
 
 
 
