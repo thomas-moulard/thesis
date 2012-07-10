@@ -742,13 +742,64 @@ donc une vitesse maximum. Le gain permet alors de contrôler la vitesse
 de réalisation de la tâche et donc, de manière indirecte, la vitesse
 de déplacement du bras.
 
-
 \FloatBarrier
 
 \subsection{Scénario d'asservissement visuel de la tête}
 
-\subsection{Scénario complexe}
+La dernière primitive de mouvement considérée ici permet d'asservir le
+regard du robot sur la position d'un point 3d soit fixe, soit mobile
+et estimé par un système externe. Le plan correspondant est la figure FIXME.
 
+\begin{figure}
+  \footnotesize
+  \begin{center}
+\begin{verbatim}
+duration: 25 # durée complète du mouvement (secondes)
+# correction maximum tous les deux pas
+maximum-correction-per-step: {x: 0.04, y: 0.04, theta: 0.1}
+
+environment:
+  - object:
+      name: table
+      planned:
+        position:
+          x: 1.75
+          y: 0.3
+          z: -0.3
+          rx: 0.
+          ry: 0.
+          rz: 2.
+
+motion:
+  # Primitive de locomotion
+  - walk:
+      interval: [0, 20] # Date de début et de fin de la primitive
+
+      # Pile de pas
+      footsteps:
+      - {x: 0.15, y: -0.19, theta: 0.}
+      - {x: 0.15, y: +0.19, theta: 0.1}
+      # etc.
+
+  # Asservissement de la tête
+  - visual-point:
+      interval: [0, 25]
+      gain: 1.
+      object-name: table
+      frame-name: cameraBottomLeft
+
+servoing:
+  - visp:
+      weight: 1.
+      object-name: table
+      position: /tracker_mbt/resultTransform
+      frame-name: cameraBottomLeft
+\end{verbatim}
+  \end{center}
+  \caption{Plan de mouvement pour une tâche de marche avec asservissement de la tête.}
+\end{figure}
+
+\FloatBarrier
 
 \section{De la difficulté à localiser un robot humanoïde}
 \subsection{Forces et limites du robot humanoïde HRP-2}
