@@ -454,37 +454,69 @@ En pratique, chaque système de localisation est représenté de la façon suiva
 \end{description}
 
 
-
 \section{Scénarii de mouvements}
+
+
+Nous allons voir ici plusieurs exemples de mouvements décrits en
+utilisant le langage de description introduit dans la section
+précédente. L'objectif est à la fois de démontrer la généricité de
+l'approche par plusieurs scénarii différents ainsi que sa mise en
+\oe uvre pratique.
+
+
 \subsection{Locomotion simple}
+
+Le premier scénario consiste en le déplacement du robot le long d'une
+pile de pas pré-déterminée pendant 20 secondes. La description
+complète du plan est fournie par la figure FIXME.
 
 \begin{figure}
   \begin{center}
 \begin{verbatim}
-duration: 200 # durée complète du mouvement (secondes)
+duration: 20 # durée complète du mouvement (secondes)
 
 # Éléments de mouvement
 motion:
   # Primitive de locomotion
   - walk:
-      interval: [0, 200] # Date de début et de fin de la primitive
+      interval: [0, 20] # Date de début et de fin de la primitive
 
       # Pile de pas
       footsteps:
-      - {x: 0.15, y: -0.19, theta: 0., slide1: 0., slide2: -0.76}
-      - {x: 0.15, y: +0.19, theta: 0.1, slide1: -1.00, slide2: -0.76}
+      - {x: 0.15, y: -0.19, theta: 0.}
+      - {x: 0.15, y: +0.19, theta: 0.1}
       # etc.
 \end{verbatim}
   \end{center}
   \caption{Plan de mouvement pour une séquence de marche non-asservie.}
 \end{figure}
 
+La marche est effectué en boucle ouverte et l'erreur d'exécution n'est
+pas compensée. Chaque pas est exprimé relativement au pas
+précédent. Le corps effectuant chaque contact peut être déduit de la
+séquence d'empreinte de pas: si la translation en $y$ du premier pas
+dispose d'un signe négatif, le premier pas est effectué avec le pied
+droit, sinon avec le pied gauche. L'alternance pied gauche/pied droit
+à chaque pas est ensuite implicite.
+
+
+Il n'y a pas, à ce niveau de vérification de la faisabilité des
+pas. C'est le rôle du planneur de s'assurer préalablement à la
+génération du plan de mouvement que la séquence est réalisable.
+
+\FloatBarrier
+
 \subsection{Locomotion asservie}
+
+On peut se demander désormais comment asservir la locomotion en
+utilisant un composant de localisation. La figure FIXME fournit une
+version alternative du plan précédent ajoutant la correction de pas
+introduite dans le chapitre FIXME.
 
 \begin{figure}
   \begin{center}
 \begin{verbatim}
-duration: 200 # durée complète du mouvement (secondes)
+duration: 20 # durée complète du mouvement (secondes)
 
 # correction maximum autorisée sur un pas (x, y en mètre, theta en radians)
 maximum-correction-per-step: {x: 0.02, y: 0.02, theta: 0.05}
@@ -493,16 +525,16 @@ maximum-correction-per-step: {x: 0.02, y: 0.02, theta: 0.05}
 motion:
   # Primitive de locomotion
   - walk:
-      interval: [0, 200] # Date de début et de fin de la primitive
+      interval: [0, 20] # Date de début et de fin de la primitive
 
       # Pile de pas
       footsteps:
-      - {x: 0.15, y: -0.19, theta: 0., slide1: 0., slide2: -0.76}
-      - {x: 0.15, y: +0.19, theta: 0.1, slide1: -1.00, slide2: -0.76}
+      - {x: 0.15, y: -0.19, theta: 0.}
+      - {x: 0.15, y: +0.19, theta: 0.1}
       # etc.
 
 # Asservissement des tâches
-control:
+servoing:
   # Asservissement via le système de capture de mouvements.
   - mocap:
       weight: 1.
@@ -515,8 +547,208 @@ control:
     mouvement --.}
 \end{figure}
 
+La seconde partie du plan décrit que l'erreur de positionnement
+provient d'un unique système de localisation. Dans ce cas, un système
+de capture de mouvement. Plusieurs systèmes de localisation ont été
+testé pour fournir une estimation de la position du robot au cours du
+mouvement:
 
-\subsection{Scénario complexe avec tâche d'atteinte et asservissement corps complet}
+\begin{description}
+\item[Capture de mouvement] Ce système permet une localisation
+  quasi-parfaite permettent de s'abstraire de la plupart des problèmes
+  de perception.
+\item[Suivi d'un objet] Un système réalisant le suivi d'un objet dans
+  l'image captée par une caméra du robot et reconstituant sa position
+  3d peut également être utilisé. Dans ce cas, on support l'objet fixe
+  dans le monde et on en déduit la position du robot.
+\item[SLAM] Les techniques de SLAM -- Simultaneous Localization and
+  Mapping -- permettent de cartographier l'environnement tout en
+  fournissant une estimation de la position actuelle du robot. La
+  carte enregistrée permet d'assurer une localisation sans dérive
+  quelque soit la longueur du mouvement à condition de pouvoir
+  identifier des amères précédemment détectées régulièrement le long
+  du mouvement.
+\end{description}
+
+\begin{figure}
+  \begin{center}
+\begin{verbatim}
+duration: 20 # durée complète du mouvement (secondes)
+
+# correction maximum autorisée sur un pas (x, y en mètre, theta en radians)
+maximum-correction-per-step: {x: 0.02, y: 0.02, theta: 0.05}
+
+environment:
+  - object:
+      name: table
+      planned:
+        position:
+          x: 1.75
+          y: 0.3
+          z: -0.3
+          rx: 0.
+          ry: 0.
+          rz: 2.
+
+# Éléments de mouvement
+motion:
+  # Primitive de locomotion
+  - walk:
+      interval: [0, 20] # Date de début et de fin de la primitive
+
+      # Pile de pas
+      footsteps:
+      - {x: 0.15, y: -0.19, theta: 0.}
+      - {x: 0.15, y: +0.19, theta: 0.1}
+      # etc.
+
+# Asservissement des tâches
+servoing:
+  # Asservissement via le système de capture de mouvements.
+  - visp:
+      weight: 1.
+      object-name: table
+      position: /tracker_mbt/resultTransform
+      camera-velocity: /tracker_mbt/camera_velocity
+      frame-name: cameraBottomLeft
+\end{verbatim}
+  \end{center}
+  \caption{Plan de mouvement pour une séquence de marche asservie sur
+    un système de suivi d'objet.}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+\begin{verbatim}
+duration: 20 # durée complète du mouvement (secondes)
+
+# correction maximum autorisée sur un pas (x, y en mètre, theta en radians)
+maximum-correction-per-step: {x: 0.02, y: 0.02, theta: 0.05}
+
+# Éléments de mouvement
+motion:
+  # Primitive de locomotion
+  - walk:
+      interval: [0, 20] # Date de début et de fin de la primitive
+
+      # Pile de pas
+      footsteps:
+      - {x: 0.15, y: -0.19, theta: 0.}
+      - {x: 0.15, y: +0.19, theta: 0.1}
+      # etc.
+
+# Asservissement des tâches
+servoing:
+  # Asservissement via le système de localisation externe (SLAM).
+  - control-ros:
+      weight: 1.
+      topic: /error
+      signal: error
+\end{verbatim}
+  \end{center}
+  \caption{Plan de mouvement pour une séquence de marche asservie sur
+    un algorithme de SLAM. En pratique, dans ce cas l'évaluation de
+    l'erreur est totalement effectuée hors du contrôle.}
+\end{figure}
+
+\FloatBarrier
+
+\subsection{Scénario d'atteinte avec équilibre quasi-statique}
+
+Dans ce scénario, le robot place son poignet a un point pré-déterminé
+tout en préservant la position de son centre de masse. Le plan de
+mouvement est détaillé dans la figure FIXME.
+
+\begin{figure}
+  \footnotesize
+  \begin{center}
+\begin{verbatim}
+duration: 10 # durée complète du mouvement (secondes)
+
+motion:
+# Fixe la position des pieds.
+  - task:
+      # Date de début et de fin de la primitive.
+      interval: [0, 10]
+      # Type de la tâche: positionnement d'un corps.
+      type: feature-point-6d
+      # Corps à positionner (cheville gauche).
+      operational-point: left-ankle
+      # Gain de la tâche.
+      gain: 1.
+      # Consigne de la tâche: aucun mouvement.
+      reference: static
+      # Contrainte en translation *et* rotation.
+      translation: on
+      rotation: on
+  - task:
+      # Date de début et de fin de la primitive.
+      interval: [0, 10]
+      # Type de la tâche: positionnement d'un corps.
+      type: feature-point-6d
+      # Corps à positionner (cheville droite).
+      operational-point: right-ankle
+      # Gain de la tâche.
+      gain: 1.
+      # Consigne de la tâche: aucun mouvement.
+      reference: static
+      # Contrainte en translation *et* rotation.
+      translation: on
+      rotation: on
+# Fixe la position du centre de masse.
+  - task:
+      # Date de début et de fin de la primitive.
+      interval: [0, 10]
+      # Type de la tâche: positionnement du centre de masse.
+      type: feature-com
+      # Gain de la tâche.
+      gain: 1.
+      # Consigne de la tâche: aucun mouvement.
+      reference: static
+      # Degré de liberté supplémentaires déverrouillés.
+      extra-unlocked-dofs: [18., 19.] # HRP-2 chest dofs.
+
+# Tâche d'atteinte.
+  - task:
+      # Date de début et de fin de la primitive.
+      interval: [0, 10]
+      # Type de la tâche: positionnement d'un corps.
+      type: feature-point-6d
+      # Corps à positionner (poignet droit).
+      operational-point: right-wrist
+      # Gain de la tâche.
+      gain: 7.5
+      # Consigne: position finale du poignet droit.
+      reference: {x: 0.4, y: -0.3, z: 1.1}
+      # Contrainte en translation uniquement.
+      translation: on
+      rotation: off
+\end{verbatim}
+  \end{center}
+  \caption{Plan de mouvement pour une tâche d'atteinte.}
+\end{figure}
+
+Contrairement à la tâche de locomotion qui est totalement encapsulée
+dans une primitive peu paramétrable, le scénario d'atteinte nécessite
+la définition manuelle des tâches. Quatre tâches sont définies ici:
+deux pour maintenir les pieds à leur place, une pour maintenir le
+centre de masse à sa position initiale et une dernière qui génère le
+mouvement du poignet droit.
+
+Les tâches associées aux pieds et au centre de masse possèdent un gain
+faible car l'erreur a une erreur nulle initialement. Inversement, la
+tâche associée au poignet droit a une erreur maximum initialement et
+donc une vitesse maximum. Le gain permet alors de contrôler la vitesse
+de réalisation de la tâche et donc, de manière indirecte, la vitesse
+de déplacement du bras.
+
+
+\FloatBarrier
+
+\subsection{Scénario d'asservissement visuel de la tête}
+
+\subsection{Scénario complexe}
+
 
 \section{De la difficulté à localiser un robot humanoïde}
 \subsection{Forces et limites du robot humanoïde HRP-2}
