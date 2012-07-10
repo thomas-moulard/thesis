@@ -254,7 +254,7 @@ modulaire, mais la taille des données rend cela difficile. En effet,
 si chaque composant vit dans un processus différent, il est nécessaire
 de passer par des méchanismes de mémoire partagée afin d'éviter les
 copies en mémoire. ROS a choisit une seconde stratégie en offrant la
-possibilité d'agglomorer plusieurs composants dans un seul
+possibilité d'agglomérer plusieurs composants dans un seul
 processus. La sérialisation devient donc totalement inutile au prix
 d'une plus grande complexité dans l'écriture des n\oe uds et d'une
 forme d'insécurité: si un problème advient dans n'importe lequel de
@@ -352,6 +352,15 @@ des paramètres intrinsèque des caméras du système.
 Une fois de plus, ce traitement est disponible dans deux variantes
 différentes: monochromatique et couleur.
 
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=.95\linewidth]{src/chap4-integration/footsteps2.jpg}
+  \end{center}
+  \caption{Affichage de la pile de pas que le robot va réaliser en
+    réalité augmentée.}
+\end{figure}
+
+
 
 \paragraph{Vision stéréoscopique}\index{vision stéréoscopique}
 
@@ -382,6 +391,14 @@ dans un processus unique afin d'éviter les copies. Cette architecture,
 également adoptée sur le robot PR2\index{PR2 (robot)} de Willow
 Garage, fournit donc un compromis intéressant entre rapidité,
 souplesse d'utilisation et modularité.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=.95\linewidth]{src/chap4-integration/stereo1.jpg}
+  \end{center}
+  \caption{Reconstruction 3d de l'environnement autour du robot HRP-2
+    à partir des données de la paire de caméra stéréo.}
+\end{figure}
 
 
 \subsection{Capture de mouvement}
@@ -518,6 +535,15 @@ représenter les informations nécessaires à la génération de mouvements
 sur un robot humanoïde. Les deux premiers formats sont le fruit du
 travail de la communauté ROS tandis que le dernier a été développé
 dans le cadre de cette thèse.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=.45\linewidth]{src/chap4-integration/hrp2_urdf.jpg}
+  \end{center}
+  \caption{Modèle de robot HRP-2 décrit via le format URDF.}
+\end{figure}
+
+
 
 \subsection{Description d'un robot}
 
