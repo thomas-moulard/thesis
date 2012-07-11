@@ -1,15 +1,45 @@
 \documentclass[a4paper,twoside,openright]{book}
 
-\usepackage[T1]{fontenc}
-\usepackage[utf8x]{inputenc}
+%PdfTeX settings for a correct UTF 8 Mapping
+%------------------------------------------------------
+\usepackage{ifpdf}
+\ifpdf    \input{glyphtounicode.tex}    %Part of modern distribution
+      %%%\input{glyphtounicode-cmr.tex}     %Additionnal glyph: You must grab it from pdfx package
+      \pdfgentounicode=1
+\else  %Place here the settings for other compilator
+\fi
 
+
+%Encoding + cmap (to get proper UTF8 mapping)
+%------------------------------------------------------
+\usepackage{cmap}
+%\usepackage[utf8x]{inputenc}
+\usepackage{CJKutf8}
+\usepackage[C40,T1]{fontenc}
+
+%NB: CHANGE lmodern AND fourier TO SEE THE PROBLEM OF MISSING UNICODE CHARACTERS
+%     You can see this on Acrobat Pro with acessibility checking or simply by copy-pasting the content.
+%     Of course copy paste is not perfect in both case but it is better with lmodern
+%------------------------------------------------------
 \usepackage{lmodern}
 
+%AMS Math + UTF8 mapping of ams symbols
+%------------------------------------------------------
+%\usepackage{amsmath} 
+\usepackage{mathtools}
+\usepackage{amssymb} % I load it after Fourier else I have more incorrect utf8 mapping (with \geqslant for example)
+%Correct UTF8 mapping for ams fonts
+\ifdefined\pdffontattr% \ifdefined is part of the e-TeX extension, which is part of any modern LaTeX compiler. 
+    \immediate\pdfobj stream file {umsa.cmap}
+    {\usefont{U}{msa}{m}{n}\pdffontattr\font{/ToUnicode \the\pdflastobj\space 0 R}}
+    \immediate\pdfobj stream file {umsb.cmap}
+    {\usefont{U}{msb}{m}{n}\pdffontattr\font{/ToUnicode \the\pdflastobj\space 0 R}}
+\fi
+
+% Other packages.
 \usepackage[francais]{babel}
 
 \usepackage{array}
-\usepackage{mathtools}
-\usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{amsfonts}
 \usepackage{mathtools}
@@ -32,31 +62,39 @@
 \usepackage{colortbl}
 \usepackage{placeins}
 
+\usepackage[overlap,CJK]{ruby}    % Furigana support
+\renewcommand{\rubysize}{0.5}     % Furigana size
+\renewcommand{\rubysep}{-0.3ex}   % Spacing between Furigana and Kanji
+
+\usepackage{multirow}
+
 \usepackage{algorithmic, algorithm}
 
 % Francisation des algorithmes
-\renewcommand{algorithmicrequire} {textbf{textsc{Entrées:}}}
-\renewcommand{algorithmicensure}  {textbf{textsc{Sorties:}}}
-\renewcommand{algorithmicwhile}   {textbf{tant que}}
-\renewcommand{algorithmicdo}      {textbf{faire}}
-\renewcommand{algorithmicendwhile}{textbf{fin tant que}}
-\renewcommand{algorithmicend}     {textbf{fin}}
-\renewcommand{algorithmicif}      {textbf{si}}
-\renewcommand{algorithmicendif}   {textbf{fin si}}
-\renewcommand{algorithmicelse}    {textbf{sinon}}
-\renewcommand{algorithmicthen}    {textbf{alors}}
-\renewcommand{algorithmicfor}     {textbf{pour}}
-\renewcommand{algorithmicforall}  {textbf{pour tout}}
-\renewcommand{algorithmicdo}      {textbf{faire}}
-\renewcommand{algorithmicendfor}  {textbf{fin pour}}
-\renewcommand{algorithmicloop}    {textbf{boucler}}
-\renewcommand{algorithmicendloop} {textbf{fin boucle}}
-\renewcommand{algorithmicrepeat}  {textbf{répéter}}
-\renewcommand{algorithmicuntil}   {textbf{jusqu'à}}
-\renewcommand{algorithmiccomment} {STATE //}
-\newcommand{BEGIN}{STATE fbox{Début}}
-\newcommand{END}{STATE fbox{Fin}}
+% \renewcommand{algorithmicrequire} {textbf{textsc{Entrées:}}}
+% \renewcommand{algorithmicensure}  {textbf{textsc{Sorties:}}}
+% \renewcommand{algorithmicwhile}   {textbf{tant que}}
+% \renewcommand{algorithmicdo}      {textbf{faire}}
+% \renewcommand{algorithmicendwhile}{textbf{fin tant que}}
+% \renewcommand{algorithmicend}     {textbf{fin}}
+% \renewcommand{algorithmicif}      {textbf{si}}
+% \renewcommand{algorithmicendif}   {textbf{fin si}}
+% \renewcommand{algorithmicelse}    {textbf{sinon}}
+% \renewcommand{algorithmicthen}    {textbf{alors}}
+% \renewcommand{algorithmicfor}     {textbf{pour}}
+% \renewcommand{algorithmicforall}  {textbf{pour tout}}
+% \renewcommand{algorithmicdo}      {textbf{faire}}
+% \renewcommand{algorithmicendfor}  {textbf{fin pour}}
+% \renewcommand{algorithmicloop}    {textbf{boucler}}
+% \renewcommand{algorithmicendloop} {textbf{fin boucle}}
+% \renewcommand{algorithmicrepeat}  {textbf{répéter}}
+% \renewcommand{algorithmicuntil}   {textbf{jusqu'à}}
+% \renewcommand{algorithmiccomment} {STATE //}
+% \newcommand{BEGIN}{STATE fbox{Début}}
+% \newcommand{END}{STATE fbox{Fin}}
 \floatname{algorithm}{Algorithme}
+
+\floatname{table}{Tableau}
 
 \usepackage[squaren, Gray, cdot]{SIunits}
 
@@ -147,6 +185,8 @@ pdfproducer = {Thomas Moulard}
 \tableofcontents{\thispagestyle{fancy}}
 %
 \mainmatter 
+\include{src/remerciements}
+\include{src/publis}
 \include{src/chap0-introduction/chap0-introduction}
 \include{src/chap1-roboptim/chap1-roboptim}
 \include{src/chap2-suivi-trajectoire/chap2-suivi-trajectoire}

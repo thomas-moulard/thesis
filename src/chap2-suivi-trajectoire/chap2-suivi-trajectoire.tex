@@ -1309,12 +1309,88 @@ seront détaillés dans la section suivante.
 
 \section{État de l'Art}
 
+Cette section réalise un sommaire de l'état de l'Art en robotique
+humanoïde. Il comprend à la fois une analyse des travaux de référence
+en robotique, des différents travaux sur lesquels l'algorithme de
+contrôle proposé dans ce chapitre s'appuie ainsi que les différents
+efforts qui ont été réalisé jusqu'alors pour parvenir à exécuter des
+tâches complexes sur les robots bipèdes malgré la dérive induite par
+ce mode de locomotion.
+
+
 \subsection{Travaux de référence en robotique}
+
+La littérature robotique contient plusieurs livres de référence
+détaillant les fondements du domaine. Un exemple renmarquable est
+\cite{SicilianoKhatib2008} détaillant la plupart des algorithmes
+fondamentaux du domaine et possédant un chapitre consacré à la
+locomotion bipède. Dans le domaine de la localisation, on peut
+également citer \cite{thrun2005probabilistic}, pour la vision
+robotique \cite{hartley2003multiple} et pour la planification de
+mouvements \cite{lavalle2006planning}. Les fondements mathématiques de
+la robotique sont très clairement décrits par \cite{94murray}.
+
+
 \subsection{Modèles pour la marche dynamique}
+
+Le développement de la locomotion bipède est étroitement lié avec la
+recherche de modèles simplifiés permettant de générer des mouvements
+stables en un temps raisonnable. En particulier, la génération de
+mouvements utilisant le ZMP comme critère de stabilité a d'abord été
+étudié par le chercheur serbe Miomir Vukobratović -- 1er Octobre 1931,
+11 Mars 2012 --. Il a publié en 2004 Un bilan des recherches sur
+l'utilisation du ZMP pour la robotique \cite{vukobratovic2004zero}. Un
+second chercheur particulièrement reconnu pour le développement de
+stratégies de génération de mouvement réactive fondé sur le ZMP est
+Shuuji Kajita \mbox{-- \begin{CJK*}{UTF8}{min}梶田　秀司\end{CJK*}
+    --}. Une sélection des travaux des équipes japonaises du domaine
+est \cite{04humanoids.harada,01icra.KajitaKanehiro,07icra.morisawa}.
+
+
+Des recherches ont également été menées pour formuler le problème de
+génération de mouvement à l'aide de solveurs supportant les
+contraintes inégalités \cite{11icra.dimitrov,10ar.herdt} afin de
+rechercher la trajectoire du centre de masse du robot parmi toutes les
+solutions correctes au lieu de spécifier une trajectoire de ZMP pour
+en déduire une trajectoire de centre de masse solution. La formulation
+générique du problème a également permis d'inclure le positionement
+des points de contact pendant la marche comme partie intégrante du
+problème. L'utilisation du démarrage à chaud \cite{09icra.wieber} a
+également permis des gains en terme de temps de calcul
+non-négligeables.
+
+
+Alors que ces équipes ont focalisés leurs efforts sur la rapidité des
+algorithmes, d'autres ont tenté de concevoir des modèles plus proches
+des modèles physiques classiques afin de générer des mouvements
+dynamiques complexes. Un exemple est \cite{09robotica.mombaur} qui
+traide de la génération de trajectoires de course. D'autres travaux
+incluent \cite{07humanoids.suleiman,08kanehiro.rsj}.
+
+
 \subsection{Contrôleurs pour robots humanoïdes}
+
+
+Le formalisme du contrôle par tâche a d'abord été défini par Bernard
+Espiau \cite{89iser.rives}. D'autres groupes ont également mené des
+recherches sur ce sujet \cite{05icra.sentis}. Les publications sur le
+logiciel utilisé pour les travaux menés au sein de cette thèse sont
+\cite{09icar.mansard,1573536,10humanoids.kanoun}.
+
 \subsection{Exécution de trajectoires asservies}
 
-
+Si la robotique mobile classique a dédié un grand nombre de
+publications au problème de la navigation
+\cite{91icra.samson,1570831}, la littérature est beaucoup moins
+abondante dans le domaine de la robotique bipède. Des exemples de
+scénarii complexes sur des systèmes humanoïdes sont
+\cite{05humanoids.michel,10springer.chestnut,06icra.MichelChestnut,5354575}. Aucun
+traitement particulier pour la compensation de la dérivé n'est décrite
+dans ces papiers bien qu'elle n'a pu être ignorée au vu des
+possibilités des systèmes décrits. D'autres papiers s'intéressent plus
+spécifiquement au maintient de l'équilibre dans le cas où une
+perturbation extérieure apparaît lors de la marche
+\cite{07icra.morisawa}.
 
 
 \section{Correction de mouvement temps réel}
