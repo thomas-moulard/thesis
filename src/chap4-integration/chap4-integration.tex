@@ -394,6 +394,15 @@ souplesse d'utilisation et modularité.
 
 \begin{figure}
   \begin{center}
+    \includegraphics[width=.95\linewidth]{src/chap4-integration/disparity-1.jpg}
+    \includegraphics[width=.95\linewidth]{src/chap4-integration/disparity-2.jpg}
+  \end{center}
+  \caption{Carte de profondeur calculée en temps réel.}
+\end{figure}
+
+
+\begin{figure}
+  \begin{center}
     \includegraphics[width=.95\linewidth]{src/chap4-integration/stereo1.jpg}
   \end{center}
   \caption{Reconstruction 3d de l'environnement autour du robot HRP-2
@@ -1018,6 +1027,14 @@ part un flux d'image, des informations de calibration, un modèle 3d de
 l'objet à suivre et un jeu de paramètres permettant de régler
 l'algorithme de suivi ainsi qu'une pose intiale.
 
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=.95\linewidth]{src/chap4-integration/shelf.png}
+  \end{center}
+  \caption{Le visualisateur associé au composant de suivi d'objet.}
+\end{figure}
+
+
 
 Il est courant de modéliser le comportement des composants robotiques
 sous la forme d'une machine à état. Dans notre cas le composant de
@@ -1189,6 +1206,19 @@ testée réellement en validant plusieurs scénarii adaptés de difficulté
 croissante. Une fois l'expérience validée, on peut alors changer
 certains composants afin de tester de nouvelles stratégies ce qui fait
 débuter un nouveau cycle comme illustré sur la figure FIXME.
+
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=.95\linewidth]{src/chap4-integration/rviz-full.jpg}
+  \end{center}
+  \caption{Architecture complexe associant de nombreux composants
+    robotiques intégrant le contrôleur du robot exécutant une tâche de
+    locomotion, le système de capture de mouvement et le processus
+    complet de vision utilisant le tracker décrit dans cette section
+    pour estimer la position d'un cube.}
+\end{figure}
+
 
 
 \section{Conclusion}

@@ -812,16 +812,144 @@ servoing:
 
 \section{De la difficulté à localiser un robot humanoïde}
 
-Plusieurs séries d'expérimentation ont été réalisées sur le robot
-HRP-2. La première
 
-% FIXME WTF
+Plusieurs séries d'expérimentation ont été réalisées sur le robot
+HRP-2 afin de tester le comportement des algorithmes de localisation
+utilisant des capteurs embarqués.
+
+
 \begin{figure}
   \begin{center}
-    \includegraphics[width=.45\linewidth]{src/chap3-primitive-mouvement/mocap.png}
+    \includegraphics[width=.75\linewidth]{src/chap3-primitive-mouvement/dimensions.png}
+    \includegraphics[width=.75\linewidth]{src/chap3-primitive-mouvement/trajectory-8.png}
   \end{center}
-  \caption{Précision de l'algorithme de SLAM par rapport au système de capture de mouvemement.}
+  \caption{Description de l'expérimentation: le robot part de la
+    droite de l'image et progresse vers l'étagère située à gauche pour
+    y déposer une balle.}
 \end{figure}
+
+
+
+Le scénario proposé est le suivant: HRP-2 contourne un obstacle, passe
+entre deux objets, et va poser une balle dans une étagère. La longueur
+de la trajectoire de marche -- 2 mètres environ -- et le nombre de pas
+génèrent une dérive suffisante pour qu'une exécution de ce scénario
+échoue en boucle ouverte. En effet, passer son bras dans une étagère
+est un mouvement contraint particulièrement sensible à la position
+d'arrivée du robot. Une petite erreur dans la positionnement du robot
+à la fin de la trajectoire engendrera une grande erreur dans la
+position finale du poignet. La figure FIXME illustre le scénario.
+L'objectif ici est d'utiliser les caméras embarquées pour construire
+une carte de l'environnement puis pour localiser le robot. La
+stratégie adoptée ici n'est pas du SLAM -- Simultaneous Localization
+and Mapping -- dans la mesure où les images permettant de construire
+la carte sont traitées hors-ligne. On réalise donc un premier
+mouvement sans correction afin d'acquérir une séquence d'images
+permettant de construire la carte puis on utilise cette carte pour
+localiser le robot durant les expérimentations suivantes. La qualité
+du résultat est ensuite validée en utilisant un système de capture de
+mouvement.
+
+
+Durant les expériences, le module de localisation a fourni une
+estimation de la position du robot à 16\hertz. Les images ont une
+résolution de 320x240 pixels. L'ordinateur sur lequel fonctionne le
+composant de localisation est un Intel\textregistered
+Core\texttrademark\ 2 CPU T7200~@~2.00GHz avec 2Gb.\ de RAM.
+
+
+La précision finale du système est illustrée par la figure FIXME. On
+peut y observer une erreur à la fin de la trajectoire d'environ 0.2
+mètres en translation. Plusieurs raisons peuvent expliquer ces mauvais résultats:
+\begin{enumerate}
+\item Carte non-métrique et absence de fermeture de boucle,
+\item Passage dans des zones où la carte est peu dense ou dans des
+  zones ne possédant que peu d'information visuelle,
+\item Flexibilité du robot et/ou mauvaise identification de certains paramètres,
+\end{enumerate}
+
+
+Le premier point pouvant amener à une mauvaise estimation de la
+localisation du robot est l'absence de fermeture de boucle. Les
+techniques de localisation utilisant les informations visuelles
+peuvent être divisées en deux catégories: odométrie visuelle et
+localisation ``globale''. L'odométrie visuelle observe les changements
+entre deux images aux temps $t_{n-1}$ et $t_n$ afin d'estimer la
+vitesse de la caméra entre les deux images. Cette vitesse est ensuité
+intégrée pour calculer le mouvement de la caméra. Il résultat de cette
+intégration une dérive temporelle qui empêche toute tentative de
+localisation sur le long terme en utilisant cette
+technique. Inversement, les algorithmes utilisant une carte peuvent
+identifier les amères déjà détectées auparavant et stabiliser le
+système. Une limite de ce mouvement est qu'il n'est pas facile pour le
+système de reconnaître des amères déjà identifiées. Il peut donc s'en
+suivre une dérive dans l'estimation de la position du robot.
+
+
+Le second problème concerne l'environnement en lui-même: à la fin du
+mouvement, le robot se trouve face au meuble ce qui rend les images
+captées par les caméras vide de toute amère permettant d'effectuer
+correctement la localisation. Ce problème ne peut expliquer que
+partiellement la mauvaise estimation dans la mesure où l'occlusion des
+caméras n'intervient qu'à l'extrême fin du mouvement.
+
+
+Le dernier point pouvant amener à une mauvaise estimation de l'erreur
+est liée à la mauvaise modélisation de la chaîne cinématique du
+robot. Une première erreur est lié à la présence, au niveau des
+chevilles du robot, d'une flexibilité passive pouvant être modélisé
+sous la forme de trois ressorts: deux autorisant un mouvement en
+rotation et un troisième un déplacement en translation, c'est à dire
+autorisant une compression de la cheville lors de la marche. Ce
+dispositif a été conçu pour absorber les chocs et protéger le capteur
+de force situé dans la cheville mais insère trois degrés de liberté
+non modélisés et surtout non mesurables car dépourvu d'encodeur. Cette
+déformation au niveau de la cheville est donc ignorée dans les calculs
+ce qui amène à un biais sur la position relative du pied et de la tête
+du robot. Ce biais est d'autant plus critique dans ce cas que c'est la
+position des points de contact que l'on essaie de corriger. Une
+seconde source d'erreur est la calibration de la position de la caméra
+dans le robot. Les imprécisions de la conception du robot, du système
+de fixation des caméras rendent nécessaire le calcul de la position
+relative de la caméra par rapport au corps auquel il est fixé, dans
+notre cas la tête. Un procédé de calibration des paramètres
+extrinsèque a donc mis en place pour estimer ces paramètres. Ces
+derniers ont été validés en reprojetant le modèle du robot dans
+l'image comme illustré par la figure FIXME.
+
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=.95\linewidth]{src/chap3-primitive-mouvement/demo1.jpg}
+  \end{center}
+  \caption{HRP-2 place une balle dans une étagère (I).}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=.95\linewidth]{src/chap3-primitive-mouvement/demo2.jpg}
+  \end{center}
+  \caption{HRP-2 place une balle dans une étagère (II).}
+\end{figure}
+
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=.95\linewidth]{src/chap3-primitive-mouvement/mocap.png}
+  \end{center}
+  \caption{Précision de l'algorithme de SLAM par rapport au système de
+    capture de mouvemement.}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=.95\linewidth]{src/chap3-primitive-mouvement/calibextrinsic.jpg}
+  \end{center}
+  \caption{Reprojection du modèle du robot dans l'image captée par une
+    caméra embarquée pour valider la calibration des paramètres de
+    cette dernière.}
+\end{figure}
+
 
 
 \subsection{Forces et limites du robot humanoïde HRP-2}
