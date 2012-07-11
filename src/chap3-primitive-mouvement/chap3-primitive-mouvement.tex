@@ -858,6 +858,8 @@ composant de localisation est un Intel\textregistered
 Core\texttrademark\ 2 CPU T7200~@~2.00GHz avec 2Gb.\ de RAM.
 
 
+\subsection{Analyse de la précision du système de localisation}
+
 La précision finale du système est illustrée par la figure FIXME. On
 peut y observer une erreur à la fin de la trajectoire d'environ 0.2
 mètres en translation. Plusieurs raisons peuvent expliquer ces mauvais résultats:
@@ -913,9 +915,40 @@ dans le robot. Les imprécisions de la conception du robot, du système
 de fixation des caméras rendent nécessaire le calcul de la position
 relative de la caméra par rapport au corps auquel il est fixé, dans
 notre cas la tête. Un procédé de calibration des paramètres
-extrinsèque a donc mis en place pour estimer ces paramètres. Ces
+extrinsèque a donc été mis en place pour estimer ces paramètres. Ces
 derniers ont été validés en reprojetant le modèle du robot dans
 l'image comme illustré par la figure FIXME.
+
+
+\subsection{Résultats de la localisation utilisant la vision sur le robot humanoïde HRP-2}
+
+L'ensemble de ces facteurs rends la réalisation d'un algorithme de
+localisation embarqué sur HRP-2 délicat. Pour réaliser une tâche de
+manipulation, une précision de l'ordre du centimère est souvent
+nécessaire. Or, les mauvaises performances du système de localisation
+engendre un bruit dans le positionnement du robot qui peut rendre
+l'exécution de tâche précises délicate. Dans le scénario choisit, la
+tâche peut être réalisée avec succès pour certains essais mais le taux
+d'échec restant très fort, cette méthode ne peut pas constituer une
+boîte noire permettant de manière automatique de réaliser un mouvement
+asservi. Une façon de résoudre le problème serait de corriger la
+position du bras. En effet, entre la caméra et le bras, la chaîne
+cinématique est bien identifiée. On voit donc ici que l'approche
+consistant à avoir plusieurs systèmes de localisation simultanément se
+justifie en pratique. Un composant de localisation ``global'' tel que
+celui utilisé ici permet de rendre la navigation robuste sans
+toutefois être suffisant pour les tâches de manipulation. Pour ces
+dernières, d'autres stratégies doivent être envisagées comme la
+détection dans l'image de l'objet à attrapper pour asservir la
+position de la pince. On voit ici que plus qu'une localisation
+parfaite sur le long terme, il est plus critique pour nos scénarii
+d'avoir des algorithmes de localisation locaux assurant une erreur
+minimale à la fin de la réalisation de la tâche. Les algorithmes
+réalisant une localisation sur le long terme étant plutôt destiné à
+alimenter les algorithmes de planification que les algorithmes de
+contrôle nécessitant une haute précision sur la pose estimée du robot.
+
+
 
 
 \begin{figure}
@@ -951,14 +984,19 @@ l'image comme illustré par la figure FIXME.
 \end{figure}
 
 
-
-\subsection{Forces et limites du robot humanoïde HRP-2}
-\subsection{Vision pour la robotique humanoïde}
-\paragraph{Difficultés classiques de la vision}
-\paragraph{Stabilisation de la tête}
-\paragraph{Pourquoi un robot n'est pas une caméra volante}
-\paragraph{Résultats de la localisation utilisant la vision sur le robot humanoïde HRP-2}
-
-\section{Résultats}
-
 \section{Conclusion}
+
+Pour continuer à explorer l'expression de plans de mouvement, il
+faudrait donc intégrer de nouveaux algorithmes de localisation dédiés
+à l'asservissement d'une tâche spécifique plutôt que d'envisager le
+problème comme un bloc unitaire. La seconde partie des travaux reste
+d'intégrer directement dans la phase de planification une étape de
+planification des asservissements. L'idée est de planifier le
+mouvement tel que le robot privilégiera le passage dans des zones où
+la qualité de la localisation est maximale. En particulier, la
+trajectoire de la tête sera calculée afin de laisser les amères
+détectables le plus longtemps possible utilisables. Ce planneur pourra
+alors générer la partie asservissement du plan de mouvement
+automatiquement. L'intégration de ces deux éléments restent des
+éléments clés pour atteindre l'objectif de pouvoir asservir n'importe
+quel mouvement sur un robot humanoïde de manière automatique.
