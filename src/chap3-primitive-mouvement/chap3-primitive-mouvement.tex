@@ -21,23 +21,23 @@ manière indirecte, la question qui se pose ici est celle de la limite
 raisonnement logique. Ce problème récurrent de la robotique et pour
 lequel il n'existe pas, de consensus au sein de la communauté trouve
 ici une solution élégante. En effet, un contrôleur fondé sur le
-paradigme de la pile de tâche ne se limite pas à une description
+paradigme de la pile de tâches ne se limite pas à une description
 d'objectifs ou de contraintes robotiques dans des espaces plus
 naturels que l'espace des configurations ou l'espace cartésien, il
-ouvre surtout la voie à des méchanismes de supervision décidant à quel
+ouvre surtout la voie à des mécanismes de supervision décidant à quel
 moment insérer telle ou telle tâche à un niveau de priorité donné. La
-pile de tâche réalise donc la jonction entre d'une part, le monde du
+pile de tâches réalise donc la jonction entre d'une part, le monde du
 calcul numérique puisque la finalité du système est de calculer la
 commande du système et d'autre part le monde de la logique dans lequel
 les utilisateurs humains souhaitent exprimer leur \emph{desiderata} au
-système robotique: va jusqu'à la cuisine, apportes moi la bouteille,
+système robotique: va jusqu'à la cuisine, apporte-moi la bouteille,
 ouvres la porte, etc. Il est clair que ce type d'ordre nécessite la
 résolution d'abstractions et que la logique mathématique semble être
-un moyen particulièrement adapté pour y parvenir. Ces méchanismes de
+un moyen particulièrement adapté pour y parvenir. Ces mécanismes de
 décision de haut niveau sont appelés ``superviseurs'' et ont pour
-objectif d'instantier et d'orchestrer tous les composants d'une
+objectif d'instancier et d'orchestrer tous les composants d'une
 architecture robotique. Dans le cadre de notre architecture, il faut
-donc pouvoir instantier des piles de tâches à partir d'une description
+donc pouvoir instancier des piles de tâches à partir d'une description
 de haut niveau des ordres passés au robot. Ce chapitre propose un
 langage de description des tâches permettant de faire le lien entre
 représentation logique et représentation numérique.
@@ -52,14 +52,14 @@ démontrés. Enfin, nous nous concentrerons sur les problèmes
 d'asservissement posés par les robots humanoïdes avant de conclure.
 
 
-\section{\'Etat de l'Art}
+\section{État de l'Art}
 
 FIXME
 
 \section{Description d'un mouvement robotique complexe}
 
 
-Décrire le comportement d'une pile de tâche revient à décrire deux
+Décrire le comportement d'une pile de tâches revient à décrire deux
 éléments primordiaux: d'une part les tâches exprimées dans le solveur
 et de l'autre les différents changements d'état de la pile au cours du
 mouvement. Concernant les tâches, il s'agit ici de représenter des
@@ -67,9 +67,9 @@ fonctions mathématiques génériques ne présentant pas de point commun
 permettant une représentation générique de ces dernières. Par exemple
 si l'on se limitait aux fonctions linéaires $\mathbf{A}(t) \mathbf{x}
 + \mathbf{b}(t)$, encoder la matrice $\mathbf{A}$ et le vecteur
-$\mathbf{b}$ serait envisageable pour un ensemble discret de valeur
+$\mathbf{b}$ serait envisageable pour un ensemble discret de valeures
 $t$ données. Le cas évoqué est trop contraint pour notre problème et
-les modélisations informatiques développées dans le chapitre 1 n'aide
+les modélisations informatiques développées dans le chapitre 1 n'aide
 pas: elles ont pour but de venir fournir un modèle pour l'expression
 d'une fonction mathématique sous la forme d'un algorithme et non pas
 sous la forme d'une donnée structurée pouvant facilement être encodée.
@@ -79,25 +79,25 @@ alors cet ensemble de ``primitives'' d'être étendu au cours du temps
 mais il nécessite l'extension du modèle de description défini ici.
 
 
-La second partie est la représentation des changements d'état. Un
+La seconde partie est la représentation des changements d'état. Un
 changement d'état du solveur survient quand une tâche est: ajoutée,
 supprimée ou bien encore quand sa priorité est modifiée. De manière
 générale les transitions peuvent être soit temporelles -- avance de 5
 mètres puis saisit la poignée de la porte --, soit logique -- si tu es
-à moins de 10 cm de la position finale, arrêtes-toi --. Pour
+à moins de 10 cm de la position finale, arrête-toi --. Pour
 comprendre la stratégie choisit, il faut garder à l'esprit que pour
 réaliser un scénario complexe certains comportements seront intégrés
 dans la boucle de temps réel tandis que d'autres -- typiquement les
 informations capteurs -- seront traitées à l'extérieur. Les deux
 catégories d'événements, temporelles ou logiques, ne mettent pas en
-jeu les mêmes méchanismes. Les événéments temporels sont décidés à
+jeu les mêmes mécanismes. Les événements temporels sont décidés à
 l'avance et doivent être exécutés avec une grande précision pour
-assurer un comportement correct du système tandis que les événéments
-logiques sont le résultat d'un méchanisme de décision externe.
+assurer un comportement correct du système tandis que les événements
+logiques sont le résultat d'un mécanisme de décision externe.
 
 De ce fait, la stratégie adoptée a été de permettre la représentation
 de transitions temporelles dans le modèle de description uniquement
-tandis que l'on considère que les transitions événémentielles, de fait
+tandis que l'on considère que les transitions événementielles, de fait
 plus lentes et difficiles à encoder, sont gérées à l'extérieur du
 contrôleur par un logiciel décisionnel aillant la possibilité de
 regénérer le mouvement s'il devient invalide suite à la réception
@@ -109,14 +109,14 @@ SMACH\footnote{\url{http://www.ros.org/wiki/smach}}.
 \subsection{Primitive de mouvement}
 
 La première tâche a été de définir des primitives de mouvement de
-haut-niveau. Les primitives proposées sont:
+haut niveau. Les primitives proposées sont:
 \begin{enumerate}
 \item La locomotion: mouvement synchronisé des deux jambes et du
   centre de masse du robot pour réaliser un déplacement tout en
   assurant sa stabilité.
 \item La manipulation et le contact: mouvement réalisant le placement
   d'une partie spécifiée du robot à un emplacement donné dans l'espace
-  Euclidien. La tâche peut contraindre la position et/ou la rotation
+  euclidien. La tâche peut contraindre la position et/ou la rotation
   du corps à positionner.
 \item Regard ou asservissement visuel: le robot doit maintenir un
   point dans son champ de vision.
@@ -125,11 +125,11 @@ haut-niveau. Les primitives proposées sont:
 
 \subsection{Primitive de locomotion}
 
-Une tâche de locomotion est définie intialement comme une série de
+Une tâche de locomotion est définie initialement comme une série de
 points de contact à réaliser pour atteindre une position
-finale. Chacun des points de contact étant annoté par l'effecteur
+finale. Chacun des points de contact étant annotés par l'effecteur
 devant réaliser le contact à cet endroit. À partir de ces
-informations, une trajectoire des effecteurs réalisant les appui est
+informations, une trajectoire des effecteurs réalisant les appuis est
 déduite ainsi que du centre de masse pour préserver l'équilibre
 dynamique du système. Afin de pouvoir utiliser les techniques décrites
 dans le chapitre FIXME, nous nous limiterons à la marche sur un sol
@@ -138,8 +138,8 @@ la trajectoire des effecteurs et du centre de masse est encore un
 problème ouvert à l'heure actuelle. Les modèles simples peuvent être
 embarqués dans les contrôleurs au prix de nombreuses simplifications
 détaillées dans le chapitre précédent tandis que les modèles les plus
-compliqués nécessitent une résolution hors du contrôleurs rendant le
-comportement du système non-réactif. Le chapitre précédent a proposé
+compliqués nécessitent une résolution hors du contrôleur rendant le
+comportement du système non réactif. Le chapitre précédent a proposé
 une stratégie pour fusionner les avantages des deux approches. Nous
 considérons ici la totalité de l'approche développée au cours du
 chapitre précédent comme une implémentation d'une primitive de
@@ -166,7 +166,7 @@ tâche comme:
 \end{equation}
 
 On remarquera que dans l'équation FIXME, $\mathbf{e}$ est un élément
-de $\text{SE}(3)$. Les élements de $\text{SE}(3)$ peuvent s'exprimer
+de $\text{SE}(3)$. Les éléments de $\text{SE}(3)$ peuvent s'exprimer
 de nombreuses façons différentes: matrice homogène -- 16 paramètres
 --, translation et quaternion -- 7 paramètres --, vecteur de rotation
 -- 6 paramètres --, etc. Il faut garder à l'esprit qu'une
@@ -181,7 +181,7 @@ bijection avec $\text{SO}(3)$, l'espace des rotations dans l'espace
 3d.
 
 De fait, les représentations non minimales ne représentent pas une
-solution acceptable pour représenter notre erreur car elles provoquent
+solution acceptable pour représenter notre erreur, car elles provoquent
 l'insertion de contraintes supplémentaires inutiles dans le problème
 d'optimisation. Il faut donc choisir pour représenter $\mathbf{e}$ une
 représentation minimale, dans notre cas via une translation et une
@@ -204,7 +204,7 @@ axe, voir figure FIXME.
 \end{figure}
 
 
-Cette représentation est minimale car la translation est représentée
+Cette représentation est minimale, car la translation est représentée
 par trois paramètres et la rotation par trois paramètres:
 
 \begin{equation}
@@ -221,7 +221,7 @@ par trois paramètres et la rotation par trois paramètres:
 \end{equation}
 
 En considérant les trois premiers éléments du vecteur d'erreur ou bien
-les trois derniers on peut restreindre la tâche à positioner le corps
+les trois derniers, on peut restreindre la tâche à positionner le corps
 respectivement en translation ou en rotation uniquement.
 
 
@@ -273,7 +273,7 @@ $\mathbf{x}^*$ selon les cas et permettre le suivi d'une trajectoire
 plutôt que l'atteinte d'une référence constante.
 
 
-Comme décrit dans le chapitre précédent, l'erreur des tâche décroît
+Comme décrit dans le chapitre précédent, l'erreur des tâches décroît
 exponentiellement -- dans le cas où la référence reste constante
 --. Un suivi suffisamment précis de la trajectoire est alors
 réalisable en augmentant suffisamment $\lambda$ le gain associé à la
@@ -287,8 +287,8 @@ articulaires malgré le gain important.
 
 
 La primitive de manipulation est une instance directe de la tâche
-d'alignement de repères présentées dans la section précédente. Elle
-est utilisée pour placer la main à un endroit donnée afin de saisir un
+d'alignement de repères présentée dans la section précédente. Elle
+est utilisée pour placer la main à un endroit donné afin de saisir un
 objet. Le déplacement d'un bras du robot ne mettant pas en jeu
 l'équilibre du robot tant qu'elle se déplace peu rapidement et sans
 perturber la tâche de suivi du centre de masse, on peut simplement
@@ -300,7 +300,7 @@ linéaire pour amener la main à la position désirée.
 
 
 La dernière primitive introduite ici concerne l'asservissement de la
-trajectoire du robot afin de préserver des amères dans une zones où
+trajectoire du robot afin de préserver des amères dans une zone où
 elles sont détectables par les capteurs du robot. Sur le robot HRP-2,
 seul des caméras sont à la disposition des utilisateurs et leur
 placement dans la tête permet naturellement de définir une tâche de
@@ -367,12 +367,11 @@ contacts définis sur la forme d'une pile de pas.
 \item[Intervalle] Date de début et de fin de la primitive de mouvement.
 \item[Empreinte de pas] Liste des pas à effectuer. Les pas sont
   considérés comme des éléments de $\text{SE}(2)$ dans la mesure où
-  l'algorithme de génération de pas fait l'hypothèse d'un sol
-  planaire.
+  l'algorithme de génération de pas fait l'hypothèse d'un sol plan.
 \end{description}
 
 Lors du chargement du plan, la génération des trajectoires de pieds et
-de centre de masse initial est réalisé hors-ligne de manière
+de centre de masse initiales est réalisée hors ligne de manière
 asynchrone. Tant que le calcul n'est pas terminé, il n'est pas
 possible de lancer le mouvement.
 
@@ -406,8 +405,8 @@ regard vers un point 3d, éventuellement mobile.
 \item[Intervalle] Date de début et de fin de la primitive de manipulation.
 \item[Caméra à considérer] Nom de la caméra utilisée. En pratique, la
   caméra est définie comme un corps ``virtuel'' du robot et l'on peut
-  donc potentiellement aligner n'importe quel partie du corps du robot
-  vers un point donné.
+  donc potentiellement aligner n'importe quelle partie du corps du
+  robot vers un point donné.
 \item[Consigne] La position de référence vers lequel le corps doit
   pointer. Il peut être de deux types. Soit fixe, dans ce cas le corps
   doit pointer vers un point prédéterminé de l'espace, soit dynamique
@@ -439,11 +438,11 @@ bassin. On a donc:
 
 Au cours du mouvement, $n$ systèmes de localisation fournissent une
 estimation de la pose du robot. Une fois de plus, cette pose est
-théoriquement dans l'espace 3d $\text{SE}(3)$ mais les contraintes
-physiques font que seul trois degrés de liberté doivent être
+théoriquement dans l'espace 3D $\text{SE}(3)$, mais les contraintes
+physiques font que seuls trois degrés de liberté doivent être
 réellement estimés: $(x, y, \theta) \in \text{SE}(2)$. Ces trois
-degrés correspondent à la position 2d de la projection du bassin sur
-le sol. De ce fait, l'interpolation de $n$ poses 2d et la moyenne des
+degrés correspondent à la position 2D de la projection du bassin sur
+le sol. De ce fait, l'interpolation de $n$ poses 2D et la moyenne des
 poses à la normalisation de l'angle $\theta$ prêt.
 
 
@@ -487,7 +486,7 @@ l'approche par plusieurs scénarii différents ainsi que sa mise en
 \subsection{Locomotion simple}
 
 Le premier scénario consiste en le déplacement du robot le long d'une
-pile de pas pré-déterminée pendant 20 secondes. La description
+pile de pas prédéterminée pendant 20 secondes. La description
 complète du plan est fournie par la figure FIXME.
 
 \begin{figure}
@@ -508,11 +507,11 @@ motion:
       # etc.
 \end{verbatim}
   \end{center}
-  \caption{Plan de mouvement pour une séquence de marche non-asservie.}
+  \caption{Plan de mouvement pour une séquence de marche non asservie.}
 \end{figure}
 
-La marche est effectué en boucle ouverte et l'erreur d'exécution n'est
-pas compensée. Chaque pas est exprimé relativement au pas
+La marche est effectuée en boucle ouverte et l'erreur d'exécution
+n'est pas compensée. Chaque pas est exprimé relativement au pas
 précédent. Le corps effectuant chaque contact peut être déduit de la
 séquence d'empreinte de pas: si la translation en $y$ du premier pas
 dispose d'un signe négatif, le premier pas est effectué avec le pied
@@ -521,7 +520,7 @@ droit, sinon avec le pied gauche. L'alternance pied gauche/pied droit
 
 
 Il n'y a pas, à ce niveau de vérification de la faisabilité des
-pas. C'est le rôle du planneur de s'assurer préalablement à la
+pas. C'est le rôle du planificateur de s'assurer préalablement à la
 génération du plan de mouvement que la séquence est réalisable.
 
 \begin{figure}
@@ -579,7 +578,7 @@ servoing:
 La seconde partie du plan décrit que l'erreur de positionnement
 provient d'un unique système de localisation. Dans ce cas, un système
 de capture de mouvement. Plusieurs systèmes de localisation ont été
-testé pour fournir une estimation de la position du robot au cours du
+testés pour fournir une estimation de la position du robot au cours du
 mouvement:
 
 \begin{description}
@@ -682,9 +681,9 @@ servoing:
 
 \FloatBarrier
 
-\subsection{Scénario d'atteinte avec équilibre quasi-statique}
+\subsection{Scénario d'atteinte avec équilibre quasi statique}
 
-Dans ce scénario, le robot place son poignet a un point pré-déterminé
+Dans ce scénario, le robot place son poignet a un point prédéterminé
 tout en préservant la position de son centre de masse. Le plan de
 mouvement est détaillé dans la figure FIXME.
 
@@ -765,7 +764,7 @@ centre de masse à sa position initiale et une dernière qui génère le
 mouvement du poignet droit.
 
 Les tâches associées aux pieds et au centre de masse possèdent un gain
-faible car l'erreur a une erreur nulle initialement. Inversement, la
+faible, car l'erreur a une erreur nulle initialement. Inversement, la
 tâche associée au poignet droit a une erreur maximum initialement et
 donc une vitesse maximum. Le gain permet alors de contrôler la vitesse
 de réalisation de la tâche et donc, de manière indirecte, la vitesse
@@ -856,14 +855,14 @@ de la trajectoire de marche -- 2 mètres environ -- et le nombre de pas
 génèrent une dérive suffisante pour qu'une exécution de ce scénario
 échoue en boucle ouverte. En effet, passer son bras dans une étagère
 est un mouvement contraint particulièrement sensible à la position
-d'arrivée du robot. Une petite erreur dans la positionnement du robot
+d'arrivée du robot. Une petite erreur dans le positionnement du robot
 à la fin de la trajectoire engendrera une grande erreur dans la
 position finale du poignet. La figure FIXME illustre le scénario.
 L'objectif ici est d'utiliser les caméras embarquées pour construire
 une carte de l'environnement puis pour localiser le robot. La
 stratégie adoptée ici n'est pas du SLAM -- Simultaneous Localization
 and Mapping -- dans la mesure où les images permettant de construire
-la carte sont traitées hors-ligne. On réalise donc un premier
+la carte sont traitées hors ligne. On réalise donc un premier
 mouvement sans correction afin d'acquérir une séquence d'images
 permettant de construire la carte puis on utilise cette carte pour
 localiser le robot durant les expérimentations suivantes. La qualité
@@ -884,7 +883,7 @@ La précision finale du système est illustrée par la figure FIXME. On
 peut y observer une erreur à la fin de la trajectoire d'environ 0.2
 mètres en translation. Plusieurs raisons peuvent expliquer ces mauvais résultats:
 \begin{enumerate}
-\item Carte non-métrique et absence de fermeture de boucle,
+\item Carte non métrique et absence de fermeture de boucle,
 \item Passage dans des zones où la carte est peu dense ou dans des
   zones ne possédant que peu d'information visuelle,
 \item Flexibilité du robot et/ou mauvaise identification de certains paramètres,
@@ -898,7 +897,7 @@ peuvent être divisées en deux catégories: odométrie visuelle et
 localisation ``globale''. L'odométrie visuelle observe les changements
 entre deux images aux temps $t_{n-1}$ et $t_n$ afin d'estimer la
 vitesse de la caméra entre les deux images. Cette vitesse est ensuité
-intégrée pour calculer le mouvement de la caméra. Il résultat de cette
+intégrée pour calculer le mouvement de la caméra. Le résultat de cette
 intégration une dérive temporelle qui empêche toute tentative de
 localisation sur le long terme en utilisant cette
 technique. Inversement, les algorithmes utilisant une carte peuvent
@@ -917,56 +916,58 @@ caméras n'intervient qu'à l'extrême fin du mouvement.
 
 
 Le dernier point pouvant amener à une mauvaise estimation de l'erreur
-est liée à la mauvaise modélisation de la chaîne cinématique du
-robot. Une première erreur est lié à la présence, au niveau des
+est lié à la mauvaise modélisation de la chaîne cinématique du
+robot. Une première erreur est liée à la présence, au niveau des
 chevilles du robot, d'une flexibilité passive pouvant être modélisé
 sous la forme de trois ressorts: deux autorisant un mouvement en
 rotation et un troisième un déplacement en translation, c'est à dire
 autorisant une compression de la cheville lors de la marche. Ce
 dispositif a été conçu pour absorber les chocs et protéger le capteur
 de force situé dans la cheville mais insère trois degrés de liberté
-non modélisés et surtout non mesurables car dépourvu d'encodeur. Cette
-déformation au niveau de la cheville est donc ignorée dans les calculs
-ce qui amène à un biais sur la position relative du pied et de la tête
-du robot. Ce biais est d'autant plus critique dans ce cas que c'est la
-position des points de contact que l'on essaie de corriger. Une
-seconde source d'erreur est la calibration de la position de la caméra
-dans le robot. Les imprécisions de la conception du robot, du système
-de fixation des caméras rendent nécessaire le calcul de la position
-relative de la caméra par rapport au corps auquel il est fixé, dans
-notre cas la tête. Un procédé de calibration des paramètres
-extrinsèque a donc été mis en place pour estimer ces paramètres. Ces
-derniers ont été validés en reprojetant le modèle du robot dans
-l'image comme illustré par la figure FIXME.
+non modélisés et surtout non mesurables, car dépourvu
+d'encodeur. Cette déformation au niveau de la cheville est donc
+ignorée dans les calculs ce qui amène à un biais sur la position
+relative du pied et de la tête du robot. Ce biais est d'autant plus
+critique dans ce cas que c'est la position des points de contact que
+l'on essaie de corriger. Une seconde source d'erreur est la
+calibration de la position de la caméra dans le robot. Les
+imprécisions de la conception du robot, du système de fixation des
+caméras rendent nécessaire le calcul de la position relative de la
+caméra par rapport au corps auquel il est fixé, dans notre cas la
+tête. Un procédé de calibration des paramètres extrinsèque a donc été
+mis en place pour estimer ces paramètres. Ces derniers ont été validés
+en reprojetant le modèle du robot dans l'image comme illustré par la
+figure FIXME.
 
 
 \subsection{Résultats de la localisation utilisant la vision sur le robot humanoïde HRP-2}
 
-L'ensemble de ces facteurs rends la réalisation d'un algorithme de
+L'ensemble de ces facteurs rend la réalisation d'un algorithme de
 localisation embarqué sur HRP-2 délicat. Pour réaliser une tâche de
-manipulation, une précision de l'ordre du centimère est souvent
+manipulation, une précision de l'ordre du centimètre est souvent
 nécessaire. Or, les mauvaises performances du système de localisation
-engendre un bruit dans le positionnement du robot qui peut rendre
+engendrent un bruit dans le positionnement du robot qui peut rendre
 l'exécution de tâche précises délicate. Dans le scénario choisit, la
-tâche peut être réalisée avec succès pour certains essais mais le taux
-d'échec restant très fort, cette méthode ne peut pas constituer une
-boîte noire permettant de manière automatique de réaliser un mouvement
-asservi. Une façon de résoudre le problème serait de corriger la
-position du bras. En effet, entre la caméra et le bras, la chaîne
-cinématique est bien identifiée. On voit donc ici que l'approche
-consistant à avoir plusieurs systèmes de localisation simultanément se
-justifie en pratique. Un composant de localisation ``global'' tel que
-celui utilisé ici permet de rendre la navigation robuste sans
-toutefois être suffisant pour les tâches de manipulation. Pour ces
-dernières, d'autres stratégies doivent être envisagées comme la
-détection dans l'image de l'objet à attrapper pour asservir la
-position de la pince. On voit ici que plus qu'une localisation
-parfaite sur le long terme, il est plus critique pour nos scénarii
-d'avoir des algorithmes de localisation locaux assurant une erreur
-minimale à la fin de la réalisation de la tâche. Les algorithmes
-réalisant une localisation sur le long terme étant plutôt destiné à
-alimenter les algorithmes de planification que les algorithmes de
-contrôle nécessitant une haute précision sur la pose estimée du robot.
+tâche peut être réalisée avec succès pour certains essais, mais le
+taux d'échec restant très fort, cette méthode ne peut pas constituer
+une boîte noire permettant de manière automatique de réaliser un
+mouvement asservi. Une façon de résoudre le problème serait de
+corriger la position du bras. En effet, entre la caméra et le bras, la
+chaîne cinématique est bien identifiée. On voit donc ici que
+l'approche consistant à avoir plusieurs systèmes de localisation
+simultanément se justifie en pratique. Un composant de localisation
+``global'' tel que celui utilisé ici permet de rendre la navigation
+robuste sans toutefois être suffisant pour les tâches de
+manipulation. Pour ces dernières, d'autres stratégies doivent être
+envisagées comme la détection dans l'image de l'objet à attraper pour
+asservir la position de la pince. On voit ici que plus qu'une
+localisation parfaite sur le long terme, il est plus critique pour nos
+scénarii d'avoir des algorithmes de localisation locaux assurant une
+erreur minimale à la fin de la réalisation de la tâche. Les
+algorithmes réalisant une localisation sur le long terme étant plutôt
+destiné à alimenter les algorithmes de planification que les
+algorithmes de contrôle nécessitant une haute précision sur la pose
+estimée du robot.
 
 
 
@@ -1015,8 +1016,8 @@ planification des asservissements. L'idée est de planifier le
 mouvement tel que le robot privilégiera le passage dans des zones où
 la qualité de la localisation est maximale. En particulier, la
 trajectoire de la tête sera calculée afin de laisser les amères
-détectables le plus longtemps possible utilisables. Ce planneur pourra
-alors générer la partie asservissement du plan de mouvement
-automatiquement. L'intégration de ces deux éléments restent des
-éléments clés pour atteindre l'objectif de pouvoir asservir n'importe
-quel mouvement sur un robot humanoïde de manière automatique.
+détectables le plus longtemps possible utilisables. Ce planificateur
+pourra alors générer la partie asservissement du plan de mouvement
+automatiquement. L'intégration de ces deux éléments reste des objectif
+clé pour atteindre l'objectif de pouvoir asservir n'importe quel
+mouvement sur un robot humanoïde de manière automatique.
