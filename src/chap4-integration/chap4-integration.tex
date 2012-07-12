@@ -118,12 +118,12 @@ correctement transmises via le réseau sans compromettre leur
 intégrité. Cette phase dîte de ``sérialisation''\index{sérialisation}
 assurer le fonctionnement de ces mécanismes dans des environnements
 informatiques hétérogènes. La seconde forme de communication sert à
-modéliser des flux de donnée continus et est appelé
+modéliser des flux de donnée continus et est appelée
 ``topic''\index{topic}. Dans ce cas, le premier composant communique a
 un ou plusieurs autres des données mises à jour régulièrement. De la
 même façon, un processus de sérialisation est nécessaire pour assurer
 que les données peuvent être transmises même si un ou plusieurs autres
-composants ne font pas partis du même processus ou ne sont pas
+composants ne font pas partie du même processus ou ne sont pas
 exécutés sur le même ordinateur.
 
 
@@ -142,10 +142,10 @@ fonctionnant sur le robot humanoïde HRP-2.
 \subsection{Contrôle}
 
 Sous le terme de ``contrôle'' est désigné le composant robotique
-chargé de calculer la commande qui sera envoyée aux actionneurs. Il
+chargée de calculer la commande qui sera envoyée aux actionneurs. Il
 est impératif que cet ordre déterminant le prochain état que les
-servo-moteurs du systèmes vont s'efforcer d'atteindre, soit envoyé à
-une fréquence fixe. Sur le robot humanoïde HRP-2, la fréquence de la
+servomoteurs du système vont s'efforcer d'atteindre soit envoyé à une
+fréquence fixe. Sur le robot humanoïde HRP-2, la fréquence de la
 boucle de contrôle est de 200$\hertz$, il faut donc que la boucle de
 contrôle ne mette pas plus de 5ms pour être évaluée. Les noyaux des
 systèmes d'exploitation multitâches ne fournissent pas de garantie
@@ -228,7 +228,7 @@ le système.
 
 
 En terme de conception, les composants nécessitant un rafraichissement
-à une vitesse supérieure doivent être intégrées à la boucle de
+à une vitesse supérieure doivent être intégrés à la boucle de
 contrôle. Pour les autres données, il faut pouvoir, via le schéma de
 calcul, pouvoir utiliser les informations temporelles attachées aux
 données capteur envoyées pour gérer de manière consistante le retard
@@ -266,7 +266,7 @@ significative de qualité de service.
 
 Nous allons donc désormais nous attacher à développer les différents
 composants de vision qui ont été utilisés sur le robot HRP-2 et
-aggloméré dans la chaîne de traitement des images du robot.
+agglomérés dans la chaîne de traitement des images du robot.
 
 
 \paragraph{Acquisition des images}
@@ -301,7 +301,7 @@ un espace colorimétrique\index{espace colorimétrique} adapté à leur
 traitement. La première étape est donc de dématricer les images
 encodées en Bayer vers des images monochromatiques ou couleurs 24 bits
 dans l'espace RGB habituel. Dès maintenant, un branchement s'effectue
-entre les traitements utilisant les images couleurs et les traitements
+entre les traitements utilisant les images couleur et les traitements
 utilisant les informations de luminance uniquement. Afin de fournir
 une expérience unifiée, les deux ``topics'' sont créés, mais les
 traitement ne sont effectués qu'à partir du moment où au moins un
@@ -309,7 +309,7 @@ client se connecte à ce dernier. On peut donc offrir une large palette
 de possibilités sans mettre à mal les performances du système. Le
 dématriçage\index{dématriçage} des images encodées en Bayer
 reconstruit les couleurs manquantes en interpolant grâce à la couleur
-des pixels adjacents. Plusieurs techniques aillant des coûts de calcul
+des pixels adjacents. Plusieurs techniques ayant des coûts de calcul
 différents existent selon les cas: interpolation bilinéaire,
 interpolation bicubique ou bien encore rééchantillonage de
 Lanczos\index{Lanczos (rééchantillonage de)}.
@@ -382,8 +382,8 @@ profondeur sont également disponibles sous la forme d'un nuage de
 points. Dans ce dernier, on associe à chaque point la couleur du pixel
 correspondant dans l'image. Ce topic est particulièrement utile
 lorsque l'on souhaite utiliser des algorithmes de traitements de
-nuages de points 3d tel que PCL -- la Point Cloud Library --\index{PCL
-  (Point Cloud Library)}.
+nuages de points 3D tels que PCL -- la Point Cloud Library
+--\index{PCL (Point Cloud Library)}.
 
 
 Une fois de plus, la totalité du processus de vision peut fonctionner
@@ -464,7 +464,7 @@ divisent en différentes catégories:
 \item[Déviation des horloges des ordinateurs embarqués] Les
   ordinateurs embarqués synchronisent leurs horloges en utilisant le
   protocole NTP -- Network Time Protocol --. L'ordinateur dédié à la
-  décision et la perception se synchronize sur un serveur de temps
+  décision et la perception se synchronisent sur un serveur de temps
   distant. L'utilisation d'un lien WiFi et la présence de routeurs
   intermédiaires rendent la synchronisation relativement peu
   précise. Cependant, le problème n'est pas très gênant, car le
@@ -489,8 +489,8 @@ complexes sachant que le mauvais fonctionnement de n'importe quel
 morceau de l'architecture peut mettre en péril la tâche tout
 entière. Qui plus est, certaines limitations du matériel tel que le
 couple maximum des actionneurs sont parfois vérifiées, a
-posteriori. Des systèmes de surveillance des valeures critiques sur
-les couples, les impacts sur les capteurs de force ont donc été mis en
+posteriori. Des systèmes de surveillance des valeurs critiques sur les
+couples, les impacts sur les capteurs de force ont donc été mis en
 place afin d'éviter d'endommager le matériel.
 
 
@@ -510,7 +510,7 @@ matériel, tant au niveau de l'actionnement que des capteurs est
 représenté informatiquement par un ensemble composé de services et de
 ``topics''. Tant que le simulateur choisi fournit ce même ensemble de
 canaux de communication, les algorithmes pourront fonctionner
-indiféremment en simulation ou sur le véritable système. Il reste
+indifféremment en simulation ou sur le véritable système. Il reste
 alors le plus important: assurer la cohérence entre les capteurs
 simulés en fonction des commandes envoyées aux actionneurs. Pour se
 faire, il est important de disposer d'un moteur physique
@@ -609,14 +609,14 @@ Les joints supportés sont les suivants:
 \end{description}
 
 Les degrés de liberté des joints possèdent généralement un minimum et
-maximum qui sont soit le résultat de la conception mécanique du
-joint, soit lié à la géométrie du robot: une valeur différente
-entraînerait immédiatement une autocollision et il n'est donc pas
-intéressant de considérer ces valeurs. Chaque joint comporte donc ces
-valeurs ainsi qu'une vitesse et une force ou un couple maximum selon
-le type de joint. Enfin la friction statique du joint ainsi que
-l'amortissement utilisé pour la simulation de ce dernier peut
-également être enregistré.
+maximum qui sont soit le résultat de la conception mécanique du joint,
+soit lié à la géométrie du robot: une valeur différente entraînerait
+immédiatement une autocollision et il n'est donc pas intéressant de
+considérer ces valeurs. Chaque joint comporte donc ces valeurs ainsi
+qu'une vitesse et une force ou un couple maximum selon le type de
+joint. Enfin la friction statique du joint ainsi que l'amortissement
+utilisé pour la simulation de ce dernier peuvent également être
+enregistrés.
 
 
 \paragraph{Capteurs}
@@ -664,18 +664,18 @@ valeur du degré de liberté associé respectivement aux joints A et B.
 Une autocollision consiste en la collision de deux corps du
 robot. C'est particulièrement facile sur un humanoïde: les bras et les
 jambes formant quatre chaînes distinctes pouvant entrer en collision
-les unes avec les autres. D'autre cas sont également possibles: par
+les unes avec les autres. D'autres cas sont également possibles: par
 exemple la jambe de certains robots HRP-2 peut entrer en collision
 avec le bassin dans certaines configurations. De manière générale,
 toute collision qui requiert le mouvement de plusieurs degrés de
-liberté combinés et qui ne peut donc pas être évitée en spécifiant
-les bornes des degrés de liberté est une autocollision qui doit être
-prise en compte.
+liberté combinés et qui ne peut donc pas être évitée en spécifiant les
+bornes des degrés de liberté est une autocollision qui doit être prise
+en compte.
 
 Pour déterminer les autocollisions, deux stratégies sont
-possibles. L'approche automatique consiste à échantilloner l'espace
+possibles. L'approche automatique consiste à échantillonner l'espace
 des configurations du robot afin de trouver les corps qui sont soit
-toujours en collision soit jamais en collision. Dans ces deux cas la
+toujours en collision soit jamais en collision. Dans ces deux cas, la
 paire de collision est rejetée. Toutes les autres sont ajoutées.  La
 seconde stratégie consiste à forger la liste à la main. Dans le cas où
 les autocollisions doivent être vérifiées dans la boucle temps réel,
@@ -712,7 +712,7 @@ s'effectuer. Un contact est valide si la force de réaction de
 l'environnement sur le corps du robot est colinéaire avec la normale
 de la zone de contact mais de direction opposée. Enfin, la force de
 réaction maximale en un point autorisée sur cette zone de contact peut
-être enregistrée afin d'assurer que le contact ne va pas compromette
+être enregistrée afin d'assurer que le contact ne va pas compromettre
 l'intégrité structurelle du robot. Cette représentation offre une
 formulation générique qui peut être utilisée pour réaliser des prises
 de décisions moins arbitraires que celles qui sont uniquement fondées
@@ -850,8 +850,8 @@ détaillés dans les figures FIXME. Les interactions entre les
 composants sont détaillés dans la figure FIXME.
 
 
-Cett architecture a été testée sur le robot humanoïde
-HRP-2. L'architecture a fonctionné correctement mais il n'a pas été
+Cette architecture a été testée sur le robot humanoïde
+HRP-2. L'architecture a fonctionné correctement, mais il n'a pas été
 possible d'atteindre une précision suffisante au sein du système de
 perception pour compenser avec succès la dérive du robot. En effet, le
 SLAM tel que configuré ici a donné une précision de plus ou moins 5cm
@@ -873,14 +873,14 @@ planification de mouvement, le contrôle, l'asservissement et
 différentes techniques de perception nécessite de pouvoir s'appuyer
 sur des composants aussi automatiques que possible. En particulier,
 concevoir des algorithmes ne nécessitant pas de paramétrage poussé est
-important mais également très difficile. Le paramétrage peut passer
+important, mais également très difficile. Le paramétrage peut passer
 soit par une phase de calibration -- comme souvent en perception --,
 une phase de construction de carte, par exemple pour la navigation --
 ou le réglage des stratégies adoptées par les algorithmes. Les outils
 de planification nécessitent souvent le réglage de paramètres ce qui
 complexifie leur utilisation. Si l'on ne peut paramétrer le système
 automatiquement, il faut alors tenter de trouver un ensemble de
-paramètres aillant une réalité physique qui puisse permettre à
+paramètres ayant une réalité physique qui puisse permettre à
 l'utilisateur de se construire plus facilement un modèle de
 comportement de l'algorithme.
 
@@ -909,7 +909,7 @@ droit?''. On se préserve également dans le cas où les composants
 utilisés changeraient le repère de référence entre deux versions. Une
 fois de plus, l'absence de typage ici rend le diagnostic difficile:
 aucune erreur de compilation n'est possible et les erreurs dans les
-valeurs numériques elles-même sont toujours difficiles à détecter. On
+valeurs numériques elles-mêmes sont toujours difficiles à détecter. On
 notera que le système adopté ici se fonde sur le traitement des chaîne
 de caractère ce qui est plus lent que le recours au typage direct tel
 que proposé dans FIXME.
@@ -917,7 +917,7 @@ que proposé dans FIXME.
 
 Une troisième difficulté est la robustesse aux phases
 transitoires. Tout système complexe possède une phase d'initialisation
-dans laquelle le comportement des modules peut être sous-optimales. En
+dans laquelle le comportement des modules peut être sous-optimal. En
 particulier quand plusieurs composants communiquant ensemble sont
 lancés en même temps, il n'y a aucune garantie que le premier
 composant terminant sont initialisation soit toujours le même. De ce
@@ -927,7 +927,7 @@ de communication est extrêmement souple sur ce point et la possibilité
 de pouvoir écouter des topics qui n'existent pas encore simplifie de
 beaucoup le développement en évitant les erreurs lorsque l'ordre
 d'initialisation change. Par contre, il est alors nécessaire de mettre
-en place, en interne et soit-même, les mécanismes afin d'éviter les
+en place, en interne et soit même, les mécanismes afin d'éviter les
 situations de famine où plusieurs composants s'attendent les uns les
 autres indéfiniment. Cependant, le graphe de communication étant le
 plus souvent un arbre, ce genre de cas reste peu courant.
@@ -944,7 +944,7 @@ XML\index{XML} --, le graphe formé par l'ensemble des composants
 robotiques ainsi que leurs paramètres respectifs. Ce système réduit
 donc au maximum les erreurs humaines, mais certaines difficultés
 persistent: un robot humanoïde utilisant une commande à gains forts
-tel que HRP-2 s'initialise en l'air, puis il doit être posé, le
+telle que HRP-2 s'initialise en l'air, puis il doit être posé, le
 système possède donc plusieurs phases transitoires d'initialisation
 qu'il est difficile d'automatiser.
 
@@ -962,7 +962,7 @@ compréhension de l'état du système, le premier élément est d'unifier
 les mécanismes de rapport d'état. En effet, la plupart des
 bibliothèques complexes viennent avec leur système de journalisation
 qui n'est pas toujours adapté. Dans le cadre de cette architecture,
-nous avons la possibilité de pouvoir aggréger les informations dans un
+nous avons la possibilité de pouvoir agréger les informations dans un
 seul topic qui peut ensuite être observé pour connaître l'évolution du
 système. On a alors la liste des messages envoyés par les différents
 composants dans l'ordre chronologique ce qui n'est pas le cas quand
@@ -1015,7 +1015,7 @@ Cet algorithme est partie intégrante de ViSP -- Visual Servoing
 Platform
 -- \footnote{\url{http://www.irisa.fr/lagadic/visp/visp.html}}. ViSP
 intègre directement des outils pour acquérir des images à partir de
-caméras ou lire des données préenregistrées mais n'est pas un
+caméras ou lire des données préenregistrées, mais n'est pas un
 composant robotique en lui-même.
 
 
@@ -1062,7 +1062,7 @@ additionnels sont fournis: le premier permet de calculer une pose
 initiale de manière graphique. L'utilisateur peut cliquer sur des
 points de l'objet prédéfini et dont on connaît la position relative en
 trois dimensions dans l'objet. Cet outil transmet également au
-composant de suivi le modèle de l'objet. Le contexte distributé de
+composant de suivi le modèle de l'objet. Le contexte distribué de
 l'application empêche de passer directement des emplacements de
 fichiers, car il n'y a aucune garantie que le composant réalisant le
 suivi et le programme réalisant l'initialisation partage leur système
@@ -1077,7 +1077,7 @@ Identifier --~\citep{rfc2396}.
 
 
 Le second outil permet de surveiller l'état du tracking en affichant
-non seulement la reprojection du modèle dans l'image mais surtout
+non seulement la reprojection du modèle dans l'image, mais surtout
 l'état du suivi des lignes du modèle. L'algorithme pouvant rejeter des
 points pour différentes raisons, cet outil fournit un retour graphique
 de ces informations afin d'aider l'utilisateur à trouver le meilleur
@@ -1152,12 +1152,12 @@ lancement du graphe diffère dans ces trois cas.
 La section précédente a décrit le développement d'un composant en
 particulier, mais concevoir une architecture ne revient pas à
 simplement dupliquer cette approche autant de fois qu'il y a de
-composants nécessaire. Il faut tout d'abord découper le problème en
+composants nécessaires. Il faut tout d'abord découper le problème en
 composants cohérents, puis assigner ces composants à un ordinateur
 parmi ceux qui équipent le robot et enfin paramétrer chacun des
 composants de manière optimale. Dans la mesure où une approche
 modulaire a pour intérêt principal la réutilisabilité des composants,
-on sera donc contraint par l'interface des composants pré-existant que
+on sera donc contraint par l'interface des composants préexistants que
 l'on devra réutiliser, ainsi que par les contraintes matérielles de la
 plate-forme: les caméras d'HRP-2 sont connectées à un PC donné donc le
 composant d'acquisition des images ne peut fonctionner que sur ce
@@ -1197,7 +1197,7 @@ Une fois les n\oe uds choisis et paramétrés, l'étape suivante est la
 simulation. De nombreux outils permettent de simuler un mouvement
 dynamique dans un monde virtuel. Il est nécessaire ici de remplacer
 les composants réalisant l'acquisition des données capteurs par des
-composants acccédants aux informations équivalentes simulées et le
+composants accédants aux informations équivalentes simulées et le
 contrôleur par un contrôleur envoyant sa commande au simulateur. Une
 phase supplémentaire de définition du monde est souvent nécessaire.
 
