@@ -23,14 +23,15 @@ de choisir automatiquement la meilleure solution parmi un ensemble de
 solutions possibles. Les applications possibles couvrent des domaines
 variés de la recherche opérationnelle aux statistiques et bien sûr la
 robotique. Dans ce domaine particulier, l'optimisation numérique
-permets par exemple d'optimiser un mouvement pour en améliorer
-certains caractéristiques ou bien encore trouver la prochaine commande
-à envoyer aux moteurs du robot afin de réaliser une tâche donnée.
+permet par exemple d'optimiser un mouvement pour en améliorer
+certaines caractéristiques ou bien encore trouver la prochaine
+commande à envoyer aux moteurs du robot afin de réaliser une tâche
+donnée.
 
 
 
 Résoudre un problème d'optimisation numérique signifie trouver les
-meilleurs paramètres solutionnant le problème. Par meilleurs, il faut
+meilleurs paramètres résolvant le problème. Par meilleurs, il faut
 entendre les paramètres minimisant la valeur d'une fonction de
 coût. Intuitivement, on peut se représenter cette fonction comme un
 indicateur de la ``qualité'' de la solution trouvée. Une solution
@@ -41,17 +42,17 @@ le raisonnement est ensuite fondé sur la linéarité -- au moins locale!
 solution, il n'y aura que des solutions légèrement meilleures et
 légèrement pires, mais jamais trop différentes. De ce fait, il
 ``suffit'' de chercher dans quelle direction aller pour se diriger
-vers les meilleurs solutions pour finir par les trouver. Cette
+vers les meilleures solutions pour finir par les trouver. Cette
 approche implique une limitation majeure: si la fonction de coût n'est
 pas convexe, on ne trouvera pas forcément la meilleure solution
 globale -- parmi toutes les solutions -- mais ma meilleure solution
-locale. C'est à dire qu'au voisinage de cette solution, toutes les
+locale. C'est-à-dire qu'au voisinage de cette solution, toutes les
 autres solutions sont de moins bonnes qualités. Dans cette situation,
 tous les solveurs arrêtent leur recherche, mais rien ne garantit
 qu'ailleurs il n'existe pas une autre solution de meilleure qualité.
 
 
-Ce raisonnement permets de trouver les meilleurs paramètres pour un
+Ce raisonnement permet de trouver les meilleurs paramètres pour un
 problème donné, mais il est rare qu'une fonction de coût seule puisse
 capturer complètement un problème donné. En fonctionnant de manière
 indépendante du problème sous-jacent, on confère aux solveurs une
@@ -74,7 +75,7 @@ plutôt de transformer la trajectoire géométrique plutôt que de jouer
 sur la vitesse de déplacement du système. La limite de cette approche
 est simple à comprendre: au fur et à mesure que les biais s'accumulent
 -- le plus souvent en sommant les uns aux autres --, le coût initial
-peut se retrouver ignoré par le solveur car numériquement
+peut se retrouver ignoré par le solveur, car numériquement
 négligeable. La fonction de coût n'a alors plus aucune justification
 physique et ses variations peuvent devenir de plus en plus difficiles
 à analyser pour le solveur.  Une seconde solution consiste à ajouter
@@ -82,16 +83,16 @@ des contraintes au problème. Ces contraintes sont exprimées sous la
 forme d'équations ou d'inéquations déterminant si une solution donnée
 est une solution acceptable. En robotique, des contraintes très
 courantes sont les bornes sur les butées articulaires. Il est rare sur
-un robot que les axes puissent bouger de manière totalement libre. De
-ce fait, il est courant d'ajouter des contraintes inégalités
-spécifiant que tel ou tel valeur de joint doit rester dans un
+un robot que les axes puissent se déplacer de manière totalement
+libre. De ce fait, il est courant d'ajouter des contraintes inégalités
+spécifiant que telle ou telle valeur de joint doit rester dans un
 intervalle donné.
 
 
 En exprimant comment résoudre un problème pratique via la construction
 d'une fonction de coût $f$ et de contraintes $g_i > 0$,
 \textbf{modélise} le problème afin qu'il soit soluble par optimisation
-numérique. Ce procédé n'est pas trivial car la qualité de la
+numérique. Ce procédé n'est pas trivial, car la qualité de la
 modélisation impacte lourdement à la fois les temps de calcul et la
 qualité du résultat final.
 
@@ -143,7 +144,7 @@ est donné par les conditions de Karush-Kuhn-Tucker \index{conditions
 
 \begin{mydef}\label{def:chap1_kkt}
 Si $\mathbf{x} \in \mathbf{X}$ est un minimum local, alors il existe
-$\lambda_i, i \in \xi$ et $\mu_j, j \in \nu$ des constantes non-nulles
+$\lambda_i, i \in \xi$ et $\mu_j, j \in \nu$ des constantes non nulles
 appelées multiplicateurs KKT tels que:
 %
 \begin{description}
@@ -178,7 +179,7 @@ est convexe, les conditions KKT sont nécessaires et suffisantes.
 
 
 Au-delà de cette présentation de la théorie générale, on peut
-regrouper les techniques de résolutions en différentes catégories
+regrouper les techniques de résolution en différentes catégories
 selon la difficulté des problèmes pouvant être traités. Nous ne nous
 attarderons ici que sur les techniques d'optimisation
 continues. Différentes caractéristiques peuvent rendre la résolution
@@ -186,15 +187,15 @@ plus délicate:
 %
 \begin{itemize}
 \item Présence de contraintes,
-\item Non-convexité de la fonction de coût ou des contraintes,
-\item Non-linéarité de la fonction de coût ou des contraintes,
+\item Non convexité de la fonction de coût ou des contraintes,
+\item Non linéarité de la fonction de coût ou des contraintes,
 \item Fonction non -- ou mal -- définie en dehors des contraintes,
-\item Variations numériques fortes entraînant des erreurs numériques
+\item Variations numériques fortes entraînantes des erreurs numériques
   difficiles à juguler,
 \item etc.
 \end{itemize}
 %
-La combinaison de ces difficultés entraînent la classification des
+La combinaison de ces difficultés entraîne la classification des
 solveurs dans de très nombreuses catégories dont un extrait est
 détaillé dans le Tableau~\ref{tbl:chap1_solver}.
 %
@@ -208,7 +209,7 @@ détaillé dans le Tableau~\ref{tbl:chap1_solver}.
 \hline
 \textbf{LQP} \small{(opt. quadratique linéaire)} & quadratique & linéaire \\
 \hline
-\textbf{SQP} \small{(opt. non-linéaire)} & non-linéaire & non-linéaire \\
+\textbf{SQP} \small{(opt. non linéaire)} & non linéaire & non linéaire \\
 \hline
 \end{tabular}
 \end{center}
@@ -219,7 +220,7 @@ Les algorithmes de résolution ont également des particularités
 intrinsèques qui peuvent être particulièrement intéressantes dans le
 cadre de la robotique. Par exemple, le démarrage à chaud ou ``warm
 start'' \index{démarrage à chaud} \index{warm start|see{démarrage à
-  chaud}} est la possibilité, pour un solveur, de pouvoir résoudre
+  chaud}} est la possibilité, pour un solveur, de résoudre
 plusieurs problèmes à la suite tout en se souvenant de son état
 interne afin de pouvoir gagner en temps de calcul lorsque le nouveau
 problème est très proche du problème précédemment résolu. Cette
@@ -231,7 +232,7 @@ solveur, de pouvoir être interrompu à n'importe quelle itération tout
 en garantissant que la solution actuelle, bien qu'incomplète,
 respecte la totalité des contraintes du problème. Ce comportement est
 important lorsque l'optimisation est lancée dans un contexte où les
-contraintes temporelles sont fortes, telle que dans le contrôleur
+contraintes temporelles sont fortes, telles que dans le contrôleur
 calculant les commandes du robot.
 
 
@@ -241,7 +242,7 @@ calculant les commandes du robot.
 
 On l'aura compris: d'une théorie unique découle un ensemble
 d'algorithmes pouvant résoudre des problèmes de complexité
-variée. Plaçons nous désormais à la place d'un roboticien devant
+variée. Plaçons-nous désormais à la place d'un roboticien devant
 résoudre un problème particulier. Quels logiciels peut-il utiliser
 pour se faire? Le Tableau~\ref{tbl:chap1_soft} détaille une partie
 des paquets logiciels existants.
@@ -268,19 +269,19 @@ les techniques les plus compliquées à implémenter sont peu disponibles
 et il n'existe pas d'outil unifié permettant de résoudre différents
 types de problèmes. Enfin, chaque outil traite une catégorie de
 problème en particulier. Il est raisonnable de se demander si chaque
-utilisateur, lorsqu'il commence à définir son problème est à même de
+utilisateur lorsqu'il commence à définir son problème est à même de
 choisir de manière pertinente le solveur -- et donc le framework --
 adapté à son problème. Est-il certain que toutes les fonctions seront
-différentiables et continues deux fois? une fois? Est-on certain de ne
+différentiables et continues deux fois? Une fois? Est-on certain de ne
 pas avoir besoin de contraintes inégalités, voire de ne pas avoir
 besoin du tout de contraintes? Rien n'est moins sûr. Un exemple simple
 est la gestion des collisions. On peut tout à fait développer un outil
 robotique et le faire fonctionner dans un environnement ouvert avant
 de vouloir s'attaquer à un problème plus difficile et prendre en
 compte les collisions. Cela peut poser des problèmes extrêmement
-important car le solveur ne sera pas le même dans les deux
+importants, car le solveur ne sera pas le même dans les deux
 cas. Cependant, il semble qu'avoir à réécrire, ou tout du moins
-adapter, le problème précédent à un nouvelle bibliothèque logicielle
+adapter, le problème précédent à une nouvelle bibliothèque logicielle
 est inutile puisque finalement les deux problèmes se formalisent au
 sein d'un même paradigme.
 
@@ -288,10 +289,10 @@ sein d'un même paradigme.
 \section{De la dif\-ficulté à passer d'un paradigme uni\-que à une implémentation unifiée}
 
 
-A première vue, il pourrait sembler que l'absence d'une architecture
+À première vue, il pourrait sembler que l'absence d'une architecture
 unifiée pour la résolution de problèmes d'optimisation numérique est
-le simple résultat d'un manque de volonté et/ou de coordination entre
-développeurs. Nous allons montrer ici qu'il n'en est rien. Une simple
+le simple résultat d'un manque de volonté ou de coordination entre
+concepteurs. Nous allons montrer ici qu'il n'en est rien. Une simple
 agglomération des implémentations de différentes stratégies de
 résolution ne saurait donner un ensemble cohérent et performant en
 terme de temps de calcul sans une véritable réflexion sur comment
@@ -302,7 +303,7 @@ orientée objet qui est la fondation d'une large proportion des
 langages modernes.
 
 
-\subsection{Typage, programmation orienté objet et familles de types}
+\subsection{Typage, programmation orientée objet et familles de types}
 
 \subsubsection{$\lambda$-calcul et théorie des types}
 
@@ -310,15 +311,14 @@ Lors du développement de l'informatique, les langages de programmation
 ont tout d'abord été de simples outils permettant de représenter du
 code machine de manière succincte et plus facilement lisible par les
 humains. Cependant, avec la complexification croissante des
-applications informatiques, vérifier la correction des programmes est
-rapidement devenu un enjeu critique. Pour se faire, les langages de
-programmation ont progressivement adopté le typage comme moyen de
-n'autoriser que la construction de programmes valides. Cette notion de
-type a issue de la théorie des types \index{théorie des types}, une
-branche de la logique mathématique. La première théorie unifiée des
-types a été développée par Bertrand Russel \index{Bertrand Russel} au
-début du vingtième siècle dans les \emph{Principia
-  Mathematica}~\citep{pm}.
+applications, vérifier la correction des programmes est rapidement
+devenu un enjeu critique. Pour se faire, les langages de programmation
+ont progressivement adopté le typage comme moyen de n'autoriser que la
+construction de programmes valides. Cette notion de type a issue de la
+théorie des types \index{théorie des types}, une branche de la logique
+mathématique. La première théorie unifiée des types a été développée
+par Bertrand Russel \index{Bertrand Russel} au début du vingtième
+siècle dans les \emph{Principia Mathematica}~\citep{pm}.
 
 
 Afin de démontrer les difficultés que peuvent poser la modélisation
@@ -328,8 +328,8 @@ un système de calcul formel particulier, le $\lambda$-calcul
 dans les années trente. Ce système de calcul formel a une expressivité
 équivalente à une \index{Machine de Türing}. Nous allons tout d'abord
 nous concentrer sur la construction des lambda-termes
-\index{lambda-terme}, c'est à dire l'ensemble des expressions
-syntaxiquement correcte pouvant être construite en lambda-calcul. Ces
+\index{lambda-terme}, c'est-à-dire l'ensemble des expressions
+syntaxiquement correctes pouvant être construites en lambda-calcul. Ces
 lambda-termes peuvent être divisés en trois catégories: variables,
 applications et abstractions. Les variables: $x$, $y$, \ldots Les
 applications sont l'ensemble des expressions $u v$ où $u$ et $v$ sont
@@ -340,11 +340,11 @@ lambda-calcul: $\lambda x.x$.
 
 
 La procédure qui, à partir de n'importe quel lambda-terme, tente de la
-simplifier en réalisant les applications par réécriture est appelé
+simplifier en réalisant les applications par réécriture est appelée
 $\beta$-conversion \index{$\beta$-conversion}. En réduisant un
 lambda-terme, on réalise le calcul associé à ce dernier. Une propriété
 utile serait de pouvoir déterminer si toutes les lambda-réductions
-terminent, c'est à dire que l'on peut réduire tous les lambda-termes
+terminent, c'est-à-dire que l'on peut réduire tous les lambda-termes
 jusqu'à un point où plus aucune réécriture \index{réécriture} n'est
 possible.
 
@@ -367,55 +367,55 @@ En terme calculatoire, on peut considérer que ce programme boucle et
 ne termine jamais.
 
 
-Face à ce constat, une autre interrogation se pose: peut-on construire
-un sous-ensemble des lambda-termes normalisables? La réponse est oui,
-via l'utilisation du lambda-calcul simplement typé
-\index{lambda-calcul simplement typé}. Dans cette version du
-lambda-calcul, toute expression est annotée par un type. Les types
-sont de deux sortes: $\iota$ et $\tau_1 \rightarrow \tau_2$ à
-condition que $\tau_1$ et $\tau_2$ soient des types. $\iota$
-représente le(s) type(s) primitif(s) du langage permettant de
-représenter les booléens ou un sous-ensemble des nombres entiers ou
-réels par exemple. Si $x$ est de type $\iota$, on a alors:
+De ce constat, une autre interrogation se pose: peut-on construire un
+sous-ensemble des lambda-termes normalisables? La réponse est oui, par
+l'utilisation du lambda-calcul simplement typé \index{lambda-calcul
+  simplement typé}. Dans cette version du lambda-calcul, toute
+expression est annotée par un type. Les types sont de deux sortes:
+$\iota$ et $\tau_1 \rightarrow \tau_2$ à condition que $\tau_1$ et
+$\tau_2$ soient des types. $\iota$ représente le(s) type(s)
+primitif(s) du langage permettant de représenter les booléens ou un
+sous-ensemble des nombres entiers ou réels par exemple. Si $x$ est de
+type $\iota$, on a alors:
 %
 \begin{equation}
   x \vdash \iota
 \end{equation}
 %
-\ldots prononcé ``$\iota$ type $x$''. L'ensemble des types est quand à
+\ldots prononcé ``$\iota$ type $x$''. L'ensemble des types est quant à
 lui noté $\Gamma$.
 
 
-En définissant des règles de typage appropriée, on peut restreindre
+En définissant des règles de typage appropriées, on peut restreindre
 les lambda-termes bien typés aux lambda-termes
 normalisables. Cependant, une limitation de cette approche est qu'une
 grande partie des expressions que l'on souhaiterait construire ne sont
-pas correctement typés. En particulier, il n'est pas possible de
+pas correctement typées. En particulier, il n'est pas possible de
 construire la fonction exponentielle dans ce paradigme.
 
 
-\subsubsection{Programmation orienté objet et typage}
+\subsubsection{Programmation orientée objet et typage}
 
 Indépendamment des systèmes de calculs formels, divers modèles plus
-pratiques ont été développé au cours de la seconde moitié du vingtième
-siècle. Notamment, la programmation orienté objet \index{programmation
-  orienté objet} a été introduite par Ole-Johan Dahl \index{Ole-Johan
-  Dahl} et Kristen Nygaard \index{Kristen Nygaard} dans \index{Simula
-  I} au cours des années soixante. Ce langage avait pour but de
-permettre le développement de simulation à événements discrets. Ce
-paradigme de pensée s'est progressivement développé jusqu'à être
-massivement adopté par la majorité des langages de programmation au
-cours des années quatre-vingt dix. L'adoption massive du C++ (Bjarne
-Stroustrup \index{Bjarne Stroustrup}, 1983) a participé à la
-démocratisation de la POO.
+pratiques ont été développés au cours de la seconde moitié du
+vingtième siècle. Notamment, la programmation orientée objet
+\index{programmation orientée objet} a été introduite par Ole-Johan
+Dahl \index{Ole-Johan Dahl} et Kristen Nygaard \index{Kristen Nygaard}
+dans \index{Simula I} au cours des années soixante. Ce langage avait
+pour but de permettre le développement de simulation à événements
+discrets. Ce paradigme de pensée s'est progressivement développé
+jusqu'à être massivement adopté par la majorité des langages de
+programmation au cours des années quatre-vingt-dix. L'adoption massive
+du C++ (Bjarne Stroustrup \index{Bjarne Stroustrup}, 1983) a participé
+à la démocratisation de la POO.
 
 
 La POO introduit la classe comme élément unitaire permettant la
 conception d'un programme informatique. Alors qu'auparavant, une
 séparation stricte était observée entre les données et les
-algorithmes, une classe est un élément du langage regroupant à ces
-deux éléments. Les algorithmes fournit par une classe sont alors
-appelés ``méthodes'' tandis que les données prennent le nom
+algorithmes, une classe est un élément du langage regroupant ces deux
+éléments. Les algorithmes fournis par une classe sont alors appelés
+``méthodes'' tandis que les données prennent le nom
 ``d'attributs''. Cette réunification des données et des traitements
 sur les données s'inscrit pleinement dans la lignée de la vision
 informatique introduite par Von Neumann et l'architecture portant son
@@ -428,7 +428,7 @@ algorithmes/données jusqu'à la conception interne des logiciels.
 \begin{mydef}\label{def:chap1_type}
   Un type peut soit être un type fondamental noté $\iota$, soit un
   type fonctionnel, soit un type de classe. En pratique, il existe
-  plusieurs types fondamentaux: réels, entiers, booléens mais le
+  plusieurs types fondamentaux: réels, entiers, booléens, mais le
   nombre de types de base ne change en rien les règles de typage.
 \end{mydef}
 
@@ -489,16 +489,16 @@ algorithmes/données jusqu'à la conception interne des logiciels.
 \end{myexample}
 
 
-Cette représentation permet de pouvoir offrir une vue d'ensemble
-intégrant à la fois des données structurées et l'ensemble des
-opérations possibles sur ces dernières. Auparavant, la séparation de
-ces deux éléments rendait plus difficile la construction d'une vision
-globale: on ne pouvait, par définition, pas connaître la liste des
-opérations définies sur un groupe de données. Soit $\tau$ un type de
-classe, l'ensemble des fonctions prenant $\tau$ en entrée n'est pas
-connu lors de la compilation car il peut être augmenté à tout moment
-d'un nouvel élément en définissant une nouvelle routine. Il convient
-donc de documenter la liste des opérations disponibles.
+Cette représentation offre une vue d'ensemble intégrant à la fois des
+données structurées et l'ensemble des opérations possibles sur ces
+dernières. Auparavant, la séparation de ces deux éléments rendait plus
+difficile la construction d'une vision globale: on ne pouvait, par
+définition, pas connaître la liste des opérations définies sur un
+groupe de données. Soit $\tau$ un type de classe, l'ensemble des
+fonctions prenant $\tau$ en entrée n'est pas connu lors de la
+compilation, car il peut être augmenté à tout moment d'un nouvel
+élément en définissant une nouvelle routine. Il convient donc de
+documenter la liste des opérations disponibles.
 
 Inversement, il est souvent nécessaire d'augmenter le comportement
 d'une classe en y ajoutant de nouvelles données et/ou de nouveaux
@@ -519,7 +519,7 @@ permet de définir des familles de types interchangeables.
 \begin{mydef}\label{chap1_oo_app}
   Soit $\Gamma$ un contexte de type. $\tau_1$, $\tau_2$, $\tau_3$
   trois types appartenant à ce contexte. La règle de typage des
-  applications en programmation orienté objet est alors:
+  applications en programmation orientée objet est alors:
 
 
   \begin{equation}
@@ -566,7 +566,7 @@ mais une famille de types. Le polymorphisme le plus simple pouvant
 être défini est la surcharge\index{surcharge}. Ce mécanisme autorise
 la création de fonctions se réécrivant vers des $\lambda$-termes
 différents selon le type de l'argument d'entrée. La formalisation de
-ce système est décrit dans~\citep{Castagna95acalculus}.
+ce système est décrite dans~\citep{Castagna95acalculus}.
 
 Une autre forme de polymorphisme est le polymorphisme d'héritage. Si
 $\tau_1$ et $\tau_2$ sont deux types tels que $\tau_2 <: \tau_1$ et
@@ -577,20 +577,20 @@ réécriture alternative d'une fonction afin d'en spécialiser le
 comportement.
 
 La généralisation de cette propriété à toutes les fonctions au lieu
-des méthodes uniquement permets d'obtenir le ``multiple
-dispatch''~\citep{Muschevici2008}. Ce mécanisme est disponible dans
-un nombre assez limité de langages de programmation dont Common
-Lisp. En effet, contrairement à la surcharge, le multiple dispatch
-ainsi que le polymorphisme d'héritage nécessite une résolution à
-l'exécution qui peut pénaliser l'implémentation des algorithmes. En
-limitant la résolution dynamique au type du premier argument des
-méthodes, on limite également le coût de la résolution à
-l'exécution. Ceci explique en partie l'une des raisons pour lesquelles
-le premier argument des méthodes est omis dans de nombreux langages de
-programmation. On ``masque'' par ce biais, le caractère spécifique de
-la résolution sur le premier argument de la méthode et on peut, une
-fois ce premier argument omis, considérer qu'il n'y a pas de
-résolution dynamique sur les arguments des méthodes.
+des méthodes uniquement permet d'obtenir le ``multiple
+dispatch''~\citep{Muschevici2008}. Ce mécanisme est disponible dans un
+nombre assez limité de langages de programmation, dont Common Lisp. En
+effet, contrairement à la surcharge, le multiple dispatch ainsi que le
+polymorphisme d'héritage nécessite une résolution à l'exécution qui
+peut pénaliser l'implémentation des algorithmes. En limitant la
+résolution dynamique au type du premier argument des méthodes, on
+limite également le coût de la résolution à l'exécution. Ceci explique
+en partie l'une des raisons pour lesquelles le premier argument des
+méthodes est omis dans de nombreux langages de programmation. On
+``masque'' par ce biais, le caractère spécifique de la résolution sur
+le premier argument de la méthode et on peut, une fois ce premier
+argument omis, considérer qu'il n'y a pas de résolution dynamique sur
+les arguments des méthodes.
 
 
 \subsubsection{Types paramétrés et génération de types}
@@ -605,7 +605,7 @@ forme de types paramétrés.
 
 
 \begin{mydef}\label{chap1_parametrized_type}
-  Un type paramétré est une fonction d'ordre supérieure $\text{type}
+  Un type paramétré est une fonction d'ordre supérieur $\text{type}
   \Rightarrow \text{type}$.
 
   \emph{Notation:} Soit $\tau$ un type paramétré. Le type $\tau$
@@ -618,16 +618,16 @@ Les types paramétrés permettent de définir un nouveau type de
 polymorphisme, le polymorphisme
 paramétré.\index{polymorphisme!polymorphisme paramétré} Ce
 polymorphisme peut se formaliser en rendant les méthodes des classes
-paramétrées dépendante du paramètre de classe.
+paramétrées dépendantes du paramètre de classe.
 
-En pratique, ce type de polymorphisme est particulièrement intéressant
-car il n'induit pas de coût à l'exécution.
+En pratique, ce type de polymorphisme est particulièrement
+intéressant, car il n'induit pas de coût à l'exécution.
 
 
 \subsection{Modélisation informatique du problème}
 
-La section précédente a introduit le formalismes et les outils que
-nous allons utiliser pour poser le problème de manière formelle.
+La section précédente a introduit le formalisme et les outils que nous
+allons utiliser pour poser le problème de manière formelle.
 
 
 Un solveur est un algorithme qui prend en entrée un problème
@@ -649,7 +649,7 @@ en utilisant un solveur générique qui sera dénoté:
 
 La vision habituellement implémentée consiste à définir un unique type
 $\tau_{\text{prob}}$ dédié à un solveur précis. L'approche proposée
-ici consiste, à la place, à définir une famille de types formées par
+ici consiste, à la place, à définir une famille de types formée par
 des classes, sous-classes éventuellement paramétrées pour tenter
 d'exprimer la totalité de la théorie de l'optimisation numérique sous
 la forme d'une et une seule modélisation.
@@ -682,7 +682,7 @@ de nombreux langages, dont celui utilisé par RobOptim -- C++ --, les
 fonctions ne sont pas des objets de premier ordre et leur manipulation
 est, de fait, mal-aisée.
 
-Afin de pouvoir associer des méta-données aux fonctions, une
+Afin de pouvoir associer des métadonnées aux fonctions, une
 représentation naturelle est l'utilisation d'une hiérarchie de classe.
 
 Le critère choisi est la classe de la fonction: $\mathcal{C}^0$,
@@ -691,8 +691,8 @@ de classe $\mathcal{C}^n$ est déclarée, elle doit non seulement être
 dérivable $n$ fois et continue $n+1$ fois, mais les valeurs des $n$
 fonctions dérivées doivent pouvoir être calculées.
 
-La classe de fonction associée à la possibilité de pouvoir calculer
-les gradients est un facteur très important lors de l'évaluation du
+La classe de fonction associée à la possibilité de calculer les
+gradients est un facteur très important lors de l'évaluation du
 ``niveau'' de difficulté d'un problème d'optimisation. Dès lors,
 regrouper les fonctions selon ce critère semble être un choix
 raisonnable.
@@ -750,12 +750,12 @@ raisonnable.
   \end{equation}
 
   On définit de sorte une famille de types formant une hiérarchie de
-  classe sous la forme d'une peigne où $\mathcal{C}^n <:
+  classe sous la forme d'un peigne où $\mathcal{C}^n <:
   \mathcal{C}^{n-1} <: \dotsc <: \mathcal{C}^1 <: \mathcal{C}^0$.
 
-  A partir de $\mathcal{C}^2$, on remarquera que la méthode
-  $\text{gradient}$ est surchargée selon le nombre d'argument. Avec un
-  argument de type $[\iota]$, le gradient est évalue en un point. Avec
+  À partir de $\mathcal{C}^2$, on remarquera que la méthode
+  $\text{gradient}$ est surchargée selon le nombre d'arguments. Avec un
+  argument de type $[\iota]$, le gradient est évalué en un point. Avec
   deux arguments $o \vdash \iota$ et $\mathbf{x} \vdash [\iota]$, on
   aura pour $o \leq n$ le résultat de l'évaluation de la dérivée d'ordre
   $o$.
@@ -763,14 +763,14 @@ raisonnable.
 
 
 Cette hiérarchie de classe est le c\oe ur de la modélisation
-informatique des problèmes d'optimisation car elle permets d'exprimer
+informatique des problèmes d'optimisations, car elle permet d'exprimer
 à la fois la fonction de coût et les contraintes éventuellement
 présentes dans un problème. Il suffit alors à l'utilisateur souhaitant
 définir sa fonction $F$ de le faire hériter du type adéquat de la
 famille $\text{Fonction}_n$.
 
 Cette approche sous forme de hiérarchie linéaire de classes en forme
-de peignes à toutefois des inconvénients qui seront détaillés dans la
+de peignes a toutefois des inconvénients qui seront détaillés dans la
 dernière section de ce chapitre.
 
 
@@ -811,7 +811,7 @@ les types de fonctions des contraintes.
   Un problème d'optimisation est constitué d'une fonction de coût de
   type $\tau_1$ et un ensemble de fonctions pouvant être de type
   $\tau_i$, $i \in \{2, \dotsc, n\}$. Cet ensemble de fonctions
-  associé à un ensemble d'intervalles permettent de définir des
+  associé à un ensemble d'intervalles permet de définir des
   contraintes égalité ou inégalité. Soit $\text{contraintes}_i$ la
   $i$-ème contrainte du problème, on a:
 
@@ -877,11 +877,11 @@ précédente. Les trois classes choisies sont:
 
 \begin{itemize}
 \item moindres carrés linéaires
-\item optimisation non-linéaire: fonction de coût non-linéaire,
-  contraintes linéaires ou non-linéaires. Le gradient des fonctions
+\item optimisation non linéaire: fonction de coût non linéaire,
+  contraintes linéaires ou non linéaires. Le gradient des fonctions
   doit pouvoir être évalué.
-\item optimisation non-linéaire: fonction de coût non-linéaire,
-  contraintes linéaires ou non-linéaires. Le hessien\index{hessien}
+\item optimisation non linéaire: fonction de coût non linéaire,
+  contraintes linéaires ou non linéaires. Le hessien\index{hessien}
   des fonctions doit pouvoir être évalué (dérivée d'ordre 2).
 \end{itemize}
 
@@ -902,7 +902,7 @@ Nous avons ici choisi de faire dériver les fonctions
 linéaires\index{fonction linéaire} du type $\text{Fonction}_2$. Cela
 ne correspond pas à la réalité mathématique dans la mesure où une
 fonction linéaire est infiniment dérivable, la dérivée étant nulle à
-partir de la second dérivation. Il n'est pas possible d'exprimer cet
+partir de la seconde dérivation. Il n'est pas possible d'exprimer cet
 état de fait au regard de la modélisation adoptée ce qui représente
 une limite du modèle de typage proposé. En pratique, les fonctions
 plus de deux fois dérivables ne présentent pas d'intérêt particulier
@@ -927,7 +927,7 @@ et cette limite ne pose donc pas de problèmes en pratique.
 \end{mydef}
 
 
-Une fois ces types définis, il ne reste plus qu'à instantier les types
+Une fois ces types définis, il ne reste plus qu'à instancier les types
 paramétrés avec un ensemble de paramètres adéquats.
 
 \begin{myexample}\label{ex:chap1_leastsquare}
@@ -940,34 +940,34 @@ paramétrés avec un ensemble de paramètres adéquats.
 \end{myexample}
 
 
-\subsection{Optimisation non-linéaire (gradient uniquement)}
+\subsection{Optimisation non linéaire (gradient uniquement)}
 
 Nous allons traiter ici la classe de problèmes suivante: la fonction
-de coût est non-linéaire et les contraintes séparées en deux types
-distincts: linéaires ou non-linéaires.
+de coût est non linéaire et les contraintes séparées en deux types
+distincts: linéaires ou non linéaires.
 
 \begin{myexample}\label{ex:chap1_cfsqp}
   Afin de pouvoir décrire cette classe de problème, la paramétrisation des types choisie est la suivante:
   \begin{description}
   \item[Fonction de coût] $\text{Fonction}_1$
   \item[Contraintes linéaires] $\text{FonctionLinéaire}$
-  \item[Contraintes non-linéaires] $\text{Fonction}_1$
+  \item[Contraintes non linéaires] $\text{Fonction}_1$
   \item[Problème] $\text{Problème}_{\text{prob}(\text{Fonction}_1, \text{FonctionLinéaire}, \text{Fonction}_1)}$
   \end{description}
 \end{myexample}
 
-\subsection{Optimisation non-linéaire (gradient et hessien)}
+\subsection{Optimisation non linéaire (gradient et hessien)}
 
-Si l'on définit la même classe de problème mais en ajoutant la
-possibilité de pouvoir évaluer les hessiens des fonctions
-non-linéaires, on obtient la paramétrisation suivante.
+Si l'on définit la même classe de problème, mais en ajoutant la
+possibilité d'évaluer les hessiens des fonctions non linéaires, on
+obtient la paramétrisation suivante.
 
 \begin{myexample}\label{ex:chap1_ipopt}
   Paramétrisation proposée:
   \begin{description}
   \item[Fonction de coût] $\text{Fonction}_2$
   \item[Contraintes linéaires] $\text{FonctionLinéaire}$
-  \item[Contraintes non-linéaires] $\text{Fonction}_2$
+  \item[Contraintes non linéaires] $\text{Fonction}_2$
   \item[Problème] $\text{Problème}_{\text{prob}(\text{Fonction}_2, \text{FonctionLinéaire}, \text{Fonction}_2)}$
   \end{description}
 \end{myexample}
@@ -984,7 +984,7 @@ présenté. On peut se demander quel apport l'utilisation d'un paradigme
 unique peut apporter. Dans la plupart des cas, les utilisateurs de
 solveurs numériques partent d'un outil existant et tentent de
 modéliser le problème à résoudre de sorte qu'il puisse être soluble
-par l'outil choisi. Cette approche est criticable car chaque problème
+par l'outil choisi. Cette approche est critiquable, car chaque problème
 possède une difficulté intrinsèque et l'on devrait au contraire
 pouvoir dans un premier temps modéliser son problème puis choisir le
 solveur adéquat une fois la modélisation correctement effectuée. De
@@ -1006,7 +1006,7 @@ solveur dédié. Il est courant donc de devoir écrire un nouveau
 solveur, ou modifier un solveur existant, afin de pouvoir rendre le
 traitement du problème plus rapide. Dans ce cas également, un
 formalisme unique présente de nombreux avantages, notamment en terme
-de temps de développement.
+de temps de conception.
 
 
 Cette modélisation présente toutefois un certain nombre de limites qui
@@ -1028,12 +1028,12 @@ appartient donc au groupe spécial orthogonal\index{groupe spécial
   orthogonal $SO(n)$} en deux dimensions $SO(2)$. La représentation
 des éléments de cet espace utilisant des réels est, par nature,
 discontinue à $2\pi$. En choisissant un type unique pour représenter
-les variables d'optimisation, nous perdons la possibilite de réaliser
+les variables d'optimisation, nous perdons la possibilité de réaliser
 un traitement spécifique selon l'espace mathématique auquel appartient
 la variable d'optimisation. Malheureusement, définir plusieurs types
-pour définir des élements de différents groupes mathématiques est
-difficile. En effet, l'ensemble des variable d'optimisations n'est
-alors plus un tableau de réels mais un tuple contenant des éléments
+pour définir des éléments de différents groupes mathématiques est
+difficile. En effet, l'ensemble des variables d'optimisations n'est
+alors plus un tableau de réels, mais un tuple contenant des éléments
 des types différents. Il faut encore alors trouver un moyen de définir
 les opérations de groupe de manière efficace afin que le solveur
 puisse utiliser les opérations adéquates pour opérer sur le groupe
@@ -1055,7 +1055,7 @@ taille des résultats calculés sous contrôle. En effet, pour une
 fonction quelconque, la représentation des dérivées partielles se fait
 sous la forme d'une matrice jacobienne\index{jacobienne}, puis d'un
 tenseur d'ordre 3 pour les hessiens. Les tenseurs\index{tenseur} sont
-rarement utilisés par les solveurs car ces objets de très grande
+rarement utilisés par les solveurs, car ces objets de très grande
 taille sont lourds à manipuler. Qui plus est, il n'est pas toujours
 nécessaire d'évaluer toutes les valeurs des matrices ou tenseurs
 représentant les dérivées partielles d'une fonction et de ce fait,
@@ -1066,21 +1066,21 @@ scalaires peut avoir du sens afin de limiter les calculs effectués.
 La troisième limite est liée à la définition des types paramétrés. Il
 n'existe pas, a priori, de hiérarchie de classe entre deux types
 résultant d'un même type paramétré. Prenons par exemple le cas de
-l'optimisation non-linéaire avec ou sans hessien: on a donc deux
-classes de problèmes relié par une relation d'ordre qui semble
+l'optimisation non linéaire avec ou sans hessien: on a donc deux
+classes de problèmes reliés par une relation d'ordre qui semble
 naturelle: si l'on a la possibilité de calculer les hessiens, on
 devrait pouvoir le donner à la fois aux solveurs nécessitant les
 hessiens, mais également à ceux qui ne les utilise pas. La classe où
 l'évaluation des hessiens est possible est donc une classe plus
 ``facile'' que la classe où l'on n'a que des gradients. On peut,
 évidemment, transformer un problème avec hessien en problème sans
-hessien mais ce n'est pas aussi simple que ce à quoi on pourrait
+hessien, mais ce n'est pas aussi simple que ce à quoi on pourrait
 s'attendre: soit $\tau$ un type paramétré et $\tau_1$ $\tau_2$ tel que
 $\tau_2 <: \tau_1$, on n'a pas $\tau_{\tau_2} <:
 \tau_{\tau_1}$. Autrement dit, les fonctions dérivent les unes des
 autres pour former une hiérarchie de classes interchangeables, mais
 pas les problèmes! Pour changer de solveur, il faut donc changer
-instantier un type de problème différent et ensuite le passer au
+instancier un type de problème différent et ensuite le passer au
 nouveau solveur. Cela représente généralement un travail court et
 facile, mais qui peut désarçonner les utilisateurs peu adeptes des
 langages de programmation utilisant des règles de typage complexe.
@@ -1089,12 +1089,12 @@ langages de programmation utilisant des règles de typage complexe.
 Face à la liste de ces critiques, on peut s'apercevoir qu'un élément
 manquant, car dépassant le cadre de ce travail, est l'absence de
 système de calcul formel sous-jacent. Développer un tel système tout
-en préservant un typage fort est un tâche ardue et complexe; de ce
-fait, un compromis entre utilisabilité et effort de modélisation a été
+en préservant un typage fort est une tâche ardue et complexe; de ce
+fait, un compromis entre ergonomie et effort de modélisation a été
 trouvé pour permettre la réalisation de ce travail. Comme tout
 compromis, il handicape parfois l'expression de certains problèmes
-dont on aurait souhaité gardé une formalisation plus proche de leurs
-natures mathématiques véritable.
+dont on aurait souhaité garder une formalisation plus proche de leurs
+natures mathématiques véritables.
 
 
 \section{RobOptim: une suite logicielle pour l'optimisation numérique en robotique}
@@ -1103,23 +1103,22 @@ natures mathématiques véritable.
 Cette formalisation a été implémentée sous la forme d'une suite
 logicielle pour l'optimisation numérique en robotique. Le langage
 choisi pour l'implémentation est le C++. Ce langage a la particularité
-d'être multi-paradigme dont un très fort support à la fois de la
-programmation orienté objet mais également de la
-méta-programmation\index{méta-programmation}, c'est à dire la
-génération de familles de types via l'utilisation des
-``templates''. Ce dernier point a été abondamment utilisé pour
-permettre de fournir un infrastructure de calcul sans impacter la
-performance des solveurs sous-jacents. En effet, il n'y a pas de coût
-à l'exécution induit par l'utilisation des templates\footnote{À
-  l'exception de quelques phénomènes impactant à la marge certains
-  méchanismes de résolution dynamique. On pensera par exemple aux
-  transtypages dynamiques ralentis par la prolifération des types
-  engendrés par les méchanismes de méta-programmation.} contrairement
-à l'utilisation de certaines techniques de programmation orienté objet
-comme les méthodes virtuelles. En effet, comme expliqué dans la
-section précédente, les méthodes virtuelles nécessitent une résolution
-et leur appel est donc plus coûteux qu'une fonction
-simple~\citep{driesen1996direct}.
+d'être multiparadigme dont un très fort support à la fois de la
+programmation orientée objet, mais également de la
+métaprogrammation\index{métaprogrammation}, c'est-à-dire la génération
+de familles de types via l'utilisation des ``templates''. Ce dernier
+point a été abondamment utilisé pour permettre de fournir une
+infrastructure de calcul sans impacter la performance des solveurs
+sous-jacents. En effet, il n'y a pas de coût à l'exécution induit par
+l'utilisation des templates\footnote{À l'exception de quelques
+  phénomènes impactant à la marge certains mécanismes de résolution
+  dynamique. On pensera par exemple aux transtypages dynamiques
+  ralentis par la prolifération des types engendrés par les mécanismes
+  de métaprogrammation.} contrairement à l'utilisation de certaines
+techniques de programmation orientée objet comme les méthodes
+virtuelles. En effet, comme expliqué dans la section précédente, les
+méthodes virtuelles nécessitent une résolution et leur appel est donc
+plus coûteux qu'une fonction simple~\citep{driesen1996direct}.
 
 
 RobOptim\index{RobOptim} est une suite logicielle dont les composants
@@ -1163,25 +1162,25 @@ l'utilisation du ``Design Pattern''\index{Design Pattern (motif de
   conception)!Visiteur} tel que décrit dans le livre de
 référence~\citep{design.pattern}. Ce motif de conception a la
 particularité d'augmenter les capacités d'une classe sans en altérer
-le comportement propre. Dans ce cas, cette classes paramétrée prend un
+le comportement propre. Dans ce cas, cette classe paramétrée prend un
 type de fonction en entrée, en hérite, tout en fournissant un niveau
 de calcul supplémentaire des dérivées. D'autres outils permettent de
 combiner des fonctions: les sommer, soustraire, multiplier entre elles
 ou bien encore les combiner. Un autre décorateur fournit également un
 cache afin d'éviter d'avoir à effectuer une nouvelle fois des calculs
-lourds qui ont déjà été demandé précédemment.
+lourds qui ont déjà été demandés précédemment.
 
-Au delà de la définition des fonctions, le noyau fournit l'interface
+Au-delà de la définition des fonctions, le noyau fournit l'interface
 pour les solveurs. Deux solutions sont alors possibles: soit se lier à
 une ou des bibliothèques tierces fournissant des algorithmes de
 résolution, soit utiliser le système de plug-in\index{plug-in}
-permettant d'en charger à l'execution. L'objectif de ce système est de
+permettant d'en charger à l'exécution. L'objectif de ce système est de
 pouvoir complètement déléguer au système la résolution d'un problème:
 il y a un certain nombre de solveurs disponibles sur le système et
 l'on pourrait ainsi, avoir une sélection automatique de l'algorithme
 adéquat en fonction du type de problème en entrée. En pratique, ce
-méchanisme permet simplement de pouvoir changer de solveur pendant
-l'exécution du programme.
+mécanisme autorise un changement de solveur pendant l'exécution du
+programme.
 
 
 \subsection{Les solveurs}
@@ -1190,21 +1189,21 @@ l'exécution du programme.
 Il est important d'insister sur le fait que ce travail n'a pas pour
 but d'écrire un nouveau solveur ou bien de tenter d'apporter des
 améliorations à une ou des approches existantes. La littérature du
-domaine est foisonante et bénéficie d'un effort de recherche
+domaine est foisonnante et bénéficie d'un effort de recherche
 important. Toutefois, l'objectif final de ce travail reste la
-possibilité de pouvoir utiliser dans un même paradigme plusieurs
-solveurs de types différents. Des plug-ins RobOptim ont été écrit pour
-trois solveurs:
+possibilité d'utiliser dans un même paradigme plusieurs solveurs de
+types différents. Des plug-ins RobOptim ont été écrits pour trois
+solveurs:
 %
 \begin{description}
 \item[CMinPack\index{CMinPack}] solveur permettant de résoudre des problèmes de type
-  moindre carrés linéaires,
-\item[CFSQP\index{CFSQP}] solveur pour les problèmes non-linéaires, contraintes
+  moindres carrés linéaires,
+\item[CFSQP\index{CFSQP}] solveur pour les problèmes non linéaires, contraintes
   égalités et inégalités, calcul du gradient requis,
-\item[IPOPT\index{IPOPT}] solveur pour les problèmes non-linéaires, contraintes
+\item[IPOPT\index{IPOPT}] solveur pour les problèmes non linéaires, contraintes
   égalités et inégalités, calcul du gradient et hessien
   requis\footnote{Une version alternative qui ne nécessite pas le
-    calcul du hessien est également fournis par le paquet logiciel.}.
+    calcul du hessien est également fournie par le paquet logiciel.}.
 \end{description}
 
 Ces solveurs sont disponibles sous la forme de plug-in pour RobOptim
@@ -1215,18 +1214,18 @@ problème d'optimisation RobOptim.
 \subsection{Optimisation de trajectoires avec RobOptim}
 
 Un paradigme de programmation unifié permet également d'unifier les
-outils de développement. En effet, le développement de bibliothèques
-de fonctions de coût et de contraintes prend tout son sens une fois
-que l'on a pu montrer que la même architecture est utilisable quelque
-soit la structure du problème à résoudre. De ce constat, RobOptim
-s'est enrichi d'une couche propre à la robotique, l'optimisation de
+outils de conception. En effet, l'écriture de bibliothèques de
+fonctions de coût et de contraintes prend tout son sens une fois que
+l'on a pu montrer que la même architecture est utilisable quelque soit
+la structure du problème à résoudre. De ce constat, RobOptim s'est
+enrichi d'une couche propre à la robotique, l'optimisation de
 trajectoires.
 
 Cette couche définit des trajectoires robotiques sous forme de
-splines\index{spline}, c'est à dire de courbes
+splines\index{spline}, c'est-à-dire de courbes
 paramétrées\index{courbe paramétrée} par des points de
 contrôle\index{point de contrôle}. Il est alors naturel de tenter de
-vouloir altérer ces points de contrôle afin de rafiner le comportement
+vouloir altérer ces points de contrôle afin de raffiner le comportement
 de la trajectoire: tenter de minimiser le temps nécessaire pour
 réaliser le mouvement, ou l'énergie ou tout autre critère adéquat.
 
@@ -1237,22 +1236,22 @@ dans la mesure où un souhait raisonnable est, par exemple, de borner
 la vitesse du robot à tout moment de la trajectoire. Malheureusement,
 la résolution de ce type de problèmes dans le cas général est
 difficile et la technique la plus couramment utilisée reste une
-discrétisation temporelle des contraintes. Ces stratégies présente
-l'inconvénient d'augmenter très largement le nombre du contrainte du
+discrétisation temporelle des contraintes. Ces stratégies présentent
+l'inconvénient d'augmenter très largement le nombre de contraintes du
 problème. De plus, le pas de discrétisation est difficile à évaluer et
 a un très fort impact sur la vitesse de résolution. Enfin, si on
 ajoute la possibilité d'accélérer ou de décélérer la trajectoire au
 problème, le solveur peut tenter de changer la paramétrisation
 temporelle afin de placer toutes les contraintes au début du mouvement
 et pouvoir, par exemple, passer au travers d'un obstacle. Un tel
-comportement peut être éviter en attachant la contrainte non pas à un
-moment temporel donné mais plutôt à un point de la trajectoire
+comportement peut être évité en attachant la contrainte non pas à un
+moment temporel donné, mais plutôt à un point de la trajectoire
 indépendamment de sa paramétrisation temporelle. Il suffit pour cela
 de se donner une échelle fixe, de 0 à 1, représentant respectivement
 le début et la fin de la trajectoire, et permettant aux contraintes de
 se déplacer avec la reparamétrisation de la trajectoire. La
 discrétisation de contraintes utilisant ce type de représentation est
-supporté par RobOptim et permet de simplifier la résolution de
+supportée par RobOptim et permet de simplifier la résolution de
 problèmes d'optimisation de trajectoires.
 
 
@@ -1278,13 +1277,13 @@ la pile de pas souhaitée.
 Pour planifier le mouvement de la boîte, nous avons choisi d'utiliser
 un algorithme aléatoire de type RRT -- Rapidly exploring Random Tree
 --. Cet arbre va tenter d'échantillonner l'espace $\mathbb{R}^2 \times
-SO(1)$ des translations et rotation en deux dimensions tout en validant
-que les configurations tirées ne violent pas de contraintes ainsi que
-le chemin amenant du n\oe ud le plus proche au nouveau n\oe ud
-tiré. Malheureusement, cette méthode rend des trajectoires rarement
+SO(1)$ des translations et rotation en deux dimensions tout en
+validant que les configurations tirées ne violent pas de contrainte
+ainsi que le chemin amenant du n\oe ud le plus proche au nouveau n\oe
+ud tiré. Malheureusement, cette méthode rend des trajectoires rarement
 réalistes et qui ne sont pas toujours acceptables. Il est donc courant
 d'utiliser une méthode probabiliste pour trouver un premier chemin
-évitant les collisions qui est ensuite améliorée dans une deuxième
+évitant les collisions qui est ensuite amélioré dans une deuxième
 passe réalisée par un algorithme d'optimisation. C'est cette seconde
 passe que nous avons choisi d'exprimer dans le paradigme de RobOptim.
 
@@ -1304,7 +1303,7 @@ courbes et sont tirées de~\citep{algo.3d}
   Soit $n \in \mathbb{N}$, le nombre de points de contrôles. Soit $k
   \geq 1$, le degré des polynômes considérés. Soit $\Xi = (t_0, \dotsc,
   t_{n+k-1})$ un vecteur appelé, vecteur nodal avec $t_0 \geq \dotsc
-  \geq t_{n+k-1}$. Les valeurs $t_i$ sont appelés noeuds. Les
+  \geq t_{n+k-1}$. Les valeurs $t_i$ sont appelées noeuds. Les
   fonctions de base $N_{i,k}$ que nous allons définir, et donc les
   courbes B-splines que nous construirons ensuite, sont les
   polynomiales sur chaque intervalle $[t_i,t_{i+1}]$, pour $i =
@@ -1354,12 +1353,12 @@ courbes et sont tirées de~\citep{algo.3d}
   \end{equation}
 
   La courbe Q s'exprime donc comme une somme des fonctions $N_{i,k}$,
-  pondérée par les points de contrôle.
+  pondérées par les points de contrôle.
 \end{mydef}
 
 
 Dans notre application, nous avons choisi d'utiliser des B-splines
-uniforme de degré 3. Une B-spline est dîte uniforme lorsque les
+uniformes de degré 3. Une B-spline est dit uniforme lorsque les
 intervalles temporels entre les points de contrôle définis par le
 vecteur nodal $\Xi$ est constant entre chaque point de contrôle. Dans
 notre cas, cette valeur sera dénotée $\lambda$ et fera parti des
@@ -1387,7 +1386,7 @@ la~\autoref{tbl:param}.
 \subsubsection{Fonction de coût}
 
 
-La paramétrisation choisit permet d'accélérer la courbe. En effet,
+La paramétrisation choisie permet d'accélérer la courbe. En effet,
 plus la valeur de $\lambda$ décroît plus la courbe est
 accélérée. L'objectif est alors simplement de tenter de réaliser le
 mouvement le plus vite possible. On réalise alors une optimisation
@@ -1400,7 +1399,7 @@ suivante:
 
 Dans les faits, le solveur va progressivement saturer les contraintes
 en accélérant la courbe. En particulier jusqu'à ce que la contrainte
-de vitesse détaille ci-dessous soit saturée. La~\autoref{fig:speed}
+de vitesse détaille ci-dessous, soit saturée. La~\autoref{fig:speed}
 montre le processus de saturation d'une contrainte sur la vitesse dans
 le cadre d'une spline unidimensionnelle.
 
@@ -1416,17 +1415,16 @@ le cadre d'une spline unidimensionnelle.
 
 \subsubsection{Contrainte sur la vitesse}
 
-\index{Contrainte!de vitesse}
-Le but de la contrainte sur les vitesses est double: s'assurer de la
-correction de la trajectoire générée tout en privilégiant la marche en
-avant par rapport à la marche sur le côté. Outre l'aspect
-anthropomorphique, les robots humanoïdes ont un comportement dégradé
-quand ils marchent ``en crabe''. L'espace accessible par les jambes
-est réduit dans cette direction et la conception des semelles du robot
-ont tendance à le faire glisser dans ce cas. Les contraintes sur les
-vitesses sont dupliquées afin de s'appliquer à la fois au pied gauche
-et au pied droit. La formulation de la contrainte pour tous les points
-de la trajectoire $t$ et pour chaque pied est:
+\index{Contrainte!de vitesse} Le but de la contrainte sur les vitesses
+est double: s'assurer de la correction de la trajectoire générée tout
+en privilégiant la marche en avant par rapport à la marche sur le
+côté. Outre l'aspect anthropomorphique, les robots humanoïdes ont un
+comportement dégradé quand ils marchent ``en crabe''. L'espace
+accessible par les jambes est réduit dans cette direction et la forme
+des semelles du robot a tendance à le faire glisser dans ce cas. Les
+contraintes sur les vitesses sont dupliquées afin de s'appliquer à la
+fois au pied gauche et au pied droit. La formulation de la contrainte
+pour tous les points de la trajectoire $t$ et pour chaque pied est:
 
 \begin{equation}
   \begin{split}
@@ -1440,13 +1438,13 @@ de la trajectoire $t$ et pour chaque pied est:
 $v_{\text{pied}}^{x}$ et $v_{\text{pied}}^{y}$ étant respectivement
 les vitesses frontales et orthogonales du pied
 considéré. $v_{\text{max}}^x$ et $v_{\text{max}}^y$ respectivement les
-vitesses frontales et orthogonales maximum du robot. Plus le ratio
+vitesses frontales et orthogonales maximums du robot. Plus le ratio
 $\frac{v_{\text{max}}^x}{v_{\text{max}}^y}$ est élevé, plus le robot
 privilégiera la marche en avant pendant l'optimisation au détriment de
 la vitesse d'exécution du mouvement.
 
 Cette contrainte impose à la vitesse des pieds de rester dans une
-ellipse allongée vers l'avant. Cette contraine impose un mouvement
+ellipse allongée vers l'avant. Cette contrainte impose un mouvement
 privilégiant la marche en avant et s'assure que le mouvement des pieds
 est suffisamment lent pour pouvoir être jouée sur le robot. Afin
 d'être certain que la contrainte est vérifiée en permanence, le temps
@@ -1484,8 +1482,8 @@ et le robot.
 \subsection{Résolution et résultats expérimentaux}
 
 
-La fonction de coût est une fonction linéaire mais les contraintes
-sont non-linéaires. Il est nécessaire de définir des types RobOptim
+La fonction de coût est une fonction linéaire, mais les contraintes
+sont non linéaires. Il est nécessaire de définir des types RobOptim
 pour ces fonctions, le type de problème associé:
 $\text{Problème}_{\text{FonctionLinéaire}, \text{Fonction}_1}$. Le
 gradient analytique a été déterminé pour toutes les fonctions afin
@@ -1531,7 +1529,7 @@ rencontrés sur deux scénarios.
 
 \section{Conclusion}
 
-Ce chapitre a été dédié a la conception d'une modélisation orienté
+Ce chapitre a été dédié à la conception d'une modélisation orientée
 objet pour la résolution de problèmes d'optimisation numériques ainsi
 qu'à son implémentation, la suite logicielle RobOptim. Après avoir
 observé les solveurs disponibles sur le marché, on peut facilement
@@ -1540,28 +1538,28 @@ mathématique et son implémentation en pratique. En pratique, chaque
 solveur vient avec son formalisme, ses interfaces et force ses
 utilisateurs à apprendre une nouvelle formalisation pour chaque
 nouveau solveur utilisé. De ce fait, réaliser des comparaisons est
-mal-aisé, l'apprentissage inutilement difficile et les interfaces
+malaisé, l'apprentissage inutilement difficile et les interfaces
 souvent peu claires ou mal documentées. En fournissant un point
 d'entrée pour plusieurs algorithmes, il n'y a qu'une interface et un
 paradigme à expliquer ce qui présente un gain net vis-à-vis de
 l'approche habituelle. De plus, de nombreux outils sont utiles en
-optimisation tout en étant décorrélé de l'algorithme de résolution. Le
-calcul des gradients par différence finies est un bon exemple. Dans
-RobOptim, il a été intégré à la fois pour pouvoir éviter d'avoir à
-calculer les gradients de manière analytique mais il peut également
-servir à vérifier le gradient analytique. Du point de vue logiciel,
-l'accent a été mis sur la création d'un ensemble de bibliothèques
-logicielles simples à utiliser et assurant la correction du problème
-posé. Cette correction passe par l'utilisation d'un système de typage
-fort permettant de détecter à la compilation les problèmes qui peuvent
-se poser. En effet, RobOptim interdit, à la compilation, la
-construction d'un problème invalide: si certains gradients sont
-manquants ou bien si certains types de fonction sont incorrects, la
-compilation du fichier échouera car les contraintes de typage ne
-seront pas respectées. Malgré ce système de typage imposant des règles
-strictes, une grande flexibilité a été gardée dans le choix de
-l'algorithme qui peut s'effectuer à l'exécution. Le système de plug-in
-de RobOptim permettant de charger les algorithmes dynamiquement
-pendant l'exécution du programme. La suite logicielle a été validée
-sur un exemple réel de robotique qu'est l'optimisation de trajectoire
-de marche pour un robot humanoïde.
+optimisation tout en étant décorrélés de l'algorithme de
+résolution. Le calcul des gradients par différences finies est un bon
+exemple. Dans RobOptim, il a été intégré à la fois pour pouvoir éviter
+d'avoir à calculer les gradients de manière analytique, mais il peut
+également servir à vérifier le gradient analytique. Du point de vue du
+logiciel, l'accent a été mis sur la création d'un ensemble de
+bibliothèques logicielles simples à utiliser et assurant la correction
+du problème posé. Cette correction passe par l'utilisation d'un
+système de typage fort permettant de détecter à la compilation les
+problèmes qui peuvent se poser. En effet, RobOptim interdit, à la
+compilation, la construction d'un problème invalide: si certains
+gradients sont manquants ou bien si certains types de fonction sont
+incorrects, la compilation du fichier échouera, car les contraintes de
+typage ne seront pas respectées. Malgré ce système de typage imposant
+des règles strictes, une grande flexibilité a été gardée dans le choix
+de l'algorithme qui peut s'effectuer à l'exécution. Le système de
+plug-in de RobOptim permettant de charger les algorithmes
+dynamiquement pendant l'exécution du programme. La suite logicielle a
+été validée sur un exemple réel de robotique qu'est l'optimisation de
+trajectoire de marche pour un robot humanoïde.
