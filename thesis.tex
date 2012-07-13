@@ -51,7 +51,6 @@
 \usepackage{natbib}
 
 \usepackage{fancyhdr}
-\pagestyle{fancy}
 
 \usepackage{hyperref}
 
@@ -67,6 +66,17 @@
 \renewcommand{\rubysep}{-0.3ex}   % Spacing between Furigana and Kanji
 
 \usepackage{multirow}
+
+\usepackage{titlesec}
+\titleformat{\chapter}[display]
+{\normalfont\bfseries\filcenter}
+{\LARGE\thechapter}
+{1ex}
+{\titlerule[2pt]
+\vspace{2ex}%
+\LARGE}
+[\vspace{1ex}%
+{\titlerule[2pt]}]
 
 \usepackage{algorithmic, algorithm}
 
@@ -122,10 +132,6 @@ pdfcreator = {Thomas Moulard},
 pdfproducer = {Thomas Moulard}
 }
 
-
-% Please fancyhdr.
-\setlength{\headheight}{25pt}
-
 % Customize chapter head.
 \makeatletter
 \renewcommand\chapter{\if@openright\cleardoublepage\else\clearpage\fi
@@ -173,6 +179,11 @@ pdfproducer = {Thomas Moulard}
 % Generate index.
 \makeindex
 
+% Please fancyhdr.
+\pagestyle{headings}
+\setlength{\headheight}{25pt}
+
+
 % Custom commands.
 \newcommand{\transformation}[2]{%
 \ensuremath{{}^{#1}\!\text{M}_{#2}}}
@@ -201,11 +212,14 @@ pdfproducer = {Thomas Moulard}
 %
 \backmatter
 
+\addcontentsline{toc}{chapter}{Liste des figures}
 \listoffigures
+\addcontentsline{toc}{chapter}{Liste des tableaux}
 \listoftables
 
 %
 % Bibliography
+\addcontentsline{toc}{chapter}{Bibliographie}
 \nocite{*}
 \bibliography{thesis}
 %

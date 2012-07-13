@@ -1,16 +1,17 @@
-\chapter[Optimisation]{Optimisation et généricité}
-\label{chap:roboptim}
+\chapter{Généricité et optimisation}\label{chap:chap1}
 
-\epigraph{Text text text text text text text text text text text text
-  text text text text text text text text text text text text text
-  text text text text text text text text text text text text text
-  text text text text text text text text text text text text text
-  text text text text}{Some Author}
+\epigraph{How do we convince people that in programming simplicity and
+  clarity --in short: what mathematicians call ``elegance''-- are not a
+  dispensable luxury, but a crucial matter that decides between
+  success and failure?}{Edsger W. Dijkstra}
+% Selected Writings on Computing: A Personal Perspective}, pp. 338-348
+
+
 \clearpage
 
-\section[Optimisation]{Optimisation numérique et robotique}
+\section{Optimisation numérique et robotique}\label{sec:chap1_optim}
 
-\subsection{Introduction à l'optimisation numérique}
+\subsection{Introduction à l'optimisation numérique}\label{sec:chap1_optim_intro}
 
 \lettrine[lines=2, lraise=0.1, nindent=0em, slope=-.5em]%
 {L}{a} robotique s'appuie sur différents outils mathématiques
@@ -98,7 +99,7 @@ qualité du résultat final.
 
 
 
-\subsection{Modélisation mathématique d'un problème}
+\subsection{Modélisation mathématique d'un problème}\label{sec:chap1_optim_model}
 
 
 Résoudre un problème d'optimisation revient à trouver une solution pour:
@@ -167,15 +168,15 @@ appelées multiplicateurs KKT tels que:
 \end{description}
 \end{mydef}
 
-Il est à noter que la Définition~\ref{def:chap1_kkt} fournit des
+Il est à noter que la Définition \ref{def:chap1_kkt} fournit des
 conditions suffisantes afin de déterminer si un point est un minimum
 local. Sous conditions de régularité, et dans le cas où le problème
 est convexe, les conditions KKT sont nécessaires et suffisantes.
 
 
-\subsection{Zoologie des solveurs}
+\subsection{Zoologie des solveurs}\label{sec:chap1_optim_solv}
 
-\subsubsection{Zoologie mathématique}
+\subsubsection{Zoologie mathématique}\label{sec:chap1_optim_solv_zoo}
 
 
 Au-delà de cette présentation de la théorie générale, on peut
@@ -197,9 +198,9 @@ plus délicate:
 %
 La combinaison de ces difficultés entraîne la classification des
 solveurs dans de très nombreuses catégories dont un extrait est
-détaillé dans le Tableau~\ref{tbl:chap1_solver}.
+détaillé dans le \autoref{tab:chap1_solver}.
 %
-\begin{table}\label{tbl:chap1_solver}
+\begin{table}
 \begin{center}
 \begin{tabular}{|>{\small}p{.24\textwidth}|>{\small}p{.305\textwidth}|>{\small}p{.305\textwidth}|}
 \hline
@@ -213,7 +214,8 @@ détaillé dans le Tableau~\ref{tbl:chap1_solver}.
 \hline
 \end{tabular}
 \end{center}
-\caption{Zoologie des problèmes en optimisation numérique.}
+\caption{Zoologie des problèmes en optimisation
+  numérique. \label{tab:chap1_solver}}
 \end{table}
 %
 Les algorithmes de résolution ont également des particularités
@@ -237,17 +239,17 @@ calculant les commandes du robot.
 
 
 
-\subsubsection{Zoologie logicielle}
+\subsubsection{Zoologie logicielle}\label{sec:chap1_optim_solv_zoosoft}
 
 
 On l'aura compris: d'une théorie unique découle un ensemble
 d'algorithmes pouvant résoudre des problèmes de complexité
 variée. Plaçons-nous désormais à la place d'un roboticien devant
 résoudre un problème particulier. Quels logiciels peut-il utiliser
-pour se faire? Le Tableau~\ref{tbl:chap1_soft} détaille une partie
+pour se faire? Le Tableau \ref{tab:chap1_soft} détaille une partie
 des paquets logiciels existants.
 %
-\begin{table}\label{tbl:chap1_soft}
+\begin{table}
 \begin{center}
 \begin{tabular}{|p{.24\textwidth}|p{.305\textwidth}|p{.305\textwidth}|}
 \hline
@@ -261,7 +263,7 @@ des paquets logiciels existants.
 \hline
 \end{tabular}
 \end{center}
-\caption{Zoologie des problèmes en optimisation numérique.}
+\caption{Zoologie des problèmes en optimisation numérique. \label{tab:chap1_soft}}
 \end{table}
 %
 Une conclusion s'impose au regard de cette liste de paquets logiciels:
@@ -287,6 +289,7 @@ sein d'un même paradigme.
 
 
 \section{De la dif\-ficulté à passer d'un paradigme uni\-que à une implémentation unifiée}
+\label{sec:chap1_model2impl}
 
 
 À première vue, il pourrait sembler que l'absence d'une architecture
@@ -296,16 +299,18 @@ concepteurs. Nous allons montrer ici qu'il n'en est rien. Une simple
 agglomération des implémentations de différentes stratégies de
 résolution ne saurait donner un ensemble cohérent et performant en
 terme de temps de calcul sans une véritable réflexion sur comment
-modéliser le paradigme décrit à la section précédente tout en prenant
-en compte les limites internes des langages de programmation. Nous
-allons tout particulièrement nous intéresser à la programmation
-orientée objet qui est la fondation d'une large proportion des
-langages modernes.
+modéliser le paradigme décrit dans la section \label{sec:chap1_optim}
+tout en prenant en compte les limites internes des langages de
+programmation. Nous allons tout particulièrement nous intéresser à la
+programmation orientée objet qui est la fondation d'une large
+proportion des langages modernes.
 
 
 \subsection{Typage, programmation orientée objet et familles de types}
+\label{sec:chap1_model2impl_typage}
 
 \subsubsection{$\lambda$-calcul et théorie des types}
+\label{sec:chap1_model2impl_typage_lambda}
 
 Lors du développement de l'informatique, les langages de programmation
 ont tout d'abord été de simples outils permettant de représenter du
@@ -318,7 +323,7 @@ construction de programmes valides. Cette notion de type a issue de la
 théorie des types \index{théorie des types}, une branche de la logique
 mathématique. La première théorie unifiée des types a été développée
 par Bertrand Russel \index{Bertrand Russel} au début du vingtième
-siècle dans les \emph{Principia Mathematica}~\citep{pm}.
+siècle dans les \emph{Principia Mathematica} \citep{pm}.
 
 
 Afin de démontrer les difficultés que peuvent poser la modélisation
@@ -395,6 +400,7 @@ construire la fonction exponentielle dans ce paradigme.
 
 
 \subsubsection{Programmation orientée objet et typage}
+\label{sec:chap1_model2impl_typage_poo}
 
 Indépendamment des systèmes de calculs formels, divers modèles plus
 pratiques ont été développés au cours de la seconde moitié du
@@ -476,7 +482,7 @@ algorithmes/données jusqu'à la conception interne des logiciels.
 
   $A$ possède un attribut et deux arguments. D'après la définition de
   $A$ et les
-  Définitions~\ref{def:chap1_method}~et~\ref{def:chap1_attribute}, on
+  Définitions \ref{def:chap1_method} et \ref{def:chap1_attribute}, on
   a:
 
   \begin{equation}
@@ -523,7 +529,7 @@ permet de définir des familles de types interchangeables.
 
 
   \begin{equation}
-    u~v~\text{bien formé} \Rightarrow u \vdash \tau_1 \rightarrow
+    u v \text{bien formé} \Rightarrow u \vdash \tau_1 \rightarrow
     \tau_2 \wedge \tau_3 <: \tau_1
   \end{equation}
 
@@ -548,7 +554,7 @@ Un sous-type se doit de contenir au moins tous les attributs et
 méthodes de la classe dont elle hérite afin d'interdire la réécriture
 vers des termes syntaxiquement faux. Le ``principe de substitution de
 Liskov''\index{principe de substitution de
-  Liskov}~\citep{Liskov94familyvalues} définit, de manière équivalente,
+  Liskov} \citep{Liskov94familyvalues} définit, de manière équivalente,
 la relation de sous-typage sous l'énoncé suivant:
 %
 \begin{mydef}\label{chap1_liskov}
@@ -558,7 +564,7 @@ la relation de sous-typage sous l'énoncé suivant:
 \end{mydef}
 
 
-La Définition~\ref{chap1_method_typing} introduit implicitement la
+La Définition \ref{chap1_method_typing} introduit implicitement la
 notion de polymorphisme d'héritage\index{polymorphisme!polymorphisme
   d'héritage}. Le polymorphisme\index{polymorphisme} est la capacité
 pour un type fonctionnel de ne pas accepter en entrée un type unique,
@@ -566,7 +572,7 @@ mais une famille de types. Le polymorphisme le plus simple pouvant
 être défini est la surcharge\index{surcharge}. Ce mécanisme autorise
 la création de fonctions se réécrivant vers des $\lambda$-termes
 différents selon le type de l'argument d'entrée. La formalisation de
-ce système est décrite dans~\citep{Castagna95acalculus}.
+ce système est décrite dans \citep{Castagna95acalculus}.
 
 Une autre forme de polymorphisme est le polymorphisme d'héritage. Si
 $\tau_1$ et $\tau_2$ sont deux types tels que $\tau_2 <: \tau_1$ et
@@ -578,7 +584,7 @@ comportement.
 
 La généralisation de cette propriété à toutes les fonctions au lieu
 des méthodes uniquement permet d'obtenir le ``multiple
-dispatch''~\citep{Muschevici2008}. Ce mécanisme est disponible dans un
+dispatch'' \citep{Muschevici2008}. Ce mécanisme est disponible dans un
 nombre assez limité de langages de programmation, dont Common Lisp. En
 effet, contrairement à la surcharge, le multiple dispatch ainsi que le
 polymorphisme d'héritage nécessite une résolution à l'exécution qui
@@ -594,6 +600,7 @@ les arguments des méthodes.
 
 
 \subsubsection{Types paramétrés et génération de types}
+\label{sec:chap1_model2impl_typage_param}
 
 Face au coût induit par la résolution dynamique du polymorphisme par
 héritage, on peut se demander s'il existe un moyen d'arriver au même
@@ -625,9 +632,11 @@ intéressant, car il n'induit pas de coût à l'exécution.
 
 
 \subsection{Modélisation informatique du problème}
+\label{sec:chap1_model2impl_typage_info}
 
-La section précédente a introduit le formalisme et les outils que nous
-allons utiliser pour poser le problème de manière formelle.
+La \autoref{sec:chap1_optim} a introduit le formalisme et les
+outils que nous allons utiliser pour poser le problème de manière
+formelle.
 
 
 Un solveur est un algorithme qui prend en entrée un problème
@@ -635,11 +644,11 @@ d'optimisation et qui calcule un point dans l'espace des solutions.
 Nous allons noter $\iota$ le type primitif représentant une partie des
 réels et $[\iota]$ une liste de zéro, un ou plusieurs variables de
 type $\iota$. $\tau_{\text{prob}}$ le type représentant le problème
-d'optimisation. Nous allons voir dans la section suivante comment ce
-type est habituellement défini, introduire une paramétrisation
-alternative du problème fournie par RobOptim et enfin montrer quelles
-avancées cette nouvelle modélisation engendre.  Nous allons travailler
-en utilisant un solveur générique qui sera dénoté:
+d'optimisation. Nous allons voir comment ce type est habituellement
+défini, introduire une paramétrisation alternative du problème fournie
+par RobOptim et enfin montrer quelles avancées cette nouvelle
+modélisation engendre.  Nous allons travailler en utilisant un solveur
+générique qui sera dénoté:
 
 
 \begin{equation}\label{eq:chap1_prob_type}
@@ -656,6 +665,7 @@ la forme d'une et une seule modélisation.
 
 
 \subsubsection{De la fonction\ldots au type fonctionnel?}
+\label{sec:chap1_model2impl_typage_info_fct}
 
 
 Naïvement, on pourrait penser qu'il n'y a rien de plus simple à
@@ -666,7 +676,7 @@ mathématiques habituelles? On aurait donc, à première vue:
 \begin{equation}
   \begin{array}{ccccc}
     f & : & \tau_1 & \rightarrow & \tau_2\\
-    ~ & ~ & x      & \mapsto     & f(x)
+      &   & x      & \mapsto     & f(x)
   \end{array}
   \xhookrightarrow{\text{devient}}
   f \vdash \tau_1 \rightarrow \tau_2
@@ -770,11 +780,12 @@ définir sa fonction $F$ de le faire hériter du type adéquat de la
 famille $\text{Fonction}_n$.
 
 Cette approche sous forme de hiérarchie linéaire de classes en forme
-de peignes a toutefois des inconvénients qui seront détaillés dans la
-dernière section de ce chapitre.
+de peignes a toutefois des inconvénients qui seront détaillés dans
+la \autoref{sec:chap1_discussion} de ce chapitre.
 
 
 \subsubsection{Des problèmes divers, un type unique}
+\label{sec:chap1_model2impl_typage_info_prob}
 
 
 Nous avons donc toute une famille de types définissant des fonctions
@@ -825,7 +836,7 @@ les types de fonctions des contraintes.
 \end{mydef}
 
 
-La Définition~\ref{def:chap1_prob} permet donc de modéliser un
+La Définition \ref{def:chap1_prob} permet donc de modéliser un
 problème d'optimisation numérique via l'utilisation d'un type
 paramétré générique. Cette modélisation couvre une large partie des
 problèmes d'optimisation avec ou sans contrainte tout en fournissant
@@ -835,13 +846,14 @@ d'un solveur qui impose son formalisme spécifique.
 
 
 \subsubsection{Le chaînon manquant: le solveur}
+\label{sec:chap1_model2impl_typage_info_solv}
 
 
 Évidemment, il ne saurait être question de terminer cette section sans
 revenir une dernière fois sur le c\oe ur et l'âme du système: le
 solveur. Dans la section précédente, nous avons construit un type
 paramétré qui satisfait les contraintes énoncées au début de cette
-section, voire l'Équation~\ref{eq:chap1_prob_type}.
+section, voire \autoref{eq:chap1_prob_type}.
 
 
 En effet, on peut construire un type paramétré par le type de problème
@@ -858,7 +870,7 @@ permettant de modéliser un solveur.
   \end{equation}
 \end{mydef}
 
-La Définition~\ref{def:chap1_solver} fournit la dernière famille de
+La Définition \ref{def:chap1_solver} fournit la dernière famille de
 types indispensables à la modélisation d'un problème d'optimisation
 numérique. Nous allons désormais nous attacher à montrer que diverses
 classes de problèmes d'optimisation peuvent être exprimées via cette
@@ -866,6 +878,7 @@ modélisation unique.
 
 
 \section{Exemples de formalisation de classes de problème}
+\label{sec:chap1_model2impl_typage_ex}
 
 
 Afin d'illustrer de démontrer que le formalisme décrit dans la section
@@ -887,6 +900,7 @@ précédente. Les trois classes choisies sont:
 
 
 \subsection{Moindres carrés linéaires}
+\label{sec:chap1_model2impl_typage_ex_moindre}
 
 Les moindres carrés linéaires\index{moindres carrés linéaires}
 utilisent une fonction de coût suivant une structure très
@@ -941,6 +955,7 @@ paramétrés avec un ensemble de paramètres adéquats.
 
 
 \subsection{Optimisation non linéaire (gradient uniquement)}
+\label{sec:chap1_model2impl_typage_ex_optimgrad}
 
 Nous allons traiter ici la classe de problèmes suivante: la fonction
 de coût est non linéaire et les contraintes séparées en deux types
@@ -957,6 +972,7 @@ distincts: linéaires ou non linéaires.
 \end{myexample}
 
 \subsection{Optimisation non linéaire (gradient et hessien)}
+\label{sec:chap1_model2impl_typage_ex_optimhess}
 
 Si l'on définit la même classe de problème, mais en ajoutant la
 possibilité d'évaluer les hessiens des fonctions non linéaires, on
@@ -976,6 +992,7 @@ FIXME:  méthodes virtuelles, union de types, interfaces
 
 
 \section{Discussion}
+\label{sec:chap1_discussion}
 
 
 Dans les sections précédentes, un formalisme permettant de représenter
@@ -1013,9 +1030,9 @@ Cette modélisation présente toutefois un certain nombre de limites qui
 peuvent être divisées en deux: les limites intrinsèques de la
 modélisation et celles qui ont été imposées par le langage de
 programmation choisi pour l'implémentation des algorithmes, à savoir
-le C++. Ces dernières seront abordées dans la section
-FIXME. Concernant les limites de la modélisation, différents éléments
-sont difficiles à modéliser.
+le C++. Ces dernières seront abordées dans
+la \autoref{sec:chap1_discussion}.Concernant les limites de la
+modélisation, différents éléments sont difficiles à modéliser.
 
 
 La première limite se présente quand les variables d'optimisations
@@ -1098,6 +1115,7 @@ natures mathématiques véritables.
 
 
 \section{RobOptim: une suite logicielle pour l'optimisation numérique en robotique}
+\label{sec:chap1_roboptim}
 
 
 Cette formalisation a été implémentée sous la forme d'une suite
@@ -1118,7 +1136,7 @@ l'utilisation des templates\footnote{À l'exception de quelques
 techniques de programmation orientée objet comme les méthodes
 virtuelles. En effet, comme expliqué dans la section précédente, les
 méthodes virtuelles nécessitent une résolution et leur appel est donc
-plus coûteux qu'une fonction simple~\citep{driesen1996direct}.
+plus coûteux qu'une fonction simple \citep{driesen1996direct}.
 
 
 RobOptim\index{RobOptim} est une suite logicielle dont les composants
@@ -1144,6 +1162,7 @@ peuvent être divisés en trois groupes:
 \end{figure}
 
 \subsection{RobOptim core et ses plug-ins}
+\label{sec:chap1_roboptim_plugin}
 
 Le noyau de RobOptim fournit la modélisation mathématique des
 fonctions, la classe définissant les problèmes d'optimisation ainsi
@@ -1160,7 +1179,7 @@ points selon les cas. Cette fonctionnalité est implémentée via
 l'utilisation du ``Design Pattern''\index{Design Pattern (motif de
   conception)} décorateur\index{Design Pattern (motif de
   conception)!Visiteur} tel que décrit dans le livre de
-référence~\citep{design.pattern}. Ce motif de conception a la
+référence \citep{design.pattern}. Ce motif de conception a la
 particularité d'augmenter les capacités d'une classe sans en altérer
 le comportement propre. Dans ce cas, cette classe paramétrée prend un
 type de fonction en entrée, en hérite, tout en fournissant un niveau
@@ -1184,6 +1203,7 @@ programme.
 
 
 \subsection{Les solveurs}
+\label{sec:chap1_roboptim_solv}
 
 
 Il est important d'insister sur le fait que ce travail n'a pas pour
@@ -1212,6 +1232,7 @@ problème d'optimisation RobOptim.
 
 
 \subsection{Optimisation de trajectoires avec RobOptim}
+\label{sec:chap1_roboptim_optim}
 
 Un paradigme de programmation unifié permet également d'unifier les
 outils de conception. En effet, l'écriture de bibliothèques de
@@ -1256,6 +1277,7 @@ problèmes d'optimisation de trajectoires.
 
 
 \section{Scénaro d'utilisation: écriture d'une application robotique complexe}
+\label{sec:chap1_roboptim_scenario}
 
 
 Afin d'illustrer les propos des sections précédentes, nous allons
@@ -1289,15 +1311,17 @@ passe que nous avons choisi d'exprimer dans le paradigme de RobOptim.
 
 
 \subsection{Définition de la trajectoire et fonction de coût}
+\label{sec:chap1_roboptim_cout}
 
-\subsection{B-Splines et courbes paramétrées}
+\subsubsection{B-Splines et courbes paramétrées}
+\label{sec:chap1_roboptim_cout_bspline}
 
 Comme indiqué dans la section précédente, les trajectoires sont
 définies sous la forme d'une courbe paramétrée. Ce type de courbe
 appelé B-spline\index{spline!B-spline} est définie comme une
 combinaison linéaire d'une famille de fonctions de base. Les deux
 définitions ci-dessous permettent de calculer analytiquement ces
-courbes et sont tirées de~\citep{algo.3d}
+courbes et sont tirées de \citep{algo.3d}
 
 \begin{mydef}\label{def:chap1_coxdeboor}
   Soit $n \in \mathbb{N}$, le nombre de points de contrôles. Soit $k
@@ -1367,7 +1391,7 @@ points de contrôle eux-mêmes, soit trois variables par point de
 contrôle: $(x,y) \in \mathbb{R}^2$ la position du robot dans le plan
 et $\theta \in S^1$ l'orientation du robot. Le vecteur de variables
 d'optimisation ainsi constitué est illustra par
-la~\autoref{tbl:param}.
+la \autoref{tab:param}.
 
 \begin{table}[htbp]
   \begin{center}
@@ -1380,10 +1404,11 @@ la~\autoref{tbl:param}.
   \hline
 \end{tabular}
   \end{center}
-  \caption{Variables d'optimisation du problème. \label{tbl:param}}
+  \caption{Variables d'optimisation du problème. \label{tab:param}}
 \end{table}
 
 \subsubsection{Fonction de coût}
+\label{sec:chap1_roboptim_cout_cout}
 
 
 La paramétrisation choisie permet d'accélérer la courbe. En effet,
@@ -1399,7 +1424,7 @@ suivante:
 
 Dans les faits, le solveur va progressivement saturer les contraintes
 en accélérant la courbe. En particulier jusqu'à ce que la contrainte
-de vitesse détaille ci-dessous, soit saturée. La~\autoref{fig:speed}
+de vitesse détaille ci-dessous, soit saturée. La \autoref{fig:speed}
 montre le processus de saturation d'une contrainte sur la vitesse dans
 le cadre d'une spline unidimensionnelle.
 
@@ -1412,8 +1437,10 @@ le cadre d'une spline unidimensionnelle.
 
 
 \subsection{Contraintes}
+\label{sec:chap1_roboptim_contraintes}
 
 \subsubsection{Contrainte sur la vitesse}
+\label{sec:chap1_roboptim_contraintes_vitesse}
 
 \index{Contrainte!de vitesse} Le but de la contrainte sur les vitesses
 est double: s'assurer de la correction de la trajectoire générée tout
@@ -1460,6 +1487,7 @@ est discrétisé et on ajoute la contrainte pour tous les pas de temps.
 
 
 \subsubsection{Contrainte sur les obstacles}
+\label{sec:chap1_roboptim_contraintes_obstacle}
 
 \index{Contrainte!d'évitement des obstacles}
 Les contraintes sur les obstacles se définissent naturellement: on
@@ -1480,6 +1508,7 @@ et le robot.
 
 
 \subsection{Résolution et résultats expérimentaux}
+\label{sec:chap1_roboptim_resultats}
 
 
 La fonction de coût est une fonction linéaire, mais les contraintes
@@ -1487,12 +1516,13 @@ sont non linéaires. Il est nécessaire de définir des types RobOptim
 pour ces fonctions, le type de problème associé:
 $\text{Problème}_{\text{FonctionLinéaire}, \text{Fonction}_1}$. Le
 gradient analytique a été déterminé pour toutes les fonctions afin
-d'accélérer les calculs. Les calculs des fonctions et des gradients
-associés sont détaillés dans FIXME. La~\autoref{fig:obstacle} montre
+d'accélérer les calculs. La \autoref{fig:obstacle} montre
 un exemple de chemin optimisé par le solveur CFSQP en simulation et
-la~\autoref{fig:results} un exemple d'application sur le
-robot. Le~\autoref{tbl:benchmarks} illustre les temps de calcul
+la \autoref{fig:results} un exemple d'application sur le
+robot. Le \autoref{tab:benchmarks} illustre les temps de calcul
 rencontrés sur deux scénarios.
+
+% Les calculs des fonctions et des gradients associés sont détaillés dans FIXME
 
 \begin{figure}[htbp]
   \begin{center}
@@ -1523,11 +1553,12 @@ rencontrés sur deux scénarios.
   \end{center}
   \caption{Temps de calculs. Le temps de calcul complet comprends la
     planification, l'optimisation et la phase de génération de
-    mouvement corps complet.\label{tbl:benchmarks}}
+    mouvement corps complet.\label{tab:benchmarks}}
 \end{table}
 
 
 \section{Conclusion}
+\label{sec:chap1_conclusion}
 
 Ce chapitre a été dédié à la conception d'une modélisation orientée
 objet pour la résolution de problèmes d'optimisation numériques ainsi

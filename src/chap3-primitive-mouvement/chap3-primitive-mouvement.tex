@@ -1,11 +1,7 @@
 \chapter{Primitives de mouvement}
 \label{chap:primitive}
 
-\epigraph{Text text text text text text text text text text text text
-  text text text text text text text text text text text text text
-  text text text text text text text text text text text text text
-  text text text text text text text text text text text text text
-  text text text text}{Some Author}
+\epigraph{Vous n'avez qu'à marcher de vertus en vertus.}{Jean Racine\\\emph{Britannicus}}
 \clearpage
 
 \section{Problématique}
@@ -368,7 +364,7 @@ Une fois de plus l'erreur se définit par la soustraction usuelle:
 \subsection{Langage de description}
 
 Le langage de description adopté est le YAML -- Yet Another Markup
-Language --~\citep{yaml}. Le fichier est divisé en trois parties:
+Language -- \citep{yaml}. Le fichier est divisé en trois parties:
 \begin{description}
 \item[En-tête] fournissant les méta-informations sur le mouvement, notamment sa durée en secondes.
 \item[Primitives de mouvement] définissant quelles primitives sont
@@ -453,7 +449,7 @@ bassin. On a donc:
 \begin{equation}
   \begin{array}{ccc}
     \mathcal{L} : & \mathrm{R} \rightarrow & \text{SE}(2)\\
-    ~ & t \mapsto & \mathcal{L}(t)
+      & t \mapsto & \mathcal{L}(t)
   \end{array}
 \end{equation}
 
@@ -474,7 +470,7 @@ l'estimation finale de la pose:
 \begin{equation}
   \begin{array}{ccc}
     m_i : & \mathrm{R} \rightarrow & \mathrm{R}\\
-    ~ & t \mapsto & m_i(t)
+      & t \mapsto & m_i(t)
   \end{array}
 \end{equation}
 
@@ -895,7 +891,7 @@ Durant les expériences, le module de localisation a fourni une
 estimation de la position du robot à 16\hertz. Les images ont une
 résolution de 320x240 pixels. L'ordinateur sur lequel fonctionne le
 composant de localisation est un Intel\textregistered
-Core\texttrademark\ 2 CPU T7200~@~2.00GHz avec 2Gb.\ de RAM.
+Core\texttrademark\ 2 CPU T7200 @ 2.00GHz avec 2Gb.\ de RAM.
 
 
 \subsection{Analyse de la précision du système de localisation}

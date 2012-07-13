@@ -1,11 +1,9 @@
 \chapter{Suivi de trajectoire}
 \label{chap:suivi}
 
-\epigraph{Text text text text text text text text text text text text
-  text text text text text text text text text text text text text
-  text text text text text text text text text text text text text
-  text text text text text text text text text text text text text
-  text text text text}{Some Author}
+
+\epigraph{Je sais calculer le mouvement des corps pesants, mais pas la
+  folie des foules.}{Isaac Newton}
 \clearpage
 
 \lettrine[lines=2, lraise=0.1, nindent=0em, slope=-.5em]%
@@ -242,7 +240,7 @@ dans le repère monde est:
 
 \subsubsection{Cinématique inverse}
 
-La Définition~\autoref{def:chap2-geomdirect} permet de construire la
+La Définition \autoref{def:chap2-geomdirect} permet de construire la
 position de tous les corps du robot dans le repère monde attaché au
 joint racine de la structure. Cependant, lors de la conception d'un
 problème robotique, il est courant de vouloir, par exemple,
@@ -262,7 +260,7 @@ de liberté du système et la position à atteindre, 0, 1 ou une infinité
 de solutions peuvent exister. La résolution analytique n'étant pas
 toujours possible, les outils numériques ont montré leur capacité à
 résoudre efficacement ce problème. Une technique de résolution
-possible sera détaillée dans la section~FIXME.
+possible sera détaillée dans la section FIXME.
 
 FIXME: vitesse des corps
 
@@ -337,7 +335,7 @@ de masses respectives $m_i$, de positions respectives $M_i$, de
 vitesses respectives $\vi$ et d'accélérations respectives $\gammai$.
 
 Pour chaque point $P_i$, on peut écrire la relation fondamentale de la
-dynamique~(\ref{eq:newton}) en distinguant les forces internes
+dynamique (\ref{eq:newton}) en distinguant les forces internes
 $\vect{F}_{j/i}$ appliquées par les autres points du système et les
 forces externes $\vect{F}^{ext}_{i}$
 issues de causes externes au système:
@@ -557,7 +555,7 @@ reposent sur la condition de stabilité du pied du robot en contact avec
 le sol supposé horizontal.
 
 Considérons donc le pied en contact avec le sol. Les actions
-extérieures appliquées sur ce pied sont (Figure~\ref{fig:zmp}):
+extérieures appliquées sur ce pied sont (Figure \ref{fig:zmp}):
 \begin{enumerate}
   \item l'action du robot privé de son pied sur la cheville,
     représentée par le torseur:
@@ -660,7 +658,7 @@ droite qui sépare le ZMP de la surface d'appui. Au prix d'un
 changement de repère, on peut supposer que cette droite est l'axe
 $O\vec{y}$ du repère, que $Z_x < 0$ et que tous les points de la
 surface d'appui ont des abscisses positives. Le terme $(Z_x-x)$ de
-l'intégrale de l'équation~(\ref{eq:4}) est donc uniformément négatif
+l'intégrale de l'équation (\ref{eq:4}) est donc uniformément négatif
 sur $S$ et donc (\ref{eq:4}) ne peut être satisfaite que si $f_z$ est
 uniformément nulle, condition exclue par nos hypothèses.
 
@@ -671,7 +669,7 @@ que le ZMP soit dans l'enveloppe convexe de la surface d'appui.
 \paragraph{Le ZMP comme critère d'équilibre}
 
 La position du ZMP peut également être calculée à partir de la dérivée du moment cinétique et de la résultante cinétique du robot.
-Exprimons les équations de la dynamique~(\ref{eq:newton3}) et (\ref{eq:newton2}) au centre de masse du robot:
+Exprimons les équations de la dynamique (\ref{eq:newton3}) et (\ref{eq:newton2}) au centre de masse du robot:
 \begin{eqnarray*}
 m\dot{\vect{v}}_G &=& \vect{R}^{ground} + m \vect{g} \\
 \dot{\sigma}_G &=& \vect{M}_G^{ground}
@@ -709,7 +707,7 @@ y_{ZMP} &=& y_G + \frac{\dot{\sigma}_x\ -\ m\ z_G\ \ddot{y}_G}{m\ (\ddot{z}_G + 
 Dans cette section, nous établissons les équations de mouvement
 dynamique d'un robot en phase de simple appui sur le sol, composé d'un
 corps ${\cal B}$, d'une jambe ${\cal L}$, d'un tibia ${\cal S}$ et
-d'un pied ${\cal F}$ et représenté sur la figure~\ref{fig:dynamics}.
+d'un pied ${\cal F}$ et représenté sur la figure \ref{fig:dynamics}.
 Pour simplifier, nous supposons que ${\cal L}$ et ${\cal S}$ ont une masse
 nulle. Nous notons ${\cal R}=(O,\vec{x},\vec{y},\vec{z})$ un repère
 fixe de l'environnement.
@@ -756,14 +754,14 @@ m \vec{\gamma}_G &=& m\vect{g} - \vect{R}^{\cal B} \\
 \frac{d\vec{\sigma}_G}{dt} &=& -\vec{GC}\crossprod \vect{R}^{\cal B} - \vect{M}^{\cal B}_C
 \end{eqnarray}
 
-Les équations~(\ref{eq:resultante-L}) et ~(\ref{eq:resultante-S})
+Les équations (\ref{eq:resultante-L}) et  (\ref{eq:resultante-S})
 représentent les résultantes des efforts exercés sur ${\cal L}$ et
 ${\cal S}$ respectivement. Elles permettent de conclure à l'égalité
 des résultantes suivantes que nous notons $\vect{R}$:
 $$
 \vect{R}^{\cal B} = \vect{R}^{\cal L} = \vect{R}^{\cal S} = \vect{R}
 $$
-Les équations~(\ref{eq:moment-L}) et
+Les équations (\ref{eq:moment-L}) et
 (\ref{eq:moment-S}) représentent les moments en $B$ et $A$ des efforts
 sur les corps ${\cal L}$ et ${\cal S}$ respectivement.
 
@@ -826,7 +824,7 @@ $$
 où $J_0$ la matrice de $\hat{J}(0)$ dans la base $(\vec{x},\vec{y},\vec{z})$.
 
 \subparagraph{Accélération du centre de masse.}
-En dérivant~(\ref{eq:xG}) et (\ref{eq:zG}), on obtient une expression
+En dérivant (\ref{eq:xG}) et (\ref{eq:zG}), on obtient une expression
 de la forme:
 \begin{eqnarray}
 \label{eq:vG}
@@ -842,7 +840,7 @@ x_G-x_A & x_C-x_A & x_B-x_A
 \end{array}\right)
 $$
 est une matrice qui dépend de la configuration du robot.
-En dérivant~(\ref{eq:vG}) on obtient:
+En dérivant (\ref{eq:vG}) on obtient:
 \begin{eqnarray}
 \label{eq:gammaG}
 \vec{\gamma}_G = M(\Theta)\ddot{\Theta} + \dot{M}(\Theta,\dot{\Theta})\dot{\Theta}
@@ -870,19 +868,19 @@ $$
 \end{array}
 $$
 }
-D'après~(\ref{eq:resultante-B}), nous pouvons écrire:
+D'après (\ref{eq:resultante-B}), nous pouvons écrire:
 \begin{eqnarray}\label{eq:R-1}
 \vect{R} &=& m(\vect{g} -\vec{\gamma}_G) \\
 \label{eq:R-2}
 &=& m(\vect{g} - M(\Theta)\ddot{\Theta} - \dot{M}(\Theta,\dot{\Theta})\dot{\Theta})
 \end{eqnarray}
-En dérivant~(\ref{eq:sigma-G}), nous obtenons une expression de la
+En dérivant (\ref{eq:sigma-G}), nous obtenons une expression de la
 forme:
 $$
 \frac{d\vec{\sigma}_G}{dt} = \hat{J}(\Theta) \frac{d\vec{\omega}_{\cal
     B}}{dt} + \dot{\hat{J}}(\Theta,\dot{\Theta})\vec{\omega}_{\cal B}
 $$
-Grâce à~(\ref{eq:moment-B}), nous pouvons écrire la relation
+Grâce à (\ref{eq:moment-B}), nous pouvons écrire la relation
 suivante:
 \begin{eqnarray}\label{eq:moment-C-1}
 \vect{M}^{\cal B}_C &=& -\vec{GC}\crossprod \vect{R} -
@@ -892,8 +890,8 @@ suivante:
 \hat{J}(\Theta) \ddot{\theta}_{\cal B} \vec{z} -
 \dot{\hat{J}}(\Theta,\dot{\Theta})\dot{\theta}_{\cal B} \vec{z}
 \end{eqnarray}
-En rassemblant les équations~(\ref{eq:R-2}) et (\ref{eq:moment-C-2})
-et en utilisant les relations~(\ref{eq:moment-L}) et
+En rassemblant les équations (\ref{eq:R-2}) et (\ref{eq:moment-C-2})
+et en utilisant les relations (\ref{eq:moment-L}) et
 (\ref{eq:moment-S}), nous arrivons au système suivant:
 \begin{eqnarray}
 \vect{R}&=& m(\vect{g} - M(\Theta)\ddot{\Theta} - \dot{M}(\Theta,\dot{\Theta})\dot{\Theta})\\
@@ -974,7 +972,7 @@ en compte sur un robot humanoïde devant posséder un comportement
 réactif, c'est-à-dire ajuster son comportement au sein du contrôleur
 temps réel réalisant l'exécution sur une trajectoire de
 référence. Cette approche est décrite en détail
-dans~\cite{10icra.perrin} mais nous rappellerons ici les grandes lignes
+dans \cite{10icra.perrin} mais nous rappellerons ici les grandes lignes
 de ces travaux. Tout d'abord, rappelons la formule du ZMP:
 
 \begin{equation}
@@ -1106,7 +1104,7 @@ marche.
 
 Cette stratégie de calcul a pour avantage d'être simple à comprendre
 et à implémenter, mais également peu coûteuse en terme de temps de
-calcul. Elle a été développée par Nicolas Perrin dans~FIXME. Les
+calcul. Elle a été développée par Nicolas Perrin dans FIXME. Les
 limites de cette approche se situent dans les nombreuses hypothèses
 limitantes du modèle simplifié ainsi que par la recherche dichotomique
 des paramètres adaptés pour assurer la continuité de la trajectoire de
@@ -1265,7 +1263,7 @@ plus simple consiste à utiliser une régulation proportionnelle:
 
 $\lambda$ étant le gain du régulateur proportionnel. Les détails du
 solveur et de l'architecture utilisée dans le cadre de ces travaux
-sont détaillés dans~\cite{09icar.mansard}.
+sont détaillés dans \cite{09icar.mansard}.
 
 
 \subsection{Limites de la boucle ouverte}
@@ -1404,13 +1402,13 @@ perturbation extérieure apparaît lors de la marche
 
 Le problème du suivi de trajectoire a été largement étudié et
 l'utilisation d'une technique classique de la littérature robotique
-telle que celle illustrée par la figure~\ref{fig:system} semble
+telle que celle illustrée par la figure \ref{fig:system} semble
 naturelle. Cependant, nous allons montrer qu'appliquer les stratégies de
 la robotique mobile n'est pas suffisant pour réaliser un suivi de
 trajectoire référencé capteur sur un robot humanoïde.
 
 
-La figure~\ref{fig:system} montre comment peut fonctionner un
+La figure \ref{fig:system} montre comment peut fonctionner un
 contrôleur réalisant un asservissement capteur pour le suivi de
 trajectoire sur un robot mobile. Un système de localisation externe
 fournit une appréciation de la position du robot qui permet de
@@ -1577,7 +1575,7 @@ pas directement les valeurs articulaires. La pile de tâches a donc pour
 tâche de résoudre la cinématique inverse en temps réel lors de la
 résolution du problème d'optimisation.
 
-Une itération de la boucle de contrôle est décrite par l'algorithme~\ref{fig:control_loop} et peut être résumée aux étapes suivantes:
+Une itération de la boucle de contrôle est décrite par l'algorithme \ref{fig:control_loop} et peut être résumée aux étapes suivantes:
 
 \begin{enumerate}
 \item estimation de la position du robot,
@@ -1754,7 +1752,7 @@ localisation échoue.
 
 
 Ensuite, la position du prochain pas est modifiée afin de compenser
-l'erreur calculée. La figure~\ref{fig:footstepreplan} illustre cette étape.
+l'erreur calculée. La figure \ref{fig:footstepreplan} illustre cette étape.
 
 
 À partir de ce moment, il est possible de regénérer des trajectoires
@@ -1872,7 +1870,7 @@ nouvelle pile de pas. Cependant, contrairement aux pas qui sont des
 données discrètes, les trajectoires doivent être raccordées
 continument. Pour ce faire, nous avons choisi un polynôme de degré
 trois à valeurs réelles auquel quatre contraintes ont été imposées,
-voire Fig.~\ref{fig:transition}. Ce polynôme est dénoté
+voire Fig. \ref{fig:transition}. Ce polynôme est dénoté
 $\Delta_\alpha(t)$ où $\alpha$ est la valeur du polynôme à $t=T$. Les
 contraintes sont donc:
 
@@ -2050,11 +2048,11 @@ $t_{\text{correction}}$ est l'ensemble des temps où une correction a
     \end{tikzpicture}
   \end{center}
   \caption{Évolution, pendante deux pas, de la position en $x$ du
-    centre de masse~(\ref{com}), du pied gauche~(\ref{lf}) et du pied
-    droit~(\ref{rf}). La courbe en gras illustre un pas de $0.3
+    centre de masse (\ref{com}), du pied gauche (\ref{lf}) et du pied
+    droit (\ref{rf}). La courbe en gras illustre un pas de $0.3
     \mathrm{m}$ en avant. Les courbes en pointillé illustre la
-    position du centre de masse~(\ref{comcorr}), pied
-    gauche~(\ref{lfcorr}) et pied droit~(\ref{rfcorr}) après un pas de
+    position du centre de masse (\ref{comcorr}), pied
+    gauche (\ref{lfcorr}) et pied droit (\ref{rfcorr}) après un pas de
     $0.05 \mathrm{m}$ en avant, soit une correction de $0.02
     \mathrm{m}$. \label{fig:traj}}
 \end{figure}
@@ -2077,7 +2075,7 @@ permet d'assurer que le ZMP reste à tout moment dans le polygone
 support. En effet, la trajectoire du ZMP étant déformée d'autant que
 la trajectoire du centre de masse, ce dernier termine à une position
 équivalente à la fin du pas, relativement au pas aillant effectué le
-mouvement. La Figure~\ref{fig:traj} illustre ces trois corrections
+mouvement. La Figure \ref{fig:traj} illustre ces trois corrections
 synchronisées.
 
 
@@ -2264,7 +2262,7 @@ positionnement croît lentement, il y a alors deux cas:
 Ce système empirique a été validé avec succès sur le robot HRP-2. Un
 objectif pour le futur est de remplacer cette heuristique par une
 validation complète de la trajectoire de pas modifiée. Une stratégie
-telle que celle décrite dans~\cite{10icra.perrin} pourrait alors être
+telle que celle décrite dans \cite{10icra.perrin} pourrait alors être
 envisagée.
 
 \section{Résultats expérimentaux}\label{exp}
@@ -2294,7 +2292,7 @@ atteindre la position finale sans problème.
 
 
 La vidéo de l'expérience est disponible sur internet:
-\mbox{\url{http://youtu.be/cUZ0nNiPs70}}. La figure~\ref{fig:scenario}
+\mbox{\url{http://youtu.be/cUZ0nNiPs70}}. La figure \ref{fig:scenario}
 fournit un aperçu de l'expérience réalisée. Le robot part de la droite
 et marche au travers des obstacles jusqu'à arriver à son but, sur la
 partie gauche de l'image.
