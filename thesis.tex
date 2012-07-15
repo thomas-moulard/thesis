@@ -37,7 +37,7 @@
 \fi
 
 % Other packages.
-\usepackage[francais]{babel}
+\usepackage[USenglish,francais]{babel}
 
 \usepackage{array}
 \usepackage{amsthm}
@@ -182,6 +182,9 @@ pdfproducer = {Thomas Moulard}
 % Please fancyhdr.
 \pagestyle{headings}
 \setlength{\headheight}{25pt}
+
+% Fix Autoref french support.
+\def\chapterautorefname{Chapitre}
 
 
 % Custom commands.

@@ -65,6 +65,14 @@ possible par une industrialisation de masse affecte évidemment de
 manière indirecte le domaine.
 
 
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=\linewidth]{src/chap0-introduction/pr2.jpg}
+  \end{center}
+  \caption{Le robot PR2 de la société Willow Garage. \label{fig:pr2}}
+\end{figure}
+
+
 Le gain en maturité du marché de la robotique se voit également dans
 les laboratoires de recherche. Il y a encore dix ans, les robots
 présents dans les laboratoires étant dans la quasi-totalité des cas
@@ -78,27 +86,28 @@ les robots des laboratoire de recherche sont en train de devenir des
 industriels tel que Kuka en Allemagne ou Kawada Industries au Japon ou
 bien encore par des start-ups innovantes comme Willow Garage aux
 États-Unis. Ce dernier exemple est révélateur du niveau de qualité
-atteint par la robotique mobile à roue: ce robot est certes cher --
-400 000 dollars! -- mais comporte 7 caméras, un projecteur de lumière
-structurée, deux bras perfectionnés, deux capteurs lasers permettant
-de cartographier l'environnement, deux ordinateurs puissants et un
-ensemble de roues motorisées permettant un déplacement
-omnidirectionnel. Un tel robot arrive avec un ensemble de logiciels
-préinstallés permettant de s'abstraire d'une large partie des
-problèmes robotique ``de base'': calibration des caméras, cartographie
-et navigation automatique, génération de trajectoires afin de réaliser
-des scénarii type ``pick and place'' où le robot doit prendre un objet
-et le déposer ailleurs. Pouvoir posséder un robot possédant un tel
-niveau de fonctionnalité dès ``qu'on le sort de sa boîte'' est
-définitivement un élément marquant qui n'était pas envisageable ne
-serait ce qu'il y a cinq ans. De plus, comme tout produit construit en
-série, aussi petite soit-elle, ce robot, le PR2, bénéficie de tests de
-fiabilité, d'une documentation importante et d'une véritable assitance
-technique. Le gain en productivité pour les chercheurs est réel et dès
-lors, il est clair que la robotique mobile est en train de passer
-d'une activité de recherche composée de prototypes à une activité
-industrielle structurée par des acteurs imposant leur plate-forme
-logicielle et matérielle.
+atteint par la robotique mobile à roue: le robot PR2, voire
+\autoref{fig:pr2}, est certes cher -- 400 000 dollars! -- mais
+comporte 7 caméras, un projecteur de lumière structurée, deux bras
+perfectionnés, deux capteurs lasers permettant de cartographier
+l'environnement, deux ordinateurs puissants et un ensemble de roues
+motorisées permettant un déplacement omnidirectionnel. Un tel robot
+arrive avec un ensemble de logiciels préinstallés permettant de
+s'abstraire d'une large partie des problèmes robotique ``de base'':
+calibration des caméras, cartographie et navigation automatique,
+génération de trajectoires afin de réaliser des scénarii type ``pick
+and place'' où le robot doit prendre un objet et le déposer
+ailleurs. Pouvoir posséder un robot possédant un tel niveau de
+fonctionnalité dès ``qu'on le sort de sa boîte'' est définitivement un
+élément marquant qui n'était pas envisageable ne serait ce qu'il y a
+cinq ans. De plus, comme tout produit construit en série, aussi petite
+soit-elle, ce robot, le PR2, bénéficie de tests de fiabilité, d'une
+documentation importante et d'une véritable assitance technique. Le
+gain en productivité pour les chercheurs est réel et dès lors, il est
+clair que la robotique mobile est en train de passer d'une activité de
+recherche composée de prototypes à une activité industrielle
+structurée par des acteurs imposant leur plate-forme logicielle et
+matérielle.
 
 
 
@@ -129,6 +138,13 @@ Répondre à toutes ces questions, qui ne sont pas uniquement des
 questions algorithmiques, est primordiale pour arriver à concevoir un
 robot humanoïde utile et autonome.
 
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=\linewidth]{src/chap0-introduction/hrp_family.jpg}
+  \end{center}
+  \caption{Les robots HRP-4, HRP-2, HRP-3 et HRP-4c (de gauche à
+    droite). \label{fig:hrpfamily}}
+\end{figure}
 
 Les robots humanoïdes se divisent en deux catégories: ceux de petite
 taille comme le robot Nao d'Aldebaran Robotics et les humanoïdes de
@@ -175,12 +191,23 @@ utilisation à proximité d'humains.
 
 \subsection{Le projet japonais HRP}
 
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=\linewidth]{src/chap0-introduction/hrp2.jpg}
+  \end{center}
+  \caption{Le robot HRP-2 réalisant une tâche de
+    manipulation. \label{fig:hrp2}}
+\end{figure}
+
+
 La totalité des recherches effectuées durant cette thèse et qui sont
 décrites ici ont été validées sur la plate-forme robotique HRP-2
-\citep{1307969} du LAAS. Le robot humanoïde HRP-2 ``Promet'' est un
-robot humanoïde japonais mesurant 154cm et pesant 58kg. Il dispose de
-deux jambes à six degrés de liberté, de deux bras à six degrés et de
-deux mains à un degré de liberté commandant l'ouverture de la pince
+\citep{1307969} du LAAS. Une version alternative est illustré par la
+\autoref{fig:hrp2}. Le robot humanoïde HRP-2 ``Promet'' est un robot
+humanoïde japonais mesurant 154cm et pesant 58kg. Il dispose de deux
+jambes à six degrés de liberté, de deux bras à six degrés et de deux
+mains à un degré de liberté commandant l'ouverture de la pince
 composant chaque préhenseur. Deux degrés de liberté sont affectés au
 mouvement de la tête et les deux derniers actionnent l'articulation du
 torse du robot. Cette dernière étant une caractéristique unique de
@@ -210,10 +237,11 @@ femme. L'objectif de ce modèle est les applications dans le domaine du
 mannequinat et du divertissement plus généralement. Le dernier robot
 de la série, HRP-4 est, quant à lui, plus léger tout en conservant
 sept degrés de liberté pour les bras et deux degrés de liberté pour
-les mains.
+les mains. Les différents modèles sont illustrés par la
+\autoref{fig:hrpfamily}.
 
 
-\section{Contributions, de la génération de mouvements à leur exécution}
+\section[Contributions]{Contributions, de la génération de mouvements à leur exécution}
 
 
 Le maître mot de ces trois ans et demi est finalement, et cela ne peut
