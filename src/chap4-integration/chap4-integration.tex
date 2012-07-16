@@ -1,4 +1,4 @@
-\chapter{Applications robotiques complexes}
+\chapter{Conception d'une architecture robotique}
 \label{chap:integration}
 
 \epigraph{\foreignlanguage{USenglish}{The belief that complex systems
@@ -35,8 +35,8 @@ robotique.
 \section{Architecture}
 
 
-Les systèmes robotiques complexes peuvent être décomposés en trois
-grandes parties:
+Les systèmes robotiques peuvent être décomposés en trois grandes
+parties:
 
 \begin{enumerate}
 \item La couche de perception\index{perception} qui analyse
@@ -491,14 +491,14 @@ divisent en différentes catégories:
 \end{description}
 
 Une des difficultés de la mise en \oe uvre d'un système robotique est
-la nécessité de faire fonctionner un ensemble de technologies
-complexes sachant que le mauvais fonctionnement de n'importe quel
-morceau de l'architecture peut mettre en péril la tâche tout
-entière. Qui plus est, certaines limitations du matériel tel que le
-couple maximum des actionneurs sont parfois vérifiées, a
-posteriori. Des systèmes de surveillance des valeurs critiques sur les
-couples, les impacts sur les capteurs de force ont donc été mis en
-place afin d'éviter d'endommager le matériel.
+la nécessité de faire fonctionner un ensemble de technologies sachant
+que le mauvais fonctionnement de n'importe quel morceau de
+l'architecture peut mettre en péril la tâche tout entière. Qui plus
+est, certaines limitations du matériel tel que le couple maximum des
+actionneurs sont parfois vérifiées, a posteriori. Des systèmes de
+surveillance des valeurs critiques sur les couples, les impacts sur
+les capteurs de force ont donc été mis en place afin d'éviter
+d'endommager le matériel.
 
 
 \section{Simulation transparente}
@@ -775,7 +775,7 @@ transformation de l'arbre aux logiciels de planification et de
 contrôle utilisés sur le robot humanoïde HRP-2.
 
 
-\section{Applications robotiques complexes}
+\section{Applications robotiques}
 
 
 L'ensemble des outils décrit dans la section précédente doivent être
@@ -795,7 +795,7 @@ exemple de scénarii puis montrer quel bilan on peut tirer des séries
 d'expériences réalisées durant cette thèse.
 
 
-\subsection{Mise en place d'une application complexe}
+\subsection{Mise en place d'une application}
 
 
 Nous allons présenter dans cette section l'architecture de la
@@ -960,6 +960,16 @@ système possède donc plusieurs phases transitoires d'initialisation
 qu'il est difficile d'automatiser.
 
 
+\begin{figure}
+  \begin{center}
+    \includegraphics{src/chap4-integration/hrp2_diagnostics.jpg}
+  \end{center}
+  \caption{Visualisation de l'état général du robot fourni par les
+    outils de diagnostic automatique.\label{fig:diagnostic}}
+\end{figure}
+
+
+
 Le dernier problème récurrent est la difficulté pour un utilisateur de
 déterminer si le système est dans un état stable et si ce n'est pas le
 cas, arriver à diagnostiquer le système. La section précédente a
@@ -979,12 +989,13 @@ système. On a alors la liste des messages envoyés par les différents
 composants dans l'ordre chronologique ce qui n'est pas le cas quand
 chacun fonctionne de manière séparée. Les causes et les conséquences
 sont, dans ce contexte, bien plus faciles à identifier. Le deuxième
-niveau consiste à publier sur le topic de diagnostic l'état du n\oe ud.
-Cela correspond à l'un des états suivants: OK, erreur,
+niveau consiste à publier sur le topic de diagnostic l'état du n\oe
+ud. Cela correspond à l'un des états suivants: OK, erreur,
 avertissement auquel on associe des données techniques pour aider au
-diagnostic. Enfin, un service standardisé peut également être fourni
-par un composant pour qu'il tente un autodiagnostic. Ces mécanismes
-permettent d'aider à la compréhension des erreurs.
+diagnostic, voir \autoref{fig:diagnostic}. Enfin, un service
+standardisé peut également être fourni par un composant pour qu'il
+tente un autodiagnostic. Ces mécanismes permettent d'aider à la
+compréhension des erreurs.
 
 
 
@@ -1231,7 +1242,7 @@ débuter un nouveau cycle comme illustré sur la figure FIXME.
   \begin{center}
     \includegraphics[width=.95\linewidth]{src/chap4-integration/rviz-full.jpg}
   \end{center}
-  \caption{Architecture complexe associant de nombreux composants
+  \caption{Architecture associant de nombreux composants
     robotiques intégrant le contrôleur du robot exécutant une tâche de
     locomotion, le système de capture de mouvement et le processus
     complet de vision utilisant l'algorithme de suivi décrit dans
@@ -1251,13 +1262,13 @@ calcul disponible --, afin de construire un ensemble
 fonctionnel. Cette section a donc à la fois présenté comment
 développer un composant robotique puis comment combiner plusieurs
 composants pour réaliser une architecture. Les différentes difficultés
-inhérentes à la conception d'un système complexe ont été passées en
-revue ainsi que les stratégies qui ont été adoptées au cours de ces
-trois années. Il est probable qu'au cours des prochaines années de
-nombreuses architectures robotiques complexes voient le jour sur des
-robots humanoïdes afin de le rendre sensible à l'évolution de
-l'environnement qui les entoure. Un objectif ambitieux pour lequel les
-robots mobiles restent la plate-forme d'expérimentation principale
-dans l'état actuel de la littérature.
+inhérentes à la conception d'un système ont été passées en revue ainsi
+que les stratégies qui ont été adoptées au cours de ces trois
+années. Il est probable qu'au cours des prochaines années de
+nombreuses architectures robotiques voient le jour sur des robots
+humanoïdes afin de le rendre sensible à l'évolution de l'environnement
+qui les entoure. Un objectif ambitieux pour lequel les robots mobiles
+restent la plate-forme d'expérimentation principale dans l'état actuel
+de la littérature.
 
 

@@ -289,7 +289,7 @@ est inutile puisque finalement les deux problèmes se formalisent au
 sein d'un même paradigme.
 
 
-\section{De la dif\-ficulté à passer d'un paradigme uni\-que à une implémentation unifiée}
+\section[Difficultés de modélisation]{De la dif\-ficulté à passer d'un paradigme uni\-que à une implémentation unifiée}
 \label{sec:chap1_model2impl}
 
 
@@ -300,8 +300,8 @@ concepteurs. Nous allons montrer ici qu'il n'en est rien. Une simple
 agglomération des implémentations de différentes stratégies de
 résolution ne saurait donner un ensemble cohérent et performant en
 terme de temps de calcul sans une véritable réflexion sur comment
-modéliser le paradigme décrit dans la \autoref{sec:chap1_optim}
-tout en prenant en compte les limites internes des langages de
+modéliser le paradigme décrit dans la \autoref{sec:chap1_optim} tout
+en prenant en compte les limites internes des langages de
 programmation. Nous allons tout particulièrement nous intéresser à la
 programmation orientée objet qui est la fondation d'une large
 proportion des langages modernes.
@@ -834,6 +834,14 @@ les types de fonctions des contraintes.
 
   On notera que construire une contrainte égalité revient à spécifier
   une borne minimum et maximum identique.
+
+  On remarquera que dans cette définition, le type $[\cup_{i \in \{2,
+      \dotsc, n\}} \tau_i]$ est construit. Ce type est un ``type
+  union''\index{type union} et correspond à une variable qui peut
+  contenir une instance d'un type parmi tous ceux listés dans
+  l'union. Ce mécanisme est nécessaire car on ne sait pas à l'avance
+  quelle sera le type de chaque contrainte. On est juste assuré que
+  chaque instance fera parti de cet ensemble de types.
 \end{mydef}
 
 
@@ -989,7 +997,7 @@ obtient la paramétrisation suivante.
   \end{description}
 \end{myexample}
 
-%FIXME:  méthodes virtuelles, union de types, interfaces
+%FIXME:  méthodes virtuelles, interfaces
 
 
 \section{Discussion}
@@ -1115,7 +1123,7 @@ souhaité garder une formalisation plus proche de leurs natures
 mathématiques véritables.
 
 
-\section{RobOptim: une suite logicielle pour l'optimisation numérique en robotique}
+\section[RobOptim]{RobOptim: une suite logicielle pour l'optimisation en robotique}
 \label{sec:chap1_roboptim}
 
 
@@ -1433,7 +1441,7 @@ le cadre d'une spline unidimensionnelle.
   \begin{center}
 \includegraphics[width=\linewidth]{src/chap1-roboptim/time-optimization.png}
   \end{center}
-  \caption{Saturation de la contrainte vitesse. \label{fig:speed}}
+  \caption{Saturation de la contrainte de vitesse. \label{fig:speed}}
 \end{figure}
 
 

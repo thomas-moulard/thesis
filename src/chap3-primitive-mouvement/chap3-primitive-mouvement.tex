@@ -180,6 +180,30 @@ endroit précis à la fois en rotation et en translation. C'est cette
 tâche qui va permettre de faire suivre la trajectoire des pieds
 notamment.
 
+\begin{figure}
+  \begin{center}
+    \begin{equation}
+      \left (
+      \begin{array}{cccc}
+        \cline{1-4}
+        \multicolumn{1}{|c}{R_{11}} & R_{12} & R_{13} & \multicolumn{1}{|c|}{t_x} \\
+        \multicolumn{1}{|c}{R_{21}} & R_{22} & R_{23} & \multicolumn{1}{|c|}{t_y} \\
+        \multicolumn{1}{|c}{R_{31}} & R_{32} & R_{33} & \multicolumn{1}{|c|}{t_z} \\
+        \cline{1-4}
+        0 & 0 & 0 & 1
+      \end{array}
+      \right )
+    \end{equation}
+  \end{center}
+  \caption{Structure d'une matrice homogène représentant un élément de
+    $\text{SE}(3)$: les coefficients $R_{i,j}$, $(i,j) \in \{1,
+    \dotsc, 3\}$ forment la matrice de rotation associé à la
+    transformation et $\{t_x, t_y, t_z\}$ le vecteur de
+    translation. Une matrice de rotation ayant elle-même une forme
+    contrainte: elle doit être une matrice orthogonale de déterminant
+    1. \label{fig:matrixhomo}}
+\end{figure}
+
 
 Soit $\mathbf{M}, \mathbf{M}^{*} \in \text{SE}(3)^2$
 respectivement la position actuelle du corps du robot et la position
@@ -201,9 +225,10 @@ paramètres. De fait, tout représentation utilisant un espace de
 dimension supérieure vient avec un ensemble de contraintes à respecter
 car tous les éléments de cet espace de dimension supérieur ne peuvent
 faire parti de $\text{SE}(3)$. Par exemple, une matrice homogène a une
-structure bien particulière tel qu'illustré sur la figure FIXME. Quant
-aux quaternions, seuls les quaternions unitaires définissent une
-bijection avec $\text{SO}(3)$, l'espace des rotations dans l'espace 3d.
+structure bien particulière tel qu'illustré sur la
+\autoref{fig:matrixhomo}. Quant aux quaternions, seuls les quaternions
+unitaires définissent une bijection avec $\text{SO}(3)$, l'espace des
+rotations dans l'espace 3d.
 
 De fait, les représentations non minimales ne constituent pas une
 solution acceptable pour représenter notre erreur, car elles
@@ -363,8 +388,10 @@ Une fois de plus l'erreur se définit par la soustraction usuelle:
   \begin{center}
     \includegraphics[width=.95\linewidth]{src/chap3-primitive-mouvement/cameraProj.pdf}
   \end{center}
-  \caption{Projection d'un point 3d sur le plan image d'une caméra
-    idéale.}
+  \caption{Projection du point 3D $M = (X, Y, Z)$ sur le plan image
+    d'une caméra idéale. Les coordonées du point projeté sont ici $m =
+    (x, y)$. $f$ est la distance focale de la caméra et $o$ le centre
+    optique, deux paramètres intrinsèques de la caméra.}
 \end{figure}
 
 

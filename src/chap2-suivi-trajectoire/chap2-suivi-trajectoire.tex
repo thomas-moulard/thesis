@@ -223,7 +223,12 @@ pouvoir assembler les transformations facilement, en effet, on a:
 \begin{equation}
   \transformation{\mathcal{A}}{\mathcal{C}} = \transformation{\mathcal{A}}{\mathcal{B}} \transformation{\mathcal{B}}{\mathcal{C}}
 \end{equation}
-%FIXME: pas de sens sans definir le ops, ici multiplication matricielle
+
+Les transformations géométriques sont des éléments du groupe spécial
+euclidien $\text{SE}(3)$. Le produit utilisé ici est donc le produit
+de groupe. Dans le cas où ces éléments sont représentés sous la forme
+de matrices homogènes, le produit de groupe est le produit matriciel
+usuel.
 
 
 La géométrie directe donne donc la position de tous les corps dans le
@@ -545,7 +550,8 @@ suivants:
 \end{enumerate}
 
 
-\subsubsection{ZMP}
+\subsubsection{Zero-Momentum Point (ZMP)}
+
 
 \begin{figure}
   \centerline {
@@ -638,7 +644,7 @@ ZMP =
 0
 \end{array}\right)
 $$
-\subsection{Pourquoi le ZMP doit-il rester dans le polygone support ?}
+\subsection{Le ZMP comme critère d'équilibre}
 
 Pour répondre à cette question, nous modélisons l'action du sol sur le
 pied par un champ de forces défini dans la partie $S$ du plan
@@ -648,8 +654,9 @@ $$
 f_x(x,y) \\ f_y(x,y) \\ f_z(x,y)
 \end{array}\right)
 $$
-la force du sol sur le pied au point de coordonnées $(x,y,0)$. Le moment des actions du sol sur le pied au
-ZMP s'exprime donc de la façon suivante:
+la force du sol sur le pied au point de coordonnées $(x,y,0)$. Le
+moment des actions du sol sur le pied au ZMP s'exprime donc de la
+façon suivante:
 \begin{eqnarray*}
 \vect{M}^{ground}_{ZMP} = \int_S \vec{Z_{mp}M} \crossprod \vect{f}(x,y) dS(M)
 \end{eqnarray*}
@@ -674,20 +681,28 @@ Ainsi, une condition nécessaire de stabilité du pied sur le sol est
 que le ZMP soit dans l'enveloppe convexe de la surface d'appui.
 
 
-\paragraph{Le ZMP comme critère d'équilibre}
+La position du ZMP peut également être calculée à partir de la dérivée
+du moment cinétique et de la résultante cinétique du robot.  Exprimons
+les équations de la dynamique (\ref{eq:newton3}) et (\ref{eq:newton2})
+au centre de masse du robot:
 
-La position du ZMP peut également être calculée à partir de la dérivée du moment cinétique et de la résultante cinétique du robot.
-Exprimons les équations de la dynamique (\ref{eq:newton3}) et (\ref{eq:newton2}) au centre de masse du robot:
 \begin{eqnarray*}
 m\dot{\vect{v}}_G &=& \vect{R}^{ground} + m \vect{g} \\
 \dot{\sigma}_G &=& \vect{M}_G^{ground}
 \end{eqnarray*}
-Exprimons maintenant le moment des forces du sol sur le robot en un point $Z=(x_Z, y_Z, 0)$ du sol:
+
+Exprimons maintenant le moment des forces du sol sur le robot en un
+point $Z=(x_Z, y_Z, 0)$ du sol:
+
 \begin{eqnarray*}
 \vect{M}_Z^{ground} &=& \vect{M}_G^{ground} + \vec{ZG} \crossprod (\vect{R}^{ground}) \\
 &=& \dot{\sigma}_G + m \vec{ZG} \crossprod (\dot{\vect{v}}_G - m\vect{g})
 \end{eqnarray*}
-En notant $\sigma_G = ({\sigma}_x, {\sigma}_y, {\sigma}_z)$ et $(x_G, y_G, z_G)$ la position du centre de masse, l'équation précédente s'écrit:
+
+En notant $\sigma_G = ({\sigma}_x, {\sigma}_y, {\sigma}_z)$ et $(x_G,
+y_G, z_G)$ la position du centre de masse, l'équation précédente
+s'écrit:
+
 \begin{eqnarray*}
 \vect{M}_Z^{ground} &=& \left(\begin{array}{lll}
 \dot{\sigma}_x\ +\ m\ (y_G - y_Z)\ (\ddot{z}_G + g)\ -\ m\ z_G\ \ddot{y}_G \\
@@ -695,235 +710,16 @@ En notant $\sigma_G = ({\sigma}_x, {\sigma}_y, {\sigma}_z)$ et $(x_G, y_G, z_G)$
 \dot{\sigma}_z\ +\ m\ (x_G - x_Z)\ \ddot{y}_G\ -\ m\ (y_G-y_Z)\ \ddot{x}_G
 \end{array}\right)
 \end{eqnarray*}
-Pour exprimer les coordonnées du ZMP, il suffit de résoudre le système d'équations obtenu en annulant les composantes $x$ et $y$ de $\vect{M}_Z^{ground}$.
-Nous obtenons alors:
+
+Pour exprimer les coordonnées du ZMP, il suffit de résoudre le système
+d'équations obtenu en annulant les composantes $x$ et $y$ de
+$\vect{M}_Z^{ground}$. Nous obtenons alors:
+
 \begin{eqnarray*}
 x_{ZMP} &=& x_G - \frac{\dot{\sigma}_y\ +\ m\ z_G\ \ddot{x}_G}{m\ (\ddot{z}_G + g)} \\
 y_{ZMP} &=& y_G + \frac{\dot{\sigma}_x\ -\ m\ z_G\ \ddot{y}_G}{m\ (\ddot{z}_G + g)}
 \end{eqnarray*}
 
-\paragraph{Mouvement de marche dynamique}
-
-\begin{figure}
-  \centerline{
-    \input{dynamics.pdftex_t}
-  }
-  \caption{Efforts internes et externes exercés sur le robot.}
-  \label{fig:dynamics}
-\end{figure}
-
-Dans cette section, nous établissons les équations de mouvement
-dynamique d'un robot en phase de simple appui sur le sol, composé d'un
-corps ${\cal B}$, d'une jambe ${\cal L}$, d'un tibia ${\cal S}$ et
-d'un pied ${\cal F}$ et représenté sur la figure \ref{fig:dynamics}.
-Pour simplifier, nous supposons que ${\cal L}$ et ${\cal S}$ ont une masse
-nulle. Nous notons ${\cal R}=(O,\vec{x},\vec{y},\vec{z})$ un repère
-fixe de l'environnement.
-
-Les différents efforts en présence sont les suivants:
-\begin{itemize}
-  \item $\vect{R}^{\cal B}$ la résultante du corps sur la jambe,
-  \item $\vect{M}^{\cal B}_C$ le moment  appliqué par le
-    corps sur la jambe en $C$,
-  \item $\vect{R}^{\cal L}$ la résultante de la jambe sur le tibia,
-  \item $\vect{M}^{\cal L}_B$ le moment  appliqué par la
-    jambe sur le tibia en $B$,
-  \item $\vect{R}^{\cal S}$ la résultante du tibia sur le pied,
-  \item $\vect{M}^{\cal S}_A$ le moment  appliqué par le
-    tibia sur le pied en $A$,
-  \item $\vect{R}^{ground}$ la résultante du sol sur le pied,
-  \item $\vect{M}^{ground}_O$ le moment appliqué par le sol sur le pied en $O$.
-\end{itemize}
-
-\subparagraph{Efforts sur la jambe et sur le tibia.}
-En isolant successivement les corps ${\cal L}$ et ${\cal S}$ et en
-écrivant les équations de la dynamique pour ces corps, nous obtenons
-les relations suivantes:
-\begin{eqnarray}
-  \label{eq:resultante-L}
-  \vect{R}^{\cal B} - \vect{R}^{\cal L} &=& 0 \\
-  \label{eq:resultante-S}
-  \vect{R}^{\cal L} - \vect{R}^{\cal S} &=& 0 \\
-  \label{eq:moment-L}
-  \vect{M}^{\cal B}_C + \vec{BC}\crossprod \vect{R}^{\cal B} -
-  \vect{M}^{\cal L}_B &=& 0 \\
-  \label{eq:moment-S}
-  \vect{M}^{\cal L}_B + \vec{AB}\crossprod \vect{R}^{\cal L} -
-  \vect{M}^{\cal S}_A &=& 0
-\end{eqnarray}
-
-\subparagraph{Efforts sur le corps du robot.}
-Les efforts qui s'appliquent sur le corps du robot sont la gravité et
-les efforts de la jambe. Ces efforts donnent lieu aux deux équations
-suivantes:
-\begin{eqnarray}\label{eq:resultante-B}
-m \vec{\gamma}_G &=& m\vect{g} - \vect{R}^{\cal B} \\
-\label{eq:moment-B}
-\frac{d\vec{\sigma}_G}{dt} &=& -\vec{GC}\crossprod \vect{R}^{\cal B} - \vect{M}^{\cal B}_C
-\end{eqnarray}
-
-Les équations (\ref{eq:resultante-L}) et  (\ref{eq:resultante-S})
-représentent les résultantes des efforts exercés sur ${\cal L}$ et
-${\cal S}$ respectivement. Elles permettent de conclure à l'égalité
-des résultantes suivantes que nous notons $\vect{R}$:
-$$
-\vect{R}^{\cal B} = \vect{R}^{\cal L} = \vect{R}^{\cal S} = \vect{R}
-$$
-Les équations (\ref{eq:moment-L}) et
-(\ref{eq:moment-S}) représentent les moments en $B$ et $A$ des efforts
-sur les corps ${\cal L}$ et ${\cal S}$ respectivement.
-
-En notant $\theta_{\cal B}$,$\theta_{\cal L}$,$\theta_{\cal S}$ et
-$\theta_{\cal F}$ respectivement l'orientation du corps par rapport à
-l'axe $\vec{z}$, les angles relatifs de ${\cal L}$ par rapport à
-${\cal B}$, de ${\cal S}$ par rapport à ${\cal L}$ de ${\cal F}$ par
-rapport à ${\cal S}$, et $l_{\cal B}$, $l_{\cal L}$, $l_{\cal S}$ les
-distances entre $G$ et $C$, entre $B$ et $C$ et entre $A$ et $B$, nous
-avons les égalités suivantes:
-$$
-\vec{BC} =
-\left(\begin{array}{c}
--l_{\cal L} \sin(\theta_{\cal B}+\theta_{\cal L}) \\
-0\\
-l_{\cal L} \cos(\theta_{\cal B}+\theta_{\cal L})
-\end{array}\right)
-\ \ \ \
-\vec{AB} =
-\left(\begin{array}{c}
--l_{\cal S} \sin(\theta_{\cal B}+\theta_{\cal L}+\theta_{\cal S}) \\
-0\\
-l_{\cal S} \cos(\theta_{\cal B}+\theta_{\cal L}+\theta_{\cal S})
-\end{array}\right)
-$$
-\subparagraph{Position de $G$ et moment cinétique de ${\cal B}$.}
-Les coordonnées de $G$ sont données par les relations suivantes:
-\begin{eqnarray}
-  \label{eq:xG}
-  x_G &=& x_A -l_{\cal S} \sin(\theta_{\cal B}+\theta_{\cal
-    L}+\theta_{\cal S}) -l_{\cal L} \sin(\theta_{\cal B}+\theta_{\cal
-    L}) -l_{\cal B} \sin(\theta_{\cal B}) \\
-  \label{eq:zG}
-  z_G &=& z_A + l_{\cal S} \cos(\theta_{\cal B}+\theta_{\cal
-    L}+\theta_{\cal S}) + l_{\cal L} \cos(\theta_{\cal B}+\theta_{\cal
-    L}) + l_{\cal B} \cos(\theta_{\cal B})
-\end{eqnarray}
-À partir de maintenant, nous notons $\Theta = (\theta_{\cal B},
-\theta_{\cal L}, \theta_{\cal S})$ un paramétrage de la configuration
-du robot. Le moment cinétique du corps ${\cal B}$ s'écrit:
-\begin{equation}\label{eq:sigma-G}
-\vec{\sigma}_G = \hat{J}(\Theta) \vec{\omega}_{\cal B}
-\end{equation}
-où $\hat{J}(\Theta)$ est l'opérateur d'inertie de ${\cal B}$ dans
-la configuration $\Theta$ et $\vec{\omega}_{\cal B} = \dot{\theta}_{\cal B}\vec{y}$ est le vecteur rotation du corps ${\cal B}$. La matrice de $\hat{J}(\theta_{\cal B})$
-dans la base $(\vec{x},\vec{y},\vec{z})$ a pour expression:
-$$
-\left(\begin{array}{ccc}
-\cos\theta_{\cal B} & 0 & -\sin\theta_{\cal B} \\
-0 & 1 & 0 \\
-\sin\theta_{\cal B} & 0 & \cos\theta_{\cal B}
-\end{array}\right)
-J_0
-\left(\begin{array}{ccc}
-\cos\theta_{\cal B} & 0 & \sin\theta_{\cal B} \\
-0 & 1 & 0 \\
--\sin\theta_{\cal B} & 0 & \cos\theta_{\cal B}
-\end{array}\right)
-$$
-où $J_0$ la matrice de $\hat{J}(0)$ dans la base $(\vec{x},\vec{y},\vec{z})$.
-
-\subparagraph{Accélération du centre de masse.}
-En dérivant (\ref{eq:xG}) et (\ref{eq:zG}), on obtient une expression
-de la forme:
-\begin{eqnarray}
-\label{eq:vG}
-\vect{v}_G &=& M(\Theta) \dot{\Theta}
-\end{eqnarray}
-où
-$$
-M(\Theta) =
-\left(\begin{array}{ccc}
-z_A-z_G & z_A-z_C & z_A-z_B \\
-0 & 0 & 0 \\
-x_G-x_A & x_C-x_A & x_B-x_A
-\end{array}\right)
-$$
-est une matrice qui dépend de la configuration du robot.
-En dérivant (\ref{eq:vG}) on obtient:
-\begin{eqnarray}
-\label{eq:gammaG}
-\vec{\gamma}_G = M(\Theta)\ddot{\Theta} + \dot{M}(\Theta,\dot{\Theta})\dot{\Theta}
-\end{eqnarray}
-avec
-{\tiny
-$$
-\begin{array}{l}
-\dot{M}(\Theta,\dot{\Theta})=\\
-\left(\begin{array}{ccc}
-(x_A-x_G)\dot{\theta}_{\cal B}+(x_A-x_C)\dot{\theta}_{\cal
-  L}+(x_A-x_B)\dot{\theta}_{\cal S} &
-(x_A-x_C)(\dot{\theta}_{\cal B}+\dot{\theta}_{\cal L}) +
-(x_A-x_B)(\dot{\theta}_{\cal S}) &
-(x_A-x_B)(\dot{\theta}_{\cal B}+\dot{\theta}_{\cal
-  L}+\dot{\theta}_{\cal S}) \\
-0 & 0 & 0 \\
-(z_A-z_G)\dot{\theta}_{\cal B}+(z_A-z_C)\dot{\theta}_{\cal
-  L}+(z_A-z_B)\dot{\theta}_{\cal S} &
-(z_A-z_C)(\dot{\theta}_{\cal B}+\dot{\theta}_{\cal L}) +
-(z_A-z_B)(\dot{\theta}_{\cal S}) &
-(z_A-z_B)(\dot{\theta}_{\cal B}+\dot{\theta}_{\cal
-  L}+\dot{\theta}_{\cal S}) \\
-\end{array}\right)
-\end{array}
-$$
-}
-D'après (\ref{eq:resultante-B}), nous pouvons écrire:
-\begin{eqnarray}\label{eq:R-1}
-\vect{R} &=& m(\vect{g} -\vec{\gamma}_G) \\
-\label{eq:R-2}
-&=& m(\vect{g} - M(\Theta)\ddot{\Theta} - \dot{M}(\Theta,\dot{\Theta})\dot{\Theta})
-\end{eqnarray}
-En dérivant (\ref{eq:sigma-G}), nous obtenons une expression de la
-forme:
-$$
-\frac{d\vec{\sigma}_G}{dt} = \hat{J}(\Theta) \frac{d\vec{\omega}_{\cal
-    B}}{dt} + \dot{\hat{J}}(\Theta,\dot{\Theta})\vec{\omega}_{\cal B}
-$$
-Grâce à (\ref{eq:moment-B}), nous pouvons écrire la relation
-suivante:
-\begin{eqnarray}\label{eq:moment-C-1}
-\vect{M}^{\cal B}_C &=& -\vec{GC}\crossprod \vect{R} -
-\frac{d\vec{\sigma}_G}{dt} \\
-\label{eq:moment-C-2}
-&=& -\vec{GC}\crossprod \vect{R} -
-\hat{J}(\Theta) \ddot{\theta}_{\cal B} \vec{z} -
-\dot{\hat{J}}(\Theta,\dot{\Theta})\dot{\theta}_{\cal B} \vec{z}
-\end{eqnarray}
-En rassemblant les équations (\ref{eq:R-2}) et (\ref{eq:moment-C-2})
-et en utilisant les relations (\ref{eq:moment-L}) et
-(\ref{eq:moment-S}), nous arrivons au système suivant:
-\begin{eqnarray}
-\vect{R}&=& m(\vect{g} - M(\Theta)\ddot{\Theta} - \dot{M}(\Theta,\dot{\Theta})\dot{\Theta})\\
-\vect{M}^{\cal B}_C&=& -\vec{GC}\crossprod \vect{R} -
-\hat{J}(\Theta) \ddot{\theta}_{\cal B} \vec{z} -
-\dot{\hat{J}}(\Theta,\dot{\Theta})\dot{\theta}_{\cal B} \vec{z}\\
-\vect{M}^{\cal L}_B &=& \vect{M}^{\cal B}_C + \vec{BC}\crossprod \vect{R}  \\
-\vect{M}^{\cal S}_A &=&\vect{M}^{\cal L}_B + \vec{AB}\crossprod \vect{R}
-\end{eqnarray}
-
-\subparagraph{Conclusion.} Étant donnée une trajectoire du système sous
-la forme de l'évolution de $\Theta$ au cours du temps, les quatre
-équations précédentes permettent de calculer
-\begin{itemize}
-  \item la réaction du tibia sur le pied $\vect{R}$,
-  \item le moment $\vect{M}^{\cal B}_C$ appliqué sur la jambe par le moteur de
-    l'articulation de la hanche,
-  \item le moment $\vect{M}^{\cal L}_B$ appliqué sur le tibia par le
-    moteur de l'articulation du genou,
-    \item le moment $\vect{M}^{\cal S}_A$ appliqué sur le pied par le
-      moteur de l'articulation de la cheville.
-\end{itemize}
-Les efforts du tibia sur le pied permettent ensuite de calculer la
-position du ZMP et de vérifier que le mouvement est admissible.
 
 
 \subsection{Génération d'une trajectoire de marche}
@@ -1411,7 +1207,7 @@ perturbation extérieure apparaît lors de la marche
 
 
 \section{Correction de mouvement temps réel}
-\subsection{Trajectory following: from mobile robots to humanoids}
+\subsection{Suivi de trajectoires: des robots mobiles aux humanoïdes}
 
 
 Le problème du suivi de trajectoire a été largement étudié et
