@@ -1175,8 +1175,8 @@ résolution adoptée ici est celle de la ``pile de tâches''.
 \subsubsection{Tâche et pile de tâches}
 
 \paragraph{Tâche}
-\index{Tâche}
-\index{Pile de tâches}
+\index{tâche}
+\index{pile de tâches}
 
 L'objectif d'un contrôleur est de pouvoir calculer la commande à
 envoyer aux actionneurs qui va réaliser un certain nombre d'objectifs
@@ -1211,7 +1211,7 @@ l'espace de la tâche.
 
 La résolution d'une tâche passe par l'utilisation du jacobien de la
 tâche. Ce dernier est noté:
-\index{Jacobien (d'une tâche)}
+\index{jacobien (d'une tâche)}
 
 \begin{equation}
   \mathbf{J}_i = \frac{\partial \mathbf{e}_i}{\partial \mathbf{q}}
@@ -1279,7 +1279,7 @@ sont détaillés dans \cite{09mansard.icar}.
 
 
 \subsection{Limites de la boucle ouverte}
-\index{Boucle ouverte}
+\index{boucle ouverte}
 
 Le schéma de contrôle consistant à simplement suivre une trajectoire
 planifiée n'est pas toujours satisfaisant. En effet, les nombreuses
@@ -1340,7 +1340,7 @@ détaillant les fondements du domaine. Un exemple remarquable est
 \cite{08siciliano} détaillant la plupart des algorithmes fondamentaux
 du domaine et possédant un chapitre consacré à la locomotion
 bipède. Dans le domaine de la localisation, on peut également citer
-\cite{05thrun}, pour la vision robotique\index{Vision robotique}
+\cite{05thrun}, pour la vision robotique\index{vision robotique}
 \cite{03hartley} et pour la planification de mouvements
 \cite{06lavalle}. Les fondements mathématiques de la robotique sont
 très clairement décrits par \cite{94murray}.
@@ -1365,7 +1365,7 @@ sélection des travaux des équipes japonaises du domaine est
 
 Des recherches ont également été menées pour formuler le problème de
 génération de mouvement à l'aide de solveurs supportant les
-contraintes\index{Contrainte inégalité (optimisation)} inégalités
+contraintes\index{contrainte!inégalité} inégalités
 \cite{11dimitrov.icra,10herdt.ar} afin de rechercher la trajectoire du
 centre de masse du robot parmi toutes les solutions correctes au lieu
 de spécifier une trajectoire de ZMP pour en déduire une trajectoire de
@@ -1533,7 +1533,7 @@ linéaires pour ajuster localement la trajectoire.
 
 
 \paragraph{Singularités des trajectoires corrigées}
-\index{Singularité (d'une tâche)}
+\index{singularité (d'une tâche)}
 
 Dans la mesure où le bassin d'un robot humanoïde n'est que localement
 actionnable, il est primordial de générer des corrections qui
@@ -1647,7 +1647,7 @@ comparant la position planifiée et la position estimée du corps de
 référence. Un seuil est appliqué pour borner la correction pouvant
 être appliquée. En pratique, ce filtrage permet de limiter l'influence
 du bruit de localisation ainsi que les valeurs aberrantes lorsque la
-localisation échoue.\index{Localisation (d'un robot)}
+localisation échoue.\index{localisation (d'un robot)}
 
 
 \begin{figure}[ht!]
@@ -1828,7 +1828,7 @@ positionnement initial est toujours nul:
 \end{equation}
 
 \paragraph{Modification de la séquence de pas}
-\index{Séquence de pas}
+\index{séquence de pas}
 
 Étant donné une erreur de localisation d'un corps de référence, le
 bassin en général, il est possible d'altérer la pile de pas restante à
