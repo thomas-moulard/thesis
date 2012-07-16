@@ -259,10 +259,12 @@ six variables sont nécessaires. De ce fait, selon le nombre de degrés
 de liberté du système et la position à atteindre, 0, 1 ou une infinité
 de solutions peuvent exister. La résolution analytique n'étant pas
 toujours possible, les outils numériques ont montré leur capacité à
-résoudre efficacement ce problème. Une technique de résolution
-possible sera détaillée dans la section FIXME.
+résoudre efficacement ce problème.
 
-FIXME: vitesse des corps
+%Une technique de résolution
+%possible sera détaillée dans la section FIXME.
+
+%FIXME: vitesse des corps
 
 \subsection{Mouvements dynamiques d'un corps dans l'espace}
 
@@ -1006,7 +1008,7 @@ suivantes:
 \end{itemize}
 
 Ces hypothèses nous permettent d'obtenir les relations linéaires suivantes:
-\begin{eqnarray*}
+\begin{eqnarray*}\label{eq:zmplin}
 x_{\text{ZMP}} &=& x_G - \frac{z_G}{g} \ddot{x}_G\\
 y_{\text{ZMP}} &=& y_G - \frac{z_G}{g} \ddot{y}_G
 \end{eqnarray*}
@@ -1104,11 +1106,11 @@ marche.
 
 Cette stratégie de calcul a pour avantage d'être simple à comprendre
 et à implémenter, mais également peu coûteuse en terme de temps de
-calcul. Elle a été développée par Nicolas Perrin dans FIXME. Les
-limites de cette approche se situent dans les nombreuses hypothèses
-limitantes du modèle simplifié ainsi que par la recherche dichotomique
-des paramètres adaptés pour assurer la continuité de la trajectoire de
-centre de masse.
+calcul. Elle a été publiée par Nicolas Perrin et al. dans
+\cite{11perrin.icra}. Les limites de cette approche se situent dans
+les nombreuses hypothèses limitantes du modèle simplifié ainsi que par
+la recherche dichotomique des paramètres adaptés pour assurer la
+continuité de la trajectoire de centre de masse.
 
 
 \subsection{Exécution d'une trajectoire}
@@ -1838,7 +1840,7 @@ pieds ainsi que du centre de masse pour pouvoir corriger le
 positionnement des deux pieds dans le futur.
 
 La correction de la trajectoire du centre de masse est calculée en
-utilisant le modèle simplifié introduit précédemment FIXME. De fait,
+utilisant le modèle simplifié décrit par \autoref{eq:zmplin}. De fait,
 aucune hypothèse n'est faite pour réaliser la correction et en
 particulier le générateur de trajectoire n'est jamais mis à
 contribution pour regénérer les trajectoires de référence. C'est là la

@@ -149,9 +149,9 @@ devant réaliser le contact à cet endroit. À partir de ces
 informations, une trajectoire des effecteurs réalisant les appuis est
 déduite ainsi que du centre de masse pour préserver l'équilibre
 dynamique du système. Afin de pouvoir utiliser les techniques décrites
-dans le chapitre FIXME, nous nous limiterons à la marche sur un sol
-plat utilisant le pied gauche et le pied droit du robot. Le calcul de
-la trajectoire des effecteurs et du centre de masse est encore un
+dans le \autoref{chap:suivi}, nous nous limiterons à la marche sur un
+sol plat utilisant le pied gauche et le pied droit du robot. Le calcul
+de la trajectoire des effecteurs et du centre de masse est encore un
 problème ouvert à l'heure actuelle. Les modèles simples peuvent être
 embarqués dans les contrôleurs au prix de nombreuses simplifications
 détaillées dans le chapitre précédent tandis que les modèles les plus
@@ -178,15 +178,15 @@ respectivement la position actuelle du corps du robot et la position
 de référence à atteindre. On peut alors définir l'erreur de cette
 tâche comme:
 
-\begin{equation}
+\begin{equation}\label{eq:featurepoint6d}
   \mathbf{e} = \mathbf{M} (\mathbf{M}^{*})^{-1}
 \end{equation}
 
-On remarquera que dans l'équation FIXME, $\mathbf{e}$ est un élément
-de $\text{SE}(3)$. Les éléments de $\text{SE}(3)$ peuvent s'exprimer
-de nombreuses façons différentes: matrice homogène -- 16 paramètres
---, translation et quaternion -- 7 paramètres --, vecteur de rotation
--- 6 paramètres --, etc. Il faut garder à l'esprit qu'une
+On remarquera que dans \autoref{eq:featurepoint6d}, $\mathbf{e}$ est
+un élément de $\text{SE}(3)$. Les éléments de $\text{SE}(3)$ peuvent
+s'exprimer de nombreuses façons différentes: matrice homogène -- 16
+paramètres --, translation et quaternion -- 7 paramètres --, vecteur
+de rotation -- 6 paramètres --, etc. Il faut garder à l'esprit qu'une
 paramétrisation minimale de $\text{SE}(3)$ nécessite six
 paramètres. De fait, tout représentation utilisant un espace de
 dimension supérieure vient avec un ensemble de contraintes à respecter
@@ -209,7 +209,7 @@ En effet, toute rotation peut être représentée par trois paramètres
 vecteur $(\alpha, \beta, \gamma)$ normalisé représentant l'axe autour
 duquel la rotation s'effectue et la norme du vecteur
 $|\mathbf{\theta}|$ la quantité de rotation réalisée autour de cet
-axe, voir figure FIXME.
+axe, voir \autoref{fig:utheta}.
 
 \begin{figure}
   \begin{center}
@@ -217,7 +217,7 @@ axe, voir figure FIXME.
   \end{center}
   \caption{Représentation d'une rotation par un axe de rotation $u$ et
     une quantité de rotation $\theta$. Une représentation minimale à
-    trois paramètres est possible en posant: $\theta = |u|$.}
+    trois paramètres est possible en posant: $\theta = |u|$. \label{fig:utheta}}
 \end{figure}
 
 
@@ -504,7 +504,7 @@ l'approche par plusieurs scénarii différents ainsi que sa mise en
 
 Le premier scénario consiste en le déplacement du robot le long d'une
 pile de pas prédéterminée pendant 20 secondes. La description
-complète du plan est fournie par la figure FIXME.
+complète du plan est fournie par la \autoref{fig:plan_locomotion_simple}.
 
 \begin{figure}
   \begin{center}
@@ -524,7 +524,7 @@ motion:
       # etc.
 \end{verbatim}
   \end{center}
-  \caption{Plan de mouvement pour une séquence de marche non asservie.}
+  \caption{Plan de mouvement pour une séquence de marche non asservie.\label{fig:plan_locomotion_simple}}
 \end{figure}
 
 La marche est effectuée en boucle ouverte et l'erreur d'exécution
@@ -554,9 +554,10 @@ génération du plan de mouvement que la séquence est réalisable.
 \subsection{Locomotion asservie}
 
 On peut se demander désormais comment asservir la locomotion en
-utilisant un composant de localisation. La figure FIXME fournit une
-version alternative du plan précédent ajoutant la correction de pas
-introduite dans le chapitre FIXME.
+utilisant un composant de localisation. La
+\autoref{fig:plan_locomotion_asservie} fournit une version alternative
+du plan précédent ajoutant la correction de pas introduite dans le
+\autoref{chap:suivi}.
 
 \begin{figure}
   \begin{center}
@@ -589,7 +590,7 @@ servoing:
   \end{center}
   \caption{Plan de mouvement pour une séquence de marche asservie sur
     un système de localisation -- ici un système de capture de
-    mouvement --.}
+    mouvement --.\label{fig:plan_locomotion_asservie}}
 \end{figure}
 
 La seconde partie du plan décrit que l'erreur de positionnement
@@ -702,7 +703,7 @@ servoing:
 
 Dans ce scénario, le robot place son poignet a un point prédéterminé
 tout en préservant la position de son centre de masse. Le plan de
-mouvement est détaillé dans la figure FIXME.
+mouvement est détaillé dans la \autoref{fig:plan_atteinte}.
 
 \begin{figure}
   \footnotesize
@@ -770,7 +771,7 @@ motion:
       rotation: off
 \end{verbatim}
   \end{center}
-  \caption{Plan de mouvement pour une tâche d'atteinte.}
+  \caption{Plan de mouvement pour une tâche d'atteinte.\label{fig:plan_atteinte}}
 \end{figure}
 
 Contrairement à la tâche de locomotion qui est totalement encapsulée
@@ -793,7 +794,8 @@ de déplacement du bras.
 
 La dernière primitive de mouvement considérée ici permet d'asservir le
 regard du robot sur la position d'un point 3d soit fixe, soit mobile
-et estimé par un système externe. Le plan correspondant est la figure FIXME.
+et estimé par un système externe. Le plan correspondant est la
+\autoref{fig:plan_asservissement_complet}.
 
 \begin{figure}
   \footnotesize
@@ -841,7 +843,8 @@ servoing:
       frame-name: cameraBottomLeft
 \end{verbatim}
   \end{center}
-  \caption{Plan de mouvement pour une tâche de marche avec asservissement de la tête.}
+  \caption{Plan de mouvement pour une tâche de marche avec
+    asservissement de la tête.\label{fig:plan_asservissement_complet}}
 \end{figure}
 
 \FloatBarrier
@@ -861,7 +864,7 @@ utilisant des capteurs embarqués.
   \end{center}
   \caption{Description de l'expérimentation: le robot part de la
     droite de l'image et progresse vers l'étagère située à gauche pour
-    y déposer une balle.}
+    y déposer une balle. \label{fig:scenario_visu}}
 \end{figure}
 
 
@@ -874,17 +877,17 @@ génèrent une dérive suffisante pour qu'une exécution de ce scénario
 est un mouvement contraint particulièrement sensible à la position
 d'arrivée du robot. Une petite erreur dans le positionnement du robot
 à la fin de la trajectoire engendrera une grande erreur dans la
-position finale du poignet. La figure FIXME illustre le scénario.
-L'objectif ici est d'utiliser les caméras embarquées pour construire
-une carte de l'environnement puis pour localiser le robot. La
-stratégie adoptée ici n'est pas du SLAM -- Simultaneous Localization
-and Mapping -- dans la mesure où les images permettant de construire
-la carte sont traitées hors ligne. On réalise donc un premier
-mouvement sans correction afin d'acquérir une séquence d'images
-permettant de construire la carte puis on utilise cette carte pour
-localiser le robot durant les expérimentations suivantes. La qualité
-du résultat est ensuite validée en utilisant un système de capture de
-mouvement.
+position finale du poignet. La figure \autoref{fig:scenario_visu}
+illustre le scénario.  L'objectif ici est d'utiliser les caméras
+embarquées pour construire une carte de l'environnement puis pour
+localiser le robot. La stratégie adoptée ici n'est pas du SLAM --
+Simultaneous Localization and Mapping -- dans la mesure où les images
+permettant de construire la carte sont traitées hors ligne. On réalise
+donc un premier mouvement sans correction afin d'acquérir une séquence
+d'images permettant de construire la carte puis on utilise cette carte
+pour localiser le robot durant les expérimentations suivantes. La
+qualité du résultat est ensuite validée en utilisant un système de
+capture de mouvement.
 
 
 Durant les expériences, le module de localisation a fourni une
@@ -896,9 +899,11 @@ Core\texttrademark\ 2 CPU T7200 @ 2.00GHz avec 2Gb.\ de RAM.
 
 \subsection{Analyse de la précision du système de localisation}
 
-La précision finale du système est illustrée par la figure FIXME. On
-peut y observer une erreur à la fin de la trajectoire d'environ 0.2
-mètres en translation. Plusieurs raisons peuvent expliquer ces mauvais résultats:
+La précision finale du système est illustrée par la
+\autoref{fig:scenario_visu_precision}. On peut y observer une erreur à
+la fin de la trajectoire d'environ 0.2 mètres en
+translation. Plusieurs raisons peuvent expliquer ces mauvais
+résultats:
 \begin{enumerate}
 \item Carte non métrique et absence de fermeture de boucle,
 \item Passage dans des zones où la carte est peu dense ou dans des
@@ -954,7 +959,7 @@ caméra par rapport au corps auquel il est fixé, dans notre cas la
 tête. Un procédé de calibration des paramètres extrinsèque a donc été
 mis en place pour estimer ces paramètres. Ces derniers ont été validés
 en reprojetant le modèle du robot dans l'image comme illustré par la
-figure FIXME.
+\autoref{fig:reprojection_modele_vision}.
 
 
 \subsection{Résultats de la localisation utilisant la vision sur le robot humanoïde HRP-2}
@@ -1009,7 +1014,7 @@ estimée du robot.
     \includegraphics[width=.95\linewidth]{src/chap3-primitive-mouvement/mocap.png}
   \end{center}
   \caption{Précision de l'algorithme de SLAM par rapport au système de
-    capture de mouvemement.}
+    capture de mouvemement. \label{fig:scenario_visu_precision}}
 \end{figure}
 
 \begin{figure}
@@ -1018,7 +1023,7 @@ estimée du robot.
   \end{center}
   \caption{Reprojection du modèle du robot dans l'image captée par une
     caméra embarquée pour valider la calibration des paramètres de
-    cette dernière.}
+    cette dernière. \label{fig:reprojection_modele_vision}}
 \end{figure}
 
 
