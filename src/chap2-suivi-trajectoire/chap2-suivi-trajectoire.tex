@@ -972,7 +972,7 @@ en compte sur un robot humanoïde devant posséder un comportement
 réactif, c'est-à-dire ajuster son comportement au sein du contrôleur
 temps réel réalisant l'exécution sur une trajectoire de
 référence. Cette approche est décrite en détail
-dans \cite{10icra.perrin} mais nous rappellerons ici les grandes lignes
+dans \cite{10perrin.icra} mais nous rappellerons ici les grandes lignes
 de ces travaux. Tout d'abord, rappelons la formule du ZMP:
 
 \begin{equation}
@@ -1263,7 +1263,7 @@ plus simple consiste à utiliser une régulation proportionnelle:
 
 $\lambda$ étant le gain du régulateur proportionnel. Les détails du
 solveur et de l'architecture utilisée dans le cadre de ces travaux
-sont détaillés dans \cite{09icar.mansard}.
+sont détaillés dans \cite{09mansard.icar}.
 
 
 \subsection{Limites de la boucle ouverte}
@@ -1325,12 +1325,12 @@ ce mode de locomotion.
 
 La littérature robotique contient plusieurs livres de référence
 détaillant les fondements du domaine. Un exemple remarquable est
-\cite{SicilianoKhatib2008} détaillant la plupart des algorithmes
+\cite{08siciliano} détaillant la plupart des algorithmes
 fondamentaux du domaine et possédant un chapitre consacré à la
 locomotion bipède. Dans le domaine de la localisation, on peut
-également citer \cite{thrun2005probabilistic}, pour la vision
-robotique \cite{hartley2003multiple} et pour la planification de
-mouvements \cite{lavalle2006planning}. Les fondements mathématiques de
+également citer \cite{05thrun}, pour la vision
+robotique \cite{03hartley} et pour la planification de
+mouvements \cite{06lavalle}. Les fondements mathématiques de
 la robotique sont très clairement décrits par \cite{94murray}.
 
 
@@ -1342,23 +1342,23 @@ stables en un temps raisonnable. En particulier, la génération de
 mouvements utilisant le ZMP comme critère de stabilité a d'abord été
 étudié par le chercheur serbe Miomir Vukobratović -- 1er octobre 1931,
 11 mars 2012 --. Il a publié en 2004 Un bilan des recherches sur
-l'utilisation du ZMP pour la robotique \cite{vukobratovic2004zero}. Un
+l'utilisation du ZMP pour la robotique \cite{04vukobratovic.ijhr}. Un
 second chercheur particulièrement reconnu pour le développement de
 stratégies de génération de mouvement réactif fondé sur le ZMP est
 Shuuji Kajita \mbox{-- \begin{CJK*}{UTF8}{min}梶田　秀司\end{CJK*}
     --}. Une sélection des travaux des équipes japonaises du domaine
-est \cite{04humanoids.harada,01icra.KajitaKanehiro,07icra.morisawa}.
+est \cite{04harada.humanoids,01kajita.icra,07morisawa.icra}.
 
 
 Des recherches ont également été menées pour formuler le problème de
 génération de mouvement à l'aide de solveurs supportant les
-contraintes inégalités \cite{11icra.dimitrov,10ar.herdt} afin de
+contraintes inégalités \cite{11dimitrov.icra,10herdt.ar} afin de
 rechercher la trajectoire du centre de masse du robot parmi toutes les
 solutions correctes au lieu de spécifier une trajectoire de ZMP pour
 en déduire une trajectoire de centre de masse solution. La formulation
 générique du problème a également permis d'inclure le positionnement
 des points de contact pendant la marche comme partie intégrante du
-problème. L'utilisation du démarrage à chaud \cite{09icra.wieber} a
+problème. L'utilisation du démarrage à chaud \cite{09dimitrov.icra} a
 également permis des gains en terme de temps de calcul non
 négligeables.
 
@@ -1366,9 +1366,9 @@ négligeables.
 Alors que ces équipes ont focalisé leurs efforts sur la rapidité des
 algorithmes, d'autres ont tenté de concevoir des modèles plus proches
 des modèles physiques classiques afin de générer des mouvements
-dynamiques complexes. Un exemple est \cite{09robotica.mombaur} qui
+dynamiques complexes. Un exemple est \cite{09mombaur.robotica} qui
 traite de la génération de trajectoires de course. D'autres travaux
-incluent \cite{07humanoids.suleiman,08kanehiro.rsj}.
+incluent \cite{07suleiman.humanoids,08kanehiro.rsj}.
 
 
 \subsection{Contrôleurs pour robots humanoïdes}
@@ -1376,24 +1376,24 @@ incluent \cite{07humanoids.suleiman,08kanehiro.rsj}.
 
 Le formalisme du contrôle par tâche a d'abord été défini par Bernard
 Espiau \cite{89iser.rives}. D'autres groupes ont également mené des
-recherches sur ce sujet \cite{05icra.sentis}. Les publications sur le
+recherches sur ce sujet \cite{05sentis.icra}. Les publications sur le
 logiciel utilisé pour les travaux menés au sein de cette thèse sont
-\cite{09icar.mansard,1573536,10humanoids.kanoun}.
+\cite{09mansard.icar,05yoshida.humanoids,10kanoun.humanoids}.
 
 \subsection{Exécution de trajectoires asservies}
 
 Si la robotique mobile classique a dédié un grand nombre de
 publications au problème de la navigation
-\cite{91icra.samson,1570831}, la littérature est beaucoup moins
-abondante dans le domaine de la robotique bipède. Des exemples de
-scénarii complexes sur des systèmes humanoïdes sont
-\cite{05humanoids.michel,10springer.chestnut,06icra.MichelChestnut,5354575}. Aucun
+\cite{91samson.icra,05lefebvre.icra}, la littérature est beaucoup
+moins abondante dans le domaine de la robotique bipède. Des exemples
+de scénarii complexes sur des systèmes humanoïdes sont
+\cite{05michel.humanoids,10chestnutt,09chestnutt.rsj}. Aucun
 traitement particulier pour la compensation de la dérive n'est pas
 décrite dans ces papiers bien qu'elle n'a pu être ignorée au vu des
 possibilités des systèmes décrits. D'autres papiers s'intéressent plus
 spécifiquement au maintien de l'équilibre dans le cas où une
 perturbation extérieure apparaît lors de la marche
-\cite{07icra.morisawa}.
+\cite{07morisawa.icra}.
 
 
 \section{Correction de mouvement temps réel}
@@ -1618,7 +1618,7 @@ Une itération de la boucle de contrôle est décrite par l'algorithme \ref{fig
 
 Tout d'abord, la position du robot $\hat{\mathbf{x}}$ est
 déterminée. Une large littérature concernant la localisation robotique
-existe \cite{08ijhr.stasse, 06humanoids.thompson} et les spécificités
+existe \cite{08stasse.ijhr, 06thompson.humanoids} et les spécificités
 de la localisation d'un robot humanoïde seront abordées dans le
 prochain chapitre. Les limites habituelles de la localisation sont la
 perte du suivi résultant dans l'absence de localisation pendant un
@@ -1772,8 +1772,8 @@ correction précédente n'est pas totalement appliquée conduit à
 corriger une partie de l'erreur de localisation plusieurs fois.
 
 
-Les travaux précédents tel que \cite{04humanoids.harada,
-  07icra.morisawa} ont pour but de permettre des changements soudains
+Les travaux précédents tel que \cite{04harada.humanoids,
+  07morisawa.icra} ont pour but de permettre des changements soudains
 dans la trajectoire des pieds -- et donc du centre de masse -- tout en
 préservant l'équilibre du robot. Le schéma de contrôle proposé a pour
 but, au contraire, de rester aussi proche que possible du plan initial
@@ -1965,7 +1965,7 @@ $t$. Plus généralement, on obtient donc la relation suivante où
 $t_{\text{correction}}$ est l'ensemble des temps où une correction a
 été appliquée:
 
-\begin{equation} \label{eq:zmpsolcor2}
+\begin{equation} \label{eq:zmpsolcor3}
   \bar{\mathbf{c}}(t) = \cosh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{V} +
   \sinh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{W} + \mathbf{r}(t) +
   \sum_{t_i \in t_{\text{correction}}} \mathbf{\Delta}_{\mathbf{\delta {x}}(t_i)}(t-t_i)
@@ -2262,7 +2262,7 @@ positionnement croît lentement, il y a alors deux cas:
 Ce système empirique a été validé avec succès sur le robot HRP-2. Un
 objectif pour le futur est de remplacer cette heuristique par une
 validation complète de la trajectoire de pas modifiée. Une stratégie
-telle que celle décrite dans \cite{10icra.perrin} pourrait alors être
+telle que celle décrite dans \cite{10perrin.icra} pourrait alors être
 envisagée.
 
 \section{Résultats expérimentaux}\label{exp}

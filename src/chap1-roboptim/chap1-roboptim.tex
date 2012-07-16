@@ -300,7 +300,7 @@ concepteurs. Nous allons montrer ici qu'il n'en est rien. Une simple
 agglomération des implémentations de différentes stratégies de
 résolution ne saurait donner un ensemble cohérent et performant en
 terme de temps de calcul sans une véritable réflexion sur comment
-modéliser le paradigme décrit dans la section \label{sec:chap1_optim}
+modéliser le paradigme décrit dans la \autoref{sec:chap1_optim}
 tout en prenant en compte les limites internes des langages de
 programmation. Nous allons tout particulièrement nous intéresser à la
 programmation orientée objet qui est la fondation d'une large
@@ -324,7 +324,7 @@ construction de programmes valides. Cette notion de type a issue de la
 théorie des types \index{théorie des types}, une branche de la logique
 mathématique. La première théorie unifiée des types a été développée
 par Bertrand Russel \index{Bertrand Russel} au début du vingtième
-siècle dans les \emph{Principia Mathematica} \citep{pm}.
+siècle dans les \emph{Principia Mathematica} \citep{10.whitehead}.
 
 
 Afin de démontrer les difficultés que peuvent poser la modélisation
@@ -555,7 +555,7 @@ Un sous-type se doit de contenir au moins tous les attributs et
 méthodes de la classe dont elle hérite afin d'interdire la réécriture
 vers des termes syntaxiquement faux. Le ``principe de substitution de
 Liskov''\index{principe de substitution de
-  Liskov} \citep{Liskov94familyvalues} définit, de manière équivalente,
+  Liskov} \citep{94liskov} définit, de manière équivalente,
 la relation de sous-typage sous l'énoncé suivant:
 %
 \begin{mydef}\label{chap1_liskov}
@@ -573,7 +573,7 @@ mais une famille de types. Le polymorphisme le plus simple pouvant
 être défini est la surcharge\index{surcharge}. Ce mécanisme autorise
 la création de fonctions se réécrivant vers des $\lambda$-termes
 différents selon le type de l'argument d'entrée. La formalisation de
-ce système est décrite dans \citep{Castagna95acalculus}.
+ce système est décrite dans \citep{95castagna}.
 
 Une autre forme de polymorphisme est le polymorphisme d'héritage. Si
 $\tau_1$ et $\tau_2$ sont deux types tels que $\tau_2 <: \tau_1$ et
@@ -585,7 +585,7 @@ comportement.
 
 La généralisation de cette propriété à toutes les fonctions au lieu
 des méthodes uniquement permet d'obtenir le ``multiple
-dispatch'' \citep{Muschevici2008}. Ce mécanisme est disponible dans un
+dispatch'' \citep{08muschevici}. Ce mécanisme est disponible dans un
 nombre assez limité de langages de programmation, dont Common Lisp. En
 effet, contrairement à la surcharge, le multiple dispatch ainsi que le
 polymorphisme d'héritage nécessite une résolution à l'exécution qui
@@ -1137,7 +1137,7 @@ l'utilisation des templates\footnote{À l'exception de quelques
 techniques de programmation orientée objet comme les méthodes
 virtuelles. En effet, comme expliqué dans la section précédente, les
 méthodes virtuelles nécessitent une résolution et leur appel est donc
-plus coûteux qu'une fonction simple \citep{driesen1996direct}.
+plus coûteux qu'une fonction simple \citep{96driesen}.
 
 
 RobOptim\index{RobOptim} est une suite logicielle dont les composants
@@ -1180,7 +1180,7 @@ points selon les cas. Cette fonctionnalité est implémentée via
 l'utilisation du ``Design Pattern''\index{Design Pattern (motif de
   conception)} décorateur\index{Design Pattern (motif de
   conception)!Visiteur} tel que décrit dans le livre de
-référence \citep{design.pattern}. Ce motif de conception a la
+référence \citep{94gamma}. Ce motif de conception a la
 particularité d'augmenter les capacités d'une classe sans en altérer
 le comportement propre. Dans ce cas, cette classe paramétrée prend un
 type de fonction en entrée, en hérite, tout en fournissant un niveau
@@ -1322,7 +1322,7 @@ définies sous la forme d'une courbe paramétrée. Ce type de courbe
 appelé B-spline\index{spline!B-spline} est définie comme une
 combinaison linéaire d'une famille de fonctions de base. Les deux
 définitions ci-dessous permettent de calculer analytiquement ces
-courbes et sont tirées de \citep{algo.3d}
+courbes et sont tirées de \citep{02malgouyres}.
 
 \begin{mydef}\label{def:chap1_coxdeboor}
   Soit $n \in \mathbb{N}$, le nombre de points de contrôles. Soit $k
