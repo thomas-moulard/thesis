@@ -21,7 +21,7 @@ va pas sans la nécessité d'intégrer et de maîtriser une grande variété
 d'algorithmes et de technologies tout en les utilisant conjointement
 afin de finalement, atteindre un objectif de haut niveau. Ce chapitre
 va donc décrire l'architecture qui a été mise en place sur le robot
-humanoïde HRP-2 afin de réaliser un ensemble de scénario
+humanoïde HRP-2\index{HRP-2} afin de réaliser un ensemble de scénario
 expérimentaux, certains faisant partie intégrante des chapitres
 précédents et d'autres étant le résultat de travaux de recherche
 disjoints, mais prenant appui sur l'architecture développée ici. Ce
@@ -83,22 +83,22 @@ décision et de perception.
 
 Afin de découpler les algorithmes robotiques, chaque algorithme est
 implémenté au sein d'un composant robotique\index{composant
-  robotique}. En pratique, un composant robotique est un processus --
-c'est-à-dire un programme indépendant -- pouvant communiquer avec un
-ou plusieurs autres composants. La distribution des calculs sur
-plusieurs ordinateurs rend nécessaire la définition d'un protocole de
-transmission des données afin de pouvoir assurer une bonne
-interprétation de ces dernières au sein d'un environnement
-informatique hétérogène. Un exemple est la représentation des nombres
-au sein des architectures informatiques: une architecture peut être
-dit ``big endian''\index{big endian (architecture)} ou ``little
-indian''\index{little endian (architecture)} selon l'ordre dans lequel
-les bits représentants le nombre sont enregistrés. Dans une
-architecture ``big endian'' les nombres ayant les poids les plus forts
-sont contenus en mémoire en premier tandis que les architectures
-``little endian'' adoptent un ordre inverse. Ce type de problème rend
-nécessaire la définition d'un modèle de communication entre
-composants.
+  robotique}\index{n\oe ud|see{composant robotique}}. En pratique, un
+composant robotique est un processus -- c'est-à-dire un programme
+indépendant -- pouvant communiquer avec un ou plusieurs autres
+composants. La distribution des calculs sur plusieurs ordinateurs rend
+nécessaire la définition d'un protocole de transmission des données
+afin de pouvoir assurer une bonne interprétation de ces dernières au
+sein d'un environnement informatique hétérogène. Un exemple est la
+représentation des nombres au sein des architectures informatiques:
+une architecture peut être dit ``big endian''\index{big endian
+  (architecture)} ou ``little indian''\index{little endian
+  (architecture)} selon l'ordre dans lequel les bits représentants le
+nombre sont enregistrés. Dans une architecture ``big endian'' les
+nombres ayant les poids les plus forts sont contenus en mémoire en
+premier tandis que les architectures ``little endian'' adoptent un
+ordre inverse. Ce type de problème rend nécessaire la définition d'un
+modèle de communication entre composants.
 
 
 Les architectures robotiques autorisent généralement la communication
@@ -135,7 +135,7 @@ Garage\index{Willow Garage}. Le mécanisme de communication ainsi
 qu'une grande partie de la modélisation du processus de perception se
 fonde sur les outils développés dans le cadre de ce projet. Les
 sections suivantes vont détailler les différents composants
-fonctionnant sur le robot humanoïde HRP-2.
+fonctionnant sur le robot humanoïde HRP-2\index{HRP-2}.
 
 
 
@@ -145,19 +145,20 @@ Sous le terme de ``contrôle'' est désigné le composant robotique
 chargée de calculer la commande qui sera envoyée aux actionneurs. Il
 est impératif que cet ordre déterminant le prochain état que les
 servomoteurs du système vont s'efforcer d'atteindre soit envoyé à une
-fréquence fixe. Sur le robot humanoïde HRP-2, la fréquence de la
-boucle de contrôle est de 200$\hertz$, il faut donc que la boucle de
-contrôle ne mette pas plus de 5ms pour être évaluée. Les noyaux des
-systèmes d'exploitation multitâches ne fournissent pas de garantie
-forte sur la réactivité des logiciels exécutés. Il est donc nécessaire
-d'utiliser des noyaux dédiés afin d'assurer que la boucle de contrôle
-soit exécutée en permanence à la fréquence voulue. Ces contraintes
-impliquent que les composants de contrôle se doivent d'être aussi
-minimaux que possible et sont souvent monolithiques. À ce sujet, les
-contrôleurs robotiques partagent une grande ressemblance avec les
-noyaux des systèmes d'exploitation. Ils assurent également la sûreté
-du système: une mauvaise commande envoyée aux moteurs peut, très
-souvent, entraîner la destruction des actionneurs.
+fréquence fixe. Sur le robot humanoïde HRP-2\index{HRP-2}, la
+fréquence de la boucle de contrôle est de 200$\hertz$, il faut donc
+que la boucle de contrôle ne mette pas plus de 5ms pour être
+évaluée. Les noyaux des systèmes d'exploitation multitâches ne
+fournissent pas de garantie forte sur la réactivité des logiciels
+exécutés. Il est donc nécessaire d'utiliser des noyaux dédiés afin
+d'assurer que la boucle de contrôle soit exécutée en permanence à la
+fréquence voulue. Ces contraintes impliquent que les composants de
+contrôle se doivent d'être aussi minimaux que possible et sont souvent
+monolithiques. À ce sujet, les contrôleurs robotiques partagent une
+grande ressemblance avec les noyaux des systèmes d'exploitation. Ils
+assurent également la sûreté du système: une mauvaise commande envoyée
+aux moteurs peut, très facilement, entraîner la destruction des
+actionneurs.
 
 Dans le cas de systèmes robotiques complexes, il est courant d'avoir
 plusieurs contrôleurs exécutés successivement au sein de la boucle de
@@ -194,12 +195,13 @@ L'architecture de contrôle est divisée en trois contrôleurs:
   d'estimant l'attitude du bassin, le stabilisateur peut déduire
   l'état des flexibilités des chevilles et, à l'aide des capteurs de
   force placés dans les chevilles, réaliser un asservissement
-  bas-niveau sur la trajectoire du ZMP désiré. Ce mécanisme permet de
-  compenser la modélisation sommaire de la dynamique réalisée, par
-  exemple, par l'utilisation du modèle simplifié du ZMP ainsi que des
-  éventuelles erreurs de modélisation de la structure du robot. Ce
-  système compense les erreurs de suivi du ZMP en modifiant les
-  valeurs des articulations des jambes du robot.
+  bas-niveau sur la trajectoire du ZMP\index{Zero-Momentum Point}
+  désiré. Ce mécanisme permet de compenser la modélisation sommaire de
+  la dynamique réalisée, par exemple, par l'utilisation du modèle
+  simplifié du ZMP ainsi que des éventuelles erreurs de modélisation
+  de la structure du robot. Ce système compense les erreurs de suivi
+  du ZMP en modifiant les valeurs des articulations des jambes du
+  robot.
 \item[Communication] Le dernier élément communique vers l'extérieur
   les informations liées au contrôle du robot tel que les commandes
   envoyées, réellement exécutées -- c'est-à-dire après stabilisation
@@ -238,35 +240,38 @@ inhérent à toute donnée provenant d'une architecture distribuée.
 \subsection{Vision}
 
 
-La vision est l'élément central de la perception sur un robot
-humanoïde. Elle est caractérisée par une particularité qui détermine
-tous les traitements qui lui sont affectés: les caméras produisent des
-quantités de données extrêmement importantes. De ce fait, il est
-important d'éviter de réaliser des traitements inutiles et il faut
-également éviter au maximum les copies. Le traitement des images est
-souvent réalisé en série: on acquiert une image, on la convertit, on
-la rectifie et puis on cherche à en tirer des informations de plus
-haut niveau. Ces traitements en série se modélisent particulièrement
-bien sous la forme d'un tuyau dans lequel les images passent les unes
-après les autres. La stratégie classique de la robotique tend alors à
-dédier un composant par traitement afin de garder un système
-modulaire, mais la taille des données rend cela difficile. En effet,
-si chaque composant vit dans un processus différent, il est nécessaire
-de passer par des mécanismes de mémoire partagée afin d'éviter les
-copies en mémoire. ROS a choisi une seconde stratégie en offrant la
-possibilité d'agglomérer plusieurs composants dans un seul
-processus. La sérialisation devient donc totalement inutile au prix
-d'une plus grande complexité dans l'écriture des n\oe uds et d'une
-forme d'insécurité: si un problème advient dans n'importe lequel de
-ces composants, il provoquera l'arrêt de la totalité du
-système. Cependant, les traitements étant effectués en série, devoir
-relancer tous les traitements en cas de panne n'amène pas de perte
-significative de qualité de service.
+La vision\index{vision robotique} est l'élément central de la
+perception sur un robot humanoïde. Elle est caractérisée par une
+particularité qui détermine tous les traitements qui lui sont
+affectés: les caméras produisent des quantités de données extrêmement
+importantes. De ce fait, il est important d'éviter de réaliser des
+traitements inutiles et il faut également éviter au maximum les
+copies. Le traitement des images est souvent réalisé en série: on
+acquiert une image, on la convertit, on la rectifie et puis on cherche
+à en tirer des informations de plus haut niveau. Ces traitements en
+série se modélisent particulièrement bien sous la forme d'un tuyau
+dans lequel les images passent les unes après les autres. La stratégie
+classique de la robotique tend alors à dédier un composant par
+traitement afin de garder un système modulaire, mais la taille des
+données rend cela difficile. En effet, si chaque composant vit dans un
+processus différent, il est nécessaire de passer par des mécanismes de
+mémoire partagée afin d'éviter les copies en mémoire. ROS a choisi une
+seconde stratégie en offrant la possibilité d'agglomérer plusieurs
+composants dans un seul processus\footnote{L'agrégation de plusieurs
+  n\oe uds se nomme ``nodelet'':
+  \url{http://ros.org/wiki/nodelet}.}. La sérialisation devient donc
+totalement inutile au prix d'une plus grande complexité dans
+l'écriture des n\oe uds et d'une forme d'insécurité: si un problème
+advient dans n'importe lequel de ces composants, il provoquera l'arrêt
+de la totalité du système. Cependant, les traitements étant effectués
+en série, devoir relancer tous les traitements en cas de panne n'amène
+pas de perte significative de qualité de service.
 
 
 Nous allons donc désormais nous attacher à développer les différents
-composants de vision qui ont été utilisés sur le robot HRP-2 et
-agglomérés dans la chaîne de traitement des images du robot.
+composants de vision qui ont été utilisés sur le robot
+HRP-2\index{HRP-2} et agglomérés dans la chaîne de traitement des
+images du robot.
 
 
 \paragraph{Acquisition des images}
@@ -343,11 +348,12 @@ estimation de la distorsion radiale\index{distorsion radiale} est
 suffisante pour compenser l'utilisation d'un objectif grand-angle.
 
 
-Le processus de calibration est réalisé en utilisant une mire que l'on
-place à différents endroits relativement à la caméra. Connaissant la
-taille des points et leur écartement, on peut alors, par la résolution
-d'un problème type moindres carrés linéaire, réaliser une estimation
-des paramètres intrinsèque des caméras du système.
+Le processus de calibration\index{calibration (d'une caméra)} est
+réalisé en utilisant une mire que l'on place à différents endroits
+relativement à la caméra. Connaissant la taille des points et leur
+écartement, on peut alors, par la résolution d'un problème type
+moindres carrés linéaire, réaliser une estimation des paramètres
+intrinsèque des caméras du système.
 
 Une fois de plus, ce traitement est disponible dans deux variantes
 différentes: monochromatique et couleur.
@@ -370,20 +376,21 @@ courant, en robotique, d'avoir recours à la vision stéréoscopique afin
 de pouvoir reconstruire la profondeur d'un objet visible dans les deux
 caméras. Il est alors nécessaire d'estimer la transformation relative
 entre les deux caméras afin de pouvoir rectifier l'image de la seconde
-image de la paire de caméras stéréo. Via ce processus, les images de
-deux caméras sont prises par des capteurs virtuels dans les plans
-images sont coplanaires. On peut alors faire en sorte que la
-projection d'un point 3d se fasse sur la même ligne tant sur la caméra
-de gauche que sur la caméra de droite. Le problème de l'appariement
-des points se ramène alors à un problème unidimensionnel de complexité
-moindre permettant la construction d'une carte de profondeur. Cette
-carte est disponible sous la forme d'un topic, mais les données de
-profondeur sont également disponibles sous la forme d'un nuage de
-points. Dans ce dernier, on associe à chaque point la couleur du pixel
-correspondant dans l'image. Ce topic est particulièrement utile
-lorsque l'on souhaite utiliser des algorithmes de traitements de
-nuages de points 3D tels que PCL -- la Point Cloud Library
---\index{PCL (Point Cloud Library)}.
+image de la paire de caméras stéréo. Une fois ce processus effectué,
+on peut estimer que les images de deux caméras ont été prises par des
+capteurs virtuels dont les plans images sont coplanaires. On peut
+alors faire en sorte que la projection d'un point 3d se fasse sur la
+même ligne tant sur la caméra de gauche que sur la caméra de
+droite. Le problème de l'appariement des points se ramène alors à un
+problème unidimensionnel de complexité moindre permettant la
+construction d'une carte de profondeur. Cette carte est disponible
+sous la forme d'un topic, mais les données de profondeur sont
+également disponibles sous la forme d'un nuage de points. Dans ce
+dernier, on associe à chaque point la couleur du pixel correspondant
+dans l'image. Ce topic est particulièrement utile lorsque l'on
+souhaite utiliser des algorithmes de traitements de nuages de
+points 3D tels que PCL -- la Point Cloud Library --\index{PCL (Point
+  Cloud Library)}.
 
 
 Une fois de plus, la totalité du processus de vision peut fonctionner
@@ -397,12 +404,12 @@ souplesse d'utilisation et modularité.
     \includegraphics[width=.95\linewidth]{src/chap4-integration/disparity-1.jpg}
     \includegraphics[width=.95\linewidth]{src/chap4-integration/disparity-2.jpg}
   \end{center}
-  \caption{Carte de profondeur calculée en temps réel. Une couleur
-    claire correspond à une faible profondeur, une couleur foncée à
-    une profondeur importante. Les zones grises indiquent les endroits
-    où aucune correspondance n'a pu être établie entre les images de
-    deux caméras. Elles correspondent typiquement à une zone peu
-    texturée comme un mur.}
+  \caption{Carte de profondeur\index{carte de profondeur} calculée en
+    temps réel. Une couleur claire correspond à une faible profondeur,
+    une couleur foncée à une profondeur importante. Les zones grises
+    indiquent les endroits où aucune correspondance n'a pu être
+    établie entre les images de deux caméras. Elles correspondent
+    typiquement à une zone peu texturée comme un mur.}
 \end{figure}
 
 
@@ -457,24 +464,24 @@ divisent en différentes catégories:
   indicateur intéressant, mais n'est malheureusement pas disponible en
   l'état actuel des capacités du robot.
 \item[Instabilité lors de la locomotion] Il est possible d'estimer la
-  position du ZMP à partir des forces mesurées par les capteurs de
-  force. Cette estimation permet d'avertir l'utilisateur quand le ZMP
-  se rapproche dangereusement de la limite du polygone de
-  sustentation.
+  position du ZMP\index{Zero-Momentum Point} à partir des forces
+  mesurées par les capteurs de force. Cette estimation permet
+  d'avertir l'utilisateur quand le ZMP se rapproche dangereusement de
+  la limite du polygone de sustentation.
 \item[Déviation des horloges des ordinateurs embarqués] Les
   ordinateurs embarqués synchronisent leurs horloges en utilisant le
-  protocole NTP -- Network Time Protocol --. L'ordinateur dédié à la
-  décision et la perception se synchronisent sur un serveur de temps
-  distant. L'utilisation d'un lien WiFi et la présence de routeurs
-  intermédiaires rendent la synchronisation relativement peu
-  précise. Cependant, le problème n'est pas très gênant, car le
-  véritable enjeu reste de faire en sorte que les deux PCs embarqués
-  gardent leurs deux horloges synchronisées. Le lien réseau étant
-  direct, la synchronisation relative de ces deux ordinateurs est, au
-  contraire, de très bonne qualité et permet d'assurer la cohérence
-  des données temporelles entre, d'une part, le contrôleur commandant
-  les actionneurs, et d'autre part les composants de décision et de
-  perception.
+  protocole NTP -- Network Time Protocol --\index{Network Time
+    Protocol (NTP)}. L'ordinateur dédié à la décision et la perception
+  se synchronisent sur un serveur de temps distant. L'utilisation d'un
+  lien WiFi et la présence de routeurs intermédiaires rendent la
+  synchronisation relativement peu précise. Cependant, le problème
+  n'est pas très gênant, car le véritable enjeu reste de faire en
+  sorte que les deux PCs embarqués gardent leurs deux horloges
+  synchronisées. Le lien réseau étant direct, la synchronisation
+  relative de ces deux ordinateurs est, au contraire, de très bonne
+  qualité et permet d'assurer la cohérence des données temporelles
+  entre, d'une part, le contrôleur commandant les actionneurs, et
+  d'autre part les composants de décision et de perception.
 \item[Difficultés informatiques d'ordre général] Au-delà des problèmes
   décrits précédemment et qui affectent plus particulièrement les
   systèmes robotiques, les robots sont également affectés par
@@ -514,13 +521,14 @@ indifféremment en simulation ou sur le véritable système. Il reste
 alors le plus important: assurer la cohérence entre les capteurs
 simulés en fonction des commandes envoyées aux actionneurs. Pour se
 faire, il est important de disposer d'un moteur physique
-réaliste. Dans le cadre de cette thèse, le simulateur OpenHRP a été
-choisi. En effet, la plupart des simulateurs robotiques -- Gazebo,
-Webots --, utilisent des moteurs physiques primitifs adaptés aux
-robots mobiles ne réalisant pas de mouvements ``dynamiques''. Afin de
-modéliser précisément les interactions entre le pied et le sol, un
-moteur physique disposant d'un modèle de contact convaincant et précis
-est indispensable à la simulation d'un mouvement réalisé par un robot
+réaliste. Dans le cadre de cette thèse, le simulateur
+OpenHRP\index{OpenHRP (simulateur dynamique)} a été choisi. En effet,
+la plupart des simulateurs robotiques -- Gazebo, Webots --, utilisent
+des moteurs physiques primitifs adaptés aux robots mobiles ne
+réalisant pas de mouvements ``dynamiques''. Afin de modéliser
+précisément les interactions entre le pied et le sol, un moteur
+physique disposant d'un modèle de contact convaincant et précis est
+indispensable à la simulation d'un mouvement réalisé par un robot
 humanoïde.
 
 
@@ -543,12 +551,14 @@ encodée à l'aide d'un format de fichier permettant de représenter les
 différentes informations caractérisant le système. Une définition
 mathématique du système a été donnée dans le \autoref{chap:suivi}. Du
 point de vue informatique, le format de fichier URDF -- Unified Robot
-Description Format --, SRDF -- Semantic Robot Description Format -- et
-RCPDF -- Robot Contact Point Definition Format -- est utilisé pour
-représenter les informations nécessaires à la génération de mouvements
-sur un robot humanoïde. Les deux premiers formats sont le fruit du
-travail de la communauté ROS tandis que le dernier a été développé
-dans le cadre de cette thèse.
+Description Format --\index{Unified Robot Description Format (URDF)},
+SRDF -- Semantic Robot Description Format --\index{Semantic Robot
+  Description Format (SRDF)} et RCPDF -- Robot Contact Point
+Definition Format --\index{Robot Contact Point Description Format
+  (RCPDF)} est utilisé pour représenter les informations nécessaires à
+la génération de mouvements sur un robot humanoïde. Les deux premiers
+formats sont le fruit du travail de la communauté ROS tandis que le
+dernier a été développé dans le cadre de cette thèse.
 
 \begin{figure}
   \begin{center}
@@ -634,21 +644,21 @@ qui permettrait de ne pas abuser de la structure cinématique du robot.
 \subsection{Modélisation des préhenseurs du robot HRP-2}
 
 La complexité du processus de génération de mouvements pour un système
-croît avec le nombre de degrés de liberté. Par exemple, HRP-2 est un
-système possédant 40 degrés de liberté, dont 10 pour les
-mains. Cependant, tous ces degrés de liberté ne sont pas
-commandables. En effet, chaque main n'est commandée que par un seul
-degré de liberté décrivant le niveau de fermeture de la pince. Ces
-mécanismes sont régulièrement utilisés dans les robots. On peut
-également citer le robot Romeo d'Aldebaran Robotics FIXME qui s'appuie
-sur un mécanisme de commande similaire: un degré de liberté commande
-l'actionnement d'une main complète composé de plusieurs degrés de
-liberté. Pour modéliser un tel système, il est possible d'insérer des
-contraintes et des degrés de liberté ``dépendants'' dans le modèle. On
-peut ainsi insérer une contrainte qui va lier deux degrés
-ensemble. Par exemple dans la définition du joint A, on peut spécifier
-que la valeur du degré de liberté associé dépend de la valeur du degré
-de liberté du joint B:
+croît avec le nombre de degrés de liberté. Par exemple,
+HRP-2\index{HRP-2} est un système possédant 40 degrés de
+liberté\index{degré de liberté}, dont 10 pour les mains. Cependant,
+tous ces degrés de liberté ne sont pas commandables. En effet, chaque
+main n'est commandée que par un seul degré de liberté décrivant le
+niveau de fermeture de la pince. Ces mécanismes sont régulièrement
+utilisés dans les robots. On peut également citer le robot Romeo
+d'Aldebaran Robotics FIXME qui s'appuie sur un mécanisme de commande
+similaire: un degré de liberté commande l'actionnement d'une main
+complète composé de plusieurs degrés de liberté. Pour modéliser un tel
+système, il est possible d'insérer des contraintes et des degrés de
+liberté ``dépendants'' dans le modèle. On peut ainsi insérer une
+contrainte qui va lier deux degrés ensemble. Par exemple dans la
+définition du joint A, on peut spécifier que la valeur du degré de
+liberté associé dépend de la valeur du degré de liberté du joint B:
 
 \begin{equation}
   \mathbf{X}_B = \alpha_B \mathbf{X}_A + \beta_B
@@ -689,8 +699,9 @@ corps A lors de la vérification des autocollisions.
 
 La liste des paires de collisions est enregistrée dans un fichier
 séparé utilisant le format SRDF -- Semantics Robot Description Format
---. Ce fichier stocke également la position de référence du robot dans
-lequel il se situe lors du démarrage des expérimentations.
+--\index{Semantic Robot Description Format (SRDF)}. Ce fichier stocke
+également la position de référence du robot dans lequel il se situe
+lors du démarrage des expérimentations.
 
 
 \subsection{Définition des contacts autorisés}
@@ -704,9 +715,10 @@ de définir des ``zones'' où les contacts sont autorisés. Cette
 information n'était pas formalisée jusqu'à présent dans l'architecture
 proposée par ROS et a été le résultat d'un travail réalisé durant
 cette thèse. Le format de fichier RCPDF -- Robots Contact Point
-Description Format -- associe à chaque corps 0, 1 ou plusieurs zones
-de contact. Chaque zone de contact peut être soit représentée par une
-primitive géométrique soit par un modèle 3d. Les normales du modèles
+Description Format --\index{Robot Contact Point Description Format
+  (RCPDF)} associe à chaque corps 0, 1 ou plusieurs zones de
+contact. Chaque zone de contact peut être soit représentée par une
+primitive géométrique soit par un modèle 3d. Les normales du modèles
 permettent de définir la direction dans laquelle le contact peut
 s'effectuer. Un contact est valide si la force de réaction de
 l'environnement sur le corps du robot est colinéaire avec la normale
@@ -787,15 +799,15 @@ d'expériences réalisées durant cette thèse.
 
 
 Nous allons présenter dans cette section l'architecture de la
-démonstration robotique suivante: le robot HRP-2 doit pouvoir réaliser
+démonstration robotique présentée dans la
+\autoref{sec:chap3_localisation}: le robot HRP-2 doit pouvoir réaliser
 une tâche de locomotion pour se déplacer jusqu'à un meuble dans lequel
 il souhaite déposer un objet -- dans cet exemple une balle rose
 --. Pour se faire, il doit tout d'abord planifier une trajectoire
 corps complet, c'est-à-dire combinant à la fois locomotion et
 manipulation. Une fois cette trajectoire déterminée, il doit
 l'exécuter tout en corrigeant sa trajectoire afin d'atteindre son
-but. La localisation est réalisée via un système de vision fondé sur
-des techniques de SLAM.
+but. La localisation est réalisée grâce aux caméras du robot.
 
 Le système est composé des composants robotiques suivant répartis sur
 deux ordinateurs -- un pour le contrôle et l'autre pour la décision et
@@ -806,10 +818,10 @@ la perception --:
   \begin{description}
   \item[Contrôle] Ce n\oe ud est composé d'un solveur fondé sur le
     paradigme de la pile de tâches et d'une infrastructure logicielle
-    utlisant le lange de programmation Python pour insérer et définir
-    des tâches en cours d'exécution. Les références des tâches peuvent
-    être fournies par l'extérieur via des topics. Ce composant fonctionne
-    partiellement en temps réel.
+    utlisant le langage de programmation Python pour insérer et
+    définir des tâches en cours d'exécution. Les références des tâches
+    peuvent être fournies par l'extérieur via des topics. Ce composant
+    fonctionne partiellement en temps réel.
   \item[Export des informations capteurs et de la
     commande\footnote{Composant remplacé lors de la simulation par un
       n\oe ud fournissant les mêmes services dans le monde
@@ -831,8 +843,8 @@ la perception --:
   \item[Rectification] Corrige la déformation de l'image liée à
     l'utilisation de l'objectif grand angle et à la conception de la
     caméra.
-  \item[SLAM] Réalise une estimation de la position du robot dans le
-    monde.
+  \item[Localisation] Réalise une estimation de la position du robot
+    dans le monde en utilisant les caméras du robot.
   \item[Cinématique directe] À partir de l'état des encodeurs, ce
     composant recalcule la position relative de tous les corps et les
     publie sous forme de topics.
@@ -851,7 +863,7 @@ composants sont détaillés dans la figure FIXME.
 
 
 Cette architecture a été testée sur le robot humanoïde
-HRP-2. L'architecture a fonctionné correctement, mais il n'a pas été
+HRP-2\index{HRP-2}. L'architecture a fonctionné correctement, mais il n'a pas été
 possible d'atteindre une précision suffisante au sein du système de
 perception pour compenser avec succès la dérive du robot. En effet, le
 SLAM tel que configuré ici a donné une précision de plus ou moins 5cm
@@ -886,33 +898,32 @@ comportement de l'algorithme.
 
 
 Une seconde difficulté concerne l'interprétation des données. La
-majorité des algorithmes produisent en sortie des données numériques,
-le plus souvent avec un sens physique fort. Prenons par exemple un
-composant réalisant le suivi d'un objet en temps réel: il va alors
-fournir en sortie la position de l'objet dans l'espace
-euclidien 3D. Une ambiguïté se pose alors: par rapport à quel repère
-référence cette donnée est-elle exprimée? La caméra du robot? La
-racine de sa chaîne cinématique? Un point fixe du monde? Face aux
-nombreux dysfonctionnements provoqués par ce type de problème, ROS
-fournit une solution clé en main: chaque transformation précise, sous
-forme de chaîne de caractère, de quel repère à quel repère cette
-donnée est-elle la transformation. En enregistrant ces données, on
-acquiert également la possibilité de calculer automatiquement des
-transformations d'un repère à un autre. Par exemple si l'on fournit la
-transformation de $A$ à $B$ et de $B$ à $C$, on peut demander la
-transformation de $A$ à $C$ et elle peut être calculée
-automatiquement. Il y a là un véritable gain puisque l'on passe d'une
-implémentation dépendant directement des données des composants auquel
-on est lié vers une requête purement sémantique: ``quelle est la
-position relative de la cheville gauche par rapport au poignet
-droit?''. On se préserve également dans le cas où les composants
-utilisés changeraient le repère de référence entre deux versions. Une
-fois de plus, l'absence de typage ici rend le diagnostic difficile:
-aucune erreur de compilation n'est possible et les erreurs dans les
-valeurs numériques elles-mêmes sont toujours difficiles à détecter. On
-notera que le système adopté ici se fonde sur le traitement des chaîne
-de caractère ce qui est plus lent que le recours au typage direct tel
-que proposé dans FIXME.
+majorité des algorithmes produisent en sortie des données numériques
+possédant un sens physique. Prenons par exemple un composant réalisant
+le suivi d'un objet en temps réel: il va alors fournir en sortie la
+position de l'objet dans l'espace euclidien 3D. Une ambiguïté se pose
+alors: par rapport à quel repère référence cette donnée est-elle
+exprimée? La caméra du robot? La racine de sa chaîne cinématique? Un
+point fixe du monde? Face aux nombreux dysfonctionnements provoqués
+par ce type de problème, ROS\index{ROS} fournit une solution clé en
+main: chaque transformation précise, sous forme de chaîne de
+caractère, de quel repère à quel repère cette donnée est-elle la
+transformation. En enregistrant ces données, on acquiert également la
+possibilité de calculer automatiquement des transformations d'un
+repère à un autre. Par exemple si l'on fournit la transformation de
+$A$ à $B$ et de $B$ à $C$, on peut demander la transformation de $A$ à
+$C$ et elle peut être calculée automatiquement. Il y a là un véritable
+gain puisque l'on passe d'une implémentation dépendant directement des
+données des composants auquel on est lié vers une requête purement
+sémantique: ``quelle est la position relative de la cheville gauche
+par rapport au poignet droit?''. On se préserve également dans le cas
+où les composants utilisés changeraient le repère de référence entre
+deux versions. Une fois de plus, l'absence de typage ici rend le
+diagnostic difficile: aucune erreur de compilation n'est possible et
+les erreurs dans les valeurs numériques elles-mêmes sont toujours
+difficiles à détecter. On notera que le système adopté ici se fonde
+sur le traitement des chaîne de caractère ce qui est plus lent que le
+recours au typage direct tel que proposé dans \cite{12delaet.ram}.
 
 
 Une troisième difficulté est la robustesse aux phases
@@ -983,17 +994,18 @@ Cette section détaille la méthodologie à suivre tant pour développer
 un composant robotique que pour développer une architecture robotique
 complète. Pour développer un composant, un exemple de développement
 réalisé pendant cette thèse a été choisi: il s'agit de l'intégration
-d'un logiciel de suivi. Le cycle de développement d'une architecture
-robotique est ensuite détaillé.
+d'un logiciel de suivi. Le cycle de développement\index{cycle de
+  développement} d'une architecture robotique est ensuite détaillé.
 
 
 \subsubsection{Étude de cas: intégration d'un algorithme de suivi}
 
 Le composant dont il est question ici est librement disponible sur
-internet. Il s'agit de la stack ROS
-\texttt{vision\_visp}\footnote{\url{http://www.ros.org/wiki/vision_visp}}
-et plus particulièrement du paquet
-\texttt{visp\_tracker}\footnote{\url{http://www.ros.org/wiki/visp_tracker}}.
+internet. Il s'agit de la stack ROS\index{ROS}
+\texttt{vision\_visp}\footnote{Site officiel:
+  \url{http://www.ros.org/wiki/vision_visp}} et plus particulièrement
+du paquet \texttt{visp\_tracker}\footnote{Site officiel:
+  \url{http://www.ros.org/wiki/visp_tracker}}.
 
 
 L'algorithme de suivi d'objet a été développé au sein de l'équipe
@@ -1007,8 +1019,8 @@ position des lignes -- bords -- de l'objet dans l'image par rapport à
 la reprojection du modèle de l'objet suivi dans l'image. D'autres
 critères que les lignes peuvent être choisis, mais c'est ce dernier
 point qui a été retenu dans nos tests. La résolution de ce problème
-passe par la méthode de Levenberg-Marquardt qui est proche de
-l'algorithme des moindres carrés classiques.
+passe par la méthode de Levenberg-Marquardt\index{Levenberg-Marquardt}
+qui est proche de l'algorithme des moindres carrés classiques.
 
 
 Cet algorithme est partie intégrante de ViSP -- Visual Servoing
@@ -1085,11 +1097,12 @@ ensemble de paramètres pour optimiser le suivi.
 
 
 Le dernier point à considérer a été d'intégrer le modèle de
-calibration de ROS à ViSP. En effet, ROS annote chaque image avec les
-paramètres intrinsèques de caméra. Ces données sont exprimées sous
-forme matricielle et doivent être converties avant d'être mises à jour
-dans ViSP ce qui nécessite un traitement simple. L'avantage étant que
-de cette manière, on peut complètement contourner le processus de
+calibration de ROS\index{ROS} à ViSP. En effet, ROS annote chaque
+image avec les paramètres intrinsèques de caméra\index{paramètres
+  intrinsèques (d'une caméra)}. Ces données sont exprimées sous forme
+matricielle et doivent être converties avant d'être mises à jour dans
+ViSP ce qui nécessite un traitement simple. L'avantage étant que de
+cette manière, on peut complètement contourner le processus de
 rectification de ViSP qui nécessiterait une calibration spécifique
 pour l'utilisation de ce composant.
 
@@ -1134,15 +1147,16 @@ sociétés tiers. Ces utilisateurs n'avaient pas d'expérience avec les
 techniques d'asservissement visuel avant de tenter d'intégrer ce
 composant et ont réussi à obtenir des résultats satisfaisants dans le
 cadre de leur utilisation si des robots différents, notamment le robot
-REEM de Pal Robotics\footnote{\url{http://www.pal-robotics.com/}}. De
-ce fait l'objectif qui consistait à pouvoir maîtriser la complexité de
-la mise en place d'un tel mécanisme a été rempli au travers des choix
-réalisés ici. Ce composant a pu être utilisé dans le cadre d'une
-architecture robotique distribuée sur deux ordinateurs et
-l'introduction d'une interface au niveau de la componentisation
-robotique a permis au robot HRP-2 de se localiser soit en utilisant ce
-composant, soit en utilisant un composant de SLAM, soit encore le
-système de capture de mouvement de manière transparente. Seul le
+REEM de Pal Robotics\footnote{Site officiel:
+  \url{http://www.pal-robotics.com/}}. De ce fait l'objectif qui
+consistait à pouvoir maîtriser la complexité de la mise en place d'un
+tel mécanisme a été rempli au travers des choix réalisés ici. Ce
+composant a pu être utilisé dans le cadre d'une architecture robotique
+distribuée sur deux ordinateurs et l'introduction d'une interface au
+niveau de la componentisation robotique a permis au robot HRP-2 de se
+localiser soit en utilisant ce composant, soit en utilisant un
+composant de localisation utilisant des amers visuelles, soit encore
+le système de capture de mouvement de manière transparente. Seul le
 lancement du graphe diffère dans ces trois cas.
 
 
@@ -1178,7 +1192,7 @@ limitée vers l'extérieur. Cette contrainte va donc contrainte les
 composants de perception, la plupart du temps gros producteurs et
 consommateurs de donnée, à se situer sur le même hôte. Une fois le
 traitement des images terminé, le résultat final peut représenter un
-volume d'information bien plus compact: trajectoire ou position 3d par
+volume d'information bien plus compact: trajectoire ou position 3d par
 exemple.
 
 
