@@ -10,8 +10,8 @@
 
 \subsection{État de la robotique en 2012}
 
-\lettrine[lines=2, lraise=0.1, nindent=0em, slope=-.5em]% {I}{l} a
-beaucoup été écrit, et il a beaucoup été dit sur la robotique. On
+\lettrine[lines=2, lraise=0.1, nindent=0em, slope=-.5em]%
+{I}{l} a beaucoup été écrit, et il a beaucoup été dit sur la robotique. On
 annonce depuis plusieurs décennies son avènement prochain et pourtant
 elle peine à s'imposer dans nos quotidiens. Il y a pourtant des
 raisons d'espérer! Le rapport PIPAME sur Le développement industriel
@@ -246,57 +246,57 @@ les mains. Les différents modèles sont illustrés par la
 
 
 Le maître mot de ces trois ans et demi est finalement, et cela ne peut
-que se ressentir à la lecture de ce manuscrit, la diversité et la
-polyvalence. Comme dans toute thèse expérimentale, il a été nécessaire
-de tenter de faire fonctionner des idées, de A à Z. C'est à la fois
-formateur et passionnant, mais m'a conduit à utiliser de très nombreux
-outils, algorithmes et autres idées de l'État de l'Art à les
-comprendre afin de pouvoir les intégrer. Le travail réalisé étant
-principalement de faire communiquer les idées entre elles: comment un
-algorithme de vision peut-il servir la commande? Comment les données
-capteur peuvent-elles être utilisées par différents composants?
-Autant de questions qui, en terme d'ingénierie logicielle, consistent
-à lier des boîtes entre elles, encapsulant autant d'algorithmes et de
-stratégies de décision différentes. Il est toutefois difficile
-d'argumenter sur la pertinence des ``flèches'' sans expliquer au
-préalable ce que contiennent les ``boîtes'', d'autant que si certaines
-techniques sont classiques en robotique, d'autres sont issues des
-recherches du groupe GEPETTO et ne peuvent être considérées comme
-allant de soi. Le choix réalisé lors de la rédaction a donc été de
-proposer une approche incrémentale construisant petit à petit comment
-réaliser des scénarii complexes avec un robot humanoïde, de la
-théorie, à la pratique, mes contributions se situant davantage dans ce
-spectre. Le premier chapitre de ce manuscrit traite d'un problème
-particulier abordé dans le cadre de cette thèse: la représentation
-informatique des problèmes d'optimisation numérique. Ce problème peut
-sembler distinct de la robotique humanoïde, mais les techniques
-d'optimisation sont devenues un socle supportant tant d'algorithmes
-utiles qu'on ne peut pas éluder la question de la représentation de
-ces problèmes. L'objectif ici est de s'appuyer sur les
-caractéristiques des langages de programmation modernes, tel que le
-C++ afin de pouvoir définir un problème d'optimisation une fois puis
-de pouvoir le transmettre à différents solveurs de façon
-transparente. Une application robotique simple valide cette approche,
-mais la contribution majeure reste la formulation et la modélisation
-informatique du problème. Le second chapitre explique pas à pas les
-techniques de génération de mouvement et d'exécution sur le robot. Ces
-techniques font partie de l'État de l'Art et il n'y a pas d'apport
-original à ce niveau. Cependant, le contrôleur construit sur ces
-techniques et permettant de suivre des trajectoires tout en
-incorporant les données capteur est un travail totalement original et
-sur lequel, à notre connaissance, aucun papier antérieur n'a été
-publié. Le troisième chapitre est divisé en deux: tout d'abord la
-description informatique d'une pile de tâches asservie est un apport
-original. La suite du chapitre est dédiée à la localisation utilisant
-la vision sur un robot humanoïde. Cette partie n'est pas nouvelle en
-soi, car des résultats similaires ont déjà été publiés dans ce
-domaine, mais l'intégration de la localisation au schéma de contrôle
-proposé dans le \autoref{chap:suivi} est un travail original. Le
-dernier chapitre traite de l'intégration des différents composants sur
-notre plate-forme robotique. Dans ce chapitre, la totalité des
-algorithmes proposés font soit partie de l'État de l'Art, soit ont été
-conçu par d'autres équipes partenaires du LAAS, notamment l'équipe
-LAGADIC de l'IRISA à Rennes. L'apport original de cette partie
-consiste à démontrer comment on peut construire une architecture
-robotique complète en utilisant des algorithmes existant afin
-d'atteindre des comportements de plus haut niveau.
+que se ressentir à la lecture de ce manuscrit, la polyvalence. Comme
+dans toute thèse expérimentale, il a été nécessaire de tenter de
+mettre en pratique des idées, de A à Z. C'est à la fois formateur et
+passionnant, mais m'a conduit à utiliser de très nombreux outils,
+algorithmes de l'État de l'Art et à les comprendre afin de pouvoir les
+intégrer à l'approche que j'ai souhaité développer. Le travail réalisé
+étant principalement de faire communiquer les idées entre elles:
+comment un algorithme de vision peut-il servir la commande? Comment
+les données capteur peuvent-elles être utilisées par différents
+composants?  Autant de questions qui, en terme d'ingénierie
+logicielle, consistent à lier des boîtes entre elles, encapsulant
+autant d'algorithmes et de stratégies de décision différentes. Il est
+toutefois difficile d'argumenter sur la pertinence des ``flèches''
+sans expliquer au préalable ce que contiennent les ``boîtes'',
+d'autant que si certaines techniques sont classiques en robotique,
+d'autres sont issues des recherches du groupe GEPETTO et ne peuvent
+être considérées comme allant de soi. Le choix réalisé lors de la
+rédaction a donc été de proposer une approche incrémentale
+construisant petit à petit comment réaliser des scénarii complexes
+avec un robot humanoïde, de la théorie, à la pratique, mes
+contributions se situant davantage dans ce spectre. Le premier
+chapitre de ce manuscrit traite d'un problème particulier abordé dans
+le cadre de cette thèse: la représentation informatique des problèmes
+d'optimisation numérique. Ce problème peut sembler distinct de la
+robotique humanoïde, mais les techniques d'optimisation sont devenues
+un socle supportant tant d'algorithmes utiles qu'on ne peut pas éluder
+la question de la représentation de ces problèmes. L'objectif ici est
+de s'appuyer sur les caractéristiques des langages de programmation
+modernes, tel que le C++ afin de pouvoir définir un problème
+d'optimisation une fois puis de pouvoir le transmettre à différents
+solveurs de façon transparente. Une application robotique simple
+valide cette approche, mais la contribution majeure reste la
+formulation et la modélisation informatique du problème. Le second
+chapitre explique pas à pas les techniques de génération de mouvement
+et d'exécution sur le robot. Ces techniques font partie de l'État de
+l'Art et il n'y a pas d'apport original à ce niveau. Cependant, le
+contrôleur construit sur ces techniques et permettant de suivre des
+trajectoires tout en incorporant les données capteur est un travail
+totalement original et sur lequel, à notre connaissance, aucun papier
+antérieur n'a été publié. Le troisième chapitre est divisé en deux:
+tout d'abord la description informatique d'une pile de tâches asservie
+est un apport original. La suite du chapitre est dédiée à la
+localisation utilisant la vision sur un robot humanoïde. Cette partie
+n'est pas nouvelle en soi, car des résultats similaires ont déjà été
+publiés dans ce domaine, mais l'intégration de la localisation au
+schéma de contrôle proposé dans le \autoref{chap:suivi} est un travail
+original. Le dernier chapitre traite de l'intégration des différents
+composants sur notre plate-forme robotique. Dans ce chapitre, la
+totalité des algorithmes proposés font soit partie de l'État de l'Art,
+soit ont été conçu par d'autres équipes partenaires du LAAS, notamment
+l'équipe LAGADIC de l'IRISA à Rennes. L'apport original de cette
+partie consiste à démontrer comment on peut construire une
+architecture robotique complète en utilisant des algorithmes existant
+afin d'atteindre des comportements de plus haut niveau.
