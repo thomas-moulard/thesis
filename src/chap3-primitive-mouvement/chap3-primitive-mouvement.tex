@@ -238,7 +238,7 @@ $\mathbf{e}$ une représentation minimale, dans notre cas par une
 translation et une rotation autour d'un axe.
 
 En effet, toute rotation peut être représentée par trois paramètres
-\mbox{$\mathbf{\theta} = (\alpha, \beta, \gamma) \in \mathrm{R}^3$}. Le
+\mbox{$\mathbf{\theta} = (\alpha, \beta, \gamma) \in \mathbb{R}^3$}. Le
 vecteur $(\alpha, \beta, \gamma)$ normalisé représentant l'axe autour
 duquel la rotation s'effectue et la norme du vecteur
 $|\mathbf{\theta}|$ la quantité de rotation réalisée autour de cet
@@ -300,7 +300,7 @@ L'erreur de positionnement du centre de masse est alors simplement:
 \end{equation}
 
 La définition de l'erreur ne posant pas de difficulté ici car
-$\mathbf{x}$ est un élément de $\mathrm{R}^3$.
+$\mathbf{x}$ est un élément de $\mathbb{R}^3$.
 
 
 \subsubsection{Définition de la primitive de locomotion}
@@ -357,9 +357,9 @@ placement dans la tête permet naturellement de définir une tâche de
 ``regard'' où l'utilisateur souhaite garder un point au centre de
 l'image captée par une caméra du robot.
 
-Soit \mbox{$M = (X, Y, Z) \in \mathrm{R}^3$} un point 3d dont les
+Soit \mbox{$M = (X, Y, Z) \in \mathbb{R}^3$} un point 3d dont les
 coordonnées sont définies par rapport à la position de la caméra du
-robot et \mbox{$m = (x, y) \in \mathrm{R}^2$} sa projection sur le
+robot et \mbox{$m = (x, y) \in \mathbb{R}^2$} sa projection sur le
 plan image de la caméra\index{géométrie projective}. On a alors la
 relation suivante:
 
@@ -489,7 +489,7 @@ bassin. On a donc:
 
 \begin{equation}
   \begin{array}{ccc}
-    \mathcal{L} : & \mathrm{R} \rightarrow & \text{SE}(2)\\
+    \mathcal{L} : & \mathbb{R} \rightarrow & \text{SE}(2)\\
       & t \mapsto & \mathcal{L}(t)
   \end{array}
 \end{equation}
@@ -510,7 +510,7 @@ l'estimation finale de la pose:
 
 \begin{equation}
   \begin{array}{ccc}
-    m_i : & \mathrm{R} \rightarrow & \mathrm{R}\\
+    m_i : & \mathbb{R} \rightarrow & \mathbb{R}\\
       & t \mapsto & m_i(t)
   \end{array}
 \end{equation}

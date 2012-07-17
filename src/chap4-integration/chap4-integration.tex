@@ -164,8 +164,9 @@ Dans le cas de systèmes robotiques complexes, il est courant d'avoir
 plusieurs contrôleurs exécutés successivement au sein de la boucle de
 contrôle. Ainsi l'architecture d'HRP-2 se fonde sur un système de
 plug-in permettant de charger des contrôleurs ``à chaud''. Chaque
-contrôleur est alors modélisé par une machine à état très simple FIXME
-FIG. Le contrôleur passe alors dans les états suivants:
+contrôleur est alors modélisé par une machine à état très simple
+illustrée par la \autoref{fig:controleur}. Le contrôleur passe alors
+par les états suivants:
 
 \begin{itemize}
 \item Initialisation sans contrainte de temps réel
@@ -174,6 +175,17 @@ FIG. Le contrôleur passe alors dans les états suivants:
 \item Destruction avec contrainte de temps réel
 \item Destruction sans contrainte de temps réel
 \end{itemize}
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=.9\linewidth]{src/chap4-integration/controleur.png}
+  \end{center}
+  \caption{Schéma de fonctionnement d'un contrôleur temps
+    réel. Plusieurs contrôleurs de ce type peuvent être lancés. Dans
+    ce cas, chaque tour de la boucle de contrôle correspond à une
+    exécution de la boucle de contrôle de chaque contrôleur actif --
+    initialisé -- dans l'ordre dans lequel ils ont été créés. \label{fig:controleur}}
+\end{figure}
 
 Le passage d'un état à l'autre se réalisant dans l'ordre, avec un
 bouclage sur la phase d'exécution autant qu'il soit nécessaire.
@@ -445,10 +457,10 @@ un risque, et ce dernier tend à croître quand l'architecture devient
 plus complexe et intègre des composants moins fiables. Pour se faire,
 il est donc nécessaire d'avoir un moyen de pouvoir obtenir un état
 complet du système de manière unifiée. Ce dernier est disponible sur
-le robot et est illustré par la figure FIXME. De plus, il est
-nécessaire à tout moment de pouvoir avoir un retour si le mouvement
-exécuté présente le risque d'endommager le robot. Ces risques se
-divisent en différentes catégories:
+le robot et est illustré par la \autoref{fig:diagnostic}. De plus, il
+est nécessaire à tout moment de pouvoir avoir un retour si le
+mouvement exécuté présente le risque d'endommager le robot. Ces
+risques se divisent en différentes catégories:
 \begin{description}
 \item[Endommagement des capteurs] Les capteurs de force sont conçus
   pour résister à un impact de 1000N au plus. Il est recommandé de ne
@@ -588,10 +600,11 @@ masse au sein de l'objet ainsi que la matrice d'inertie associée au
 corps. Une représentation alternative de la géométrie du corps
 utilisée pour les calculs des collisions peut également être
 définie. Dans le cas d'HRP-2, une version alternative des modèles des
-corps utilisant une approximation convexe contenant moins de triangles
-est disponible afin de pouvoir accélérer l'évaluation des
-collisions. Une version alternative fondée sur l'utilisation de
-capsules est également utilisée dans FIXME.
+corps utilisant une approximation convexe avec un pas de dicrétisation
+plus grossier est disponible afin de pouvoir accélérer l'évaluation
+des collisions. Une version alternative fondée sur l'utilisation de
+capsules est également utilisée afin de fournir des tests de collision
+rapides pour la planification de mouvements.
 
 
 \paragraph{Joints}
@@ -651,14 +664,16 @@ tous ces degrés de liberté ne sont pas commandables. En effet, chaque
 main n'est commandée que par un seul degré de liberté décrivant le
 niveau de fermeture de la pince. Ces mécanismes sont régulièrement
 utilisés dans les robots. On peut également citer le robot Romeo
-d'Aldebaran Robotics FIXME qui s'appuie sur un mécanisme de commande
-similaire: un degré de liberté commande l'actionnement d'une main
-complète composé de plusieurs degrés de liberté. Pour modéliser un tel
-système, il est possible d'insérer des contraintes et des degrés de
-liberté ``dépendants'' dans le modèle. On peut ainsi insérer une
-contrainte qui va lier deux degrés ensemble. Par exemple dans la
-définition du joint A, on peut spécifier que la valeur du degré de
-liberté associé dépend de la valeur du degré de liberté du joint B:
+d'Aldebaran Robotics\footnote{Description officielle du prototype de
+  plate-forme: \url{http://projetromeo.com/}} qui s'appuie sur un
+mécanisme de commande similaire: un degré de liberté commande
+l'actionnement d'une main complète composé de plusieurs degrés de
+liberté. Pour modéliser un tel système, il est possible d'insérer des
+contraintes et des degrés de liberté ``dépendants'' dans le modèle. On
+peut ainsi insérer une contrainte qui va lier deux degrés
+ensemble. Par exemple dans la définition du joint A, on peut spécifier
+que la valeur du degré de liberté associé dépend de la valeur du degré
+de liberté du joint B:
 
 \begin{equation}
   \mathbf{X}_B = \alpha_B \mathbf{X}_A + \beta_B
@@ -857,21 +872,34 @@ la perception --:
 \end{description}
 
 
-Ces composants fournissent chacun des topics et des services qui sont
-détaillés dans les figures FIXME. Les interactions entre les
-composants sont détaillés dans la figure FIXME.
+\begin{figure}[htbp]
+  \begin{landscape}
+    \begin{center}
+      \includegraphics[width=.95\linewidth]{src/chap4-integration/archi.png}
+    \end{center}
+    \caption{Schéma de fonctionnement de
+      l'architecture.\label{tab:roscomponents}}
+  \end{landscape}
+\end{figure}
+
+
+
+Ces composants interagissent entre eux et fournissent chacun des flux
+de données et des services qui sont détaillés dans la
+\autoref{fig:roscomponents}.
 
 
 Cette architecture a été testée sur le robot humanoïde
-HRP-2\index{HRP-2}. L'architecture a fonctionné correctement, mais il n'a pas été
-possible d'atteindre une précision suffisante au sein du système de
-perception pour compenser avec succès la dérive du robot. En effet, le
-SLAM tel que configuré ici a donné une précision de plus ou moins 5cm
-ce qui est insuffisant pour des tâches de locomotions complexes. On
-notera également que la phase de planification n'apparaît pas, elle a
-été réalisée grâce au travail décrit dans FIXME mais sous la forme
-d'une phase hors ligne. Le chemin est alors enregistré sous la forme
-d'un fichier chargé au début de l'expérimentation.
+HRP-2\index{HRP-2}. L'architecture a fonctionné correctement, mais il
+n'a pas été possible d'atteindre une précision suffisante au sein du
+système de perception pour compenser avec succès la dérive du
+robot. En effet, le SLAM tel que configuré ici a donné une précision
+de plus ou moins 5cm ce qui est insuffisant pour des tâches de
+locomotions complexes. On notera également que la phase de
+planification n'apparaît pas, elle a été réalisée grâce au travail
+décrit dans \cite{11dalibard.humanoids} sous la forme d'un traitement
+hors ligne. Le chemin est enregistré sous la forme d'un fichier
+chargé au début de l'expérimentation.
 
 
 \subsection{Difficultés récurrentes}
@@ -935,7 +963,7 @@ composant terminant sont initialisation soit toujours le même. De ce
 fait, un composant peut commencer à attendre des données sur un topic
 avant que le topic ne soit créé par le premier composant. Le protocole
 de communication est extrêmement souple sur ce point et la possibilité
-de pouvoir écouter des topics qui n'existent pas encore simplifie de
+de pouvoir écouter des flux de données qui n'existent pas encore simplifie de
 beaucoup le développement en évitant les erreurs lorsque l'ordre
 d'initialisation change. Par contre, il est alors nécessaire de mettre
 en place, en interne et soit même, les mécanismes afin d'éviter les
@@ -960,9 +988,9 @@ système possède donc plusieurs phases transitoires d'initialisation
 qu'il est difficile d'automatiser.
 
 
-\begin{figure}
+\begin{figure}[htbp]
   \begin{center}
-    \includegraphics{src/chap4-integration/hrp2_diagnostics.jpg}
+    \includegraphics[width=.3\linewidth]{src/chap4-integration/hrp2_diagnostics.jpg}
   \end{center}
   \caption{Visualisation de l'état général du robot fourni par les
     outils de diagnostic automatique.\label{fig:diagnostic}}
@@ -1020,29 +1048,30 @@ du paquet \texttt{visp\_tracker}\footnote{Site officiel:
 
 
 L'algorithme de suivi d'objet a été développé au sein de l'équipe
-LAGADIC\footnote{\url{http://www.irisa.fr/lagadic/}} -- INRIA
-Rennes-Bretagne Atlantique et à l'IRISA--. Cet algorithme utilise
-l'asservissement visuel virtuel pour calculer une estimation de la
-pose d'un objet. Le modèle de l'objet est connu et une estimation
-initiale de la position de ce dernier est nécessaire. Une fois cette
-estimation connue, l'algorithme tente de minimiser l'écart entre la
-position des lignes -- bords -- de l'objet dans l'image par rapport à
-la reprojection du modèle de l'objet suivi dans l'image. D'autres
-critères que les lignes peuvent être choisis, mais c'est ce dernier
-point qui a été retenu dans nos tests. La résolution de ce problème
-passe par la méthode de Levenberg-Marquardt\index{Levenberg-Marquardt}
-qui est proche de l'algorithme des moindres carrés classiques.
+LAGADIC\footnote{Site de l'équipe LAGADIC:
+  \url{http://www.irisa.fr/lagadic/}} -- INRIA Rennes-Bretagne
+Atlantique et à l'IRISA--. Cet algorithme utilise l'asservissement
+visuel virtuel pour calculer une estimation de la pose d'un objet. Le
+modèle de l'objet est connu et une estimation initiale de la position
+de ce dernier est nécessaire. Une fois cette estimation connue,
+l'algorithme tente de minimiser l'écart entre la position des lignes
+-- bords -- de l'objet dans l'image par rapport à la reprojection du
+modèle de l'objet suivi dans l'image. D'autres critères que les lignes
+peuvent être choisis, mais c'est ce dernier point qui a été retenu
+dans nos tests. La résolution de ce problème passe par la méthode de
+Levenberg-Marquardt\index{Levenberg-Marquardt} qui est proche de
+l'algorithme des moindres carrés classiques.
 
 
 Cet algorithme est partie intégrante de ViSP -- Visual Servoing
-Platform
--- \footnote{\url{http://www.irisa.fr/lagadic/visp/visp.html}}. ViSP
-intègre directement des outils pour acquérir des images à partir de
-caméras ou lire des données préenregistrées, mais n'est pas un
-composant robotique en lui-même.
+Platform -- \footnote{Site du logiciel ViSP:
+  \url{http://www.irisa.fr/lagadic/visp/visp.html}}. ViSP intègre
+directement des outils pour acquérir des images à partir de caméras ou
+lire des données préenregistrées, mais n'est pas un composant
+robotique en lui-même.
 
 
-La première étape a été de concevoir l'interface du composant: topics
+La première étape a été de concevoir l'interface du composant: flux de données
 et services. L'information calculée par ce programme est simple à
 définir: il s'agit de la position relative de l'objet suivi par
 rapport à la caméra. On peut donc ajouter un repère supplémentaire à
@@ -1227,6 +1256,15 @@ contrôleur par un contrôleur envoyant sa commande au simulateur. Une
 phase supplémentaire de définition du monde est souvent nécessaire.
 
 
+%\begin{figure}[htbp]
+%  \begin{center}
+%    %\includegraphics[width=.95\linewidth]{src/chap4-integration/rviz-full.jpg}
+%    FIXME
+%  \end{center}
+%  \caption{Cycle de conception d'une architecture robotique. \label{fig:archidesign}}
+%\end{figure}
+
+
 Une fois validée en simulation, l'architecture est portée sur le robot
 proprement dit. On peut alors faire tourner l'architecture sans
 envoyer réellement les commandes aux actionneurs afin de vérifier
@@ -1235,7 +1273,7 @@ communications entre les hôtes, etc. Enfin, l'architecture peut être
 testée réellement en validant plusieurs scénarii adaptés de difficulté
 croissante. Une fois l'expérience validée, on peut alors changer
 certains composants afin de tester de nouvelles stratégies ce qui fait
-débuter un nouveau cycle comme illustré sur la figure FIXME.
+débuter un nouveau cycle.
 
 
 \begin{figure}
