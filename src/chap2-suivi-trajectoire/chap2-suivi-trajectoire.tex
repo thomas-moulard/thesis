@@ -28,7 +28,7 @@ système proposé se révèle utile. Enfin, les prospectives montreront
 quelles sont les possibilités d'améliorations de l'approche proposée
 et quels futurs travaux restent à réaliser.
 
-\section{Génération de mouvements pour les robots humanoïdes}
+\section{Génération de mouvements}
 \subsection{Structure robotique}
 
 Un robot est un système composé par des actionneurs -- moteurs --, des
@@ -1138,8 +1138,8 @@ du domaine et possédant un chapitre consacré à la locomotion
 bipède. Dans le domaine de la localisation, on peut également citer
 \cite{05thrun}, pour la vision robotique\index{vision robotique}
 \cite{03hartley} et pour la planification de mouvements
-\cite{06lavalle}. Les fondements mathématiques de la robotique sont
-très clairement décrits par \cite{94murray}.
+\cite{91latombe,05choset,06lavalle}. Les fondements mathématiques de
+la robotique sont clairement décrits par \cite{94murray}.
 
 
 \subsection{Modèles pour la marche dynamique}
@@ -1184,11 +1184,13 @@ incluent \cite{07suleiman.humanoids,08kanehiro.rsj}.
 \subsection{Contrôleurs pour robots humanoïdes}
 
 
-Le formalisme du contrôle par tâche a d'abord été défini par Bernard
-Espiau \cite{89iser.rives}. D'autres groupes ont également mené des
-recherches sur ce sujet \cite{05sentis.icra}. Les publications sur le
-logiciel utilisé pour les travaux menés au sein de cette thèse sont
+Le formalisme du contrôle par tâche a notamment été étudié par Bernard
+Espiau \cite{89iser.rives}, ainsi que d'autres groupes tel que celui
+de Luis Sentis \cite{05sentis.icra}. Les publications sur l'approche
+de contrôle par tâche dévéloppé au sein du de notre groupe de
+recherche sont
 \cite{09mansard.icar,05yoshida.humanoids,10kanoun.humanoids}.
+
 
 \subsection{Exécution de trajectoires asservies}
 
@@ -1350,7 +1352,7 @@ section suivante. Le schéma de contrôle proposé tient compte de ces
 deux problèmes afin de fournir une approche adaptée à la locomotion
 bipède.
 
-\section{Suivi de trajectoire pour la robotique humanoïde}\label{closedloop}
+\section{Suivi de trajectoire}\label{closedloop}
 
 
 Cette section propose un contrôleur pour le suivi de trajectoire
@@ -1683,48 +1685,10 @@ futurs. L'objectif est donc de raccrocher la trajectoire de ZMP à la
 nouvelle pile de pas. Cependant, contrairement aux pas qui sont des
 données discrètes, les trajectoires doivent être raccordées
 continument. Pour ce faire, nous avons choisi un polynôme de degré
-trois à valeurs réelles auquel quatre contraintes ont été imposées,
-voire Fig. \ref{fig:transition}. Ce polynôme est dénoté
-$\Delta_\alpha(t)$ où $\alpha$ est la valeur du polynôme à $t=T$. Les
-contraintes sont donc:
+trois à valeurs réelles auquel quatre contraintes ont été imposées. Ce
+polynôme est dénoté $\Delta_\alpha(t)$ où $\alpha$ est la valeur du
+polynôme à $t=T$. Les contraintes sont donc:
 
-\begin{figure}[ht!]
-  \begin{center}
-
-    \begin{tikzpicture}[x=.9\textwidth]
-      \def\xmin{0.}
-      \def\xmax{1.}
-      \def\ymin{0.5}
-      \def\ymax{2.5}
-
-      % grid
-      \draw[style=help lines, ystep=.5, xstep=.25] (\xmin,\ymin) grid
-      (\xmax,\ymax);
-
-      % axes
-      \draw[->] (\xmin,\ymin) -- (\xmax,\ymin) node[right] {$t$};
-      \draw[->] (\xmin,\ymin) -- (\xmin,\ymax) node[above]
-           {$\mathbf{\Delta}(t)$};
-
-      % xticks and yticks
-      \node at (0.05, \ymin) [below] {start};
-      \node at (0.95, \ymin) [below] {end};
-
-      \draw[color=black,domain=\xmin:\xmax] plot[id=cur] function{1}
-      node [right] {position initiale};
-
-      \draw[color=black, domain=\xmin:\xmax] plot[id=des]
-      function{2} node [right] {position désirée};
-
-      \draw[color=black, domain=\xmin:\xmax] plot[id=trans]
-      function{-2. * x * x * x + 3 * x * x + 1} node [below] {};
-
-    \end{tikzpicture}
-  \end{center}
-  \caption{Courbe polynomiale $\mathbf{\Delta}(t)$ réalisant une
-    transition continue lors de la mise à jour des
-    trajectoires. \label{fig:transition}}
-\end{figure}
 
 \begin{enumerate}
 \item $\forall t \leq 0, \Delta_\alpha(t) = 0$

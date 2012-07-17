@@ -205,9 +205,11 @@ pdfproducer = {Thomas Moulard}
 \frontmatter
 \tableofcontents{\thispagestyle{headings}}
 %
-\mainmatter 
+\mainmatter
+\pagestyle{empty}
 \include{src/remerciements}
 \include{src/publis}
+\pagestyle{headings}
 \include{src/chap0-introduction/chap0-introduction}
 \include{src/chap1-roboptim/chap1-roboptim}
 \include{src/chap2-suivi-trajectoire/chap2-suivi-trajectoire}
