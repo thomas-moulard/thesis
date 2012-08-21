@@ -9,7 +9,7 @@
 \lettrine[lines=2, lraise=0.1, nindent=0em, slope=-.5em]%
 {C}{e} chapitre est dédié au problème de la génération et de
 l'exécution asservie de trajectoires pour un robot humanoïde. Les
-robots humanoïdes sont des robots ayant une forme anthropomorphique:
+robots humanoïdes sont des robots ayant une forme anthropomorphe:
 une tête, deux bras, deux jambes et un torse. La locomotion est donc
 bipède et les robots humanoïdes ont la possibilité d'effectuer des
 tâches dextres. De ces choix résulte un système hautement dimensionné
@@ -44,9 +44,9 @@ l'action de ses actionneurs, elle est donc conditionnée par l'état de
 l'arbre cinématique\index{arbre cinématique}.
 
 \begin{mydef}
-  Un arbre cinématique\index{arbre cinématique} est un ensemble de
-  joints\index{joint} formant un arbre.  Soit $\mathcal{A}$ un arbre
-  cinématique, on a:
+  Un arbre cinématique\index{arbre cinématique} est un ensemble
+  d'articulations\index{articulation}\index{joint|see{articulation}}
+  formant un arbre. Soit $\mathcal{A}$ un arbre cinématique, on a:
 
   \begin{equation}
     \mathcal{A} = \emptyset \cup \{ (\mathcal{J}_0, \mathcal{C}_0),
@@ -108,18 +108,19 @@ mais nous n'allons ici en détailler que deux:
 \end{description}
 
 
-Une fois cette structure construite, un souhait naturel est de
-souhaiter pouvoir exprimer son état. C'est l'objectif du vecteur de
+Une fois cette structure construite, une attente naturelle est pouvoir
+exprimer son état. C'est l'objectif du vecteur de
 configuration\index{vecteur de
   configuration}\index{configuration|see{vecteur de configuration}}.
 
 \begin{mydef}
   Soit $\mathbf{q}$ le vecteur de configuration de l'arbre cinématique
   $\mathcal{C}$. Soit $\mathcal{J}_0, \dotsc, \mathcal{J}_n$
-  l'ensemble des joints de $\mathcal{C}$. Le vecteur de configuration
-  a pour dimension: $\sum_{i=0}^n \#\mathcal{J}_i$, la somme des arités
-  des joints interprétés comme fonctions, c'est-à-dire la somme du
-  nombre de degrés de liberté de tous les joints.
+  l'ensemble des articulations de $\mathcal{C}$. Le vecteur de
+  configuration a pour dimension: $\sum_{i=0}^n \#\mathcal{J}_i$, la
+  somme des arités des articulations interprétées comme fonctions,
+  c'est-à-dire le nombre de degrés de liberté de toutes les
+  articulations.
 
 
   Les valeurs du vecteur de configuration sont alors les valeurs des
@@ -157,7 +158,8 @@ de configuration en deux parties: d'un côté la position du robot dans
 le plan, définie par une sous-partie des degrés de liberté du joint
 libre à la racine, le repère de ce joint définissant de ce fait le
 repère monde $\mathcal{W}$ et d'autre part les degrés de liberté
-internes correspondant à une réalité mécanique. On aura donc:
+internes correspondant à une réalité mécanique. Sous l'hypothèse que
+le robot se déplace sur un sol plan, on aura donc:
 
 \begin{equation} \label{eq:chap2_configuration}
   \begin{aligned}
@@ -204,7 +206,7 @@ centre de masse et sa matrice d'inertie.
 \subsubsection{Cinématique directe}
 
 À partir de la structure définie dans la section précédente, la
-première opération que l'on souhaite pouvoir réaliser est pouvoir
+première opération que l'on souhaite réaliser est de pouvoir
 déterminer la position des corps du robot en fonction de la
 configuration de ce dernier. Cette opération, appelée calcul de la
 géométrie directe, consiste en la fonction suivante:
@@ -267,10 +269,10 @@ dont le nombre de variables correspond au nombre de degrés de liberté
 du robot et dépend évidemment de sa structure. Si l'on souhaite
 positionner un corps à un endroit précis en rotation et translation,
 six variables sont nécessaires. De ce fait, selon le nombre de degrés
-de liberté du système et la position à atteindre, 0, 1 ou une infinité
-de solutions peuvent exister. La résolution analytique n'étant pas
-toujours possible, les outils numériques ont montré leur capacité à
-résoudre efficacement ce problème.
+de liberté du système et la position à atteindre, aucune solution, un
+nombre fini ou infini de solutions peuvent exister. La résolution
+analytique n'étant pas toujours possible, les outils numériques ont
+montré leur capacité à résoudre efficacement ce problème.
 
 %Une technique de résolution
 %possible sera détaillée dans la section FIXME.
@@ -279,17 +281,17 @@ résoudre efficacement ce problème.
 
 \subsection{Mouvements dynamiques d'un corps dans l'espace}
 
-La géométrie et cinématique permettent de calculer la vitesse de corps
-dans l'espace indépendamment de leur réalité physique. Cependant, ce
-n'est pas suffisant pour pouvoir générer un mouvement complexe: le
-poids des corps du robot, leurs propriétés inertielles ainsi les
-forces exercées s'appliquant au robot doivent être prises en compte
-pour pouvoir donner un mouvement qui n'est pas seulement viable dans
-un monde sans physique, mais également dans le monde réel où les lois
-de la physique s'appliquent.
+La cinématique directe permet de calculer la vitesse de corps dans
+l'espace indépendamment de leur réalité physique. Cependant, ce n'est
+pas suffisant pour pouvoir générer un mouvement complexe: le poids des
+corps du robot, leurs propriétés inertielles ainsi que les forces
+exercées s'appliquant au robot doivent être prises en compte pour
+pouvoir donner un mouvement qui n'est pas seulement viable dans un
+monde sans physique, mais également dans le monde réel où les lois de
+la physique s'appliquent.
 
-Pour se faire, nous allons commencer par rappeler les notions de
-mécanique nécessaire à la génération de mouvements et les différents
+Pour ce faire, nous allons commencer par rappeler les notions de
+mécanique nécessaires à la génération de mouvements et les différents
 modèles simplifiés utilisés en robotique humanoïde. Tout l'enjeu de la
 robotique humanoïde se joue ici: d'un côté on ne peut ignorer la
 physique pour générer un mouvement de marche, mais de l'autre le coût
@@ -299,9 +301,9 @@ pour pouvoir fonctionner en temps réel sur un robot. Il y a ici un
 compromis à trouver qui fait toute la richesse de la robotique
 humanoïde: quelles simplifications adopter? quels calculs peuvent être
 réalisés à l'avance, une fois pour toutes, et quels calculs doivent
-être évalutés en ligne? Nous allons tout d'abord nous attacher à rappeler
-les lois de la mécanique classique avant de nous intéresser aux
-différentes simplifications qui permettent de rendre le problème
+être évalués en ligne? Nous allons tout d'abord nous attacher à
+rappeler les lois de la mécanique classique avant de nous intéresser
+aux différentes simplifications qui permettent de rendre le problème
 tractable.
 
 
@@ -764,7 +766,7 @@ stratégie la plus utilisée consiste en les étapes suivantes:
 
 Le problème reste alors la troisième étape: comment passer d'une
 trajectoire de ZMP à une trajectoire de centre de masse tout en
-préservant les contraintes temps réel qui sont inhérantes au contrôle
+préservant les contraintes temps réel qui sont inhérentes au contrôle
 d'un système robotique.
 
 \paragraph{De la réalité physique à un modèle calculatoire tractable}
@@ -794,7 +796,7 @@ y_G + \frac{\dot{\sigma}_x\ -\ m\ z_G\ \ddot{y}_G}{m\ (\ddot{z}_G + g)}
 \end{equation}
 
 $x_G$, $y_G$, $z_G$ étant la position du centre de masse dans
-l'espace, $\sigma$ le moment d'inertie du centre de masse, $m$ la
+l'espace, $\sigma$ le moment d'inertie du robot, $m$ la
 masse totale du robot et $g$ la constante de gravité. L'objectif ici
 est de déduire $x_{G}$ à partir du $x_{ZMP}$ choisi. La résolution
 d'une telle équation est malheureusement difficile, car il n'existe
@@ -815,7 +817,7 @@ x_{\text{ZMP}} &=& x_G - \frac{z_G}{g} \ddot{x}_G\\
 y_{\text{ZMP}} &=& y_G - \frac{z_G}{g} \ddot{y}_G
 \end{eqnarray*}
 
-Ce modèle dît du ``Pendule Inverse Linéarisé''\index{Pendule Inverse
+Ce modèle dit du ``Pendule Inverse Linéarisé''\index{Pendule Inverse
   Linéarisé} pose le problème sous la forme d'une équation
 différentielle non homogène du second ordre. La résolution explicite
 d'une telle équation est possible et peut s'exprimer sous la forme
@@ -922,14 +924,14 @@ continuité de la trajectoire de centre de masse.
 La section précédente a montré comment générer, à partir d'une
 séquence d'empreintes de pas, une trajectoire de centre de masse qui
 assure la stabilité du robot. Une fois cette trajectoire associée aux
-trajectoires des pieds, on obtient une représentation une
-représentation d'une trajectoire de marche. Cette représentation est
-avantageuse, car elle ne fixe pas directement la position des corps du
-robot, il est alors encore possible de déplacer le haut du corps pour,
-par exemple, aller saisir un objet. Ce type de tâche étant typiquement
-définie comme un asservissement sur la donnée d'un capteur, il est
-nécessaire de pouvoir découpler ce qui relève de la planification et
-donc d'un processus lent et ce qui relève de l'asservissement capteur,
+trajectoires des pieds, on obtient une représentation d'une
+trajectoire de marche. Cette représentation est avantageuse, car elle
+ne fixe pas directement la position des corps du robot, il est alors
+encore possible de déplacer le haut du corps pour, par exemple, aller
+saisir un objet. Ce type de tâche étant typiquement définie comme un
+asservissement sur la donnée d'un capteur, il est nécessaire de
+pouvoir découpler ce qui relève de la planification et donc d'un
+processus lent et ce qui relève de l'asservissement capteur,
 c'est-à-dire d'un comportement réactif. On peut alors se demander,
 comment passer d'une série de trajectoires à une commande pouvant être
 envoyée aux actionneurs du système.
@@ -945,12 +947,12 @@ exemple.
 
 
 C'est à ce moment qu'une différenciation s'opère entre d'un côté les
-stratégies d'optimisation numériques classiques et les stratégies
+stratégies d'optimisation numérique classiques et les stratégies
 d'optimisation adaptées à la robotique de l'autre. Les problèmes que
-la robotique traite possèdent deux caractéristiques qui les rend
-spécifique:
+la robotique traite possèdent deux caractéristiques qui les rendent
+spécifiques:
 \begin{enumerate}
-\item Ils n'admettent pas toujours une solution: il est possible
+\item Ils n'admettent pas toujours une solution: il est possible que
   l'objet soit trop loin pour pouvoir être atteint.
 \item Les contraintes du problème ont une importance variable: suivre
   les trajectoires de référence sur les pieds et le centre de masse
@@ -964,7 +966,7 @@ Enfin, le suivi de trajectoire et la génération de la commande doit
 être réalisée à une fréquence fixe. Le solveur doit donc pouvoir
 réaliser une itération durant un tour de la boucle temps réel ce qui
 impose des limitations très strictes sur la complexité des calculs
-pouvant être réalisé. Face à ces particularités, la stratégie de
+pouvant être réalisés. Face à ces particularités, la stratégie de
 résolution adoptée ici est celle de la ``pile de tâches''.
 
 
@@ -979,7 +981,7 @@ envoyer aux actionneurs qui va réaliser un certain nombre d'objectifs
 assignés au robot. Habituellement, il est mal aisé d'exprimer ses
 objectifs directement dans l'espace des commandes du système. À la
 place, nous pouvons exprimer ces objectifs sous forme de tâche. Chaque
-tâche vît dans un espace qui lui est propre et adapté à la contrainte
+tâche vit dans un espace qui lui est propre et adapté à la contrainte
 que l'on souhaite exprimer. Par exemple, dans le cas d'un
 asservissement visuel, l'espace de la tâche sera l'espace image
 2d. Une tâche d'asservissement visuel sera alors de réaliser un
@@ -1031,7 +1033,7 @@ relation précédente:
 \end{equation}
 
 $\mathbf{J}_1^{+}$ est la pseudoinverse de $\mathbf{J}_1$ ou inverse
-des moindres carrés de $\mathbf{J}_1$. $\dot{\mathbf{e}}_1$, la
+des moindres carrés de $\mathbf{J}_1$. $\dot{\mathbf{e}}_1^{*}$, la
 consigne, est le mouvement souhaité dans l'espace de la
 tâche. $\mathbf{P}_1$ est le projecteur vectoriel sur le noyau du
 jacobien $\mathbf{J}_1$ et $\mathbf{z}$ un vecteur quelconque. Le
@@ -1082,11 +1084,11 @@ planifiée n'est pas toujours satisfaisant. En effet, les nombreuses
 hypothèses réalisées dans le cadre de l'utilisation de modèles
 linéaires pour la marche entretiennent un flou entre les mouvements
 stables et instables sur une plate-forme donnée. En effet, les
-hypothèses tell que négliger les moments autour du centre de masse,
+hypothèses telles que négliger les moments autour du centre de masse,
 supposer un sol plan, ne sont jamais respectées en réalité. Il faut
 donc pouvoir apprécier ce qui est une entorse ``acceptable'' aux
-hypothèses sur lequel le raisonnement a été effectué. Il en découle
-une grande part de ``savoir-faire'' dans l'implémentation d'un
+hypothèses sur lesquelles le raisonnement a été effectué. Il en
+découle une grande part de ``savoir-faire'' dans l'implémentation d'un
 algorithme de marche fiable. Et même avec ce savoir-faire, l'écart
 entre le modèle et la réalité est tel qu'il met souvent en péril la
 réalisation de tâches complexes. Lors de l'utilisation d'un modèle
@@ -1095,16 +1097,16 @@ deux centimètres par pas. Dès lors, prendre un objet ou interagir avec
 un humain se révèle impossible après un déplacement de quelques mètres
 sans un mécanisme de compensation adapté. Inversement, l'utilisation
 d'un modèle physique réaliste aboutit à des temps de calcul
-importants, trop longs pour pouvoir être utilisé pour s'asservir sur un
-capteur notamment. La recherche d'un compromis entre réactivité,
+importants, trop longs pour pouvoir être utilisés pour s'asservir sur
+un capteur notamment. La recherche d'un compromis entre réactivité,
 fiabilité et précision est un réel enjeu pour la robotique humanoïde.
 
 
 \subsection{Conclusion}
 
 Cette section propose une stratégie de génération de mouvement pour
-les robots humanoïdes de l'État de l'Art. Nous sommes parti des
-fondements de la robotique avec la définition d'un arbre cinématique,
+les robots humanoïdes de l'État de l'Art. Nous sommes partis des
+fondements de la robotique avec la définition d'un arbre cinmatique,
 de la cinématique directe et inverse pour ensuite détailler comment
 les relations fondamentales de la physique ont permis de définir des
 modèles de génération de mouvement tractables pour le calcul de
@@ -1112,7 +1114,7 @@ trajectoire de référence pour la marche. On a enfin montré que ces
 trajectoires pouvaient être suivies via un contrôleur temps réel
 reposant sur le paradigme de la pile des tâches. L'utilisation de
 tâches permet la conception de contrôleurs versatiles, pouvant être
-étendu facilement par la définition de nouvelles tâches. Cette
+étendus facilement par la définition de nouvelles tâches. Cette
 stratégie globale relève de nombreux travaux du domaine réalisés qui
 seront détaillés dans la section suivante.
 
@@ -1120,7 +1122,7 @@ seront détaillés dans la section suivante.
 
 \section{État de l'Art}
 
-Cette section réalise un sommaire de l'état de l'Art en robotique
+Cette section réalise un état de l'Art sommaire en robotique
 humanoïde. Il comprend à la fois une analyse des travaux de référence
 en robotique, de différents travaux sur lesquels l'algorithme de
 contrôle proposé dans ce chapitre s'appuie ainsi que les différents
@@ -1201,7 +1203,7 @@ moins abondante dans le domaine de la robotique bipède. Des exemples
 de scénarii complexes sur des systèmes humanoïdes sont
 \cite{05michel.humanoids,10chestnutt,09chestnutt.rsj}. Aucun
 traitement particulier pour la compensation de la dérive n'est pas
-décrite dans ces papiers bien qu'elle n'a pu être ignorée au vu des
+décrite dans ces travaux bien qu'elle n'a pu être ignorée au vu des
 possibilités des systèmes décrits. D'autres papiers s'intéressent plus
 spécifiquement au maintien de l'équilibre dans le cas où une
 perturbation extérieure apparaît lors de la marche
@@ -1302,9 +1304,9 @@ support:
   \mathbf{z} = \mathbf{x}  - \frac{z_c}{g} \ddot{\mathbf{x}}
 \end{equation}
 
-La linéarité de l'équation signifie que perturber le center masse par
-une fonction \mbox{$\delta \mathbf{x}$} dépendant du temps perturbe le
-ZMP de manière linéaire:
+La linéarité de l'équation signifie que perturber le centre de masse
+par une fonction \mbox{$\delta \mathbf{x}$} dépendant du temps
+perturbe le ZMP de manière linéaire:
 
 \begin{equation} \label{eq:zmpperturbation}
 \begin{split}
@@ -1379,7 +1381,7 @@ séquence d'empreintes de pas, c'est-à-dire un ensemble de $S_i$ tel
 que \mbox{$0 \leq i \leq n^{\text{pas}}$} et une trajectoire du haut
 du corps \mbox{$\gamma(t \in [t_{\text{min}}, t_{\text{max}}]) \in
   \mathcal{C}$}. Un avantage du schéma de contrôle proposé est que la
-position des empreintes de pas peut être altéré pour s'assurer que la
+position des empreintes de pas peut être altérée pour s'assurer que la
 trajectoire reste faisable. En partant d'une modification de la pile
 de pas, on peut déformer la trajectoire du centre de masse pour
 s'assurer que la trajectoire reste stable. Les trajectoires de
@@ -1398,11 +1400,11 @@ suivantes:
 \item filtrage de l'erreur calculée par un filtre passe-bas afin de
   borner la déformation maximum et absorber d'éventuelles erreurs de
   localisation,
-\item recalculer les prochains pas de façon à absorber l'erreur de
+\item recalcule les prochains pas de façon à absorber l'erreur de
   positionnement du robot,
-\item vérifier si le prochain pas est réalisable,
-\item regénérer des trajectoires continues pour les pieds, le ZMP et le centre de masse,
-\item recalculer les valeurs articulaires via la pile de tâches
+\item vérifie si le prochain pas est réalisable,
+\item regénère des trajectoires continues pour les pieds, le ZMP et le centre de masse,
+\item recalcule les valeurs articulaires via la pile de tâches
 \end{enumerate}
 
 
@@ -1571,7 +1573,7 @@ l'erreur calculée. La figure \ref{fig:footstepreplan} illustre cette étape.
 
 
 À partir de ce moment, il est possible de regénérer des trajectoires
-pour les pieds et le centre de masse. Afind d'assurer la continuité de
+pour les pieds et le centre de masse. Afin d'assurer la continuité de
 la solution, la correction de la trajectoire est appliquée
 progressivement durant les deux prochains pas. Pour finir, la
 résolution des tâches calcule les nouvelles valeurs articulaires.
@@ -1614,7 +1616,7 @@ interprétée comme la position du robot planifiée par rapport à la
 position du robot estimée. Le délai induit par le système de
 localisation fait que l'estimation du robot doit être comparée à la
 position dans le plan au même moment. On obtient alors une erreur sur
-le positionnement à un moment du passé, mais qui peut être utilisé
+le positionnement à un moment du passé, mais qui peut être utilisée
 sans problème. On peut raisonnablement estimer que l'erreur de
 positionnement croît avec le temps et qu'on ne compensera donc
 l'erreur qu'en partie, mais on évitera une trop grande divergence
@@ -1629,7 +1631,7 @@ positionnement initial est toujours nul:
 \index{séquence de pas}
 
 Étant donné une erreur de localisation d'un corps de référence, le
-bassin en général, il est possible d'altérer la pile de pas restante à
+bassin en général, il est possible d'altérer la pile de pas restants à
 exécuter pour absorber cette erreur.
 
 L'objectif de cette étape est donc de faire en sorte de déformer la
@@ -1660,7 +1662,7 @@ particulier le générateur de trajectoire n'est jamais mis à
 contribution pour regénérer les trajectoires de référence. C'est là la
 différence majeure qui différencie cette approche de la
 replanification. Ces approches se fondent sur un recalcul complet des
-trajectoires de marche régulère en changeant la position du robot à
+trajectoires de marche régulière en changeant la position du robot à
 partir de l'estimation de sa position. Si cette approche est adaptée
 lorsque la planification a un coût peu important, comme sur les bases
 mobiles, elle ne l'est pas dans le cadre de la robotique humanoïde où
@@ -1684,9 +1686,9 @@ Dans la section précédente, nous avons déplacé les pas
 futurs. L'objectif est donc de raccrocher la trajectoire de ZMP à la
 nouvelle pile de pas. Cependant, contrairement aux pas qui sont des
 données discrètes, les trajectoires doivent être raccordées
-continument. Pour ce faire, nous avons choisi un polynôme de degré
+continûment. Pour ce faire, nous avons choisi un polynôme de degré
 trois à valeurs réelles auquel quatre contraintes ont été imposées. Ce
-polynôme est dénoté $\Delta_\alpha(t)$ où $\alpha$ est la valeur du
+polynôme est noté $\Delta_\alpha(t)$ où $\alpha$ est la valeur du
 polynôme à $t=T$. Les contraintes sont donc:
 
 
@@ -1853,7 +1855,7 @@ trajectoire du centre de masse et de la trajectoire du premier pas
 permet d'assurer que le ZMP reste à tout moment dans le polygone
 support. En effet, la trajectoire du ZMP étant déformée d'autant que
 la trajectoire du centre de masse, ce dernier termine à une position
-équivalente à la fin du pas, relativement au pas aillant effectué le
+équivalente à la fin du pas, relativement au pas ayant effectué le
 mouvement. La Figure \ref{fig:traj} illustre ces trois corrections
 synchronisées.
 
@@ -1997,7 +1999,7 @@ positionnement du robot.
     \includegraphics[width=\textwidth]{src/chap2-suivi-trajectoire/demo.jpg}
   \end{center}
   \caption{HRP-2 marchant dans un environnement extrêmement encombré
-    tout en évitant des obstacles. La précision finale est atteinte
+    tout en évitant des obstacles. La position finale est atteinte
     avec une précision de $\pm 3\mathrm{cm}$. L'erreur finale est la
     conséquence du bruit impactant l'estimation de la position du
     robot ainsi que de la dérive accumulée sur la fin de la
@@ -2007,8 +2009,8 @@ positionnement du robot.
 
 
 Ensuite, le nouveau pas est validé. La décision se fonde sur le
-raisonnement géométrique suivant: le pied d'HRP-2 ne peut pas entre en
-collision avec lui-même. Par conséquent, les seules collisions
+raisonnement géométrique suivant: le pied d'HRP-2 ne peut pas entrer
+en collision avec lui-même. Par conséquent, les seules collisions
 possibles sont qu'un pied entre en collision avec le second. De ce
 fait, si l'on ignore les configurations rares du type, ``le robot
 croise les jambes en marchant'', possibles, mais aux limites des
@@ -2031,7 +2033,7 @@ positionnement croît lentement, il y a alors deux cas:
 \item Dans le premier, le signe de l'erreur de positionnement
   $\mathbf{\delta {x}}$ a changé, ce qui signifie que l'erreur de
   localisation était faible et qu'il n'était pas critique de la
-  corrige maintenant,
+  corriger maintenant,
 \item Dans le second, le signe de l'erreur reste constant et il sera
   possible de corriger l'erreur, car la direction dans laquelle la
   correction est possible s'inverse en passant d'un pas avec le pied
@@ -2106,7 +2108,7 @@ contraints. Ces équations fondamentales de la physique sont connues
 depuis longtemps. Le véritable enjeu est de trouver des modèles
 calculatoires adaptés permettant un compromis idéal entre réalisme,
 expressivité et réactivité. Différents outils de l'État de l'Art ont
-été détaillé et sont assemblés pour former une plate-forme robotique
+été détaillés et sont assemblés pour former une plate-forme robotique
 cohérente. La seconde partie propose un contrôleur pour le suivi de
 trajectoire boucle fermée afin d'autoriser la navigation de précision
 pour le robot humanoïde HRP-2\index{HRP-2}. Cette section montre la

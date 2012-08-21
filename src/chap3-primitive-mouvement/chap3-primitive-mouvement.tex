@@ -29,7 +29,7 @@ part, le monde du calcul numérique puisque la finalité du système est
 de calculer la commande du système et d'autre part le monde de la
 logique dans lequel les utilisateurs humains souhaitent exprimer leur
 \emph{desiderata} au système robotique: va jusqu'à la cuisine,
-apporte-moi la bouteille, ouvres la porte, etc. Il est clair que ce
+apporte-moi la bouteille, ouvre la porte, etc. Il est clair que ce
 type d'ordre nécessite la résolution d'abstractions et que la logique
 mathématique semble être un moyen particulièrement adapté pour y
 parvenir. Ces mécanismes de décision de haut niveau sont appelés
@@ -43,7 +43,7 @@ représentation numérique.
 
 
 Nous allons commencer par détailler l'état de l'Art et en particulier
-les autres travaux aillant trait aux architectures robotiques haut
+les autres travaux ayant trait aux architectures robotiques haut
 niveau et à l'ordonnancement de tâches ainsi que plus généralement aux
 applications robotiques complexes. Dans un second temps, le langage de
 description sera décrit et quelques scénarii types seront
@@ -58,12 +58,12 @@ La perception et l'exécution de tâches asservies en robotique
 représentent deux domaines particulièrement actifs. Un livre de
 référence sur la localisation robotique et le SLAM\index{Simultaneous
   Localization and Mapping (SLAM)}, le domaine lié à la cartographie
-et locolisation simultanée en robotique est \cite{05thrun}. Les
+et localisation simultanée en robotique est \cite{05thrun}. Les
 travaux de navigation en robotique humanoïdes sont plus rares. On peut
 citer les travaux de James Kuffner, Joel Chestnutt, Koichi Nishiwaki
 -- \begin{CJK*}{UTF8}{min}正西脇 光一\end{CJK*} --
   \cite{05michel.humanoids,05ozawa.smc,03chestnutt.humanoids,02nishiwaki.rsj}
-  de l'Université de Freiburg en Allemange \cite{10osswald.icra}. Dans
+  de l'Université de Freiburg en Allemagne \cite{10osswald.icra}. Dans
   le domaine la vision pour les humanoïdes, l'utilisation de
   l'asservissement visuel a été tenté \cite{10dune.iros} ainsi que des
   techniques de SLAM telles que
@@ -73,7 +73,7 @@ citer les travaux de James Kuffner, Joel Chestnutt, Koichi Nishiwaki
   robot humanoïde pour la modélisation automatique d'objets 3D a
   également été envisagée par \cite{09foisotte.icra,08stasse.ras}. Une
   approche fondée sur la replanification à partir de données vision
-  sur HRP-2\index{HRP-2} a également été publié dans
+  sur HRP-2\index{HRP-2} a également été publiée dans
   \cite{11dang.humanoids}.
 
 
@@ -89,7 +89,7 @@ mathématiques génériques ne présentant pas de point commun permettant
 une représentation générique de ces dernières. Par exemple si l'on se
 limitait aux fonctions linéaires $\mathbf{A}(t) \mathbf{x} +
 \mathbf{b}(t)$, encoder la matrice $\mathbf{A}$ et le vecteur
-$\mathbf{b}$ serait envisageable pour un ensemble discret de valeures
+$\mathbf{b}$ serait envisageable pour un ensemble discret de valeurs
 $t$ données. Le cas évoqué est trop contraint pour notre problème et
 les modélisations informatiques développées dans le
 \autoref{chap:chap1} n'aide pas: elles ont pour but de venir fournir
@@ -106,23 +106,23 @@ La seconde partie est la représentation des changements d'état. Un
 changement d'état du solveur survient quand une tâche est: ajoutée,
 supprimée ou bien encore quand sa priorité est modifiée. De manière
 générale les transitions peuvent être soit temporelles -- avance de 5
-mètres puis saisit la poignée de la porte --, soit logique -- si tu es
-à moins de 10 cm de la position finale, arrête-toi --. Pour
-comprendre la stratégie choisit, il faut garder à l'esprit que pour
-réaliser un scénario complexe certains comportements seront intégrés
-dans la boucle de temps réel tandis que d'autres -- typiquement les
-informations capteurs -- seront traitées à l'extérieur. Les deux
-catégories d'événements, temporelles ou logiques, ne mettent pas en
-jeu les mêmes mécanismes. Les événements temporels sont décidés à
-l'avance et doivent être exécutés avec une grande précision pour
-assurer un comportement correct du système tandis que les événements
-logiques sont le résultat d'un mécanisme de décision externe.
+mètres puis saisis la poignée de la porte --, soit logique -- si tu es
+à moins de 10 cm de la position finale, arrête-toi --. Pour comprendre
+la stratégie choisie, il faut garder à l'esprit que pour réaliser un
+scénario complexe certains comportements seront intégrés dans la
+boucle temps réel tandis que d'autres -- typiquement les informations
+capteurs -- seront traitées à l'extérieur. Les deux catégories
+d'événements, temporelle ou logique, ne mettent pas en jeu les mêmes
+mécanismes. Les événements temporels sont décidés à l'avance et
+doivent être exécutés avec une grande précision pour assurer un
+comportement correct du système tandis que les événements logiques
+sont le résultat d'un mécanisme de décision externe.
 
 De ce fait, la stratégie adoptée a été de permettre la représentation
 de transitions temporelles dans le modèle de description uniquement
 tandis que l'on considère que les transitions événementielles, de fait
 plus lentes et difficiles à encoder, sont gérées à l'extérieur du
-contrôleur par un logiciel décisionnel aillant la possibilité de
+contrôleur par un logiciel décisionnel ayant la possibilité de
 regénérer le mouvement s'il devient invalide suite à la réception
 d'une nouvelle donnée capteur. De nombreux logiciels adaptés à cette
 tâche ont été développés tel que SMACH\footnote{Site web officiel:
@@ -152,7 +152,7 @@ haut niveau. Les primitives proposées sont:
 Une tâche de locomotion est définie initialement comme une série de
 points de contact à réaliser pour atteindre une position
 finale. Chacun des points de contact\index{point de contact} étant
-annotés par l'effecteur devant réaliser le contact à cet endroit. À
+annoté par l'effecteur devant réaliser le contact à cet endroit. À
 partir de ces informations, une trajectoire des effecteurs réalisant
 les appuis est déduite ainsi que du centre de masse pour préserver
 l'équilibre dynamique du système. Afin de pouvoir utiliser les
@@ -214,7 +214,7 @@ tâche comme:
   \mathbf{e} = \mathbf{M} (\mathbf{M}^{*})^{-1}
 \end{equation}
 
-On remarquera que dans \autoref{eq:featurepoint6d}, $\mathbf{e}$ est
+On remarquera que dans (\autoref{eq:featurepoint6d}), $\mathbf{e}$ est
 un élément de $\text{SE}(3)$. Les éléments de $\text{SE}(3)$ peuvent
 s'exprimer de nombreuses façons différentes: matrice homogène -- 16
 paramètres --, translation et quaternion -- 7 paramètres
@@ -350,7 +350,7 @@ linéaire pour amener la main à la position désirée.
 
 
 La dernière primitive introduite ici concerne l'asservissement de la
-trajectoire du robot afin de préserver des amères dans une zone où
+trajectoire du robot afin de préserver des amers dans une zone où
 elles sont détectables par les capteurs du robot. Sur le robot HRP-2,
 seul des caméras sont à la disposition des utilisateurs et leur
 placement dans la tête permet naturellement de définir une tâche de
@@ -445,7 +445,7 @@ rotation ou la translation.
 \item[Corps à considérer] Nom du corps à considérer. Des noms
   génériques ont été définis tels que: cheville gauche, cheville
   droite, poignet gauche, poignet droit, tête, torse et bassin.
-\item[Consigne] La position de référence vers lequel le corps doit
+\item[Consigne] La position de référence vers laquelle le corps doit
   être amené. Il peut être de trois types. Soit statique, le corps
   doit maintenir sa position initiale, soit fixe dans ce cas le corps
   doit atteindre un point prédéterminé de l'espace, soit dynamique
@@ -478,8 +478,8 @@ regard vers un point 3d, éventuellement mobile.
 Une fois la séquence de mouvement définie, il faut encore pouvoir
 fermer la boucle sur les données capteur. Dans le cadre d'un mouvement
 complexe, une stratégie intéressante est de pouvoir s'asservir
-successivement sur plusieurs amères afin de planifier \emph{a priori}
-quelle est la ou les amères les plus pertinentes à différents instants.
+successivement sur plusieurs amers afin de planifier \emph{a priori}
+quelle est la ou les amers les plus pertinentes à différents instants.
 
 
 Soit $\mathcal{L}$ un système de localisation. Un système de
@@ -642,18 +642,18 @@ mouvement:
 
 \begin{description}
 \item[Capture de mouvement] Ce système permet une localisation
-  quasi-parfaite permettent de s'abstraire de la plupart des problèmes
+  quasi-parfaite permettant de s'abstraire de la plupart des problèmes
   de perception.
 \item[Suivi d'un objet] Un système réalisant le suivi d'un objet dans
   l'image captée par une caméra du robot et reconstituant sa position
-  3d peut également être utilisé. Dans ce cas, on support l'objet fixe
+  3d peut également être utilisé. Dans ce cas, on suppose l'objet fixe
   dans le monde et on en déduit la position du robot.
 \item[SLAM] Les techniques de SLAM -- Simultaneous Localization and
   Mapping -- permettent de cartographier l'environnement tout en
   fournissant une estimation de la position actuelle du robot. La
   carte enregistrée permet d'assurer une localisation sans dérive
   quelque soit la longueur du mouvement à condition de pouvoir
-  identifier des amères précédemment détectées régulièrement le long
+  identifier des amers précédemment détectées régulièrement le long
   du mouvement.
 \end{description}
 
