@@ -914,7 +914,7 @@ utilisant des capteurs embarqués.
 Le scénario proposé est le suivant: HRP-2\index{HRP-2} contourne un
 obstacle, passe entre deux objets, et va poser une balle dans une
 étagère. La longueur de la trajectoire de marche -- 2 mètres environ
--- et le nombre de pas génèrent une dérive suffisante pour qu'une
+-- et le nombre de pas génèrant une dérive suffisante pour qu'une
 exécution de ce scénario échoue en boucle ouverte. En effet, passer
 son bras dans une étagère est un mouvement contraint particulièrement
 sensible à la position d'arrivée du robot. Une petite erreur dans le
@@ -963,19 +963,19 @@ visuelle\index{odométrie visuelle} et localisation
 ``globale''. L'odométrie visuelle observe les changements entre deux
 images aux temps $t_{n-1}$ et $t_n$ afin d'estimer la vitesse de la
 caméra entre les deux images. Cette vitesse est ensuité intégrée pour
-calculer le mouvement de la caméra. Le résultat de cette intégration
-une dérive temporelle qui empêche toute tentative de localisation sur
-le long terme en utilisant cette technique. Inversement, les
-algorithmes utilisant une carte peuvent identifier les amères déjà
-détectées auparavant et stabiliser le système. Une limite de ce
-mouvement est qu'il n'est pas facile pour le système de reconnaître
-des amères déjà identifiées. Il peut donc s'en suivre une dérive dans
-l'estimation de la position du robot.
+calculer le mouvement de la caméra. Par conséquent, il se produit une
+dérive temporelle qui empêche toute tentative de localisation sur le
+long terme en utilisant cette technique. Inversement, les algorithmes
+utilisant une carte peuvent identifier les amers déjà détectés
+auparavant et stabiliser le système. Une limite de ce mouvement est
+qu'il n'est pas facile pour le système de reconnaître des amers déjà
+identifiés. Il s'en suit une dérive dans l'estimation de la position
+du robot.
 
 
 Le second problème concerne l'environnement en lui-même: à la fin du
 mouvement, le robot se trouve face au meuble ce qui rend les images
-captées par les caméras vide de toute amère permettant d'effectuer
+captées par les caméras vides de tout amer permettant d'effectuer
 correctement la localisation. Ce problème ne peut expliquer que
 partiellement la mauvaise estimation dans la mesure où l'occlusion des
 caméras n'intervient qu'à l'extrême fin du mouvement.
@@ -1014,8 +1014,8 @@ localisation embarqué sur HRP-2\index{HRP-2} délicat. Pour réaliser
 une tâche de manipulation, une précision de l'ordre du centimètre est
 souvent nécessaire. Or, les mauvaises performances du système de
 localisation engendrent un bruit dans le positionnement du robot qui
-peut rendre l'exécution de tâche précises délicate. Dans le scénario
-choisit, la tâche peut être réalisée avec succès pour certains essais,
+peut rendre l'exécution de tâches précises délicate. Dans le scénario
+choisi, la tâche peut être réalisée avec succès pour certains essais,
 mais le taux d'échec restant très fort, cette méthode ne peut pas
 constituer une boîte noire permettant de manière automatique de
 réaliser un mouvement asservi. Une façon de résoudre le problème
@@ -1032,7 +1032,7 @@ localisation parfaite sur le long terme, il est plus critique pour nos
 scénarii d'avoir des algorithmes de localisation locaux assurant une
 erreur minimale à la fin de la réalisation de la tâche. Les
 algorithmes réalisant une localisation sur le long terme étant plutôt
-destiné à alimenter les algorithmes de planification que les
+destinés à alimenter les algorithmes de planification que les
 algorithmes de contrôle nécessitant une haute précision sur la pose
 estimée du robot.
 
@@ -1082,9 +1082,9 @@ d'intégrer directement dans la phase de planification une étape de
 planification des asservissements. L'idée est de planifier le
 mouvement tel que le robot privilégiera le passage dans des zones où
 la qualité de la localisation est maximale. En particulier, la
-trajectoire de la tête sera calculée afin de laisser les amères
+trajectoire de la tête sera calculée afin de laisser les amers
 détectables le plus longtemps possible utilisables. Ce planificateur
 pourra alors générer la partie asservissement du plan de mouvement
-automatiquement. L'intégration de ces deux éléments reste des objectif
-clé pour atteindre l'objectif de pouvoir asservir n'importe quel
-mouvement sur un robot humanoïde de manière automatique.
+automatiquement. L'intégration de ces deux éléments reste un objectif
+clé afin de pouvoir asservir n'importe quel mouvement sur un robot
+humanoïde de manière automatique.
