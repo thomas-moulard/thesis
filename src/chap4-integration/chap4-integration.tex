@@ -13,8 +13,8 @@
 complexes permettant la validation de nouveaux algorithmes robotiques.
 Les précédents chapitres ont montré une progression d'une approche qui
 est dédiée purement à la génération de trajectoires par l'utilisation
-d'outils d'optimisation numérique vers un l'exécution de scénarios
-dont la complexité a augmenté incrémentalement. Ce passage de la
+d'outils d'optimisation numérique vers l'exécution de scénarii
+dont la complexité a augmentée incrémentalement. Ce passage de la
 génération de trajectoire sans ``conscience'' de ce qu'est un système
 évoluant dans le monde réel vers une application robotique réelle ne
 va pas sans la nécessité d'intégrer et de maîtriser une grande variété
@@ -73,7 +73,7 @@ de calcul est parfois déportée sur un ordinateur spécifique. Par
 exemple dans le cadre du robot HRP-2, deux ordinateurs sont
 embarqués. Le premier est dédié à la boucle de contrôle temps réel et
 est relié aux actionneurs tandis que le second est relié aux capteurs
--- ici les caméras embarquées -- et support les algorithmes de
+-- ici les caméras embarquées -- et supporte les algorithmes de
 décision et de perception.
 
 
@@ -91,7 +91,7 @@ une architecture peut être dit ``big endian''\index{big endian
   (architecture)} ou ``little indian''\index{little endian
   (architecture)} selon l'ordre dans lequel les bits représentants le
 nombre sont enregistrés. Dans une architecture ``big endian'' les
-nombres ayant les poids les plus forts sont contenus en mémoire en
+bits ayant les poids les plus forts sont contenus en mémoire en
 premier tandis que les architectures ``little endian'' adoptent un
 ordre inverse. Ce type de problème rend nécessaire la définition d'un
 modèle de communication entre composants.
@@ -111,10 +111,10 @@ résidant dans le passage des arguments et la transmission du
 résultat. Il est nécessaire que cette fonction soit définie selon des
 règles particulières afin de s'asssurer que les données peuvent être
 correctement transmises via le réseau sans compromettre leur
-intégrité. Cette phase dîte de ``sérialisation''\index{sérialisation}
-assurer le fonctionnement de ces mécanismes dans des environnements
+intégrité. Cette phase, dite de ``sérialisation''\index{sérialisation},
+assure le fonctionnement de ces mécanismes dans des environnements
 informatiques hétérogènes. La seconde forme de communication sert à
-modéliser des flux de donnée continus et est appelée
+modéliser des flux de données continus et est appelée
 ``topic''\index{topic}. Dans ce cas, le premier composant communique a
 un ou plusieurs autres des données mises à jour régulièrement. De la
 même façon, un processus de sérialisation est nécessaire pour assurer
@@ -138,7 +138,7 @@ fonctionnant sur le robot humanoïde HRP-2\index{HRP-2}.
 \subsection{Contrôle}
 
 Sous le terme de ``contrôle'' est désigné le composant robotique
-chargée de calculer la commande qui sera envoyée aux actionneurs. Il
+chargé de calculer la commande qui sera envoyée aux actionneurs. Il
 est impératif que cet ordre déterminant le prochain état que les
 servomoteurs du système vont s'efforcer d'atteindre soit envoyé à une
 fréquence fixe. Sur le robot humanoïde HRP-2\index{HRP-2}, la
@@ -193,14 +193,14 @@ L'architecture de contrôle est divisée en trois contrôleurs:
   tâches, la résolution de la pile de tâches est calculée dans la
   boucle de contrôle afin de calculer la commande à envoyer aux
   moteurs. HRP-2 étant commandé en position, la commande envoyée
-  correspond à la position articulaire des différents joints du
+  correspond à la position articulaire des différents articulations du
   système.
 \item[Stabilisateur\index{stabilisateur}] HRP-2 intègre un mécanisme
-  d'absorption passif des chocs appelé ``silent blocks''\index{silent
+  d'absorption passif des chocs appelé ``silent blocs''\index{silent
     block}. Ce système passif intègre au niveau des chevilles une
   compliance difficile à modéliser et à prendre en compte dans le
   calcul de la commande. La centrale inertielle du robot permettant
-  d'estimant l'attitude du bassin, le stabilisateur peut déduire
+  d'estimer l'attitude du bassin, le stabilisateur peut déduire
   l'état des flexibilités des chevilles et, à l'aide des capteurs de
   force placés dans les chevilles, réaliser un asservissement
   bas-niveau sur la trajectoire du ZMP\index{Zero-Momentum Point}
@@ -240,7 +240,7 @@ le système.
 En terme de conception, les composants nécessitant un rafraichissement
 à une vitesse supérieure doivent être intégrés à la boucle de
 contrôle. Pour les autres données, il faut pouvoir, via le schéma de
-calcul, pouvoir utiliser les informations temporelles attachées aux
+calcul, utiliser les informations temporelles attachées aux
 données capteur envoyées pour gérer de manière consistante le retard
 inhérent à toute donnée provenant d'une architecture distribuée.
 
@@ -361,7 +361,7 @@ réalisé en utilisant une mire que l'on place à différents endroits
 relativement à la caméra. Connaissant la taille des points et leur
 écartement, on peut alors, par la résolution d'un problème type
 moindres carrés linéaire, réaliser une estimation des paramètres
-intrinsèque des caméras du système.
+intrinsèques des caméras du système.
 
 Une fois de plus, ce traitement est disponible dans deux variantes
 différentes: monochromatique et couleur.
@@ -450,13 +450,13 @@ simultanément et publie une estimation de leur pose via le système de
 
 L'utilisation d'un robot humanoïde de grande taille présente toujours
 un risque, et ce dernier tend à croître quand l'architecture devient
-plus complexe et intègre des composants moins fiables. Pour se faire,
-il est donc nécessaire d'avoir un moyen de pouvoir obtenir un état
-complet du système de manière unifiée. Ce dernier est disponible sur
-le robot et est illustré par la \autoref{fig:diagnostic}. De plus, il
-est nécessaire à tout moment de pouvoir avoir un retour si le
-mouvement exécuté présente le risque d'endommager le robot. Ces
-risques se divisent en différentes catégories:
+plus complexe et intègre des composants moins fiables. Pour ce faire,
+il est donc nécessaire de pouvoir obtenir un état complet du système
+de manière unifiée. Ce dernier est disponible sur le robot et est
+illustré par la \autoref{fig:diagnostic}. De plus, il est nécessaire à
+tout moment de pouvoir avoir un retour si le mouvement exécuté
+présente le risque d'endommager le robot. Ces risques se divisent en
+différentes catégories:
 \begin{description}
 \item[Endommagement des capteurs] Les capteurs de force sont conçus
   pour résister à un impact de 1000N au plus. Il est recommandé de ne
@@ -527,7 +527,7 @@ représenté informatiquement par un ensemble composé de services et de
 canaux de communication, les algorithmes pourront fonctionner
 indifféremment en simulation ou sur le véritable système. Il reste
 alors le plus important: assurer la cohérence entre les capteurs
-simulés en fonction des commandes envoyées aux actionneurs. Pour se
+simulés en fonction des commandes envoyées aux actionneurs. Pour ce
 faire, il est important de disposer d'un moteur physique
 réaliste. Dans le cadre de cette thèse, le simulateur
 OpenHRP\index{OpenHRP (simulateur dynamique)} a été choisi. En effet,
@@ -555,7 +555,7 @@ du modèle calculé.
 
 La génération de mouvement se fonde sur une connaissance précise des
 capacités physiques des robots. Cette description est généralement
-encodée à l'aide d'un format de fichier permettant de représenter les
+codée à l'aide d'un format de fichier permettant de représenter les
 différentes informations caractérisant le système. Une définition
 mathématique du système a été donnée dans le \autoref{chap:suivi}. Du
 point de vue informatique, le format de fichier URDF -- Unified Robot
@@ -583,15 +583,15 @@ dernier a été développé dans le cadre de cette thèse.
 Un robot est un ensemble de corps dont les mouvements relatifs sont
 contraints. La modélisation des contraintes passe par la modélisation
 des articulations reliant deux corps entre eux. Le format URDF définit
-donc deux grands types d'objets: les corps et les joints. Nous allons
-voir quelles informations sont attachées à chaque type d'objet.
+donc deux grands types d'objets: les corps et les articulations. Nous
+allons voir quelles informations sont attachées à chaque type d'objet.
 
 \paragraph{Corps}
 
 Un corps est défini par une forme géométrique. Cette forme peut soit
 être définie par une primitive géométrique commune -- sphère,
 cylindre, boîte -- ou bien via un modèle 3D. Les informations de la
-dynamique du corps sont également encodées: position du centre de
+dynamique du corps sont également codées: position du centre de
 masse au sein de l'objet ainsi que la matrice d'inertie associée au
 corps. Une représentation alternative de la géométrie du corps
 utilisée pour les calculs des collisions peut également être
@@ -603,14 +603,14 @@ capsules est également utilisée afin de fournir des tests de collision
 rapides pour la planification de mouvements.
 
 
-\paragraph{Joints}
+\paragraph{Articulation}
 
-Un joint lie deux corps tout en imposant un ensemble de contraintes au
-mouvement relatif de ces deux éléments. Un joint comporte donc un lien
-vers le corps ``père'' et le corps ``fils'' pour définir sa position
-dans l'arbre cinématique. Dans le cas du joint racine, il peut ne pas
-y avoir de corps ``père'' et dans le cas d'un organe terminal, il peut
-ne pas y avoir de corps ``fils''.
+Une articulation lie deux corps tout en imposant un ensemble de
+contraintes au mouvement relatif de ces deux éléments. Un joint
+comporte donc un lien vers le corps ``père'' et le corps ``fils'' pour
+définir sa position dans l'arbre cinématique. Dans le cas du joint
+racine, il peut ne pas y avoir de corps ``père'' et dans le cas d'un
+organe terminal, il peut ne pas y avoir de corps ``fils''.
 
 Les joints supportés sont les suivants:
 \begin{description}
@@ -756,10 +756,10 @@ Instrumenter le modèle pour y incorporer le maximum d'informations est
 intéressant, cependant utiliser la chaîne cinématique pour positionner
 des capteurs pose des problèmes pratiques. En effet, l'évaluation de
 l'arbre est nécessaire pour de nombreux calculs qu'ils soient
-géométriques, cinématiques ou dynamiques, inverses ou direct. La
+géométriques, cinématiques ou dynamiques, inverses ou directs. La
 complexité de ces algorithmes est donc dépendante de la taille de
-l'arbre et la présence de joints, même fixes, pour positionner les
-capteurs crée un coût supplémentaire qui semble inutile. Une
+l'arbre et la présence d'articulations, même fixes, pour positionner
+les capteurs crée un coût supplémentaire qui semble inutile. Une
 proposition est en cours pour modéliser d'une manière plus propre les
 capteurs dans le format URDF, mais à l'heure actuelle il semble
 intéressant de pouvoir réaliser des simplifications ou ``élagages'' de
@@ -768,18 +768,18 @@ nécessaires. Dans le cas où les corps que l'on souhaite supprimer sont
 des n\oe uds terminaux de l'arbre sans information dynamique -- comme
 les capteurs --, alors l'opération peut être réalisée
 directement. Cependant, dans tous les autres cas, il est nécessaire de
-pouvoir calculer la masse et l'inertie équivalente de l'ensemble de
-l'ensemble des corps rendus solidaires par la simplification
-opérée. De fait, ces transformations de l'arbre sont un moyen bien
-plus efficace d'exprimer les contraintes égalités sur certains degrés
-de liberté que leur insertion en tant que contrainte dans l'algorithme
-de génération de mouvement proprement dit. Les transformations
-dynamiques de l'arbre sont également nécessaires pour adapter la
-géométrie du robot lorsqu'il est nécessaire, par exemple, de réaliser
-une tâche de locomotion en transportant un objet possédant un poids
-non négligeable pouvant interférer dans la dynamique du mouvement.
+pouvoir calculer la masse et l'inertie équivalente de l'ensemble des
+corps rendus solidaires par la simplification opérée. De fait, ces
+transformations de l'arbre sont un moyen bien plus efficace d'exprimer
+les contraintes égalités sur certains degrés de liberté que leur
+insertion en tant que contrainte dans l'algorithme de génération de
+mouvement proprement dit. Les transformations dynamiques de l'arbre
+sont également nécessaires pour adapter la géométrie du robot
+lorsqu'il est nécessaire, par exemple, de réaliser une tâche de
+locomotion en transportant un objet possédant un poids non négligeable
+pouvant interférer dans la dynamique du mouvement.
 
-Le système de représentation du robot peut d'ores et déjà encoder la
+Le système de représentation du robot peut d'ores et déjà coder la
 totalité des informations proposées dans cette section, mais il n'a
 pas été possible, à l'heure actuelle, d'intégrer le mécanisme de
 transformation de l'arbre aux logiciels de planification et de
@@ -789,7 +789,7 @@ contrôle utilisés sur le robot humanoïde HRP-2.
 \section{Applications robotiques}
 
 
-L'ensemble des outils décrit dans la section précédente doivent être
+L'ensemble des outils décrits dans la section précédente doivent être
 mis en \oe uvre conjointement afin de pouvoir former une architecture
 robotique cohérente. Chaque composant faisant partie d'une
 architecture robotique a beau disposer d'un modèle de communication
@@ -814,7 +814,7 @@ démonstration robotique présentée dans la
 \autoref{sec:chap3_localisation}: le robot HRP-2 doit pouvoir réaliser
 une tâche de locomotion pour se déplacer jusqu'à un meuble dans lequel
 il souhaite déposer un objet -- dans cet exemple une balle rose
---. Pour se faire, il doit tout d'abord planifier une trajectoire
+--. Pour ce faire, il doit tout d'abord planifier une trajectoire
 corps complet, c'est-à-dire combinant à la fois locomotion et
 manipulation. Une fois cette trajectoire déterminée, il doit
 l'exécuter tout en corrigeant sa trajectoire afin d'atteindre son
@@ -840,7 +840,7 @@ la perception --:
     La commande envoyée au système, la commande après stabilisation et
     l'état actuel du robot lu sur les encodeurs est publié sous la
     forme de topics. L'accélération linéaire et la vitesse angulaire
-    du torse du robot est également publié sous la forme d'un
+    du torse du robot sont également publiés sous la forme d'un
     topic. Ce composant fonctionne partiellement en temps réel.
   \end{description}
 
@@ -930,7 +930,7 @@ exprimée? La caméra du robot? La racine de sa chaîne cinématique? Un
 point fixe du monde? Face aux nombreux dysfonctionnements provoqués
 par ce type de problème, ROS\index{ROS} fournit une solution clé en
 main: chaque transformation précise, sous forme de chaîne de
-caractère, de quel repère à quel repère cette donnée est-elle la
+caractère, de quel repère à quel repère cette donnée est la
 transformation. En enregistrant ces données, on acquiert également la
 possibilité de calculer automatiquement des transformations d'un
 repère à un autre. Par exemple si l'on fournit la transformation de
@@ -1046,14 +1046,14 @@ L'algorithme de suivi d'objet a été développé au sein de l'équipe
 LAGADIC\footnote{Site de l'équipe LAGADIC:
   \url{http://www.irisa.fr/lagadic/}} -- INRIA Rennes-Bretagne
 Atlantique et à l'IRISA--. Cet algorithme utilise l'asservissement
-visuel virtuel pour calculer une estimation de la pose d'un objet. Le
-modèle de l'objet est connu et une estimation initiale de la position
-de ce dernier est nécessaire. Une fois cette estimation connue,
-l'algorithme tente de minimiser l'écart entre la position des lignes
--- bords -- de l'objet dans l'image par rapport à la reprojection du
-modèle de l'objet suivi dans l'image. D'autres critères que les lignes
-peuvent être choisis, mais c'est ce dernier point qui a été retenu
-dans nos tests. La résolution de ce problème passe par la méthode de
+visuel pour calculer une estimation de la pose d'un objet. Le modèle
+de l'objet est connu et une estimation initiale de la position de ce
+dernier est nécessaire. Une fois cette estimation connue, l'algorithme
+tente de minimiser l'écart entre la position des lignes -- bords -- de
+l'objet dans l'image par rapport à la reprojection du modèle de
+l'objet suivi dans l'image. D'autres critères que les lignes peuvent
+être choisis, mais c'est ce dernier point qui a été retenu dans nos
+tests. La résolution de ce problème passe par la méthode de
 Levenberg-Marquardt\index{Levenberg-Marquardt} qui est proche de
 l'algorithme des moindres carrés classiques.
 
@@ -1094,7 +1094,7 @@ suivi est dans un état ``non initialisé'' au départ où il reçoit déjà
 des images et des informations de calibration, mais ne réalise aucun
 traitement. Un service permet d'initialiser le suivi en fournissant à
 la fois la pose initiale de l'objet, son modèle et les paramètres de
-suivi. Le n\oe passse alors dans un état actif où il réalise le
+suivi. Le n\oe ud passse alors dans un état actif où il réalise le
 suivi. Si le suivi est perdu à un moment ou un autre, le n\oe ud passe
 dans un état ``perdu'' où il tente de réinitialiser le suivi avec la
 dernière position connue. Si une estimation de la position de la
@@ -1118,7 +1118,7 @@ représentation textuelle via le réseau. De plus, le composant pouvant
 être lancé à distance, laisser l'utilisateur spécifier le chemin vers
 le modèle sous la forme d'un chemin local est une mauvaise idée, car
 il sera tenté d'y insérer le chemin sur sa machine et non sur celle
-sur laquelle le composant va être lancé. Pour se faire, l'emplacement
+sur laquelle le composant va être lancé. Pour ce faire, l'emplacement
 du modèle est passé sous la forme d'une URI -- Uniform Resource
 Identifier -- \citep{rfc2396}.
 
@@ -1190,7 +1190,7 @@ composant a pu être utilisé dans le cadre d'une architecture robotique
 distribuée sur deux ordinateurs et l'introduction d'une interface au
 niveau de la componentisation robotique a permis au robot HRP-2 de se
 localiser soit en utilisant ce composant, soit en utilisant un
-composant de localisation utilisant des amers visuelles, soit encore
+composant de localisation utilisant des amers visuels, soit encore
 le système de capture de mouvement de manière transparente. Seul le
 lancement du graphe diffère dans ces trois cas.
 
@@ -1223,7 +1223,7 @@ entre les ordinateurs. Pour les composants effectuant de l'affichage
 ou de la surveillance distant le problème est souvent encore plus
 critique dans la mesure où le robot est la plupart du temps connecté
 en wi-fi et dispose donc d'un lien avec une bande-passante extrêmement
-limitée vers l'extérieur. Cette contrainte va donc contrainte les
+limitée vers l'extérieur. Cela va donc contraindre les
 composants de perception, la plupart du temps gros producteurs et
 consommateurs de donnée, à se situer sur le même hôte. Une fois le
 traitement des images terminé, le résultat final peut représenter un
@@ -1232,7 +1232,7 @@ exemple.
 
 
 En considérant la répartition des composants sur les différentes
-machines, il faut déterminer la liste des composants nécessaire. En
+machines, il faut déterminer la liste des composants nécessaires. En
 général, on part d'un côté de la liste des capteurs que l'on souhaite
 utiliser, que l'on fait communiquer avec les algorithmes utilisant ces
 données en entrée qui eux même communiquent avec la partie
@@ -1299,8 +1299,8 @@ inhérentes à la conception d'un système ont été passées en revue ainsi
 que les stratégies qui ont été adoptées au cours de ces trois
 années. Il est probable qu'au cours des prochaines années de
 nombreuses architectures robotiques voient le jour sur des robots
-humanoïdes afin de le rendre sensible à l'évolution de l'environnement
-qui les entoure. Un objectif ambitieux pour lequel les robots mobiles
+humanoïdes afin de les rendre sensibles à l'évolution de leur
+environnement. Un objectif ambitieux pour lequel les robots mobiles
 restent la plate-forme d'expérimentation principale dans l'état actuel
 de la littérature.
 
