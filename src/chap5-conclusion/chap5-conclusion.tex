@@ -56,9 +56,9 @@ possible de se localiser grâce aux caméras embarquées, mais au prix
 d'une précision moindre. Si cette qualité moindre ne gêne pas la
 navigation en soi, elle empêche malheureusement toute manipulation
 complexe une fois la trajectoire terminée. Il est donc nécessaire de
-non seulement asservir la locomotion, mais également la locomotion. La
+non seulement asservir la locomotion, mais également la manipulation. La
 locomotion nécessite un système de localisation sans dérive, proche
-des besoins d'un robot mobile alors que la locomotion nécessite avant
+des besoins d'un robot mobile alors que la manipulation nécessite avant
 tout un système de localisation dont l'erreur tend vers zéro lors de
 la réalisation d'un contact. Un asservissement visuel par exemple est
 tout à fait adapté à cet objectif, car plus le robot s'approche de
@@ -133,7 +133,7 @@ localisation variant selon les cas, un dialogue entre l'étage de
 planification et l'étage de perception et localisation est nécessaire.
 La dernière étape serait alors de ne plus se contraindre à des
 transitions temporelles dans le plan, mais également insérer des
-événements logiques. Pour se faire, il sera nécessaire d'insérer dans
+événements logiques. Pour ce faire, il sera nécessaire d'insérer dans
 l'architecture un superviseur de haut niveau permettant de réaliser la
 transition entre les états logiques ainsi que de gérer les retours sur
 erreur.
