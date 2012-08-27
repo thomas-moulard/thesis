@@ -335,7 +335,7 @@ monoculaire. Dans ce cas, l'objectif de ce procédé est de se ramener
 au cas de la caméra parfaite dit
 ``pinhole''\index{sténopé}\index{modèle de caméra
   pinhole|see{sténopé}} -- ou sténopé en français -- où la projection
-du point 3d $P$ sur le plan image donne un point 2d $p$ qui correspond
+du point 3D $P$ sur le plan image donne un point 2d $p$ qui correspond
 parfaitement à la projection de ce dernier en passant par le point
 focal de la caméra $C$: $p_x = P_x / P_z$ et $p_y = P_y / P_z$ où
 $P_x, P_y, P_z$ sont les coordonnées du point dans l'espace 3D et
@@ -388,7 +388,7 @@ entre les deux caméras afin de pouvoir rectifier l'image de la seconde
 image de la paire de caméras stéréo. Une fois ce processus effectué,
 on peut estimer que les images de deux caméras ont été prises par des
 capteurs virtuels dont les plans images sont coplanaires. On peut
-alors faire en sorte que la projection d'un point 3d se fasse sur la
+alors faire en sorte que la projection d'un point 3D se fasse sur la
 même ligne tant sur la caméra de gauche que sur la caméra de
 droite. Le problème de l'appariement des points se ramène alors à un
 problème unidimensionnel de complexité moindre permettant la
@@ -426,7 +426,7 @@ souplesse d'utilisation et modularité.
   \begin{center}
     \includegraphics[width=.95\linewidth]{src/chap4-integration/stereo1.jpg}
   \end{center}
-  \caption{Reconstruction 3d de l'environnement autour du robot HRP-2
+  \caption{Reconstruction 3D de l'environnement autour du robot HRP-2
     à partir des données de la paire de caméra stéréo.}
 \end{figure}
 
@@ -730,7 +730,7 @@ cette thèse. Le format de fichier RCPDF -- Robots Contact Point
 Description Format --\index{Robot Contact Point Description Format
   (RCPDF)} associe à chaque corps 0, 1 ou plusieurs zones de
 contact. Chaque zone de contact peut être soit représentée par une
-primitive géométrique soit par un modèle 3d. Les normales du modèles
+primitive géométrique soit par un modèle 3D. Les normales du modèles
 permettent de définir la direction dans laquelle le contact peut
 s'effectuer. Un contact est valide si la force de réaction de
 l'environnement sur le corps du robot est colinéaire avec la normale
@@ -1077,7 +1077,7 @@ suivi. Il sera dès lors possible de calculer, par exemple, la position
 relative du poignet par rapport à cet objet pour tenter de
 l'atteindre, s'il existe une chaîne entre de transformations entre ces
 deux repères. En entrée, le problème est plus complexe. Il faut d'une
-part un flux d'images, des informations de calibration, un modèle 3d de
+part un flux d'images, des informations de calibration, un modèle 3D de
 l'objet à suivre et un jeu de paramètres permettant de régler
 l'algorithme de suivi ainsi qu'une pose initiale.
 
@@ -1229,7 +1229,7 @@ limitée vers l'extérieur. Cela va donc contraindre les
 composants de perception, la plupart du temps gros producteurs et
 consommateurs de donnée, à se situer sur le même hôte. Une fois le
 traitement des images terminé, le résultat final peut représenter un
-volume d'informations bien plus compact: trajectoire ou position 3d par
+volume d'informations bien plus compact: trajectoire ou position 3D par
 exemple.
 
 

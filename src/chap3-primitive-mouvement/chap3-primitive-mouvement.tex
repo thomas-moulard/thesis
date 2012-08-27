@@ -228,7 +228,7 @@ faire partie de $\text{SE}(3)$. Par exemple, une matrice homogène a une
 structure bien particulière tel qu'illustré sur la
 \autoref{fig:matrixhomo}. Quant aux quaternions, seuls les quaternions
 unitaires définissent une bijection avec $\text{SO}(3)$, l'espace des
-rotations dans l'espace 3d.
+rotations dans l'espace 3D.
 
 De fait, les représentations non minimales ne constituent pas une
 solution acceptable pour représenter notre erreur, car elles
@@ -357,7 +357,7 @@ placement dans la tête permet naturellement de définir une tâche de
 ``regard'' où l'utilisateur souhaite garder un point au centre de
 l'image captée par une caméra du robot.
 
-Soit \mbox{$M = (X, Y, Z) \in \mathbb{R}^3$} un point 3d dont les
+Soit \mbox{$M = (X, Y, Z) \in \mathbb{R}^3$} un point 3D dont les
 coordonnées sont définies par rapport à la position de la caméra du
 robot et \mbox{$m = (x, y) \in \mathbb{R}^2$} sa projection sur le
 plan image de la caméra\index{géométrie projective}. On a alors la
@@ -457,7 +457,7 @@ rotation ou la translation.
 \index{primitive!de regard}
 
 La primitive de regard définit comment le robot peut maintenir son
-regard vers un point 3d, éventuellement mobile.
+regard vers un point 3D, éventuellement mobile.
 
 \begin{description}
 \item[Intervalle.] Date de début et de fin de la primitive de manipulation.
@@ -645,9 +645,9 @@ mouvement:
   quasi-parfaite permettant de s'abstraire de la plupart des problèmes
   de perception.
 \item[Suivi d'un objet.] Un système réalisant le suivi d'un objet dans
-  l'image captée par une caméra du robot et reconstituant sa position
-  3d peut également être utilisé. Dans ce cas, on suppose l'objet fixe
-  dans le monde et on en déduit la position du robot.
+  l'image captée par une caméra du robot et reconstituant sa
+  position 3D peut également être utilisé. Dans ce cas, on suppose
+  l'objet fixe dans le monde et on en déduit la position du robot.
 \item[SLAM.] Les techniques de SLAM -- Simultaneous Localization and
   Mapping -- permettent de cartographier l'environnement tout en
   fournissant une estimation de la position actuelle du robot. La
@@ -834,7 +834,7 @@ de déplacement du bras.
 \subsection{Scénario d'asservissement visuel de la tête}
 
 La dernière primitive de mouvement considérée ici permet d'asservir le
-regard du robot sur la position d'un point 3d soit fixe, soit mobile
+regard du robot sur la position d'un point 3D soit fixe, soit mobile
 et estimé par un système externe. Le plan correspondant est la
 \autoref{fig:plan_asservissement_complet}.
 
