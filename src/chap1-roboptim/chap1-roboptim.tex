@@ -265,7 +265,7 @@ Moindres carrés non linéaires & C/C++, réentrant, thread-safe \\
 \hline
 \end{tabular}
 \end{center}
-\caption{Zoologie des problèmes en optimisation numérique. \label{tab:chap1_soft}}
+\caption{Zoologie des logiciels en optimisation numérique. \label{tab:chap1_soft}}
 \end{table}
 %
 Une conclusion s'impose au regard de cette liste de paquets logiciels:
@@ -760,7 +760,7 @@ raisonnable.
   \end{equation}
 
   On définit de sorte une famille de types formant une hiérarchie de
-  classe sous la forme d'un peigne où $\mathcal{C}^n <:
+  classe sous la forme d'une chaîne où $\mathcal{C}^n <:
   \mathcal{C}^{n-1} <: \dotsc <: \mathcal{C}^1 <: \mathcal{C}^0$.
 
   À partir de $\mathcal{C}^2$, on remarquera que la méthode
@@ -840,7 +840,7 @@ les types de fonctions des contraintes.
   contenir une instance d'un type parmi tous ceux listés dans
   l'union. Ce mécanisme est nécessaire car on ne sait pas à l'avance
   quelle sera le type de chaque contrainte. On est juste assuré que
-  chaque instance fera parti de cet ensemble de types.
+  chaque instance fera partie de cet ensemble de types.
 \end{mydef}
 
 
@@ -1033,7 +1033,7 @@ est plus simple de l'intégrer à un formalisme existant plutôt que de
 devoir adapter son problème à un logiciel alors qu'algorithmiquement
 parlant il n'existe pas de différence notable. Pour terminer, il est
 arrivé que l'on commence tout d'abord par poser un problème robotique
-pour s'apercevoir qu'il serait bien mieux traité à l'aider d'un
+pour s'apercevoir qu'il serait bien mieux traité à l'aide d'un
 solveur dédié. Il est courant donc de devoir écrire un nouveau
 solveur, ou modifier un solveur existant, afin de pouvoir rendre le
 traitement du problème plus rapide. Dans ce cas également, un
@@ -1046,7 +1046,7 @@ peuvent être divisées en deux: les limites intrinsèques de la
 modélisation et celles qui ont été imposées par le langage de
 programmation choisi pour l'implémentation des algorithmes, à savoir
 le C++. Ces dernières seront abordées dans
-la \autoref{sec:chap1_discussion}. Concernant les limites de la
+la \autoref{sec:chap1_roboptim}. Concernant les limites de la
 modélisation, différents éléments sont difficiles à modéliser.
 
 
@@ -1065,7 +1065,7 @@ un traitement spécifique selon l'espace mathématique auquel appartient
 la variable d'optimisation. Malheureusement, définir plusieurs types
 pour définir des éléments de différents groupes mathématiques est
 difficile. En effet, l'ensemble des variables d'optimisations n'est
-alors plus un tableau de réels, mais un tuple contenant des éléments
+alors plus un tableau de réels, mais un n-uplet contenant des éléments
 des types différents. Il faut encore alors trouver un moyen de définir
 les opérations de groupe de manière efficace afin que le solveur
 puisse utiliser les opérations adéquates pour opérer sur le groupe
@@ -1403,7 +1403,7 @@ Dans notre application, nous avons choisi d'utiliser des B-splines
 uniformes de degré 3. Une B-spline est dit uniforme lorsque les
 intervalles temporels entre les points de contrôle définis par le
 vecteur nodal $\Xi$ est constant entre chaque point de contrôle. Dans
-notre cas, cette valeur sera notée $\lambda$ et fera parti des
+notre cas, cette valeur sera notée $\lambda$ et fera partie des
 variables d'optimisation. Les autres variables d'optimisation sont les
 points de contrôle eux-mêmes, soit trois variables par point de
 contrôle: $(x,y) \in \mathbb{R}^2$ la position du robot dans le plan

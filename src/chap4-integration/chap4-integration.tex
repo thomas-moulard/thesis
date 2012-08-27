@@ -58,7 +58,7 @@ plus souvent d'être extrêmement réactive et impose des contraintes
 importantes en terme de temps réel. Il faut pouvoir garantir que la
 boucle de contrôle peut être évaluée à une fréquence donnée ce qui
 contraint à la fois le type d'algorithmes pouvant être exécuté dans
-cette boucle ainsi que le volume de donnée pouvant être traité. Enfin,
+cette boucle ainsi que le volume de données pouvant être traité. Enfin,
 la couche de perception est, elle, en général plus lente que le
 contrôle et dépendante de la vitesse à laquelle les capteurs du robot
 peuvent fonctionner. Qui plus est, il arrive parfois que les capteurs
@@ -88,7 +88,7 @@ afin de pouvoir assurer une bonne interprétation de ces dernières au
 sein d'un environnement informatique hétérogène. Un exemple est la
 représentation des nombres au sein des architectures informatiques:
 une architecture peut être dit ``big endian''\index{big endian
-  (architecture)} ou ``little indian''\index{little endian
+  (architecture)} ou ``little endian''\index{little endian
   (architecture)} selon l'ordre dans lequel les bits représentants le
 nombre sont enregistrés. Dans une architecture ``big endian'' les
 bits ayant les poids les plus forts sont contenus en mémoire en
@@ -104,23 +104,24 @@ sous une forme continue. La forme discrète est appelée
 fonction distant. Un algorithme est généralement divisé en fonctions,
 ces dernières formant des blocs logiques pouvant être combinés entre
 eux pour réaliser des comportements de plus haut niveau. Les services
-fournissent un moyen d'appeler une fonction qui ne sera non pas
-exécutée au sein du processus courant, mais dans un autre processus,
-voire sur un autre ordinateur de manière transparente. La difficulté
-résidant dans le passage des arguments et la transmission du
-résultat. Il est nécessaire que cette fonction soit définie selon des
-règles particulières afin de s'asssurer que les données peuvent être
+fournissent un moyen d'appeler une fonction qui sera non pas exécutée
+au sein du processus courant, mais dans un autre processus, voire sur
+un autre ordinateur de manière transparente. La difficulté résidant
+dans le passage des arguments et la transmission du résultat. Il est
+nécessaire que cette fonction soit définie selon des règles
+particulières afin de s'asssurer que les données peuvent être
 correctement transmises via le réseau sans compromettre leur
-intégrité. Cette phase, dite de ``sérialisation''\index{sérialisation},
-assure le fonctionnement de ces mécanismes dans des environnements
-informatiques hétérogènes. La seconde forme de communication sert à
-modéliser des flux de données continus et est appelée
-``topic''\index{topic}. Dans ce cas, le premier composant communique a
-un ou plusieurs autres des données mises à jour régulièrement. De la
-même façon, un processus de sérialisation est nécessaire pour assurer
-que les données peuvent être transmises même si un ou plusieurs autres
-composants ne font pas partie du même processus ou ne sont pas
-exécutés sur le même ordinateur.
+intégrité. Cette phase, dite de
+``sérialisation''\index{sérialisation}, assure le fonctionnement de
+ces mécanismes dans des environnements informatiques hétérogènes. La
+seconde forme de communication sert à modéliser des flux de données
+continus et est appelée ``topic''\index{topic}. Dans ce cas, le
+premier composant communique à un ou plusieurs autres des données
+mises à jour régulièrement. De la même façon, un processus de
+sérialisation est nécessaire pour assurer que les données peuvent être
+transmises même si un ou plusieurs autres composants ne font pas
+partie du même processus ou ne sont pas exécutés sur le même
+ordinateur.
 
 
 De nombreux outils logiciels implémentent ces mécanismes sous
@@ -165,11 +166,11 @@ illustrée par la \autoref{fig:controleur}. Le contrôleur passe alors
 par les états suivants:
 
 \begin{itemize}
-\item Initialisation sans contrainte de temps réel
-\item Initialisation avec contrainte de temps réel
-\item Exécution
-\item Destruction avec contrainte de temps réel
-\item Destruction sans contrainte de temps réel
+\item Initialisation sans contrainte de temps réel.
+\item Initialisation avec contrainte de temps réel.
+\item Exécution.
+\item Destruction avec contrainte de temps réel.
+\item Destruction sans contrainte de temps réel.
 \end{itemize}
 
 \begin{figure}
@@ -189,13 +190,13 @@ bouclage sur la phase d'exécution autant qu'il soit nécessaire.
 
 L'architecture de contrôle est divisée en trois contrôleurs:
 \begin{description}
-\item[Pile de tâches\index{pile de tâches}] À partir d'un ensemble de
+\item[Pile de tâches.\index{pile de tâches}] À partir d'un ensemble de
   tâches, la résolution de la pile de tâches est calculée dans la
   boucle de contrôle afin de calculer la commande à envoyer aux
   moteurs. HRP-2 étant commandé en position, la commande envoyée
   correspond à la position articulaire des différents articulations du
   système.
-\item[Stabilisateur\index{stabilisateur}] HRP-2 intègre un mécanisme
+\item[Stabilisateur.\index{stabilisateur}] HRP-2 intègre un mécanisme
   d'absorption passif des chocs appelé ``silent blocs''\index{silent
     block}. Ce système passif intègre au niveau des chevilles une
   compliance difficile à modéliser et à prendre en compte dans le
@@ -210,7 +211,7 @@ L'architecture de contrôle est divisée en trois contrôleurs:
   de la structure du robot. Ce système compense les erreurs de suivi
   du ZMP en modifiant les valeurs des articulations des jambes du
   robot.
-\item[Communication] Le dernier élément communique vers l'extérieur
+\item[Communication.] Le dernier élément communique vers l'extérieur
   les informations liées au contrôle du robot tel que les commandes
   envoyées, réellement exécutées -- c'est-à-dire après stabilisation
   --, ainsi que les sorties des capteurs tels que la centrale
@@ -301,7 +302,7 @@ E. Bayer chercheur au sein de la société Kodak, réalise l'encodage
 d'images couleurs sur 8 bits au lieu des 24 bits habituellement
 nécessaires pour représenter les trois canaux utilisés pour encoder
 les trois couleurs primaires: rouge, vert et bleu. Cet encodage encode
-la couleur verte sur 50\% du volume de donnée totale tandis que bleu
+la couleur verte sur 50\% du volume de données totale tandis que bleu
 et rouge représentent 25\% chacun. Cette prépondérance du vert est
 fondée sur la plus grande sensibilité au vert des cônes, les
 photorécepteurs présents au fond de l'\oe il.
@@ -440,8 +441,8 @@ difficultés propres à la perception en robotique.
 
 
 Un composant réalisant l'interface entre d'une part, le système de
-capture de mouvement, et l'architecture robotique a été écrit. Ce
-dernier permet de suivre les mouvements de plusieurs objets
+capture de mouvement, et l'architecture robotique d'autre part a été
+écrit. Ce dernier permet de suivre les mouvements de plusieurs objets
 simultanément et publie une estimation de leur pose via le système de
 ``topics'' précédemment décrit.
 
@@ -458,11 +459,11 @@ tout moment de pouvoir avoir un retour si le mouvement exécuté
 présente le risque d'endommager le robot. Ces risques se divisent en
 différentes catégories:
 \begin{description}
-\item[Endommagement des capteurs] Les capteurs de force sont conçus
+\item[Endommagement des capteurs.] Les capteurs de force sont conçus
   pour résister à un impact de 1000N au plus. Il est recommandé de ne
   pas aller au-delà de 800N par mesure de sécurité. Les autres
   capteurs ne présentent pas de risque particulier.
-\item[Endommagement des actionneurs] Les actionneurs peuvent fournir
+\item[Endommagement des actionneurs.] Les actionneurs peuvent fournir
   un couple maximal. Au-delà de ce dernier, il risque de chauffer de
   manière trop importante et d'être rendu inopérant. On peut donc
   fixer une borne ``raisonnable'' qui ne devrait jamais être
@@ -471,12 +472,12 @@ différentes catégories:
   retour sur la température des actionneurs se révélerait être un
   indicateur intéressant, mais n'est malheureusement pas disponible en
   l'état actuel des capacités du robot.
-\item[Instabilité lors de la locomotion] Il est possible d'estimer la
+\item[Instabilité lors de la locomotion.] Il est possible d'estimer la
   position du ZMP\index{Zero-Momentum Point} à partir des forces
   mesurées par les capteurs de force. Cette estimation permet
   d'avertir l'utilisateur quand le ZMP se rapproche dangereusement de
   la limite du polygone de sustentation.
-\item[Déviation des horloges des ordinateurs embarqués] Les
+\item[Déviation des horloges des ordinateurs embarqués.] Les
   ordinateurs embarqués synchronisent leurs horloges en utilisant le
   protocole NTP -- Network Time Protocol --\index{Network Time
     Protocol (NTP)}. L'ordinateur dédié à la décision et la perception
@@ -490,7 +491,7 @@ différentes catégories:
   qualité et permet d'assurer la cohérence des données temporelles
   entre, d'une part, le contrôleur commandant les actionneurs, et
   d'autre part les composants de décision et de perception.
-\item[Difficultés informatiques d'ordre général] Au-delà des problèmes
+\item[Difficultés informatiques d'ordre général.] Au-delà des problèmes
   décrits précédemment et qui affectent plus particulièrement les
   systèmes robotiques, les robots sont également affectés par
   l'ensemble des problèmes qui peuvent toucher un ordinateur:
@@ -503,7 +504,7 @@ la nécessité de faire fonctionner un ensemble de technologies sachant
 que le mauvais fonctionnement de n'importe quel morceau de
 l'architecture peut mettre en péril la tâche tout entière. Qui plus
 est, certaines limitations du matériel tel que le couple maximum des
-actionneurs sont parfois vérifiées, a posteriori. Des systèmes de
+actionneurs sont parfois vérifiées a posteriori. Des systèmes de
 surveillance des valeurs critiques sur les couples, les impacts sur
 les capteurs de force ont donc été mis en place afin d'éviter
 d'endommager le matériel.
@@ -614,16 +615,16 @@ organe terminal, il peut ne pas y avoir de corps ``fils''.
 
 Les joints supportés sont les suivants:
 \begin{description}
-\item[Libre] Ce joint virtuel possède six degrés de liberté et
+\item[Libre.] Ce joint virtuel possède six degrés de liberté et
   n'impose aucune contrainte.
-\item[Rotation] Ce joint possède un degré de liberté unique et impose
+\item[Rotation.] Ce joint possède un degré de liberté unique et impose
   un mouvement de rotation autour d'un axe spécifique au joint.
-\item[Translation] Ce joint possède un degré de liberté unique et
+\item[Translation.] Ce joint possède un degré de liberté unique et
   impose un mouvement de translation le long d'un axe spécifique au
   joint.
-\item[Planaire] Ce joint possède deux degrés de liberté et impose un
+\item[Planaire.] Ce joint possède deux degrés de liberté et impose un
   mouvement coplanaire à un plan spécifique au joint.
-\item[Fixe] Ce joint ne possède pas de degré de liberté et impose un
+\item[Fixe.] Ce joint ne possède pas de degré de liberté et impose un
   mouvement rigide entre les deux corps.
 \end{description}
 
@@ -789,7 +790,7 @@ contrôle utilisés sur le robot humanoïde HRP-2.
 \section{Applications robotiques}
 
 
-L'ensemble des outils décrits dans la section précédente doivent être
+L'ensemble des outils décrits dans la section précédente doit être
 mis en \oe uvre conjointement afin de pouvoir former une architecture
 robotique cohérente. Chaque composant faisant partie d'une
 architecture robotique a beau disposer d'un modèle de communication
@@ -824,10 +825,10 @@ Le système est composé des composants robotiques suivant répartis sur
 deux ordinateurs -- un pour le contrôle et l'autre pour la décision et
 la perception --:
 \begin{description}
-\item[Ordinateur dédié au contrôle]
+\item[Ordinateur dédié au contrôle.]
    \\
   \begin{description}
-  \item[Contrôle] Ce n\oe ud est composé d'un solveur fondé sur le
+  \item[Contrôle.] Ce n\oe ud est composé d'un solveur fondé sur le
     paradigme de la pile de tâches et d'une infrastructure logicielle
     utlisant le langage de programmation Python pour insérer et
     définir des tâches en cours d'exécution. Les références des tâches
@@ -836,7 +837,7 @@ la perception --:
   \item[Export des informations capteurs et de la
     commande\footnote{Composant remplacé lors de la simulation par un
       n\oe ud fournissant les mêmes services dans le monde
-      simulé.}\addtocounter{footnote}{-1}\addtocounter{Hfootnote}{-1}]
+      simulé.}\addtocounter{footnote}{-1}\addtocounter{Hfootnote}{-1}.]
     La commande envoyée au système, la commande après stabilisation et
     l'état actuel du robot lu sur les encodeurs est publié sous la
     forme de topics. L'accélération linéaire et la vitesse angulaire
@@ -844,25 +845,25 @@ la perception --:
     topic. Ce composant fonctionne partiellement en temps réel.
   \end{description}
 
-\item[Ordinateur dédié à la décision et à la perception]
+\item[Ordinateur dédié à la décision et à la perception.]
    \\
   \begin{description}
-  \item[Acquisition des images\footnotemark] Capture les images venant de la paire
+  \item[Acquisition des images.\footnotemark] Capture les images venant de la paire
     stéréo grand angle.
-  \item[Conversion de l'espace couleur] Transforme les images encodées
+  \item[Conversion de l'espace couleur.] Transforme les images encodées
     en Bayer vers des images monochromatiques.
-  \item[Rectification] Corrige la déformation de l'image liée à
+  \item[Rectification.] Corrige la déformation de l'image liée à
     l'utilisation de l'objectif grand angle et à la conception de la
     caméra.
-  \item[Localisation] Réalise une estimation de la position du robot
+  \item[Localisation.] Réalise une estimation de la position du robot
     dans le monde en utilisant les caméras du robot.
-  \item[Cinématique directe] À partir de l'état des encodeurs, ce
+  \item[Cinématique directe.] À partir de l'état des encodeurs, ce
     composant recalcule la position relative de tous les corps et les
     publie sous forme de topics.
-  \item[Évaluation de l'erreur de positionnement] Compare la position
+  \item[Évaluation de l'erreur de positionnement.] Compare la position
     voulue du robot dans le plan à un instant $t$ à la position perçue
     au même instant.
-  \item[Divers] Plusieurs n\oe uds supplémentaires sont chargés de la
+  \item[Divers.] Plusieurs n\oe uds supplémentaires sont chargés de la
     surveillance des paramètres critiques du robot.
   \end{description}
 \end{description}
@@ -902,7 +903,7 @@ début de l'expérimentation.
 La mise en place d'une architecture modulaire pour la robotique sert
 un objectif principal: contenir la complexité en assurant à
 l'utilisateur la possibilité de pouvoir s'abstraire d'une partie des
-traitements sous-jacents, quit à obtenir une solution
+traitements sous-jacents, quitte à obtenir une solution
 sous-optimale. En effet, l'agrégation d'outils aussi différents que la
 planification de mouvement, le contrôle, l'asservissement et
 différentes techniques de perception nécessite de pouvoir s'appuyer
@@ -939,13 +940,14 @@ $C$ et elle peut être calculée automatiquement. Il y a là un véritable
 gain puisque l'on passe d'une implémentation dépendant directement des
 données des composants auquel on est lié vers une requête purement
 sémantique: ``quelle est la position relative de la cheville gauche
-par rapport au poignet droit?''. On se préserve également dans le cas
-où les composants utilisés changeraient le repère de référence entre
+par rapport au poignet droit?''. En réalisant une résolution
+automatique des transformations, on se préserve également dans le cas
+où les composants utilisés changeraient leur repère de référence entre
 deux versions. Une fois de plus, l'absence de typage ici rend le
 diagnostic difficile: aucune erreur de compilation n'est possible et
 les erreurs dans les valeurs numériques elles-mêmes sont toujours
 difficiles à détecter. On notera que le système adopté ici se fonde
-sur le traitement des chaîne de caractère ce qui est plus lent que le
+sur le traitement des chaînes de caractères ce qui est plus lent que le
 recours au typage direct tel que proposé dans \cite{12delaet.ram}.
 
 
@@ -954,14 +956,14 @@ transitoires. Tout système complexe possède une phase d'initialisation
 dans laquelle le comportement des modules peut être sous-optimal. En
 particulier quand plusieurs composants communiquant ensemble sont
 lancés en même temps, il n'y a aucune garantie que le premier
-composant terminant sont initialisation soit toujours le même. De ce
+composant terminant son initialisation soit toujours le même. De ce
 fait, un composant peut commencer à attendre des données sur un topic
 avant que le topic ne soit créé par le premier composant. Le protocole
 de communication est extrêmement souple sur ce point et la possibilité
-de pouvoir écouter des flux de données qui n'existent pas encore simplifie de
-beaucoup le développement en évitant les erreurs lorsque l'ordre
-d'initialisation change. Par contre, il est alors nécessaire de mettre
-en place, en interne et soit même, les mécanismes afin d'éviter les
+de pouvoir écouter des flux de données qui n'existent pas encore
+simplifie de beaucoup le développement en évitant les erreurs lorsque
+l'ordre d'initialisation change. Par contre, il est alors nécessaire
+de mettre en place, en interne, les mécanismes afin d'éviter les
 situations de famine où plusieurs composants s'attendent les uns les
 autres indéfiniment. Cependant, le graphe de communication étant le
 plus souvent un arbre, ce genre de cas reste peu courant.
@@ -994,7 +996,7 @@ qu'il est difficile d'automatiser.
 
 
 Le dernier problème récurrent est la difficulté pour un utilisateur de
-déterminer si le système est dans un état stable et si ce n'est pas le
+déterminer si le système est dans un état stable et, si ce n'est pas le
 cas, arriver à diagnostiquer le système. La section précédente a
 développé un ensemble d'outils permettant de surveiller l'état du
 robot tant au niveau mécanique, informatique que de l'utilisation qui
@@ -1014,7 +1016,7 @@ chacun fonctionne de manière séparée. Les causes et les conséquences
 sont, dans ce contexte, bien plus faciles à identifier. Le deuxième
 niveau consiste à publier sur le topic de diagnostic l'état du n\oe
 ud. Cela correspond à l'un des états suivants: OK, erreur,
-avertissement auquel on associe des données techniques pour aider au
+avertissement auxquels on associe des données techniques pour aider au
 diagnostic, voir \autoref{fig:diagnostic}. Enfin, un service
 standardisé peut également être fourni par un composant pour qu'il
 tente un autodiagnostic. Ces mécanismes permettent d'aider à la
@@ -1075,7 +1077,7 @@ suivi. Il sera dès lors possible de calculer, par exemple, la position
 relative du poignet par rapport à cet objet pour tenter de
 l'atteindre, s'il existe une chaîne entre de transformations entre ces
 deux repères. En entrée, le problème est plus complexe. Il faut d'une
-part un flux d'image, des informations de calibration, un modèle 3d de
+part un flux d'images, des informations de calibration, un modèle 3d de
 l'objet à suivre et un jeu de paramètres permettant de régler
 l'algorithme de suivi ainsi qu'une pose initiale.
 
@@ -1117,10 +1119,10 @@ de fichier. Le modèle est donc directement transmis sous sa
 représentation textuelle via le réseau. De plus, le composant pouvant
 être lancé à distance, laisser l'utilisateur spécifier le chemin vers
 le modèle sous la forme d'un chemin local est une mauvaise idée, car
-il sera tenté d'y insérer le chemin sur sa machine et non sur celle
-sur laquelle le composant va être lancé. Pour ce faire, l'emplacement
-du modèle est passé sous la forme d'une URI -- Uniform Resource
-Identifier -- \citep{rfc2396}.
+il sera tenté d'y insérer le chemin sur sa machine et non sur celle où
+le composant va être lancé. Pour ce faire, l'emplacement du modèle est
+passé sous la forme d'une URI -- Uniform Resource Identifier
+-- \citep{rfc2396}.
 
 
 Le second outil permet de surveiller l'état du tracking en affichant
@@ -1155,7 +1157,7 @@ d'information n'est pas justifiable. À la place, un topic
 supplémentaire pour les développeur a été ajouté. Le défi est alors
 d'assurer la cohérence des données entre d'un côté les images
 provenant du composant de vision, de la pose provenant du tracker
-ainsi que du topic transportant les informations supplémentaire pour
+ainsi que du topic transportant les informations supplémentaires pour
 les développeurs. Ces informations sont filtrées afin que seul les
 triplets présentant un temps identique soient affichés. En effet, dans
 les précédentes versions, cette synchronisation n'était pas
@@ -1181,7 +1183,7 @@ avec plusieurs utilisateurs confirmés dans des laboratoires et
 sociétés tiers. Ces utilisateurs n'avaient pas d'expérience avec les
 techniques d'asservissement visuel avant de tenter d'intégrer ce
 composant et ont réussi à obtenir des résultats satisfaisants dans le
-cadre de leur utilisation si des robots différents, notamment le robot
+cadre de leur utilisation sur des robots différents, notamment le robot
 REEM de Pal Robotics\footnote{Site officiel:
   \url{http://www.pal-robotics.com/}}. De ce fait l'objectif qui
 consistait à pouvoir maîtriser la complexité de la mise en place d'un
@@ -1227,7 +1229,7 @@ limitée vers l'extérieur. Cela va donc contraindre les
 composants de perception, la plupart du temps gros producteurs et
 consommateurs de donnée, à se situer sur le même hôte. Une fois le
 traitement des images terminé, le résultat final peut représenter un
-volume d'information bien plus compact: trajectoire ou position 3d par
+volume d'informations bien plus compact: trajectoire ou position 3d par
 exemple.
 
 
@@ -1235,7 +1237,7 @@ En considérant la répartition des composants sur les différentes
 machines, il faut déterminer la liste des composants nécessaires. En
 général, on part d'un côté de la liste des capteurs que l'on souhaite
 utiliser, que l'on fait communiquer avec les algorithmes utilisant ces
-données en entrée qui eux même communiquent avec la partie
+données en entrée qui eux-mêmes communiquent avec la partie
 décisionnelle. Cette partie étant généralement algorithmique, le
 positionnement de ces composants n'est pas soumis à des contraintes
 techniques fortes. Enfin, un composant de contrôle est nécessaire pour

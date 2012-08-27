@@ -92,13 +92,13 @@ l'arbre cinématique\index{arbre cinématique}.
 Plusieurs types de joints sont habituellement utilisés en robotique,
 mais nous n'allons ici en détailler que deux:
 \begin{description}
-\item[Joint libre -- ou joint flottant --]\index{joint!libre} Ce joint
+\item[Joint libre -- ou joint flottant --.]\index{joint!libre} Ce joint
   comporte six degrés de liberté, soit le nombre de paramètres
   nécessaire et suffisant pour spécifier une pose dans
   $SE(3)$. Autrement dit, ce joint n'impose aucune contrainte
   particulière sur le mouvement et correspond donc à la fonction
   identité, à la représentation de la pose prête.
-\item[Joint rotation]\index{joint!rotation} Ce joint comporte un seul
+\item[Joint rotation.]\index{joint!rotation} Ce joint comporte un seul
   degré de liberté. Dans ce cas, la position du prochain corps du
   robot est définie par la valeur de ce degré de liberté, interprété
   comme une rotation d'un angle équivalent autour d'un axe. A chaque
@@ -1054,7 +1054,7 @@ $\dot{\mathbf{e}}_1$. Par exemple, on peut prendre:
 Dans ce cas, on aboutit à une commande telle que l'on essaie d'abord
 de réaliser la consigne $\dot{\mathbf{e}}_1^{*}$ puis
 $\dot{\mathbf{e}}_2^{*}$, sans perturber la réalisation de la première
-tâche. Ce pile de tâche possède deux niveaux de priorité, mais peut
+tâche. Cette pile de tâche possède deux niveaux de priorité, mais peut
 être généralisée à autant de niveaux de priorité que souhaité. Ce
 mécanisme de résolution est particulièrement adapté dans la mesure où
 l'on va d'abord résoudre la tâche de priorité la plus haute pour
@@ -1226,7 +1226,7 @@ La figure \ref{fig:system} montre comment peut fonctionner un
 contrôleur réalisant un asservissement capteur pour le suivi de
 trajectoire sur un robot mobile. Un système de localisation externe
 fournit une appréciation de la position du robot qui permet de
-déformer continument la trajectoire de référence
+déformer continûment la trajectoire de référence
 $\gamma$. L'estimation de la position du robot par le système de
 localisation est dénotée $\hat{\mathbf{x}}$. De cette estimation, une
 erreur sur le positionnement peut être calculée et ajoutée composante
@@ -1621,7 +1621,7 @@ sans problème. On peut raisonnablement estimer que l'erreur de
 positionnement croît avec le temps et qu'on ne compensera donc
 l'erreur qu'en partie, mais on évitera une trop grande divergence
 entre le plan et la réalité. On estime également que l'erreur de
-positionnement initial est toujours nul:
+positionnement initial est toujours nulle:
 
 \begin{equation}\label{eq:errorpos_prop}
 \delta \mathbf{x}(t_{\text{min}}) = 0

@@ -92,7 +92,7 @@ limitait aux fonctions linéaires $\mathbf{A}(t) \mathbf{x} +
 $\mathbf{b}$ serait envisageable pour un ensemble discret de valeurs
 $t$ données. Le cas évoqué est trop contraint pour notre problème et
 les modélisations informatiques développées dans le
-\autoref{chap:chap1} n'aide pas: elles ont pour but de venir fournir
+\autoref{chap:chap1} n'aident pas: elles ont pour but de venir fournir
 un modèle pour l'expression d'une fonction mathématique sous la forme
 d'un algorithme et non pas sous la forme d'une donnée structurée
 pouvant facilement être encodée. Le choix a donc été fait de définir
@@ -224,7 +224,7 @@ paramétrisation minimale de $\text{SE}(3)$ nécessite six
 paramètres. De fait, tout représentation utilisant un espace de
 dimension supérieure vient avec un ensemble de contraintes à respecter
 car tous les éléments de cet espace de dimension supérieur ne peuvent
-faire parti de $\text{SE}(3)$. Par exemple, une matrice homogène a une
+faire partie de $\text{SE}(3)$. Par exemple, une matrice homogène a une
 structure bien particulière tel qu'illustré sur la
 \autoref{fig:matrixhomo}. Quant aux quaternions, seuls les quaternions
 unitaires définissent une bijection avec $\text{SO}(3)$, l'espace des
@@ -352,7 +352,7 @@ linéaire pour amener la main à la position désirée.
 La dernière primitive introduite ici concerne l'asservissement de la
 trajectoire du robot afin de préserver des amers dans une zone où
 elles sont détectables par les capteurs du robot. Sur le robot HRP-2,
-seul des caméras sont à la disposition des utilisateurs et leur
+seules des caméras sont à la disposition des utilisateurs et leur
 placement dans la tête permet naturellement de définir une tâche de
 ``regard'' où l'utilisateur souhaite garder un point au centre de
 l'image captée par une caméra du robot.
@@ -420,8 +420,8 @@ Une primitive de locomotion est définie par un ensemble de points de
 contacts définis sur la forme d'une pile de pas.
 
 \begin{description}
-\item[Intervalle] Date de début et de fin de la primitive de mouvement.
-\item[Empreinte de pas] Liste des pas à effectuer. Les pas sont
+\item[Intervalle.] Date de début et de fin de la primitive de mouvement.
+\item[Empreinte de pas.] Liste des pas à effectuer. Les pas sont
   considérés comme des éléments de $\text{SE}(2)$ dans la mesure où
   l'algorithme de génération de pas fait l'hypothèse d'un sol plan.
 \end{description}
@@ -441,11 +441,11 @@ position 6d de référence. Cette tâche peut ne considérer que la
 rotation ou la translation.
 
 \begin{description}
-\item[Intervalle] Date de début et de fin de la primitive de manipulation.
-\item[Corps à considérer] Nom du corps à considérer. Des noms
+\item[Intervalle.] Date de début et de fin de la primitive de manipulation.
+\item[Corps à considérer.] Nom du corps à considérer. Des noms
   génériques ont été définis tels que: cheville gauche, cheville
   droite, poignet gauche, poignet droit, tête, torse et bassin.
-\item[Consigne] La position de référence vers laquelle le corps doit
+\item[Consigne.] La position de référence vers laquelle le corps doit
   être amené. Il peut être de trois types. Soit statique, le corps
   doit maintenir sa position initiale, soit fixe dans ce cas le corps
   doit atteindre un point prédéterminé de l'espace, soit dynamique
@@ -460,12 +460,12 @@ La primitive de regard définit comment le robot peut maintenir son
 regard vers un point 3d, éventuellement mobile.
 
 \begin{description}
-\item[Intervalle] Date de début et de fin de la primitive de manipulation.
-\item[Caméra à considérer] Nom de la caméra utilisée. En pratique, la
+\item[Intervalle.] Date de début et de fin de la primitive de manipulation.
+\item[Caméra à considérer.] Nom de la caméra utilisée. En pratique, la
   caméra est définie comme un corps ``virtuel'' du robot et l'on peut
   donc potentiellement aligner n'importe quelle partie du corps du
   robot vers un point donné.
-\item[Consigne] La position de référence vers lequel le corps doit
+\item[Consigne.] La position de référence vers lequel le corps doit
   pointer. Il peut être de deux types. Soit fixe, dans ce cas le corps
   doit pointer vers un point prédéterminé de l'espace, soit dynamique
   et dans ce cas le corps doit pointer vers un point mobile.
@@ -524,9 +524,9 @@ barycentre des poses 2d:
 
 En pratique, chaque système de localisation est représenté de la façon suivante:
 \begin{description}
-\item[Poids] en fonction du temps. Il peut soit être constant, soit
+\item[Poids.] en fonction du temps. Il peut soit être constant, soit
   varier dynamiquement.
-\item[Erreur] de positionnement en fonction du temps. Elle est fournie
+\item[Erreur.] de positionnement en fonction du temps. Elle est fournie
   par un système de localisation externe.
 \end{description}
 
@@ -641,14 +641,14 @@ testés pour fournir une estimation de la position du robot au cours du
 mouvement:
 
 \begin{description}
-\item[Capture de mouvement] Ce système permet une localisation
+\item[Capture de mouvement.] Ce système permet une localisation
   quasi-parfaite permettant de s'abstraire de la plupart des problèmes
   de perception.
-\item[Suivi d'un objet] Un système réalisant le suivi d'un objet dans
+\item[Suivi d'un objet.] Un système réalisant le suivi d'un objet dans
   l'image captée par une caméra du robot et reconstituant sa position
   3d peut également être utilisé. Dans ce cas, on suppose l'objet fixe
   dans le monde et on en déduit la position du robot.
-\item[SLAM] Les techniques de SLAM -- Simultaneous Localization and
+\item[SLAM.] Les techniques de SLAM -- Simultaneous Localization and
   Mapping -- permettent de cartographier l'environnement tout en
   fournissant une estimation de la position actuelle du robot. La
   carte enregistrée permet d'assurer une localisation sans dérive
@@ -912,25 +912,25 @@ utilisant des capteurs embarqués.
 
 
 Le scénario proposé est le suivant: HRP-2\index{HRP-2} contourne un
-obstacle, passe entre deux objets, et va poser une balle dans une
+obstacle, passe entre deux objets, et va poser une balle sur une
 étagère. La longueur de la trajectoire de marche -- 2 mètres environ
 -- et le nombre de pas génèrant une dérive suffisante pour qu'une
 exécution de ce scénario échoue en boucle ouverte. En effet, passer
 son bras dans une étagère est un mouvement contraint particulièrement
 sensible à la position d'arrivée du robot. Une petite erreur dans le
 positionnement du robot à la fin de la trajectoire engendrera une
-grande erreur dans la position finale du poignet. La figure
-\autoref{fig:scenario_visu} illustre le scénario.  L'objectif ici est
-d'utiliser les caméras embarquées pour construire une carte de
-l'environnement puis pour localiser le robot. La stratégie adoptée ici
-n'est pas du SLAM -- Simultaneous Localization and Mapping
---\index{Simultaneous Localization and Mapping (SLAM)} dans la mesure
-où les images permettant de construire la carte sont traitées hors
-ligne. On réalise donc un premier mouvement sans correction afin
-d'acquérir une séquence d'images permettant de construire la carte
-puis on utilise cette carte pour localiser le robot durant les
-expérimentations suivantes. La qualité du résultat est ensuite validée
-en utilisant un système de capture de mouvement.
+grande erreur dans la position finale du
+poignet. La \autoref{fig:scenario_visu} illustre le scénario.
+L'objectif ici est d'utiliser les caméras embarquées pour construire
+une carte de l'environnement puis pour localiser le robot. La
+stratégie adoptée ici n'est pas du SLAM -- Simultaneous Localization
+and Mapping --\index{Simultaneous Localization and Mapping (SLAM)}
+dans la mesure où les images permettant de construire la carte sont
+traitées hors ligne. On réalise donc un premier mouvement sans
+correction afin d'acquérir une séquence d'images permettant de
+construire la carte puis on utilise cette carte pour localiser le
+robot durant les expérimentations suivantes. La qualité du résultat
+est ensuite validée en utilisant un système de capture de mouvement.
 
 
 Durant les expériences, le module de localisation a fourni une
@@ -1001,7 +1001,7 @@ imprécisions de la conception du robot, du système de fixation des
 caméras rendent nécessaire le calcul de la position relative de la
 caméra par rapport au corps auquel il est fixé, dans notre cas la
 tête. Un procédé de calibration des paramètres
-extrinsèque\index{paramètres extrinsèques (d'une caméra)} a donc été
+extrinsèques\index{paramètres extrinsèques (d'une caméra)} a donc été
 mis en place pour estimer ces paramètres. Ces derniers ont été validés
 en reprojetant le modèle du robot dans l'image comme illustré par la
 \autoref{fig:reprojection_modele_vision}.
@@ -1014,7 +1014,7 @@ localisation embarqué sur HRP-2\index{HRP-2} délicat. Pour réaliser
 une tâche de manipulation, une précision de l'ordre du centimètre est
 souvent nécessaire. Or, les mauvaises performances du système de
 localisation engendrent un bruit dans le positionnement du robot qui
-peut rendre l'exécution de tâches précises délicate. Dans le scénario
+peut rendre l'exécution de tâches précises délicates. Dans le scénario
 choisi, la tâche peut être réalisée avec succès pour certains essais,
 mais le taux d'échec restant très fort, cette méthode ne peut pas
 constituer une boîte noire permettant de manière automatique de
