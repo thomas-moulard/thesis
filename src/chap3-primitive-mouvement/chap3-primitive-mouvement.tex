@@ -105,7 +105,7 @@ l'extension du modèle de description défini ici.
 La seconde partie est la représentation des changements d'état. Un
 changement d'état du solveur survient quand une tâche est: ajoutée,
 supprimée ou bien encore quand sa priorité est modifiée. De manière
-générale les transitions peuvent être soit temporelles -- avance de 5
+générale les transitions peuvent être, soit temporelles -- avance de 5
 mètres puis saisis la poignée de la porte --, soit logique -- si tu es
 à moins de 10 cm de la position finale, arrête-toi --. Pour comprendre
 la stratégie choisie, il faut garder à l'esprit que pour réaliser un
@@ -226,9 +226,7 @@ dimension supérieure vient avec un ensemble de contraintes à respecter
 car tous les éléments de cet espace de dimension supérieur ne peuvent
 faire partie de $\text{SE}(3)$. Par exemple, une matrice homogène a une
 structure bien particulière tel qu'illustré sur la
-\autoref{fig:matrixhomo}. Quant aux quaternions, seuls les quaternions
-unitaires définissent une bijection avec $\text{SO}(3)$, l'espace des
-rotations dans l'espace 3D.
+\autoref{fig:matrixhomo}.
 
 De fait, les représentations non minimales ne constituent pas une
 solution acceptable pour représenter notre erreur, car elles
@@ -524,7 +522,7 @@ barycentre des poses 2d:
 
 En pratique, chaque système de localisation est représenté de la façon suivante:
 \begin{description}
-\item[Poids.] en fonction du temps. Il peut soit être constant, soit
+\item[Poids.] en fonction du temps. Il peut, soit être constant, soit
   varier dynamiquement.
 \item[Erreur.] de positionnement en fonction du temps. Elle est fournie
   par un système de localisation externe.
@@ -834,7 +832,7 @@ de déplacement du bras.
 \subsection{Scénario d'asservissement visuel de la tête}
 
 La dernière primitive de mouvement considérée ici permet d'asservir le
-regard du robot sur la position d'un point 3D soit fixe, soit mobile
+regard du robot sur la position d'un point 3D, soit fixe, soit mobile
 et estimé par un système externe. Le plan correspondant est la
 \autoref{fig:plan_asservissement_complet}.
 
@@ -936,8 +934,9 @@ est ensuite validée en utilisant un système de capture de mouvement.
 Durant les expériences, le module de localisation a fourni une
 estimation de la position du robot à 16\hertz. Les images ont une
 résolution de 320x240 pixels. L'ordinateur sur lequel fonctionne le
-composant de localisation est un Intel\textregistered
-Core\texttrademark\ 2 CPU T7200 @ 2.00GHz avec 2Gb.\ de RAM.
+composant de localisation est un
+\mbox{Intel\textregistered~Core\texttrademark 2 CPU T7200 @ 2.00GHz}
+avec 2 Gb.\ de RAM.
 
 
 \subsection{Analyse de la précision du système de localisation}

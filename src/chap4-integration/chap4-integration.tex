@@ -440,8 +440,8 @@ suivre les mouvements d'objets autour du robot et s'abstraire des
 difficultés propres à la perception en robotique.
 
 
-Un composant réalisant l'interface entre d'une part, le système de
-capture de mouvement, et l'architecture robotique d'autre part a été
+Un composant réalisant l'interface entre d'une part le système de
+capture de mouvement et d'autre part l'architecture robotique a été
 écrit. Ce dernier permet de suivre les mouvements de plusieurs objets
 simultanément et publie une estimation de leur pose via le système de
 ``topics'' précédemment décrit.
@@ -489,8 +489,8 @@ différentes catégories:
   synchronisées. Le lien réseau étant direct, la synchronisation
   relative de ces deux ordinateurs est, au contraire, de très bonne
   qualité et permet d'assurer la cohérence des données temporelles
-  entre, d'une part, le contrôleur commandant les actionneurs, et
-  d'autre part les composants de décision et de perception.
+  entre, d'une part, le contrôleur commandant les actionneurs et,
+  d'autre part, les composants de décision et de perception.
 \item[Difficultés informatiques d'ordre général.] Au-delà des problèmes
   décrits précédemment et qui affectent plus particulièrement les
   systèmes robotiques, les robots sont également affectés par
@@ -629,7 +629,7 @@ Les joints supportés sont les suivants:
 \end{description}
 
 Les degrés de liberté des joints possèdent généralement un minimum et
-maximum qui sont soit le résultat de la conception mécanique du joint,
+maximum qui sont, soit le résultat de la conception mécanique du joint,
 soit lié à la géométrie du robot: une valeur différente entraînerait
 immédiatement une autocollision et il n'est donc pas intéressant de
 considérer ces valeurs. Chaque joint comporte donc ces valeurs ainsi
@@ -696,8 +696,8 @@ en compte.
 
 Pour déterminer les autocollisions, deux stratégies sont
 possibles. L'approche automatique consiste à échantillonner l'espace
-des configurations du robot afin de trouver les corps qui sont soit
-toujours en collision soit jamais en collision. Dans ces deux cas, la
+des configurations du robot afin de trouver les corps qui sont, soit
+toujours en collision, soit jamais en collision. Dans ces deux cas, la
 paire de collision est rejetée. Toutes les autres sont ajoutées.  La
 seconde stratégie consiste à forger la liste à la main. Dans le cas où
 les autocollisions doivent être vérifiées dans la boucle temps réel,
@@ -729,8 +729,8 @@ proposée par ROS et a été le résultat d'un travail réalisé durant
 cette thèse. Le format de fichier RCPDF -- Robots Contact Point
 Description Format --\index{Robot Contact Point Description Format
   (RCPDF)} associe à chaque corps 0, 1 ou plusieurs zones de
-contact. Chaque zone de contact peut être soit représentée par une
-primitive géométrique soit par un modèle 3D. Les normales du modèles
+contact. Chaque zone de contact peut être, soit représentée par une
+primitive géométrique, soit par un modèle 3D. Les normales du modèles
 permettent de définir la direction dans laquelle le contact peut
 s'effectuer. Un contact est valide si la force de réaction de
 l'environnement sur le corps du robot est colinéaire avec la normale
@@ -909,7 +909,7 @@ planification de mouvement, le contrôle, l'asservissement et
 différentes techniques de perception nécessite de pouvoir s'appuyer
 sur des composants aussi automatiques que possible. En particulier,
 concevoir des algorithmes ne nécessitant pas de paramétrage poussé est
-important, mais également très difficile. Le paramétrage peut passer
+important, mais également très difficile. Le paramétrage peut passer,
 soit par une phase de calibration -- comme souvent en perception --,
 une phase de construction de carte, par exemple pour la navigation --
 ou le réglage des stratégies adoptées par les algorithmes. Les outils
@@ -1191,7 +1191,7 @@ tel mécanisme a été rempli au travers des choix réalisés ici. Ce
 composant a pu être utilisé dans le cadre d'une architecture robotique
 distribuée sur deux ordinateurs et l'introduction d'une interface au
 niveau de la componentisation robotique a permis au robot HRP-2 de se
-localiser soit en utilisant ce composant, soit en utilisant un
+localiser, soit en utilisant ce composant, soit en utilisant un
 composant de localisation utilisant des amers visuels, soit encore
 le système de capture de mouvement de manière transparente. Seul le
 lancement du graphe diffère dans ces trois cas.
