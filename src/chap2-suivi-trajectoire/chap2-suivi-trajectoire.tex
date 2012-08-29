@@ -1425,12 +1425,15 @@ suivantes:
     \ENDIF
     \ENDIF
     \STATE $\mathbf{q} \leftarrow \gamma(t_{\text{maintenant}})$
-    \STATE $t_{\text{maintenant}} \leftarrow t_{\text{maintenant}} + \Delta t$
+    \STATE $t_{\text{maintenant}} \leftarrow t_{\text{maintenant}} + 2 T_{\text{step}}$
   \end{algorithmic}
-  \caption{Boucle de contrôle au temps $t_{\text{maintenant}}$ réalisant
-    un suivi de trajectoire boucle-fermée de la trajectoire $\gamma$
-    (la prochaine correction sera appliquée au temps
-    $t_{\text{prochain}}$). \label{fig:control_loop}}
+  \caption{Boucle de contrôle au temps $t_{\text{maintenant}}$
+    réalisant un suivi de trajectoire boucle-fermée de la trajectoire
+    $\gamma$ (la prochaine correction sera appliquée au temps
+    $t_{\text{prochain}}$). $\bigoplus$ étant l'opération usuelle du
+    groupe considéré -- $\text{SE}(3)$ pour les trajectoires de pied
+    et $\mathbb{R}^2$ pour la trajectoire du centre de
+    masse. \label{fig:control_loop}}
 \end{algorithm}
 
 Tout d'abord, la position du robot $\hat{\mathbf{x}}$ est
@@ -1556,15 +1559,14 @@ localisation échoue.\index{localisation (d'un robot)}
 
     \end{tikzpicture}
   \end{center}
-  \caption{Correction of the next step due to a position error. Dotted
-    rectangles are the planned positions $\mathbf{x}$ of the robot
-    waist and feet before and after the next step. Non-dotted
-    rectangles corresponds to the robot localization
-    $\mathbf{\hat{x}}$. Error w.r.t to axis X, Y and yaw rotation is
-    \mbox{$(\Delta x, \Delta y, \Delta r_z) = \delta \mathbf{x}$,
-      $\gamma$} the reference trajectory and $\delta \gamma$ the
-    corrected trajectory reaching the planned
-    step. \label{fig:footstepreplan}}
+  \caption{Correction du prochain pas suite à une erreur
+    d'exécution. La position planifiée du bassin $x$ est en pointillé
+    -- avant et après le prochain pas --. La position estimée du robot
+    $\mathbf{\hat{x}}$ est représentée en trait plein. L'erreur selon
+    les axes X, Y et l'erreur angulaire sont \mbox{$(\Delta x, \Delta
+      y, \Delta r_z) = \delta \mathbf{x}$} et $\delta \gamma$ est la
+      trajectoire corrigée atteignant l'empreinte de pas
+      planifiée. \label{fig:footstepreplan}}
 \end{figure}
 
 
@@ -2059,17 +2061,17 @@ $2.5\mathrm{m}$ et est exécutée en environ $40\mathrm{s}$.
 Ce scénario démontre que l'utilisation de ce schéma de contrôle permet
 une navigation fiable. Le robot atteint l'objectif fixé avec une
 précision de quelques centimètres tandis que le positionnement final
-en utilisant un schéma de contrôle en boucle ouverte a une erreur
-d'environ un mètre. De plus, ce schéma de contrôle est robuste aux
-pertes de suivi et à des estimations peu précises par le système de
-localisation. En effet, l'expérience s'appuie sur un système de
-capture de mouvement pour localiser le robot. Ces derniers sont
-extrêmement précis -- précision au millimètre dans les cas favorables
--- mais nécessitent un environnement dégagé ce qui n'est pas le cas
-ici. Les marqueurs posés sur le pied sont parfois occlus par les
-obstacles ce qui fait varier la précision durant le mouvement. Ce
-comportement ne perturbe pas le schéma de correction qui peut
-atteindre la position finale sans problème.
+en utilisant un schéma de contrôle en boucle ouverte a une erreur de
+plus ou moins 50 centimètres. De plus, ce schéma de contrôle est
+robuste aux pertes de suivi et à des estimations peu précises par le
+système de localisation. En effet, l'expérience s'appuie sur un
+système de capture de mouvement pour localiser le robot. Ces derniers
+sont extrêmement précis -- précision au millimètre dans les cas
+favorables -- mais nécessitent un environnement dégagé ce qui n'est
+pas le cas ici. Les marqueurs posés sur le pied sont parfois occlus
+par les obstacles ce qui fait varier la précision durant le
+mouvement. Ce comportement ne perturbe pas le schéma de correction qui
+peut atteindre la position finale sans problème.
 
 
 La vidéo de l'expérience est disponible sur internet:

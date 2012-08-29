@@ -25,11 +25,11 @@
 
 %AMS Math + UTF8 mapping of ams symbols
 %------------------------------------------------------
-%\usepackage{amsmath} 
+%\usepackage{amsmath}
 \usepackage{mathtools}
 \usepackage{amssymb} % I load it after Fourier else I have more incorrect utf8 mapping (with \geqslant for example)
 %Correct UTF8 mapping for ams fonts
-\ifdefined\pdffontattr% \ifdefined is part of the e-TeX extension, which is part of any modern LaTeX compiler. 
+\ifdefined\pdffontattr% \ifdefined is part of the e-TeX extension, which is part of any modern LaTeX compiler.
     \immediate\pdfobj stream file {umsa.cmap}
     {\usefont{U}{msa}{m}{n}\pdffontattr\font{/ToUnicode \the\pdflastobj\space 0 R}}
     \immediate\pdfobj stream file {umsb.cmap}
@@ -195,7 +195,7 @@ pdfproducer = {Thomas Moulard}
 \ensuremath{{}^{#1}\!\text{M}_{#2}}}
 
 \begin{document}
-\bibliographystyle{plainnat}
+\bibliographystyle{francais}
 %
 \author{Thomas Moulard}
 \title{Optimisation numérique pour la robotique et exécution de trajectoires référencées capteurs}
