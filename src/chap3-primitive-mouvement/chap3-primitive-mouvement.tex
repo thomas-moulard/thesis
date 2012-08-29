@@ -311,12 +311,12 @@ préférera donc exprimer ces trois tâches -- pied gauche, pied droit et
 centre de masse -- de la façon suivante:
 
 \begin{equation}
-  \mathbf{e} = \left\{
+  \mathbf{e} = \left(
   \begin{array}{c}
     \mathbf{e}_{\text{pied gauche}}\\
     \mathbf{e}_{\text{pied droit}}\\
     \mathbf{e}_{\text{centre de masse}}
-  \end{array}\right.
+  \end{array}\right)
 \end{equation}
 
 Les équations formulées dans cette section peuvent enfin être
@@ -393,7 +393,7 @@ Une fois de plus l'erreur se définit par la soustraction usuelle:
   \end{center}
   \caption{Projection du point 3D $M = (X, Y, Z)$ sur le plan image
     d'une caméra idéale. Les coordonées du point projeté sont ici $m =
-    (x, y)$. $f$ est la distance focale de la caméra et $o$ le centre
+    (x, y)$. $f$ est la distance focale de la caméra et $C$ le centre
     optique, deux paramètres intrinsèques de la caméra.}
 \end{figure}
 
@@ -696,6 +696,7 @@ motion:
 servoing:
   # Asservissement via le système de capture de mouvements.
   - visp:
+      interval: [0, 20] # Date de début et de fin de l'élément d'asservissement.
       weight: 1.
       object-name: table
       position: /tracker_mbt/resultTransform
