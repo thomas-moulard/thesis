@@ -19,3 +19,6 @@
 *.make
 thesis.*.gnuplot
 thesis.pdf
+slides.nav
+slides.pdf
+slides.snm
