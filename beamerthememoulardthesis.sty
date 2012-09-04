@@ -5,32 +5,12 @@
 \usecolortheme{moulardthesis}
 \useinnertheme{default}
 \usefonttheme{moulardthesis}
-\useoutertheme{default}
+\useoutertheme{moulardthesis}
 
 %\setbeamertemplate{navigation symbols}{}
 \beamertemplatenavigationsymbolsempty
 
-% Custom title page.
-\defbeamertemplate*{title page}{customized}[1][]
-{
-  \vspace{60pt}
-  \hfill
-  \begin{beamercolorbox}[sep=4pt,right]{title}
-    \usebeamerfont{title}\inserttitle\par%
-  \end{beamercolorbox}
-  \usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par
-  \bigskip
-%
-  \begin{beamercolorbox}[sep=4pt,right]{title}
-    \usebeamerfont{author}\insertauthor\par%
-    \usebeamerfont{institute}\insertinstitute\par%
-    \usebeamerfont{date}\insertdate\par%
-  \end{beamercolorbox}
-  \usebeamercolor[fg]{titlegraphic}\inserttitlegraphic
-}
-
-
-% Full screen slides                                                  
+% Full screen slides
 \newenvironment{changemargin}[2]{%
 \begin{list}{}{%
 \setlength{\topsep}{0pt}%
@@ -42,7 +22,8 @@
 }%
 \item[]}{\end{list}}
 
-% Make one image take up the entire slide area, including borders, in beamer.
+% Make one image take up the entire slide area, including borders,
+% in beamer.
 % centered/centred full-screen image, no title:
 % This uses the entire whole screen
 \newcommand{\maxFrameImage}[1]{
@@ -51,6 +32,19 @@
 \begin{center}
 \vspace{-0.1cm}
 \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio]
+{#1}
+\end{center}
+\end{changemargin}
+\end{frame}
+}
+
+% Same as before, but useful when images do not have the good ratio.
+\newcommand{\maxFrameImageHeight}[1]{
+\begin{frame}[plain]
+\begin{changemargin}{-1cm}{-1cm}
+\begin{center}
+\vspace{-0.1cm}
+\includegraphics[height=\paperheight,keepaspectratio]
 {#1}
 \end{center}
 \end{changemargin}

@@ -50,7 +50,7 @@ pdfproducer = {Thomas Moulard}
 
 % Introduction
 % Animated scheme introducing contributions.
-\begin{frame}[plain]
+\begin{frame}
   \begin{changemargin}{-1cm}{-1cm}
     \begin{center}
       \tikzstyle{normalPath} = [line width=.7mm, color=black!50, -latex]
@@ -65,7 +65,7 @@ pdfproducer = {Thomas Moulard}
         \uncover<1->{
           \node (perception) [state] {%
             \includegraphics[height=3cm]{%
-              src/slides/perception.jpg}};
+              src/slides/perception.pdf}};
         }
 
         \uncover<1>{
@@ -79,7 +79,7 @@ pdfproducer = {Thomas Moulard}
           \node (decision)
                [state,above right=of perception] {%
             \includegraphics[height=3cm]{%
-              src/slides/decision.jpg}};
+              src/slides/decision.pdf}};
         }
 
         \uncover<2>{
@@ -91,7 +91,7 @@ pdfproducer = {Thomas Moulard}
         \uncover<3->{
         \node (action) [state,below right=of decision]{%
           \includegraphics[height=3cm]{%
-            src/slides/action.jpg}};
+            src/slides/action.pdf}};
         }
 
         \uncover<3>{
@@ -104,7 +104,7 @@ pdfproducer = {Thomas Moulard}
           \path (perception) edge[->, normalPath] (decision);
         }
         
-        \uncover<5->{
+        \uncover<5-8>{
           \path (decision) edge[->, normalPath] (action);
         }
         
@@ -126,7 +126,7 @@ pdfproducer = {Thomas Moulard}
           \node[thick,draw=ThoughfulBrick] (contrib1)
                [state,above=-3.4cm of decision] {%
                  \phantom{\includegraphics[height=3.5cm]{%
-                     src/slides/perception.jpg}}};
+                     src/slides/perception.pdf}}};
         }
 
         \uncover<8->{
@@ -139,16 +139,21 @@ pdfproducer = {Thomas Moulard}
           \node[thick,draw=ThoughfulBrick] (contrib2)
                [state,above=-3.4cm of action] {%
                  \phantom{\includegraphics[height=3.5cm]{%
-                     src/slides/action.jpg}}};
+                     src/slides/action.pdf}}};
         }
 
-%FIXME ajouter primitive mouvement ici
 
         \uncover<9->{
-          \node (contrib3b) [state,above=10pt of perception]{%
-            (3) Intégration};
+          \path (decision) edge[->, normalPath,color=ThoughfulBrick]
+          node[color=ThoughfulBrick,text width=3.5cm]{%
+            (3) Primitives de mouvement} (action);
         }
-        \uncover<9>{
+
+        \uncover<10->{
+          \node (contrib4b) [state,above=10pt of perception]{%
+            (4) Intégration};
+        }
+        \uncover<10>{
           \node[thick,draw=ThoughfulBrick] (contrib4)
                [state,above=-3.4cm of perception] {%
                  \phantom{\includegraphics[height=3.5cm]{%
@@ -166,11 +171,21 @@ pdfproducer = {Thomas Moulard}
 {
   \usebackgroundtemplate{%
     \vspace{-2cm}
-    \hspace{-4cm}
-    \includegraphics[height=\paperheight]{%
-      src/slides/perception.jpg}}
-  \begin{frame}[plain]
-    absence de strategie analytique, outil polyvalent
+    \hspace{-4.5cm}
+    \includegraphics[height=.75\paperheight]{%
+      src/slides/decision.jpg}}
+  \begin{frame}
+    \begin{list}{}{
+        \setlength{\topsep}{0pt}%
+        \setlength{\leftmargin}{1.1cm}%
+        \setlength{\listparindent}{\parindent}%
+        \setlength{\itemindent}{\parindent}%
+        \setlength{\parsep}{\parskip}%
+      \item[]}
+      absence de strategie analytique, outil polyvalent
+
+      bla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla bla
+    \end{list}
   \end{frame}
 }
 
@@ -269,6 +284,8 @@ pdfproducer = {Thomas Moulard}
 \begin{frame}
   CONCLUSION
 \end{frame}
+
+\maxFrameImageHeight{src/slides/hrp2-thx.jpg}
 
 
 \end{document}

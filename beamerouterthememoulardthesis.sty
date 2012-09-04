@@ -1,0 +1,43 @@
+\ProvidesPackage{beamerouterthememoulardthesis}[2012/09/04]
+
+\RequirePackage{intcalc}
+
+\useoutertheme{default}
+
+% Custom title page.
+\defbeamertemplate*{title page}{moulardthesis}[1][]
+{
+  \vspace{60pt}
+  \hfill
+  \pgfsetfillopacity{0.75}
+  \begin{beamercolorbox}[sep=4pt,right]{title}
+    \usebeamerfont{title}\inserttitle\par%
+  \end{beamercolorbox}
+  \usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par
+  \bigskip
+%
+  \begin{beamercolorbox}[sep=4pt,right]{title}
+    \usebeamerfont{author}\insertauthor\par%
+    \usebeamerfont{institute}\insertinstitute\par%
+    \usebeamerfont{date}\insertdate\par%
+  \end{beamercolorbox}
+  \pgfsetfillopacity{1.}
+  \usebeamercolor[fg]{titlegraphic}\inserttitlegraphic
+}
+
+% Custom footline.
+\defbeamertemplate*{footline}{moulardthesis}{%
+\leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.99\paperwidth,ht=2.5ex,dp=1ex,right]%
+      {title in head/foot}%
+      \hfill
+      \insertframenumber
+      \hspace*{.5cm}
+      \includegraphics%
+          [height=2ex]%
+          {src/slides/nyan\intcalcMod{\insertframenumber}{5}.jpg}
+    \end{beamercolorbox}
+  }%
+  \vskip0pt%
+}
