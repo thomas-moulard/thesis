@@ -50,3 +50,54 @@
 \end{changemargin}
 \end{frame}
 }
+
+
+%\newenvironment{slideDecision}{%
+%  \usebackgroundtemplate{%
+%    \vspace{-2cm}
+%    \hspace{-4.5cm}
+%    \includegraphics[height=.75\paperheight]{%
+%      src/slides/decision.jpg}}
+%  \begin{frame}
+%    \begin{list}{}{
+%        \setlength{\topsep}{0pt}%
+%        \setlength{\leftmargin}{1.1cm}%
+%        \setlength{\listparindent}{\parindent}%
+%        \setlength{\itemindent}{\parindent}%
+%        \setlength{\parsep}{\parskip}%
+%      \item[]}
+%      \begin{center}}{\end{center}\end{list}\end{}
+
+\newenvironment{changeleftmargin}[1]{%
+\begin{list}{}{%
+\setlength{\topsep}{0pt}%
+\setlength{\leftmargin}{#1}%
+\setlength{\listparindent}{\parindent}%
+\setlength{\itemindent}{\parindent}%
+\setlength{\parsep}{\parskip}%
+}%
+\item[]}{\end{list}}
+
+\newenvironment{slideDecision}{%
+  \usebackgroundtemplate{%
+    \vspace{-2cm}%
+    \hspace{-4.5cm}%
+    \includegraphics[height=.75\paperheight]{%
+      src/slides/decision.jpg}}%
+  \begin{frame}}{\end{frame}}
+
+\newenvironment{slideAction}{%
+  \usebackgroundtemplate{%
+    \vspace{-5cm}%
+    \hspace{-2.5cm}%
+    \includegraphics[height=.75\paperheight]{%
+      src/slides/action.jpg}}%
+  \begin{frame}}{\end{frame}}
+
+\newenvironment{slidePerception}{%
+  \usebackgroundtemplate{%
+    \vspace{-5cm}%
+    \hspace{-3.5cm}%
+    \includegraphics[height=.75\paperheight]{%
+      src/slides/perception.jpg}}%
+  \begin{frame}}{\end{frame}}

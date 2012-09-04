@@ -13,6 +13,7 @@
 
 \usetheme{moulardthesis}
 
+\DeclareUnicodeCharacter{00A0}{~}
 
 \title{Optimisation numérique\\
   Exécution~de~trajectoires référencées capteurs}
@@ -103,11 +104,11 @@ pdfproducer = {Thomas Moulard}
         \uncover<4->{
           \path (perception) edge[->, normalPath] (decision);
         }
-        
+
         \uncover<5-8>{
           \path (decision) edge[->, normalPath] (action);
         }
-        
+
         \uncover<6->{
           \path (action.south)
           edge[->, normalPath, dashed, bend right, bend left]
@@ -166,119 +167,368 @@ pdfproducer = {Thomas Moulard}
   \end{changemargin}
 \end{frame}
 
-\section{Optimisation numérique pour la robotique}
+\begin{slideDecision}
+  \begin{changeleftmargin}{1.1cm}
+    \frametitle{Processus de décision}
+    \begin{center}
+      \includegraphics%
+          [width=.75\linewidth]%
+          {src/chap1-roboptim/hrp2-two-chairs.png}
 
-{
-  \usebackgroundtemplate{%
-    \vspace{-2cm}
-    \hspace{-4.5cm}
-    \includegraphics[height=.75\paperheight]{%
-      src/slides/decision.jpg}}
-  \begin{frame}
-    \begin{list}{}{
-        \setlength{\topsep}{0pt}%
-        \setlength{\leftmargin}{1.1cm}%
-        \setlength{\listparindent}{\parindent}%
-        \setlength{\itemindent}{\parindent}%
-        \setlength{\parsep}{\parskip}%
-      \item[]}
-      absence de strategie analytique, outil polyvalent
+          \begin{enumerate}
+          \item Planification.
+          \item Optimisation de la trajectoire trouvée.
+          \end{enumerate}
+    \end{center}
+  \end{changeleftmargin}
+\end{slideDecision}
 
-      bla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla blabla bla bla
-    \end{list}
-  \end{frame}
-}
+\begin{slideDecision}
+  \begin{changeleftmargin}{1.1cm}
+    \frametitle{Optimisation}
+    \begin{equation*}
+      \min_{\mathbf{x} \in \mathbb{R}^n} f(\mathbf{x})%
+      \text{ sous la contrainte } \mathbf{x} \in \mathbf{X}
+    \end{equation*}
+
+    \begin{equation*}
+      \mathbf{X} \equiv \left\{
+      \begin{array}{l l}
+        c_i (x) = 0    & \quad i \in \xi \\
+        c_j (x) \leq 0 & \quad j \in \nu \\
+      \end{array} \right.
+    \end{equation*}
+
+  \end{changeleftmargin}
+\end{slideDecision}
+
+\begin{slideDecision}
+  \begin{changeleftmargin}{1.1cm}
+    \frametitle{$\lambda$-calcul (1)}
+
+    \begin{description}
+      \item[Variables libres] $x$, $y$, \ldots
+      \item[Application] $u v$ avec $u, v$ deux lambda-termes
+      \item[Abstraction] $\lambda f x . t$ avec $x$ une variable, $t$
+        un $\lambda$-terme.
+    \end{description}
+  \end{changeleftmargin}
+\end{slideDecision}
+
+\begin{slideDecision}
+  \begin{changeleftmargin}{1.1cm}
+    \frametitle{$\lambda$-calcul (2)}
+    \begin{description}
+      \item[Identité]~\\
+        $\text{Id} \equiv \lambda x . x$
+      \item[Entiers de Church]~\\
+        $0 \equiv \lambda f x . x$\\
+        $1 \equiv \lambda f x . f x$
+      \item[Addition]~\\
+        $\text{succ} \equiv \lambda n f x . f (n f x)$
+    \end{description}
+  \end{changeleftmargin}
+\end{slideDecision}
+
+\begin{slideDecision}
+  \begin{changeleftmargin}{1.1cm}
+    \frametitle{$\beta$-conversion}
+
+    \begin{equation*}
+      \begin{array}{ll}
+      \text{succ}~1 & \rightarrow_\beta \lambda f x . (\lambda n f x . f (n f x)) (\lambda f x . f x)\\
+        & \rightarrow_\beta \lambda f x . f ((\lambda f x . f x) f x)\\
+        & \rightarrow_\beta \lambda f x . f f x \equiv 2\\
+      \end{array}
+    \end{equation*}
+
+    \begin{center}
+      \alert{réécrire $\equiv$ calculer $\equiv$ exécuter}
+    \end{center}
+
+  \end{changeleftmargin}
+\end{slideDecision}
+
+\begin{slideDecision}
+  \begin{changeleftmargin}{1.1cm}
+    \frametitle{$\lambda$-calcul simpement typé (1)}
+
+    \begin{equation*}
+      \Omega \equiv (\lambda x . x) (\lambda x . x)
+    \end{equation*}
+
+    \begin{equation*}
+      (\lambda x . x) (\lambda x . x) =_\beta (\lambda x . x) (\lambda x . x)
+    \end{equation*}
+  \end{changeleftmargin}
+\end{slideDecision}
+
+\begin{slideDecision}
+  \begin{changeleftmargin}{1.1cm}
+    \frametitle{$\lambda$-calcul simpement typé (2)}
+
+    \begin{description}
+    \item[Type naturel]~\\
+      $x \vdash \iota$
+    \item[Type fonctionnel]~\\
+      $x \vdash \iota \wedge t \vdash \tau \Rightarrow \lambda x. t \vdash \iota \rightarrow \tau$
+    \end{description}
+
+    \bigskip
+
+    $\Omega$ n'est pas correctement typé.
+
+  \end{changeleftmargin}
+\end{slideDecision}
+
+\begin{slideDecision}
+  \begin{changeleftmargin}{1.1cm}
+    \frametitle{Programmation orientée objet (1)}
+
+    \begin{equation*}
+      A \equiv \{ \underbrace{\{ \text{foo} \vdash \iota
+        \}}_{\mathfrak{A}}, \underbrace{\{ \text{bar} \vdash A
+        \rightarrow \iota, \text{baz} \vdash A \rightarrow \iota
+        \}}_{\mathfrak{M}} \}
+    \end{equation*}
+
+    \begin{equation*}
+      a \vdash A \Rightarrow a.\text{foo} \vdash \iota
+    \end{equation*}
+
+    \begin{equation*}
+      a \vdash A \Rightarrow a.\text{bar} \vdash A \rightarrow \iota
+    \end{equation*}
+  \end{changeleftmargin}
+\end{slideDecision}
+
+\begin{slideDecision}
+  \begin{changeleftmargin}{1.1cm}
+    \frametitle{Programmation orientée objet (2)}
+
+    \begin{equation*}
+      u v \text{bien formé} \Rightarrow u \vdash \tau_1 \rightarrow
+      \tau_2 \wedge \tau_3 <: \tau_1
+    \end{equation*}
+
+    \begin{equation*}
+      \tau_2 <: \tau_1 \Rightarrow
+      \mathfrak{A_{\tau_1}} \subset \mathfrak{A_{\tau_2}} \wedge \mathfrak{M_{\tau_1}} \subset
+      \mathfrak{M_{\tau_2}}
+    \end{equation*}
+  \end{changeleftmargin}
+\end{slideDecision}
+
+\begin{slideDecision}
+  \begin{changeleftmargin}{1.1cm}
+    \frametitle{Type paramétré}
+
+    Fonction d'ordre supérieur $\text{type}
+    \Rightarrow \text{type}$.
+
+    \bigskip
+
+    Exemple: $\tau_\alpha$
+  \end{changeleftmargin}
+\end{slideDecision}
+
+\begin{slideDecision}
+  \begin{changeleftmargin}{1.1cm}
+    \frametitle{Représentation du problème (1)}
+
+    \begin{equation*}
+      \text{Fonction} \equiv \{ \underbrace{\{ \#\text{entrée} \vdash
+        \iota \}}_{\text{attributs}}, \underbrace{\{ \text{calcule}
+        \vdash \text{Fonction} \rightarrow[\iota] \rightarrow \iota \}}_{\text{méthode}} \}
+    \end{equation*}
+
+    \begin{equation*}
+      \text{FonctionDérivable} \equiv \{ \{ \}, \{ \text{gradient}
+      \vdash \text{FonctionDérivable} \rightarrow [\iota] \rightarrow [\iota] \} \} <: \text{Fonction}
+    \end{equation*}
+
+  \end{changeleftmargin}
+\end{slideDecision}
+
+\begin{slideDecision}
+  \begin{changeleftmargin}{1.1cm}
+    \frametitle{Représentation du problème (2)}
+
+  \begin{equation*}
+  \begin{split}
+    \text{Fonction}_n \equiv
+    \left\{
+    \begin{array}{l l}
+      \text{Fonction} & \quad \text{si $n = 0$}\\
+      \text{FonctionDérivable} & \quad \text{si $n = 1$}\\
+      \{ \{ \}, \{ \text{gradient} \vdash \text{Fonction}_n \rightarrow \iota \rightarrow [\iota] \rightarrow [\iota] \} \} <: \text{Fonction}_{n-1} & \quad \text{si $n > 1$}\\
+    \end{array} \right.
+  \end{split}
+  \end{equation*}
+
+  \end{changeleftmargin}
+\end{slideDecision}
+
+\begin{slideDecision}
+  \begin{changeleftmargin}{1.1cm}
+    \frametitle{Représentation du problème (3)}
+
+  \begin{equation*}
+  \begin{split}
+    \tau_{\text{prob}(\tau_1, \tau_2, \tau_3, \dotsc)} \equiv
+    \{ \{ & \text{coût} \vdash \tau_1,\\
+    & \text{contraintes} \vdash [\cup_{i \in \{2, \dotsc, n\}} \tau_i],\\
+    & \text{bornes\_contraintes\_min} \vdash [\iota], \\
+    & \text{bornes\_contraintes\_max} \vdash [\iota] \},\\
+    & \{ \} \}\\
+  \end{split}
+  \end{equation*}
+
+  \begin{equation*}
+    \text{Solveur}_{\tau} \equiv \{ \{ \}, \{ \text{résous} \vdash
+    \text{Solveur}_{\tau} \rightarrow \tau \rightarrow [\iota] \} \}
+  \end{equation*}
+  \end{changeleftmargin}
+\end{slideDecision}
+
+\begin{slideDecision}
+  \begin{changeleftmargin}{1.1cm}
+    \frametitle{Exemple: Optimisation non linéaire}
+
+    \begin{description}
+    \item[Fonction de coût]~\\
+      $\text{Fonction}_2$
+    \item[Contraintes linéaires]~\\
+      $\text{FonctionLinéaire}$
+    \item[Contraintes non linéaires]~\\
+      $\text{Fonction}_2$
+    \item[Problème]
+    \end{description}
+
+    ~~~~$\text{Problème}_{\text{prob}(\text{Fonction}_2, \text{FonctionLinéaire}, \text{Fonction}_2)}$
+
+  \end{changeleftmargin}
+\end{slideDecision}
 
 
-\begin{frame}
-  \frametitle{Le typage au secours du roboticien}
+\begin{slideDecision}
+  \frametitle{RobOptim}
+\end{slideDecision}
 
-  courte introduction au typage
-\end{frame}
-
-\begin{frame}
-  \frametitle{État de l'Art}
-
-  algorithmes et logiciels
-\end{frame}
-
-\begin{frame}
-  \frametitle{Modélisation informatique proposée}
-
-  theoremes
-\end{frame}
-
-\begin{frame}
+\begin{slideDecision}
   \frametitle{Applications}
-
-  slide karim
-\end{frame}
+\end{slideDecision}
 
 
-\section{Exécution de trajectoire en boucle fermée}
+\begin{slideAction}
+  \frametitle{La marche bipède (1)}
 
-\begin{frame}
-  \frametitle{La marche bipède}
+  \begin{equation*}
+    \begin{array}{lll}
+    x_{ZMP} &=& x_G - \frac{\dot{\sigma}_y\ +\ m\ z_G\ \ddot{x}_G}{m\ (\ddot{z}_G + g)}\\
+    y_{ZMP} &=& y_G + \frac{\dot{\sigma}_x\ -\ m\ z_G\ \ddot{y}_G}{m\ (\ddot{z}_G + g)}
+    \end{array}
+  \end{equation*}
+\end{slideAction}
 
-  FIXME
-\end{frame}
+\maxFrameImageHeight{src/chap3-primitive-mouvement/footsteps1.jpg}
+\maxFrameImageHeight{src/chap3-primitive-mouvement/calibextrinsic.jpg}
 
-\begin{frame}
+\begin{slideAction}
   \frametitle{Contrôleur polyvalent pour la robotique}
 
-  FIXME
-\end{frame}
+  \begin{equation*}
+    \mathbf{e} = \mathbf{s} - \mathbf{s}^{*}
+  \end{equation*}
+  
+  \begin{equation*}
+    \mathbf{J}_i = \frac{\partial \mathbf{e}_i}{\partial \mathbf{q}}
+  \end{equation*}
 
-\begin{frame}
+  \begin{equation*}
+    \dot{\mathbf{e}}_i = \mathbf{J}_i \dot{\mathbf{q}}
+  \end{equation*}
+
+  \begin{equation*}
+    \dot{\mathbf{q}} = \mathbf{J}_1^{+} \dot{\mathbf{e}}_1^{*} + \mathbf{P}_1 \mathbf{z}
+  \end{equation*}
+
+  \begin{equation*}
+    \mathbf{P}_1 = \mathbf{I} - \mathbf{J}_1^{+} \mathbf{J}_1
+  \end{equation*}
+
+  \begin{equation*}
+    \mathbf{z} = \mathbf{J}_2^{+} \dot{\mathbf{e}}_2^{*}
+  \end{equation*}
+
+  \begin{equation*}
+    \mathbf{s}_1^{*} = -\lambda (\mathbf{s}_1 - \mathbf{s}_1{*})
+  \end{equation*}
+
+\end{slideAction}
+
+
+
+
+\begin{slideAction}
   \frametitle{Schéma de contrôle boucle fermée}
 
   FIXME
-\end{frame}
+\end{slideAction}
 
-\begin{frame}
+\maxFrameImageHeight{src/chap2-suivi-trajectoire/demo.jpg}
+
+\begin{slideAction}
   \frametitle{Correction de la pile de pas}
 
   FIXME
-\end{frame}
+\end{slideAction}
 
-\begin{frame}
+\begin{slideAction}
   \frametitle{Correction de la trajectoire des pieds}
 
   FIXME
-\end{frame}
+\end{slideAction}
 
-\begin{frame}
+\begin{slideAction}
   \frametitle{Correction de la trajectoire du centre de masse}
 
   FIXME
-\end{frame}
+\end{slideAction}
 
 
-\begin{frame}
+\begin{slideAction}
   \frametitle{Résultats expérimentaux}
 
   FIXME
-\end{frame}
+\end{slideAction}
 
 
-\section{Intégration}
-
-\begin{frame}
+\begin{slidePerception}
   \frametitle{Du magnétophone au robot}
 
   FIXME
-\end{frame}
+\end{slidePerception}
 
-\begin{frame}
+\begin{slidePerception}
   \frametitle{De la bibliothèque au composant}
 
   FIXME
-\end{frame}
+\end{slidePerception}
 
-\begin{frame}
+\maxFrameImageHeight{src/slides/demo2.jpg}
+
+\maxFrameImageHeight{src/chap4-integration/footsteps2.jpg}
+\maxFrameImageHeight{src/chap4-integration/disparity-1.jpg}
+\maxFrameImageHeight{src/chap4-integration/disparity-2.jpg}
+\maxFrameImageHeight{src/chap4-integration/hrp2_urdf.jpg}
+\maxFrameImageHeight{src/chap4-integration/rviz-full.jpg}
+\maxFrameImageHeight{src/chap4-integration/shelf.png}
+
+\begin{slidePerception}
   \frametitle{Résultats}
   FIXME
-\end{frame}
+\end{slidePerception}
 
 
 \begin{frame}

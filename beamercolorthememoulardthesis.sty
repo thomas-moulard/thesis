@@ -2,19 +2,66 @@
 
 \usecolortheme{default}
 
-% Based on 
+\mode<presentation>
+
+% Based on
 % http://www.colourlovers.com/palette/694737/Thought_Provoking
 
+% Light color.
 \definecolor{ThoughtBySome}{RGB}{236,208,120}
 \definecolor{ThoughfulBrick}{RGB}{217,91,67}
 \definecolor{Thoughtless}{RGB}{192,41,66}
 \definecolor{ThoughtYouWere}{RGB}{84,36,55}
 \definecolor{Thoughtless2}{RGB}{83,119,122}
 
-\setbeamercolor{normal text}{fg=ThoughfulBrick,bg=white}
-\setbeamercolor{alerted text}{fg=ThoughfulBrick}
-\setbeamercolor{title}{fg=Thoughtless,bg=white}
 
-\setbeamercolor{structure}{fg=white}
+%\setbeamercolor{normal text}{fg=black,bg=white}
+\setbeamercolor{normal text}{fg=ThoughfulBrick,bg=white}
+%\setbeamercolor{alerted text}{fg=red}
+\setbeamercolor{alerted text}{fg=Thoughtless}
+\setbeamercolor{example text}{fg=ThoughtBySome}
+
+\setbeamercolor{structure}{fg=Thoughtless}
+
 \setbeamercolor{background canvas}{parent=normal text}
 \setbeamercolor{background}{parent=background canvas}
+
+\setbeamercolor{palette primary}{use=structure,fg=structure.fg}
+\setbeamercolor{palette secondary}{use=structure,fg=ThoughfulBrick}
+\setbeamercolor{palette tertiary}{use=structure,fg=ThoughtYouWere}
+\setbeamercolor{palette quaternary}{fg=Thoughtless2}
+
+\setbeamercolor{palette sidebar primary}{use=normal text,fg=normal text.fg}
+\setbeamercolor{palette sidebar secondary}{use=structure,fg=structure.fg}
+\setbeamercolor{palette sidebar tertiary}{use=normal text,fg=normal text.fg}
+\setbeamercolor{palette sidebar quaternary}{use=structure,fg=structure.fg}
+
+\setbeamercolor{math text}{}
+\setbeamercolor{math text inlined}{parent=math text}
+\setbeamercolor{math text displayed}{parent=math text}
+
+\setbeamercolor{normal text in math text}{}
+
+\setbeamercolor{local structure}{parent=structure}
+
+\setbeamercolor{titlelike}{parent=structure}
+
+\setbeamercolor{title}{fg=Thoughtless,bg=white}
+\setbeamercolor{title in head/foot}{parent=palette quaternary}
+\setbeamercolor{title in sidebar}{parent=palette sidebar quaternary}
+
+\setbeamercolor{subtitle}{parent=title}
+
+\setbeamercolor{author}{}
+\setbeamercolor{author in head/foot}{parent=palette primary}
+\setbeamercolor{author in sidebar}{use=palette sidebar tertiary,fg=palette sidebar tertiary.fg}
+
+\setbeamercolor{institute}{}
+\setbeamercolor{institute in head/foot}{parent=palette tertiary}
+\setbeamercolor{institute in sidebar}{use=palette sidebar tertiary,fg=palette sidebar tertiary.fg}
+
+\setbeamercolor{date}{}
+\setbeamercolor{date in head/foot}{parent=palette secondary}
+\setbeamercolor{date in sidebar}{use=palette sidebar tertiary,fg=palette sidebar tertiary.fg}
+
+\setbeamercolor{titlegraphic}{}
