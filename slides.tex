@@ -1,8 +1,8 @@
-\documentclass[14pt,utf8x]{beamer}
+\documentclass[14pt,utf8x,hyperref={pdfpagelabels=false}]{beamer}
 
-\usepackage[utf8x]{inputenc}
+\usepackage[utf8]{inputenc} % hyperref broken with utf8x
 \usepackage[C40,T1]{fontenc}
-\usepackage{lmodern}
+
 \usepackage{graphicx}
 
 \usepackage[francais]{babel}
@@ -11,74 +11,8 @@
 \usepackage{tikz-qtree}
 \usetikzlibrary{shapes.arrows,chains,positioning}
 
-\usepackage[scaled]{helvet}
+\usetheme{moulardthesis}
 
-\usetheme{default}
-\beamertemplatenavigationsymbolsempty
-
-\definecolor{ThoughtBySome}{RGB}{236,208,120}
-\definecolor{ThoughfulBrick}{RGB}{217,91,67}
-\definecolor{Thoughtless}{RGB}{192,41,66}
-\definecolor{ThoughtYouWere}{RGB}{84,36,55}
-\definecolor{Thoughtless2}{RGB}{83,119,122}
-
-\setbeamercolor{normal text}{fg=ThoughfulBrick,bg=white}
-\setbeamercolor{alerted text}{fg=ThoughfulBrick}
-\setbeamercolor{title}{fg=Thoughtless,bg=white}
-
-\setbeamercolor{structure}{fg=white}
-\setbeamercolor{background canvas}{parent=normal text}
-\setbeamercolor{background}{parent=background canvas}
-
-
-\newenvironment{changemargin}[2]{%
-\begin{list}{}{%
-\setlength{\topsep}{0pt}%
-\setlength{\leftmargin}{#1}%
-\setlength{\rightmargin}{#2}%
-\setlength{\listparindent}{\parindent}%
-\setlength{\itemindent}{\parindent}%
-\setlength{\parsep}{\parskip}%
-}%
-\item[]}{\end{list}}
-
-% Make one image take up the entire slide area, including borders, in beamer.
-% centered/centred full-screen image, no title:
-% This uses the entire whole screen
-\newcommand{\maxFrameImage}[1]{
-\begin{frame}[plain]
-\begin{changemargin}{-1cm}{-1cm}
-\begin{center}
-\vspace{-0.1cm}
-\includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio]
-{#1}
-\end{center}
-\end{changemargin}
-\end{frame}
-}
-
-
-\defbeamertemplate*{title page}{customized}[1][]
-{
-  \vspace{60pt}
-  \hfill
-  \begin{beamercolorbox}[sep=4pt,right]{title}
-    \usebeamerfont{title}\inserttitle\par%
-  \end{beamercolorbox}
-  \usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par
-  \bigskip
-%
-  \begin{beamercolorbox}[sep=4pt,right]{title}
-    \usebeamerfont{author}\insertauthor\par%
-    \usebeamerfont{institute}\insertinstitute\par%
-    \usebeamerfont{date}\insertdate\par%
-  \end{beamercolorbox}
-  \usebeamercolor[fg]{titlegraphic}\inserttitlegraphic
-}
-
-\tikzset{onslide/.code args={<#1>#2}{%
-  \only<#1>{\pgfkeysalso{#2}} 
-}}
 
 \title{Optimisation numérique\\
   Exécution~de~trajectoires référencées capteurs}
@@ -87,11 +21,14 @@
 
 
 % Setup pdf meta-data.
-\hypersetup{ % Modifiez la valeur des champs suivants
+\hypersetup{
 pdfauthor = {Thomas Moulard},
-pdftitle = {Optimisation num\'erique pour la robotique et ex\'ecution de trajectoires r\'ef\'erenc\'ees capteurs},
-pdfsubject = {Optimisation num\'erique pour la robotique et ex\'ecution de trajectoires r\'ef\'erenc\'ees capteurs},
-pdfkeywords = {optimisation numérique, typage, type, robotique, humano\"ide},
+pdftitle = {Optimisation num\'erique pour la robotique%
+ et ex\'ecution de trajectoires r\'ef\'erenc\'ees capteurs},
+pdfsubject = {Optimisation num\'erique pour la robotique%
+ et ex\'ecution de trajectoires r\'ef\'erenc\'ees capteurs},
+pdfkeywords = {optimisation numérique, typage, type,%
+robotique, humano\"ide},
 pdfcreator = {Thomas Moulard},
 pdfproducer = {Thomas Moulard}
 }
@@ -139,7 +76,7 @@ pdfproducer = {Thomas Moulard}
 
 
         \uncover<2->{
-          \node[onslide=<2->] (decision)
+          \node (decision)
                [state,above right=of perception] {%
             \includegraphics[height=3cm]{%
               src/slides/decision.jpg}};
