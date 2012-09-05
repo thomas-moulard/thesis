@@ -343,14 +343,21 @@ pdfproducer = {Thomas Moulard}
     \frametitle{Représentation du problème (1)}
 
     \begin{equation*}
-      \text{Fonction} \equiv \{ \underbrace{\{ \#\text{entrée} \vdash
-        \iota \}}_{\text{attributs}}, \underbrace{\{ \text{calcule}
+      \begin{array}{ll}
+      \text{Fonction} \equiv & \{ \underbrace{\{ \#\text{entrée} \vdash
+        \iota \}}_{\text{attributs}}, \\
+      & \underbrace{\{ \text{calcule}
         \vdash \text{Fonction} \rightarrow[\iota] \rightarrow \iota \}}_{\text{méthode}} \}
+      \end{array}
     \end{equation*}
 
     \begin{equation*}
-      \text{FonctionDérivable} \equiv \{ \{ \}, \{ \text{gradient}
-      \vdash \text{FonctionDérivable} \rightarrow [\iota] \rightarrow [\iota] \} \} <: \text{Fonction}
+      \begin{array}{l}
+        \text{FonctionDérivable} \equiv \\
+        \{ \{ \}, \{ \text{gradient}
+      \vdash \text{FonctionDérivable} \rightarrow [\iota] \rightarrow [\iota] \} \}\\
+      ~~<: \text{Fonction}
+      \end{array}
     \end{equation*}
 
   \end{changeleftmargin}
@@ -360,18 +367,16 @@ pdfproducer = {Thomas Moulard}
   \begin{changeleftmargin}{1.1cm}
     \frametitle{Représentation du problème (2)}
 
-  \begin{equation*}
-  \begin{split}
-    \text{Fonction}_n \equiv
-    \left\{
-    \begin{array}{l l}
-      \text{Fonction} & \quad \text{si $n = 0$}\\
-      \text{FonctionDérivable} & \quad \text{si $n = 1$}\\
-      \{ \{ \}, \{ \text{gradient} \vdash \text{Fonction}_n \rightarrow \iota \rightarrow [\iota] \rightarrow [\iota] \} \} <: \text{Fonction}_{n-1} & \quad \text{si $n > 1$}\\
-    \end{array} \right.
-  \end{split}
-  \end{equation*}
-
+    \begin{equation*}
+      \begin{array}{l}
+        \text{Fonction}_n \equiv \text{Fonction} \quad \text{si $n = 0$}\\
+        \text{Fonction}_n \equiv \text{FonctionDérivable} \quad \text{si $n = 1$}\\
+        \text{Fonction}_n \equiv \\
+        \{ \{ \}, \{ \text{gradient} \vdash \text{Fonction}_n \rightarrow \iota \rightarrow [\iota] \rightarrow [\iota] \} \}\\
+        ~~<: \text{Fonction}_{n-1} \quad \text{si $n > 1$}\\
+      \end{array}
+    \end{equation*}
+    
   \end{changeleftmargin}
 \end{slideDecision}
 
@@ -419,6 +424,8 @@ pdfproducer = {Thomas Moulard}
 
 \begin{slideDecision}
   \frametitle{RobOptim}
+
+  FIXME
 \end{slideDecision}
 
 \begin{slideDecision}
