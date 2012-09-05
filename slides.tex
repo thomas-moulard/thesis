@@ -11,6 +11,12 @@
 \usepackage{tikz-qtree}
 \usetikzlibrary{shapes.arrows,chains,positioning}
 
+\tikzstyle{every picture}+=[remember picture]
+\tikzstyle{na} = [baseline=-.5ex]
+\newcommand{\tikzplaceholder}[1]{\begingroup\shorthandoff{;}\tikz[na] \node[coordinate] (#1) {};\endgroup}
+
+\newcommand{\blueoverlay}[2]{\tikz[baseline]{ \node[fill=blue!20,anchor=base,rounded corners=2pt] (#1) {$#2$}; }}
+
 \usetheme{moulardthesis}
 
 \DeclareUnicodeCharacter{00A0}{~}
@@ -417,66 +423,197 @@ pdfproducer = {Thomas Moulard}
 
 \begin{slideDecision}
   \frametitle{Applications}
+
+  \begin{center}
+    \includegraphics[height=.33\paperheight]%
+                    {src/chap1-roboptim/straight-line-obstacle.png}
+  \includegraphics[height=.33\paperheight]%
+                  {src/slides/agent-067.jpg}\par
+  \includegraphics[height=.33\paperheight]%
+                  {src/slides/multi-014.jpg}
+  \includegraphics[height=.33\paperheight]%
+                  {src/slides/multi-015.jpg}
+%  \includegraphics[height=.33\paperheight]%
+%                  {src/slides/deformable.jpg}
+
+  Figures 2, 3, 4: K. Bouyarmane et collab.
+  \end{center}
 \end{slideDecision}
 
 
-\begin{slideAction}
-  \frametitle{La marche bipède (1)}
+\begin{slideDecision}
+  \frametitle{Génération de mouvements (1)}
+  \begin{changeleftmargin}{1.1cm}
+  \begin{center}
+    \includegraphics[width=.25\paperheight]{src/slides/falling.pdf}%
+    \includegraphics[width=.25\paperheight]{src/slides/burning.pdf}\par
+    \bigskip
+    Quelles contraintes?\par
+  \end{center}
+  Limites en torque et vitesse,\\
+  (auto-)collision et \alert{équilibre}.
+  \end{changeleftmargin}
+\end{slideDecision}
 
-  \begin{equation*}
+\begin{slideDecision}
+  \frametitle{Génération de mouvements (2)}
+  \begin{changeleftmargin}{1.1cm}
+    \begin{center}
+      ZMP dans le polygone support $\Rightarrow$ mouvement
+      dynamiquement stable.
+
+      \bigskip
+
+      FIG PAS POLYGONE SUPPORT
+    \end{center}
+  \end{changeleftmargin}
+\end{slideDecision}
+
+\begin{slideDecision}
+  \frametitle{Génération de mouvements (3)}
+  \begin{changeleftmargin}{1.1cm}
+  \begin{center}
+    \begin{equation*}
     \begin{array}{lll}
-    x_{ZMP} &=& x_G - \frac{\dot{\sigma}_y\ +\ m\ z_G\ \ddot{x}_G}{m\ (\ddot{z}_G + g)}\\
-    y_{ZMP} &=& y_G + \frac{\dot{\sigma}_x\ -\ m\ z_G\ \ddot{y}_G}{m\ (\ddot{z}_G + g)}
+    x_{ZMP} &=& x_G -
+    \frac{\dot{\sigma}_y\ +\ m\ z_G\ \ddot{x}_G}{m\ (\ddot{z}_G + g)}\\
+    y_{ZMP} &=& y_G +
+    \frac{\dot{\sigma}_x - m z_G \ddot{y}_G}{m (\ddot{z}_G + g)}
     \end{array}
   \end{equation*}
-\end{slideAction}
 
-\maxFrameImageHeight{src/chap3-primitive-mouvement/footsteps1.jpg}
-\maxFrameImageHeight{src/chap3-primitive-mouvement/calibextrinsic.jpg}
+  \end{center}
+
+  \begin{description}
+    \item[$(x_G, y_G, z_G)$]~\\
+      Position du centre de masse.
+    \item[$(\sigma_x, \sigma_y)$]~\\
+      Moment autour du centre de masse.
+    \item[$m$] Masse du robot.
+    \item[$g$] Constante de gravité.
+  \end{description}
+
+  \end{changeleftmargin}
+\end{slideDecision}
+
+\begin{slideDecision}
+  \frametitle{Génération de mouvements (4)}
+  \begin{changeleftmargin}{1.1cm}
+  \begin{center}
+
+    Modèle linéaire:
+
+    \begin{equation*}
+      z = x - \frac{z_G}{g} \ddot{x}_G
+    \end{equation*}
+
+    \begin{description}
+    \item[$z$] Position du ZMP.
+    \item[$x$] Position du centre de masse.
+    \item[$z_G$] Hauteur du centre de masse.
+    \item[$g$] Constante de gravité.
+    \end{description}
+  \end{center}
+  \end{changeleftmargin}
+\end{slideDecision}
+
+\begin{slideDecision}
+  \frametitle{Génération de mouvements (5)}
+  \begin{changeleftmargin}{1.1cm}
+  \begin{center}
+    changer en algo
+    \begin{enumerate}
+    \item Génération d'une pile de pas.
+    \item Génération d'une trajectoire de ZMP.
+    \item Génération de la trajectoire de centre de masse
+      correspondante.
+    \item Génération des trajectoires de pieds.
+    \item Section suivante: génération d'une trajectoire corps complet
+      respectant à la fois la trajectoire du centre de masse et la
+      trajectoire des pieds.
+    \end{enumerate}
+  \end{center}
+  \end{changeleftmargin}
+\end{slideDecision}
+
+\maxFrameImageWidth{src/chap3-primitive-mouvement/footsteps1.jpg}
 
 \begin{slideAction}
-  \frametitle{Contrôleur polyvalent pour la robotique}
+  \frametitle{Contrôleur polyvalent (1)}
 
-  \begin{equation*}
-    \mathbf{e} = \mathbf{s} - \mathbf{s}^{*}
-  \end{equation*}
-  
-  \begin{equation*}
-    \mathbf{J}_i = \frac{\partial \mathbf{e}_i}{\partial \mathbf{q}}
-  \end{equation*}
+  \begin{changeleftmargin}{1.1cm}
+  \begin{center}
+    Contrôleur: algorithme générant la commande envoyée aux moteurs à
+    une fréquence fixe (200Hz pour HRP-2).
 
-  \begin{equation*}
-    \dot{\mathbf{e}}_i = \mathbf{J}_i \dot{\mathbf{q}}
-  \end{equation*}
+    \bigskip
 
-  \begin{equation*}
-    \dot{\mathbf{q}} = \mathbf{J}_1^{+} \dot{\mathbf{e}}_1^{*} + \mathbf{P}_1 \mathbf{z}
-  \end{equation*}
+    \begin{itemize}
+    \item Exécute les mouvements générés par la partie décisionelle.
+    \item En charge de l'adaptation réactive du mouvement.
+    \item Respecte le temps réel.
+    \end{itemize}
 
-  \begin{equation*}
-    \mathbf{P}_1 = \mathbf{I} - \mathbf{J}_1^{+} \mathbf{J}_1
-  \end{equation*}
+    \bigskip
 
-  \begin{equation*}
-    \mathbf{z} = \mathbf{J}_2^{+} \dot{\mathbf{e}}_2^{*}
-  \end{equation*}
-
-  \begin{equation*}
-    \mathbf{s}_1^{*} = -\lambda (\mathbf{s}_1 - \mathbf{s}_1{*})
-  \end{equation*}
-
+    Composant \alert{critique} de tout robot.
+  \end{center}
+  \end{changeleftmargin}
 \end{slideAction}
 
+\begin{slideAction}
+  \frametitle{Contrôleur polyvalent (2)}
 
+  \begin{changeleftmargin}{1.1cm}
+  \begin{center}
+    Espace des tâches\\
+    VS\\
+    Espaces des configurations.
 
+    \bigskip
+
+    \begin{equation*}
+      \mathbf{e} = \mathbf{s} - \mathbf{s}^{*}
+    \end{equation*}
+
+    \begin{description}
+      \item[$\mathbf{e}$] erreur.
+      \item[$\mathbf{s}$] valeur courante de la tâche.
+      \item[$\mathbf{s}^{*}$] valeur de référence.
+    \end{description}
+  \end{center}
+  \end{changeleftmargin}
+\end{slideAction}
+
+\begin{slideAction}
+  \frametitle{Contrôleur polyvalent (2)}
+
+  \begin{changeleftmargin}{1.1cm}
+  \begin{center}
+
+    Pile de tâches pour la marche:
+
+    \bigskip
+
+    \begin{tabular}{|l|}
+      \hline
+      centre de masse\\
+      \hline
+      pied gauche\\
+      \hline
+      pied droit\\
+      \hline
+    \end{tabular}
+
+  \end{center}
+  \end{changeleftmargin}
+\end{slideAction}
 
 \begin{slideAction}
   \frametitle{Schéma de contrôle boucle fermée}
 
   FIXME
 \end{slideAction}
-
-\maxFrameImageHeight{src/chap2-suivi-trajectoire/demo.jpg}
 
 \begin{slideAction}
   \frametitle{Correction de la pile de pas}
@@ -491,51 +628,60 @@ pdfproducer = {Thomas Moulard}
 \end{slideAction}
 
 \begin{slideAction}
-  \frametitle{Correction de la trajectoire du centre de masse}
+  \frametitle{Correction de la trajectoire du CoM}
 
   FIXME
 \end{slideAction}
 
+\maxFrameImageHeight{src/chap2-suivi-trajectoire/demo.jpg}
 
-\begin{slideAction}
-  \frametitle{Résultats expérimentaux}
 
-  FIXME
-\end{slideAction}
-
+%\maxFrameImageHeight{src/chap3-primitive-mouvement/calibextrinsic.jpg}
 
 \begin{slidePerception}
-  \frametitle{Du magnétophone au robot}
+  \frametitle{Systèmes de localisation}
 
   FIXME
 \end{slidePerception}
 
-\begin{slidePerception}
-  \frametitle{De la bibliothèque au composant}
-
-  FIXME
-\end{slidePerception}
-
-\maxFrameImageHeight{src/slides/demo2.jpg}
-
-\maxFrameImageHeight{src/chap4-integration/footsteps2.jpg}
-\maxFrameImageHeight{src/chap4-integration/disparity-1.jpg}
-\maxFrameImageHeight{src/chap4-integration/disparity-2.jpg}
-\maxFrameImageHeight{src/chap4-integration/hrp2_urdf.jpg}
-\maxFrameImageHeight{src/chap4-integration/rviz-full.jpg}
 \maxFrameImageHeight{src/chap4-integration/shelf.png}
 
-\begin{slidePerception}
-  \frametitle{Résultats}
-  FIXME
-\end{slidePerception}
-
-
 \begin{frame}
-  CONCLUSION
+  \frametitle{Conclusion}
+
+  \begin{itemize}
+  \item Architecture complète: perception, décision, action.
+  \item Correction des pas pour les mouvements de précision.
+  \end{itemize}
+
+  \bigskip
+
+  \begin{itemize}
+  \item Valider l'approche pour les bras.
+  \item Valider les pas corrigés en-ligne.
+  \item Améliorer la localisation du robot. Utilisation conjoint de
+    plusieurs systèmes de localisation.
+  \end{itemize}
 \end{frame}
 
 \maxFrameImageHeight{src/slides/hrp2-thx.jpg}
+
+
+%
+%\begin{slidePerception}
+%  \frametitle{De la bibliothèque au composant}
+%
+%  FIXME
+%\end{slidePerception}
+
+%\maxFrameImageHeight{src/slides/demo2.jpg}
+
+%\maxFrameImageHeight{src/chap4-integration/footsteps2.jpg}
+%\maxFrameImageHeight{src/chap4-integration/disparity-1.jpg}
+%\maxFrameImageHeight{src/chap4-integration/disparity-2.jpg}
+%\maxFrameImageHeight{src/chap4-integration/hrp2_urdf.jpg}
+%\maxFrameImageHeight{src/chap4-integration/rviz-full.jpg}
+
 
 
 \end{document}

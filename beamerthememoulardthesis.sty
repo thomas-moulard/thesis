@@ -51,6 +51,19 @@
 \end{frame}
 }
 
+% Same as before, but useful when images do not have the good ratio.
+\newcommand{\maxFrameImageWidth}[1]{
+\begin{frame}[plain]
+\begin{changemargin}{-1cm}{-1cm}
+\begin{center}
+\vspace{-0.1cm}
+\includegraphics[width=\paperwidth,keepaspectratio]
+{#1}
+\end{center}
+\end{changemargin}
+\end{frame}
+}
+
 
 %\newenvironment{slideDecision}{%
 %  \usebackgroundtemplate{%
