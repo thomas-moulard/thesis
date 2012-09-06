@@ -9,12 +9,21 @@
 
 \usepackage[francais]{babel}
 
+\usepackage{algorithmic, algorithm}
+
 \usepackage{tikz, pgfplots}
 \usepackage{tikz-qtree}
-\usetikzlibrary{shapes.arrows,chains,positioning,matrix}
+\usetikzlibrary{shapes.arrows,chains,positioning,matrix,patterns}
 
 \tikzstyle{every picture}+=[remember picture]
 \tikzstyle{na} = [baseline=-.5ex]
+
+\tikzstyle{state}=[rectangle,
+  color=structure.fg,
+  fill=ThoughtBySome,
+  inner sep=0.2cm,
+  rounded corners=2mm]
+
 \newcommand{\tikzplaceholder}[1]{\begingroup\shorthandoff{;}\tikz[na] \node[coordinate] (#1) {};\endgroup}
 
 \newcommand{\blueoverlay}[2]{\tikz[baseline]{ \node[fill=blue!20,anchor=base,rounded corners=2pt] (#1) {$#2$}; }}
@@ -266,7 +275,8 @@ pdfproducer = {Thomas Moulard}
     \end{equation*}
 
     \begin{equation*}
-      (\lambda x . x) (\lambda x . x) =_\beta (\lambda x . x) (\lambda x . x)
+      (\lambda x . x) (\lambda x . x) \rightarrow_\beta
+      (\lambda x . x) (\lambda x . x)
     \end{equation*}
   \end{changeleftmargin}
 \end{slideDecision}
@@ -561,19 +571,19 @@ pdfproducer = {Thomas Moulard}
 
 \begin{slideDecision}
   \frametitle{Génération de mouvements (5)}
-  \begin{changeleftmargin}{1.1cm}
+  \begin{changeleftmargin}{1.5cm}
   \begin{center}
-    changer en algo
     \begin{enumerate}
-    \item Génération d'une pile de pas.
-    \item Génération d'une trajectoire de ZMP.
-    \item Génération de la trajectoire de centre de masse
-      correspondante.
-    \item Génération des trajectoires de pieds.
-    \item Section suivante: génération d'une trajectoire corps complet
-      respectant à la fois la trajectoire du centre de masse et la
-      trajectoire des pieds.
+      \item Génération d'une pile de pas.
+      \item Génération d'une trajectoire de ZMP.
+      \item Génération de la trajectoire de centre de masse
+        correspondante.
+      \item Génération des trajectoires de pieds.
     \end{enumerate}
+
+    \bigskip
+    
+    \alert{Et la trajectoire corps complet?}
   \end{center}
   \end{changeleftmargin}
 \end{slideDecision}
@@ -633,20 +643,21 @@ pdfproducer = {Thomas Moulard}
   \begin{changeleftmargin}{1.1cm}
   \begin{center}
 
-    Pile de tâches pour la marche:
+    \begin{tikzpicture}[%
+        >=latex,
+        node distance=1em,
+        fixed/.style={
+          text width=120pt}]
+      \node [state,fixed] (com) {Centre de masse};
+      \node [state,fixed, below=of com] (lf) {Pied gauche};
+      \node [state,fixed, below=of lf] (rf) {Pied droit};
+      \node [state,fixed, below=of rf] (posture) {Posture};
 
-    \bigskip
-
-    \begin{tabular}{|l|}
-      \hline
-      centre de masse\\
-      \hline
-      pied gauche\\
-      \hline
-      pied droit\\
-      \hline
-    \end{tabular}
-
+      \node [left=of com] (fort) {Priorité forte};
+      \node [left=of posture] (faible) {Priorité faible};
+      \draw[->, line width=1.05]
+      (fort.south) -- (faible.north);
+    \end{tikzpicture}
   \end{center}
   \end{changeleftmargin}
 \end{slideAction}
@@ -654,25 +665,350 @@ pdfproducer = {Thomas Moulard}
 \begin{slideAction}
   \frametitle{Schéma de contrôle boucle fermée}
 
-  FIXME
+  \begin{center}
+    \begin{tikzpicture}[>=latex]
+
+      \draw (-1,-2) node [state] (ctrl) {Contrôleur};
+
+      \draw (-1,0) node [state] (corr) {Correction};
+      \draw (-1,1.5) node [state] (gen) {Génération};
+
+      \draw (4,0) node (loc) [state] {Localisation};
+
+      \draw[-,style=dashed] (2,-3) -- (2,3);
+
+      \uncover<3-> {
+        \draw[->] (loc.west) -- (corr.east)
+        node [at start,left,font=\tiny,yshift=0.2cm]
+        {$\hat{\mathbf{x}}_t \in \text{SE}(2)$};
+      }
+
+      \uncover<2-> {
+        \draw[->] (gen.south) -- (corr.north)
+        node [at start,left,font=\tiny,yshift=-0.2cm]
+        {$(\gamma_{\text{pieds}}(t), \gamma_{\text{com}}(t), \mathbf{x}(t)) \in \text{SE}(3)^3 \times \text{SE}(2)$};
+      }
+
+      \uncover<3-> {
+        \draw[->] (corr.south) -- (ctrl.north)
+        node [at start,left,font=\tiny,yshift=-0.25cm]
+        {$(\gamma'_{\text{pied~gauche}}(t), \gamma'_{\text{pied~droit}}(t), \gamma'_{\text{com}}(t)) \in \text{SE}(3)^3$};
+      }
+
+      \uncover<4-> {
+        \draw[->] (ctrl.south) --++ (0,-1)
+        node [at start,left,font=\tiny,yshift=-0.25cm]
+        {$\dot{\mathbf{q}}_t \in \mathbb{R}^n$};
+      }
+
+      \draw[<-] (gen.north) --++ (0,1) node [left,font=\tiny,yshift=-0.25cm]
+           {$\mathbf{S} \in \text{SE}(2)^{\text{nsteps}}$};
+    \end{tikzpicture}
+  \end{center}
 \end{slideAction}
 
 \begin{slideAction}
-  \frametitle{Correction de la pile de pas}
+  \frametitle{Synchronisation temporelle}
 
-  FIXME
+
+  \begin{center}
+    \vspace{-1cm}
+    \begin{tikzpicture}
+      \begin{axis}[
+          grid=major,
+          legend style={
+            at={(0.5,-0.2)},
+            anchor=north,
+            legend columns=3,
+            cells={anchor=west},
+            font=\footnotesize,
+            rounded corners=2pt,
+            draw=white
+          },
+          xlabel=time ($s$),
+          ylabel=$x$ position ($m$),
+          no markers
+          ]
+
+        \addplot[
+          red,
+          dashed,
+        ] table {dat/feet_follower_feet-follower-com.dat};
+        \addlegendentry{center of mass}
+
+        \addplot[
+          blue,
+          dashed,
+        ] table[
+          x index=0,
+          y index=4
+        ] {dat/feet_follower_feet-follower-left-ankle.dat};
+        \addlegendentry{left foot}
+
+        \addplot[
+          green,
+          dashed,
+        ] table[
+          x index=0,
+          y index=4
+        ] {dat/feet_follower_feet-follower-right-ankle.dat};
+        \addlegendentry{right foot}
+
+        \uncover<7->{
+        \addplot[
+          red,
+        ] table {dat/feet_follower_correction-com.dat};
+        \addlegendentry{center of mass (corr.)}
+        }
+
+        \uncover<6->{
+        \addplot[
+          blue,
+        ] table[
+          x index=0,
+          y index=4
+        ] {dat/feet_follower_correction-left-ankle.dat};
+        \addlegendentry{left foot (corr.)}
+        }
+
+        \uncover<5->{
+        \addplot[
+          green,
+        ] table[
+          x index=0,
+          y index=4
+        ] {dat/feet_follower_correction-right-ankle.dat};
+        \addlegendentry{right foot (corr.)}
+        }
+      \end{axis}
+
+      \uncover<2-> {
+        \draw [
+        thick,
+        decoration={
+          brace,
+          raise=-1.05cm
+        },
+        font=\tiny,
+        decorate
+      ] (axis cs:2.1,6.35) -- (axis cs:4.1,6.35)
+      node [pos=0.5,anchor=north,yshift=-0.55cm] {pas 1};
+      }
+
+      \uncover<3-> {
+      \draw [
+        thick,
+        decoration={
+          brace,
+          raise=-1.05cm
+        },
+        font=\tiny,
+        decorate
+      ] (axis cs:5.1,6.35) -- (axis cs:7.1,6.35)
+      node [pos=0.5,anchor=north,yshift=-0.55cm] {pas 2};
+      }
+
+      % error measure
+      \uncover<4-> {
+      \draw[<-]
+      (1.3, 0.5) -- (1.3, 1.5)
+      node [font=\tiny,anchor=north,yshift=0.3cm, line width=1.3]
+      {mesure};
+      }
+
+      \def\w{0.5}
+      \def\h{0.75}
+      \def\dx{8.}
+
+      \def\dy{.5}
+      % left step planned 1
+      \filldraw[pattern=north east lines] (\dx + 0., \dy + 0.5)
+      rectangle (\dx + 0. + \w, \dy + \h + 0.5);
+
+      % left step planned 1 - drift
+      \uncover<4-> {
+        \draw[style=solid,color=red,line width=1.25] (\dx, \dy - 0.3 + 0.5)
+        rectangle (\dx + \w, \dy + \h - 0.3 + 0.5);
+      }
+
+      \filldraw[pattern=north east lines] (\dx + 1., \dy + 0.5)
+      rectangle (\dx + 1. + \w, \dy + \h + 0.5);
+      \draw<4->[style=solid,color=red,line width=1.25] (\dx + 1., \dy - 0.3 + 0.5)
+      rectangle (\dx + \w + 1., \dy + \h - 0.3 + 0.5);
+
+
+      % right step planned 1
+      \filldraw[pattern=north east lines] (\dx + 1., \dy + 3.)
+      rectangle (\dx + 1. + \w, \dy + \h + 3.)
+      node [pos=0.5,anchor=north,font=\tiny,yshift=0.75cm] {pas 1};
+
+      % right step planned 1 - corrected
+      \uncover<4-> {
+        \draw[style=solid,color=red,line width=1.25]
+        (\dx + 1., \dy + 3.-0.3)
+        rectangle (\dx + 1. + \w, \dy + \h + 3. -0.3);
+      }
+
+
+      \uncover<5-> {
+        \draw[style=solid,color=green,line width=1.25] (\dx + 1., \dy + 3.)
+        rectangle (\dx + 1. + \w, \dy + \h + 3.);
+      }
+
+      \def\dy{3.}
+      % left step planned 2
+      \filldraw[pattern=north east lines] (\dx + 0., \dy + 0.5)
+      rectangle (\dx + 0. + \w, \dy + \h + 0.5)
+      node [pos=0.5,anchor=north,font=\tiny,yshift=0.75cm] {pas 2};
+
+      \uncover<4-> {
+        \draw[style=solid,color=red,line width=1.25] (\dx, \dy + 0.5 -0.3)
+        rectangle (\dx + \w, \dy + \h + 0.5 -0.3);
+      }
+
+      % left step planned 2 - corrected
+      \uncover<6-> {
+        \draw[style=solid,color=green,line width=1.25] (\dx + 0., \dy + 0.5)
+      rectangle (\dx + 0. + \w, \dy + \h + 0.5);
+      }
+
+    \end{tikzpicture}
+  \end{center}
 \end{slideAction}
 
 \begin{slideAction}
-  \frametitle{Correction de la trajectoire des pieds}
+  \frametitle{Trajectoire des pieds (1)}
 
-  FIXME
+  \begin{center}
+    \begin{tikzpicture}[>=latex]
+        \def\w{0.5}
+        \def\h{0.75}
+
+        \foreach \dy in {0., 1., 2., 3.}
+                 {
+                   % left step planned
+                   \filldraw[pattern=north east lines] (0., \dy)
+                   rectangle (0. + \w, \dy + \h);
+
+                   % right step planned
+                   \filldraw[pattern=north west lines] (1., \dy + 0.5)
+                   rectangle (1. + \w, \dy + \h + 0.5);
+                 }
+
+        % before correction
+        \def\driftx{0.1}
+        \def\drifty{0.05}
+        \def\drifttheta{5.}
+
+        \def\dy{0}
+        % left step planned
+        \draw<2->[style=solid, color=red, rotate=\drifttheta * \dy,line width=1.25]
+        (0. + \driftx * \dy, \drifty * \dy + \dy)
+        rectangle (0. + \driftx * \dy + \w, \drifty * \dy + \dy + \h);
+
+        % right step planned
+        \draw<3->[style=solid, color=red, rotate=\drifttheta * \dy + \drifttheta / 2.,line width=1.25]
+        (1. + \driftx * \dy + \drifty / 2., \drifty * \dy + \drifty / 2. + \dy + 0.5)
+        rectangle (1. + \driftx * \dy + \drifty / 2. + \w, \drifty * \dy + \drifty / 2. + \dy + \h + 0.5);
+
+        \def\dy{1}
+        % left step planned
+        \draw<4->[style=solid, color=red, rotate=\drifttheta * \dy,line width=1.25]
+        (0. + \driftx * \dy, \drifty * \dy + \dy)
+        rectangle (0. + \driftx * \dy + \w, \drifty * \dy + \dy + \h);
+
+        % right step planned
+        \draw<5->[style=solid, color=red, rotate=\drifttheta * \dy + \drifttheta / 2.,line width=1.25]
+        (1. + \driftx * \dy + \drifty / 2., \drifty * \dy + \drifty / 2. + \dy + 0.5)
+        rectangle (1. + \driftx * \dy + \drifty / 2. + \w, \drifty * \dy + \drifty / 2. + \dy + \h + 0.5);
+
+
+        \def\dy{2}
+        \draw<6->[style=solid, color=red,line width=1.25, rotate=\drifttheta] (0. + \driftx, \dy + \drifty)
+        rectangle (0. + \w + \driftx, \dy + \h + \drifty);
+
+        % --- after correction ---
+
+        % left step planned
+        \draw<7->[style=solid, color=green,line width=1.25] (0., \dy)
+        rectangle (0. + \w, \dy + \h);
+
+        \uncover<7->{
+        \draw[smooth,rounded corners=1ex,<-,thick]
+        (-0.3, \dy) -- (-0.3 - 0.05, \dy + 0.2) -- (-0.3 - 0.2, \dy + 0.4)
+        node[midway,left]
+        {
+          $\delta \mathbf{x}$
+        };
+        }
+
+
+        \draw<7->[style=solid, color=green,line width=1.25] (0., \dy)
+        rectangle (0. + \w, \dy + \h);
+        \draw<7->[style=solid, color=green,line width=1.25] (1., \dy + 0.5)
+        rectangle (1. + \w, \dy + \h + 0.5);
+        \def\dy{3}
+        \draw<7->[style=solid, color=green,line width=1.25] (0., \dy)
+        rectangle (0. + \w, \dy + \h);
+        \draw<7->[style=solid, color=green,line width=1.25] (1., \dy + 0.5)
+        rectangle (1. + \w, \dy + \h + 0.5);
+
+        % right step planned
+        \def\dy{2}
+        \draw<8->[style=solid, color=orange,line width=1.25, rotate=\drifttheta * 0.5] (1. + \driftx * .5, \dy + 0.5 + \drifty * 0.5)
+        rectangle (1. + \driftx * 0.5 + \w, \dy + \drifty * 0.5 + \h + 0.5);
+
+        \def\dy{3}
+        % left step planned
+        \draw<9->[style=solid, color=orange,line width=1.25, rotate=\drifttheta * 1.] (0. + \driftx * 1., \dy + \drifty * 1.)
+        rectangle (0. + \w + \driftx * 1., \dy + \h + \drifty * 1.);
+
+        % right step planned
+        \uncover<10-> {
+          \draw[style=solid, color=orange,line width=1.25, rotate=\drifttheta * 1.5] (1. + \driftx * 1.5, \dy + 0.5 + \drifty * 1.5)
+        rectangle (1. + \w + \driftx * 1.5, \dy + \h + 0.5 + \drifty * 1.5);
+        }
+
+      \end{tikzpicture}
+      \end{center}
 \end{slideAction}
 
 \begin{slideAction}
-  \frametitle{Correction de la trajectoire du CoM}
+  \frametitle{Trajectoire des pieds (2)}
 
-  FIXME
+  \begin{equation*}
+    \gamma_{\text{pied}}^{(1)}(t) = \Delta^t(t) . \gamma_{\text{pied}}(t)
+  \end{equation*}
+
+  \begin{equation*}
+    \gamma_{\text{foot}}^{(n)}(t) =
+    ( \prod_{i=0}^{n-1}\Delta^{t_{n-i}}(t) ) . \gamma_{\text{pied}}(t)
+  \end{equation*}
+
+\end{slideAction}
+
+\begin{slideAction}
+  \frametitle{Trajectoire du centre de masse}
+
+  \begin{equation*}
+    \mathbf{z} = \mathbf{c} - \frac{z_c}{g} \ddot{\mathbf{c}}
+  \end{equation*}
+
+  \begin{equation*}
+    \mathbf{c}^{(n)}(t) =
+    \underbrace{\scriptstyle \cosh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{V} +
+      \sinh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{W} +
+      \mathbf{r}(t)}_{\mathbf{c}(t) \in \mathbb{R}^2} + \sum_{i=1}^n \Delta^{t_i}(t)
+  \end{equation*}
+
+  \begin{center}
+    $\mathbf{V}$, $\mathbf{W}$ déterminent la position et vitesse
+    initiale.
+  \end{center}
+
+  \begin{equation*}
+    \forall t \in \mathbb{R}, \Delta^t(0) = \dot{\Delta}^t(0) = 0
+  \end{equation*}
 \end{slideAction}
 
 \maxFrameImageHeight{src/chap2-suivi-trajectoire/demo.jpg}
@@ -709,7 +1045,7 @@ pdfproducer = {Thomas Moulard}
   \begin{itemize}
   \item Valider l'approche pour les bras.
   \item Valider les pas corrigés en-ligne.
-  \item Améliorer la localisation du robot. Utilisation conjoint de
+  \item Améliorer la localisation du robot. Utilisation conjointe de
     plusieurs systèmes de localisation.
   \end{itemize}
 \end{frame}
