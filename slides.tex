@@ -4,12 +4,14 @@
 \usepackage[C40,T1]{fontenc}
 
 \usepackage{graphicx}
+\usepackage{array}
+\usepackage{multirow}
 
 \usepackage[francais]{babel}
 
 \usepackage{tikz, pgfplots}
 \usepackage{tikz-qtree}
-\usetikzlibrary{shapes.arrows,chains,positioning}
+\usetikzlibrary{shapes.arrows,chains,positioning,matrix}
 
 \tikzstyle{every picture}+=[remember picture]
 \tikzstyle{na} = [baseline=-.5ex]
@@ -376,7 +378,7 @@ pdfproducer = {Thomas Moulard}
         ~~<: \text{Fonction}_{n-1} \quad \text{si $n > 1$}\\
       \end{array}
     \end{equation*}
-    
+
   \end{changeleftmargin}
 \end{slideDecision}
 
@@ -424,8 +426,41 @@ pdfproducer = {Thomas Moulard}
 
 \begin{slideDecision}
   \frametitle{RobOptim}
+  \begin{changeleftmargin}{1.1cm}
+  \begin{center}
+    \tikzstyle{roboptim} = [align=center,
+      rectangle,
+      minimum size=6mm,
+      minimum height=15mm,
+      color=Thoughtless,
+      fill=ThoughtBySome,
+      line width=1pt,
+      inner sep=0pt,
+      outer sep=0pt,
+      text width=70pt
+    ]
 
-  FIXME
+    \begin{tabular}{cccl}
+      \tikz \node[roboptim] (cfsqp) {CFSQP}; &
+      \tikz \node[roboptim] (ipopt) {IPOPT}; &
+      \tikz \node[roboptim] (others) {\ldots}; &
+      \parbox[l][1.5cm][l]{2cm}{%
+        \vspace{-.6cm}\rotatebox{-90}{\footnotesize \textbf{Solveur}}}\\
+      \multicolumn{3}{c}{%
+        \tikz \node[roboptim,
+          text width=235pt] (core) {RobOptim Core};
+      } &
+      \parbox[l][1.5cm][l]{2cm}{%
+        \vspace{-.6cm}\rotatebox{-90}{\footnotesize \textbf{Interface}}}\\
+      \tikz \node[roboptim] (traj) {RobOptim Trajectory}; &
+      \tikz \node[roboptim] (post) {RobOptim Posture}; &
+      \tikz \node[roboptim] (others2) {\ldots}; &
+      \parbox[l][1.5cm][l]{2cm}{%
+        \vspace{-.6cm}\rotatebox{-90}{%
+          \footnotesize \textbf{Application}}}\\
+    \end{tabular}
+  \end{center}
+  \end{changeleftmargin}
 \end{slideDecision}
 
 \begin{slideDecision}
