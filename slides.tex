@@ -516,7 +516,57 @@ pdfproducer = {Thomas Moulard}
 
       \bigskip
 
-      FIG PAS POLYGONE SUPPORT
+      \begin{tikzpicture}[%
+          auto,
+          footprint/.style={%
+            rectangle,
+            draw=black,
+            ultra thick,
+            minimum size=6mm,
+            text width=8mm,
+            decoration={brace},
+        },
+        fpLeft/.style={%
+          footprint,
+          decoration={brace, raise=-1.05cm},
+        },
+        fpRight/.style={%
+          footprint,
+          decoration={brace, raise=1.05cm},
+        }]
+        
+        \matrix[ampersand replacement=\&,
+          row sep=1cm, column sep=.5cm]{%
+            \uncover<1-2>{
+              \node[fpLeft] (l0) {};
+            } \&
+            \&
+            \uncover<3->{
+              \node[fpLeft] (l1) {};
+            }\\
+%           
+            \uncover<1>{
+              \node[fpRight] (r0) {};
+            }\&
+            \uncover<2-3>{
+              \node[fpRight] (r1) {};
+            } \&
+            \&
+            \uncover<4->{
+              \node[fpRight] (r2) {};
+            }\\
+          };
+
+        \path[draw,ultra thick]
+        (l0.north west) -- (r0.south west);
+        \path[draw,ultra thick]
+        (l0.north west) -- (l0.north east);
+        \path[draw,ultra thick]
+        (r0.south west) -- (r0.south east);
+        \path[draw,ultra thick]
+        (l0.north east) -- (r0.south east);
+      \end{tikzpicture}
+
     \end{center}
   \end{changeleftmargin}
 \end{slideDecision}
@@ -582,7 +632,7 @@ pdfproducer = {Thomas Moulard}
     \end{enumerate}
 
     \bigskip
-    
+
     \alert{Et la trajectoire corps complet?}
   \end{center}
   \end{changeleftmargin}
