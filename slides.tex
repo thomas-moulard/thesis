@@ -268,7 +268,7 @@ pdfproducer = {Thomas Moulard}
 
 \begin{slideDecision}
   \begin{changeleftmargin}{1.1cm}
-    \frametitle{$\lambda$-calcul simpement typé (1)}
+    \frametitle{$\lambda$-calcul simplement typé (1)}
 
     \begin{equation*}
       \Omega \equiv (\lambda x . x) (\lambda x . x)
@@ -283,7 +283,7 @@ pdfproducer = {Thomas Moulard}
 
 \begin{slideDecision}
   \begin{changeleftmargin}{1.1cm}
-    \frametitle{$\lambda$-calcul simpement typé (2)}
+    \frametitle{$\lambda$-calcul simplement typé (2)}
 
     \begin{description}
     \item[Type naturel]~\\
@@ -502,7 +502,7 @@ pdfproducer = {Thomas Moulard}
     \bigskip
     Quelles contraintes?\par
   \end{center}
-  Limites en torque et vitesse,\\
+  Limites en couple et vitesse,\\
   (auto-)collision et \alert{équilibre}.
   \end{changeleftmargin}
 \end{slideDecision}
@@ -667,7 +667,7 @@ pdfproducer = {Thomas Moulard}
     \item[$(x_G, y_G, z_G)$]~\\
       Position du centre de masse.
     \item[$(\sigma_x, \sigma_y)$]~\\
-      Moment autour du centre de masse.
+      Moment cinétique autour du centre de masse.
     \item[$m$] Masse du robot.
     \item[$g$] Constante de gravité.
   \end{description}
@@ -728,7 +728,7 @@ pdfproducer = {Thomas Moulard}
     \bigskip
 
     \begin{itemize}
-    \item Exécute les mouvements générés par la partie décisionelle.
+    \item Exécute les tâches générées par la partie décisionelle.
     \item En charge de l'adaptation réactive du mouvement.
     \item Respecte le temps réel.
     \end{itemize}
@@ -861,7 +861,7 @@ pdfproducer = {Thomas Moulard}
           red,
           dashed,
         ] table {dat/feet_follower_feet-follower-com.dat};
-        \addlegendentry{center of mass}
+        \addlegendentry{centre de masse}
 
         \addplot[
           blue,
@@ -870,7 +870,7 @@ pdfproducer = {Thomas Moulard}
           x index=0,
           y index=4
         ] {dat/feet_follower_feet-follower-left-ankle.dat};
-        \addlegendentry{left foot}
+        \addlegendentry{pied gauche}
 
         \addplot[
           green,
@@ -879,13 +879,13 @@ pdfproducer = {Thomas Moulard}
           x index=0,
           y index=4
         ] {dat/feet_follower_feet-follower-right-ankle.dat};
-        \addlegendentry{right foot}
+        \addlegendentry{pied droit}
 
         \uncover<7->{
         \addplot[
           red,
         ] table {dat/feet_follower_correction-com.dat};
-        \addlegendentry{center of mass (corr.)}
+        \addlegendentry{centre de masse (corr.)}
         }
 
         \uncover<6->{
@@ -895,7 +895,7 @@ pdfproducer = {Thomas Moulard}
           x index=0,
           y index=4
         ] {dat/feet_follower_correction-left-ankle.dat};
-        \addlegendentry{left foot (corr.)}
+        \addlegendentry{pied gauche (corr.)}
         }
 
         \uncover<5->{
@@ -905,7 +905,7 @@ pdfproducer = {Thomas Moulard}
           x index=0,
           y index=4
         ] {dat/feet_follower_correction-right-ankle.dat};
-        \addlegendentry{right foot (corr.)}
+        \addlegendentry{pied droit (corr.)}
         }
       \end{axis}
 
