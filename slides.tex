@@ -13,7 +13,7 @@
 
 \usepackage{tikz, pgfplots}
 \usepackage{tikz-qtree}
-\usetikzlibrary{shapes.arrows,chains,positioning,matrix,patterns}
+\usetikzlibrary{shapes.arrows,chains,positioning,matrix,patterns,shapes.multipart,positioning}
 
 \tikzstyle{every picture}+=[remember picture]
 \tikzstyle{na} = [baseline=-.5ex]
@@ -541,7 +541,7 @@ pdfproducer = {Thomas Moulard}
         zmpPoint/.style={%
           fill=ThoughfulBrick,
         }]
-        
+
         \matrix[ampersand replacement=\&,
           row sep=1cm, column sep=.5cm]{%
             \uncover<1-3> {
@@ -551,7 +551,7 @@ pdfproducer = {Thomas Moulard}
             \uncover<5-> {
               \node[fpLeft] (l1) {};
             }\\
-%           
+%
             \uncover<1> {
               \node[fpRight] (r0) {};
             }\&
@@ -717,6 +717,9 @@ pdfproducer = {Thomas Moulard}
 
 \maxFrameImageWidth{src/chap3-primitive-mouvement/footsteps1.jpg}
 
+%\maxFrameImageWidth{src/slides/goal-generation.png}
+\maxFrameImageWidth{src/slides/over.jpg}
+
 \begin{slideAction}
   \frametitle{Contrôleur polyvalent (1)}
 
@@ -792,17 +795,23 @@ pdfproducer = {Thomas Moulard}
 \begin{slideAction}
   \frametitle{Schéma de contrôle boucle fermée}
 
+  \begin{changeleftmargin}{1.1cm}
   \begin{center}
-    \begin{tikzpicture}[>=latex]
+    \begin{tikzpicture}[%
+        >=latex]
+      \node[state] (gen) {Génération};
+      \node[state, below=of gen] (corr) {Correction};
+      \node[state, below=of corr, align=left,inner sep=0.1ex,
+        shape=rectangle split,
+        rectangle split part align=left,
+        rectangle split parts=5] (ctrl) {Contrôleur%
+        \nodepart{two}\footnotesize{centre de masse}
+        \nodepart{three}\footnotesize{pied gauche}
+        \nodepart{four}\footnotesize{pied droit}
+        \nodepart{five}\footnotesize{posture}};
+      \node[state,right=2cm of corr] (loc) {Localisation};
 
-      \draw (-1,-2) node [state] (ctrl) {Contrôleur};
-
-      \draw (-1,0) node [state] (corr) {Correction};
-      \draw (-1,1.5) node [state] (gen) {Génération};
-
-      \draw (4,0) node (loc) [state] {Localisation};
-
-      \draw[-,style=dashed] (2,-3) -- (2,3);
+      %\draw[-,style=dashed] (2,-3) -- (2,3);
 
       \uncover<3-> {
         \draw[->] (loc.west) -- (corr.east)
@@ -813,13 +822,13 @@ pdfproducer = {Thomas Moulard}
       \uncover<2-> {
         \draw[->] (gen.south) -- (corr.north)
         node [at start,left,font=\tiny,yshift=-0.2cm]
-        {$(\gamma_{\text{pieds}}(t), \gamma_{\text{com}}(t), \mathbf{x}(t)) \in \text{SE}(3)^3 \times \text{SE}(2)$};
+        {$(\gamma_{\text{pieds}}(t), \gamma_{\text{com}}(t)) \in \text{SE}(3)^2 \times \mathbb{R}^3$};
       }
 
       \uncover<3-> {
         \draw[->] (corr.south) -- (ctrl.north)
         node [at start,left,font=\tiny,yshift=-0.25cm]
-        {$(\gamma'_{\text{pied~gauche}}(t), \gamma'_{\text{pied~droit}}(t), \gamma'_{\text{com}}(t)) \in \text{SE}(3)^3$};
+        {$(\gamma'_{\text{pieds}(t)}, \gamma'_{\text{com}}(t)) \in \text{SE}(3)^2 \times \mathbb{R}^3$};
       }
 
       \uncover<4-> {
@@ -832,6 +841,7 @@ pdfproducer = {Thomas Moulard}
            {$\mathbf{S} \in \text{SE}(2)^{\text{nsteps}}$};
     \end{tikzpicture}
   \end{center}
+  \end{changeleftmargin}
 \end{slideAction}
 
 \begin{slideAction}
@@ -1139,6 +1149,70 @@ pdfproducer = {Thomas Moulard}
 \end{slideAction}
 
 \maxFrameImageHeight{src/chap2-suivi-trajectoire/demo.jpg}
+
+\maxFrameImageHeight{src/slides/door.jpg}
+
+\begin{slideAction}
+  \frametitle{Primitives de mouvement}
+
+  \begin{changeleftmargin}{1.1cm}
+  \begin{center}
+    \begin{tikzpicture}[%
+        node distance=1em,
+        inner sep=0.1ex,
+        outer sep=0.1ex,
+        fixed/.style={
+          text width=40pt}]
+
+      \matrix[ampersand replacement=\&,
+        row sep=.5cm, column sep=.5cm]{%
+        \node {%
+          \includegraphics[height=1.5cm]{src/slides/doorstate1.jpg}};\&
+        \node {%
+          \includegraphics[height=1.5cm]{src/slides/doorstate2.jpg}};\&
+        \node {%
+          \includegraphics[height=1.5cm]{src/slides/doorstate3.jpg}};\&
+        \node {%
+          \includegraphics[height=1.5cm]{src/slides/doorstate4.jpg}};\\
+        \node[state,fixed] {\tiny{Équilibre}};\&
+        \node[state,fixed] {\tiny{Équilibre}};\&
+        \node[state,fixed] {\tiny{Équilibre}};\&
+        \node[state,fixed] {\tiny{Équilibre}};\\
+%
+        \node [state,fixed] {\tiny{Bras gauche}};\&
+        \node [state,fixed] {\tiny{Bras gauche}};\&
+        \node [state,fixed] {\tiny{Bras droit}};\&
+        \node [state,fixed] {\tiny{Posture}};\\
+%
+        \node [state,fixed] {\tiny{Posture}};\&
+        \node [state,fixed] {\tiny{Bras droit}};\&
+        \node [state,fixed] {\tiny{Posture}};\&
+        \\
+%
+        \&
+        \node [state,fixed] {\tiny{Posture}};\&
+        \&
+        \\
+
+        \node[state,fixed,color=ThoughtBySome,fill=Thoughtless2]
+             {\tiny{Porte}};\&
+        \node[state,fixed,color=ThoughtBySome,fill=Thoughtless2]
+             {\tiny{Poignée}};\&
+        \node[state,fixed,color=ThoughtBySome,fill=Thoughtless2]
+             {\tiny{Poignée}};\&
+        \node[state,fixed,color=ThoughtBySome,fill=Thoughtless2]
+             {\tiny{Poignée}};\\
+      };
+    \end{tikzpicture}
+  \end{center}
+  \end{changeleftmargin}
+  \vbox{%
+    \tikz \node[state,
+      color=ThoughtBySome,fill=Thoughtless2] {\tiny{Asservissement}};
+    \tikz \node[state] {\tiny{Tâche}};
+  }
+\end{slideAction}
+
 
 
 %\maxFrameImageHeight{src/chap3-primitive-mouvement/calibextrinsic.jpg}
