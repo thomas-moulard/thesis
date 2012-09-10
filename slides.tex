@@ -13,7 +13,14 @@
 
 \usepackage{tikz, pgfplots}
 \usepackage{tikz-qtree}
-\usetikzlibrary{shapes.arrows,chains,positioning,matrix,patterns,shapes.multipart,positioning}
+
+\newcommand{\umltextcolor}{ThoughfulBrick}
+\newcommand{\umldrawcolor}{Thoughtless}
+\newcommand{\umlfillcolor}{ThoughtBySome}
+\usepackage{pgf-umlcd}
+
+\usetikzlibrary{shapes.arrows,chains,positioning,%
+  matrix,patterns,shapes.multipart,positioning,arrows}
 
 \tikzstyle{every picture}+=[remember picture]
 \tikzstyle{na} = [baseline=-.5ex]
@@ -23,6 +30,16 @@
   fill=ThoughtBySome,
   inner sep=0.2cm,
   rounded corners=2mm]
+
+\tikzset{
+  template parameter/.style={
+        append after command={
+            node [draw, densely dashed, umlcolor, font=\ttfamily]
+                at (\tikzlastnode.north east)
+                {#1}
+        }
+    }
+}
 
 \newcommand{\tikzplaceholder}[1]{\begingroup\shorthandoff{;}\tikz[na] \node[coordinate] (#1) {};\endgroup}
 
@@ -221,218 +238,188 @@ pdfproducer = {Thomas Moulard}
 
 \begin{slideDecision}
   \begin{changeleftmargin}{1.1cm}
-    \frametitle{$\lambda$-calcul (1)}
-
-    \begin{description}
-      \item[Variables libres] $x$, $y$, \ldots
-      \item[Application] $u v$ avec $u, v$ deux lambda-termes
-      \item[Abstraction] $\lambda f x . t$ avec $x$ une variable, $t$
-        un $\lambda$-terme.
-    \end{description}
-  \end{changeleftmargin}
-\end{slideDecision}
-
-\begin{slideDecision}
-  \begin{changeleftmargin}{1.1cm}
-    \frametitle{$\lambda$-calcul (2)}
-    \begin{description}
-      \item[Identité]~\\
-        $\text{Id} \equiv \lambda x . x$
-      \item[Entiers de Church]~\\
-        $0 \equiv \lambda f x . x$\\
-        $1 \equiv \lambda f x . f x$
-      \item[Addition]~\\
-        $\text{succ} \equiv \lambda n f x . f (n f x)$
-    \end{description}
-  \end{changeleftmargin}
-\end{slideDecision}
-
-\begin{slideDecision}
-  \begin{changeleftmargin}{1.1cm}
-    \frametitle{$\beta$-conversion}
-
-    \begin{equation*}
-      \begin{array}{ll}
-      \text{succ}~1 & \rightarrow_\beta \lambda f x . (\lambda n f x . f (n f x)) (\lambda f x . f x)\\
-        & \rightarrow_\beta \lambda f x . f ((\lambda f x . f x) f x)\\
-        & \rightarrow_\beta \lambda f x . f f x \equiv 2\\
-      \end{array}
-    \end{equation*}
+    \frametitle{Motivation}
 
     \begin{center}
-      \alert{réécrire $\equiv$ calculer $\equiv$ exécuter}
+      \begin{description}
+        \item[Généricité] Un algorithme, un logiciel?
+        \item[\ldots et efficacité] Meta-programmation.
+      \end{description}
+      \bigskip
+      Quelle est la \alert{représentation informatique} d'un problème
+      d'optimisation générique?
     \end{center}
+  \end{changeleftmargin}
+\end{slideDecision}
 
+
+\begin{slideDecision}
+  \begin{changeleftmargin}{1.1cm}
+    \frametitle{Fonctions (1)}
+
+    \begin{center}
+      \footnotesize
+    \begin{tikzpicture}[%
+        y=.1\paperheight,
+        auto]
+
+      \begin{interface}[text width=7cm]{Fonction}{0,0}
+        \attribute{+ taille de l'espace d'entrée: entier}
+        \attribute{+ taille de l'espace de sortie: entier}
+        \operation{+ calcul (vecteur): vecteur}
+      \end{interface}
+
+      \begin{interface}[text width=7cm]{Fonction dérivable}{0,-3}
+        \inherit{Fonction}
+        \operation{+ jacobien (vecteur): matrice}
+      \end{interface}
+
+      \begin{interface}[text width=7cm]{Fonction dérivable deux fois}{0,-6}
+        \inherit{Fonction dérivable}
+        \operation{+ hessien (vecteur, entier): vecteur}
+      \end{interface}
+    \end{tikzpicture}
+    \end{center}
   \end{changeleftmargin}
 \end{slideDecision}
 
 \begin{slideDecision}
   \begin{changeleftmargin}{1.1cm}
-    \frametitle{$\lambda$-calcul simplement typé (1)}
+    \frametitle{Fonctions (2)}
 
-    \begin{equation*}
-      \Omega \equiv (\lambda x . x) (\lambda x . x)
-    \end{equation*}
+    \begin{center}
+      \footnotesize
+    \begin{tikzpicture}[%
+        y=.1\paperheight,
+        auto]
 
-    \begin{equation*}
-      (\lambda x . x) (\lambda x . x) \rightarrow_\beta
-      (\lambda x . x) (\lambda x . x)
-    \end{equation*}
+      \begin{interface}[text width=7cm]{Fonction dérivable deux fois}{0,0}
+        \operation{+ hessien (vecteur, entier): vecteur}
+      \end{interface}
+
+      \begin{interface}[template parameter=n,text width=7cm]{%
+          Fonction dérivable ``n'' fois}{0,-3}
+        \inherit{Fonction dérivable deux fois}
+        \operation{+ dérivée (vecteur, entier): vecteur}
+      \end{interface}
+
+%      \path[umlcd style inherit line, ultra thick]
+%      (Fonction dérivable ``n'' fois.south) + (0,-0.1) --
+%      (Fonction dérivable ``n'' fois.south) + (-0.1,0) --
+%      (Fonction dérivable ``n'' fois.south) + (0,0.1);
+
+    \end{tikzpicture}
+    \end{center}
   \end{changeleftmargin}
 \end{slideDecision}
 
 \begin{slideDecision}
   \begin{changeleftmargin}{1.1cm}
-    \frametitle{$\lambda$-calcul simplement typé (2)}
+    \frametitle{Problème}
 
-    \begin{description}
-    \item[Type naturel]~\\
-      $x \vdash \iota$
-    \item[Type fonctionnel]~\\
-      $x \vdash \iota \wedge t \vdash \tau \Rightarrow \lambda x. t \vdash \iota \rightarrow \tau$
-    \end{description}
+    \begin{center}
+      \footnotesize
+    \begin{tikzpicture}[%
+        y=.1\paperheight,
+        auto]
 
+      \begin{class}[template parameter={F,$C_1$,$\dotsc$,$C_n$},%
+          text width=7cm]{Problème}{0,0}
+        \attribute{+ estimation initiale: vecteur}
+        \attribute{+ bornes: (double, double)[*]}
+        \attribute{+ coût: \texttt{$F$}}
+        \attribute{+ contraintes: (\texttt{$C_i$}, entier, entier)[*]}
+      \end{class}
+    \end{tikzpicture}
+
+    \begin{equation*}
+      \begin{split}
+        F <: \text{Fonction}\\
+        \forall i, C_i <: \text{Fonction}
+      \end{split}
+    \end{equation*}
+    \end{center}
+  \end{changeleftmargin}
+\end{slideDecision}
+
+\begin{slideDecision}
+  \begin{changeleftmargin}{1.1cm}
+    \frametitle{Solveur}
+
+    \begin{center}
+      \footnotesize
+    \begin{tikzpicture}[%
+        y=.1\paperheight,
+        auto]
+
+      \node[na] at (5,-1) (P) {P};
+
+      \begin{class}[%
+          template parameter={Problème<$F$,$C_1$,$\dotsc$,$C_n$>},
+          text width=7cm]{Solveur}{0,0}
+        \inherit{P}
+        \attribute{+ problème: $\text{Problème}<F, C_1, \dotsc, C_n>$}
+        \operation{+ résous (): vecteur}
+      \end{class}
+
+      \composition{Solveur}{}{1}{P}
+    \end{tikzpicture}
+
+    \begin{equation*}
+      (F, C_1, \dotsc, C_n) <: Fonction^{n+1}
+    \end{equation*}
+
+    \end{center}
+  \end{changeleftmargin}
+\end{slideDecision}
+
+\begin{slideDecision}
+  \begin{changeleftmargin}{1.1cm}
+    \frametitle{Dérivation par différences finies}
+
+    \begin{center}
+      \footnotesize
+      \begin{tikzpicture}[%
+          y=.1\paperheight,
+          auto]
+
+      \node[na] at (0,0) (F) {F};
+
+        \begin{class}[template parameter=F,%
+            text width=7cm]{DifférencesFinies}{0,-2}
+          \inherit{F}
+          \attribute{- fonction: F}
+          \operation{+ jacobien (vecteur): vecteur}
+        \end{class}
+      \end{tikzpicture}
+    \end{center}
     \bigskip
-
-    $\Omega$ n'est pas correctement typé.
-
+    Design Pattern \alert{décorateur}.
   \end{changeleftmargin}
 \end{slideDecision}
+
 
 \begin{slideDecision}
   \begin{changeleftmargin}{1.1cm}
-    \frametitle{Programmation orientée objet (1)}
+    \frametitle{Propriétés assurées par typage}
 
-    \begin{equation*}
-      A \equiv \{ \underbrace{\{ \text{foo} \vdash \iota
-        \}}_{\mathfrak{A}}, \underbrace{\{ \text{bar} \vdash A
-        \rightarrow \iota, \text{baz} \vdash A \rightarrow \iota
-        \}}_{\mathfrak{M}} \}
-    \end{equation*}
+    \begin{center}
+      \begin{description}
+        \item[Correction]~\\
+          Tout problème exprimable est bien formé.
 
-    \begin{equation*}
-      a \vdash A \Rightarrow a.\text{foo} \vdash \iota
-    \end{equation*}
+        \item[Généricité]~\\
+          Un solveur peut résoudre tous les problèmes de complexité
+          ``égale'' ou ``inférieure'' à ses capacités.
 
-    \begin{equation*}
-      a \vdash A \Rightarrow a.\text{bar} \vdash A \rightarrow \iota
-    \end{equation*}
+        \item[Efficacité]~\\
+          Un solveur peut résoudre un problème de complexité
+          ``supérieure'' à condition de construire explicitement ce
+          problème.
+      \end{description}
+    \end{center}
   \end{changeleftmargin}
 \end{slideDecision}
-
-\begin{slideDecision}
-  \begin{changeleftmargin}{1.1cm}
-    \frametitle{Programmation orientée objet (2)}
-
-    \begin{equation*}
-      u v \text{bien formé} \Rightarrow u \vdash \tau_1 \rightarrow
-      \tau_2 \wedge \tau_3 <: \tau_1
-    \end{equation*}
-
-    \begin{equation*}
-      \tau_2 <: \tau_1 \Rightarrow
-      \mathfrak{A_{\tau_1}} \subset \mathfrak{A_{\tau_2}} \wedge \mathfrak{M_{\tau_1}} \subset
-      \mathfrak{M_{\tau_2}}
-    \end{equation*}
-  \end{changeleftmargin}
-\end{slideDecision}
-
-\begin{slideDecision}
-  \begin{changeleftmargin}{1.1cm}
-    \frametitle{Type paramétré}
-
-    Fonction d'ordre supérieur $\text{type}
-    \Rightarrow \text{type}$.
-
-    \bigskip
-
-    Exemple: $\tau_\alpha$
-  \end{changeleftmargin}
-\end{slideDecision}
-
-\begin{slideDecision}
-  \begin{changeleftmargin}{1.1cm}
-    \frametitle{Représentation du problème (1)}
-
-    \begin{equation*}
-      \begin{array}{ll}
-      \text{Fonction} \equiv & \{ \underbrace{\{ \#\text{entrée} \vdash
-        \iota \}}_{\text{attributs}}, \\
-      & \underbrace{\{ \text{calcule}
-        \vdash \text{Fonction} \rightarrow[\iota] \rightarrow \iota \}}_{\text{méthode}} \}
-      \end{array}
-    \end{equation*}
-
-    \begin{equation*}
-      \begin{array}{l}
-        \text{FonctionDérivable} \equiv \\
-        \{ \{ \}, \{ \text{gradient}
-      \vdash \text{FonctionDérivable} \rightarrow [\iota] \rightarrow [\iota] \} \}\\
-      ~~<: \text{Fonction}
-      \end{array}
-    \end{equation*}
-
-  \end{changeleftmargin}
-\end{slideDecision}
-
-\begin{slideDecision}
-  \begin{changeleftmargin}{1.1cm}
-    \frametitle{Représentation du problème (2)}
-
-    \begin{equation*}
-      \begin{array}{l}
-        \text{Fonction}_n \equiv \text{Fonction} \quad \text{si $n = 0$}\\
-        \text{Fonction}_n \equiv \text{FonctionDérivable} \quad \text{si $n = 1$}\\
-        \text{Fonction}_n \equiv \\
-        \{ \{ \}, \{ \text{gradient} \vdash \text{Fonction}_n \rightarrow \iota \rightarrow [\iota] \rightarrow [\iota] \} \}\\
-        ~~<: \text{Fonction}_{n-1} \quad \text{si $n > 1$}\\
-      \end{array}
-    \end{equation*}
-
-  \end{changeleftmargin}
-\end{slideDecision}
-
-\begin{slideDecision}
-  \begin{changeleftmargin}{1.1cm}
-    \frametitle{Représentation du problème (3)}
-
-  \begin{equation*}
-  \begin{split}
-    \tau_{\text{prob}(\tau_1, \tau_2, \tau_3, \dotsc)} \equiv
-    \{ \{ & \text{coût} \vdash \tau_1,\\
-    & \text{contraintes} \vdash [\cup_{i \in \{2, \dotsc, n\}} \tau_i],\\
-    & \text{bornes\_contraintes\_min} \vdash [\iota], \\
-    & \text{bornes\_contraintes\_max} \vdash [\iota] \},\\
-    & \{ \} \}\\
-  \end{split}
-  \end{equation*}
-
-  \begin{equation*}
-    \text{Solveur}_{\tau} \equiv \{ \{ \}, \{ \text{résous} \vdash
-    \text{Solveur}_{\tau} \rightarrow \tau \rightarrow [\iota] \} \}
-  \end{equation*}
-  \end{changeleftmargin}
-\end{slideDecision}
-
-\begin{slideDecision}
-  \begin{changeleftmargin}{1.1cm}
-    \frametitle{Exemple: Optimisation non linéaire}
-
-    \begin{description}
-    \item[Fonction de coût]~\\
-      $\text{Fonction}_2$
-    \item[Contraintes linéaires]~\\
-      $\text{FonctionLinéaire}$
-    \item[Contraintes non linéaires]~\\
-      $\text{Fonction}_2$
-    \item[Problème]
-    \end{description}
-
-    ~~~~$\text{Problème}_{\text{prob}(\text{Fonction}_2, \text{FonctionLinéaire}, \text{Fonction}_2)}$
-
-  \end{changeleftmargin}
-\end{slideDecision}
-
 
 \begin{slideDecision}
   \frametitle{RobOptim}
@@ -453,7 +440,7 @@ pdfproducer = {Thomas Moulard}
     \begin{tabular}{cccl}
       \tikz \node[roboptim] (cfsqp) {CFSQP}; &
       \tikz \node[roboptim] (ipopt) {IPOPT}; &
-      \tikz \node[roboptim] (others) {\ldots}; &
+      \tikz \node[roboptim] (cminpack) {CMinPack}; &
       \parbox[l][1.5cm][l]{2cm}{%
         \vspace{-.6cm}\rotatebox{-90}{\footnotesize \textbf{Solveur}}}\\
       \multicolumn{3}{c}{%
