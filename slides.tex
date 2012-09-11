@@ -1,4 +1,4 @@
-\documentclass[14pt,utf8x,hyperref={pdfpagelabels=false},handout]{beamer}
+\documentclass[14pt,utf8x,hyperref={pdfpagelabels=false}]{beamer}
 \usepackage{etex}
 
 \usepackage[utf8]{inputenc} % hyperref broken with utf8x
@@ -83,7 +83,7 @@ pdfproducer = {Thomas Moulard}
       src/slides/demo1.jpg}}
   \begin{frame}[plain]
     \titlepage
-    \note[item]{Remercier le jury.}
+    \note[item]{Remercier les rapporteurs, le jury}
   \end{frame}
 }
 
@@ -93,6 +93,17 @@ pdfproducer = {Thomas Moulard}
 % Introduction
 % Animated scheme introducing contributions.
 \begin{frame}
+  \note[item]{Architecture P-D-A}
+  \note[item]{Perception: environnement, capteurs}
+  \note[item]{Décision: résolution de l'objectif, planification}
+  \note[item]{Action: commande des actioneurs}
+  \note[item]{Contributions diverses pour les robots humanoïdes}
+  \note[item]{RobOptim: représentation info des pb optim}
+  \note[item]{Correction de trajectoire: %
+    rebouclage capteur de la partie action}
+  \note[item]{Primitives de mouvement: résultats préliminaires. %
+    Planification de tâche, intégration capteurs dans la planificapteurs}
+  %
   \begin{changemargin}{-1cm}{-1cm}
     \begin{center}
       \tikzstyle{normalPath} = [line width=.7mm, color=black!50, -latex]
@@ -211,6 +222,12 @@ pdfproducer = {Thomas Moulard}
 \begin{slideDecision}
   \begin{changeleftmargin}{1.1cm}
     \frametitle{Processus de décision}
+
+    \note[item]{Deux familles d'algos: planification vs optimisation}
+    \note[item]{Contribution porte sur l'optimisation.}
+    \note[item]{Planification utilisée pour trouver %
+      une estimation initiale de la solution.}
+
     \begin{center}
       \includegraphics%
           [width=.75\linewidth]%
@@ -227,6 +244,12 @@ pdfproducer = {Thomas Moulard}
 \begin{slideDecision}
   \begin{changeleftmargin}{1.1cm}
     \frametitle{Optimisation}
+
+    \note[item]{Intuition: trouver la meilleure action parmi un nombre
+      infini d'actions possibles.}
+    \note[item]{Large zoologie de problème existe. Détailler.}
+    \note[item]{Ensembles E et I.}
+
     \begin{equation*}
       \min_{\mathbf{x} \in \mathbb{R}^n} f(\mathbf{x})%
       \text{ sous la contrainte } \mathbf{x} \in \mathbf{X}
@@ -235,8 +258,8 @@ pdfproducer = {Thomas Moulard}
     \begin{equation*}
       \mathbf{X} \equiv \left\{
       \begin{array}{l l}
-        c_i (x) = 0    & \quad i \in \xi \\
-        c_j (x) \leq 0 & \quad j \in \nu \\
+        c_i (x) = 0    & \quad i \in \mathcal{E} \\
+        c_j (x) \leq 0 & \quad j \in \mathcal{I} \\
       \end{array} \right.
     \end{equation*}
 
@@ -246,6 +269,12 @@ pdfproducer = {Thomas Moulard}
 \begin{slideDecision}
   \begin{changeleftmargin}{1.1cm}
     \frametitle{Motivation}
+
+    \note[item]{Beaucoup de solveurs, peu de formalisation.}
+    \note[item]{Très utile en robotique. Applications:
+      décision, action et eperception.}
+    \note[item]{Unifier la représentation.}
+    \note[item]{Dissocier les solveurs des problèmes.}
 
     \begin{center}
       \begin{description}
@@ -263,6 +292,15 @@ pdfproducer = {Thomas Moulard}
 \begin{slideDecision}
   \begin{changeleftmargin}{1.1cm}
     \frametitle{Fonctions (1)}
+
+    \note[item]{Semble trivial: difficile à cause des limites
+      des langage.}
+    \note[item]{Nécessité de définir une relation d'ordre sur les
+      fonctions. Pas naturel.}
+   \note[item]{Nécessité de déterminer ce qui rend les fonctions
+     compatibles/interchangeables.}
+   \note[item]{INTERFACES: nécessaire de dériver les classes
+     pour implémenter ses propres fonctions.}
 
     \begin{center}
       \footnotesize
@@ -292,6 +330,9 @@ pdfproducer = {Thomas Moulard}
 
 \begin{slideDecision}
   \begin{changeleftmargin}{1.1cm}
+
+    \note[item]{Création d'une famille de types.}
+
     \frametitle{Fonctions (2)}
 
     \begin{center}
@@ -324,6 +365,13 @@ pdfproducer = {Thomas Moulard}
   \begin{changeleftmargin}{1.1cm}
     \frametitle{Problème}
 
+    \note[item]{Un problème est définir par le type du coût
+      et des contraintes.}
+    \note[item]{Possibilité d'avoir plusieurs types de contraintes.}
+    \note[item]{Utile pour différencier les comportements selon
+      les types.}
+    \note[item]{Pas de contraintes également possible.}
+
     \begin{center}
       \footnotesize
     \begin{tikzpicture}[%
@@ -352,6 +400,8 @@ pdfproducer = {Thomas Moulard}
 \begin{slideDecision}
   \begin{changeleftmargin}{1.1cm}
     \frametitle{Solveur}
+
+    \note[item]{Prend une classe de problème en entrée.}
 
     \begin{center}
       \footnotesize
@@ -384,6 +434,13 @@ pdfproducer = {Thomas Moulard}
   \begin{changeleftmargin}{1.1cm}
     \frametitle{Dérivation par différences finies}
 
+    \note[item]{Rend la fonction utilisable par un plus grand nombre
+      de solveur au prix d'un (possible) ralentissement de
+      l'exécution. MECHANISME EXPLICITE}
+
+    \note[item]{Gang of Four (Erich Gamma, Richard Helm, Ralph Johnson
+      and John Vlissides).}
+
     \begin{center}
       \footnotesize
       \begin{tikzpicture}[%
@@ -410,6 +467,9 @@ pdfproducer = {Thomas Moulard}
   \begin{changeleftmargin}{1.1cm}
     \frametitle{Propriétés assurées par typage}
 
+    \note[item]{Expliquer comment un problème plus simple peut être
+      résolu en tant que problème plus complexe (et l'inverse!).}
+
     \begin{center}
       \begin{description}
         \item[Correction]~\\
@@ -430,6 +490,11 @@ pdfproducer = {Thomas Moulard}
 
 \begin{slideDecision}
   \frametitle{RobOptim}
+
+  \note[item]{Détailler les solveurs supportés.}
+  \note[item]{Couche d'abstraction.}
+  \note[item]{Couche métier (fonctions).}
+
   \begin{changeleftmargin}{1.1cm}
   \begin{center}
     \tikzstyle{roboptim} = [align=center,
@@ -470,6 +535,12 @@ pdfproducer = {Thomas Moulard}
 \begin{slideDecision}
   \frametitle{Applications}
 
+  \note[item]{Application initiale: optimisation de la trajectoire
+    de marche d'un robot humanoïde.}
+
+  \note[item]{Puis: planification de points de contact en
+    multi-contact, planification dans un environnement non-rigide.}
+
   \begin{center}
     \includegraphics[height=.33\paperheight]%
                     {src/chap1-roboptim/straight-line-obstacle.png}
@@ -489,6 +560,13 @@ pdfproducer = {Thomas Moulard}
 
 \begin{slideDecision}
   \frametitle{Génération de mouvements (1)}
+
+  \note[item]{Contraintes = plus de temps de calcul ainsi
+  que possiblement plus de minima locaux.}
+  \note[item]{Exemple: contrainte de distances/évitement d'obstacles.}
+  \note[item]{Travail effectué: représentation du problème pour
+    trouver équilibre entre réalisme, sûreté et tractabilité.}
+
   \begin{changeleftmargin}{1.1cm}
   \begin{center}
     \includegraphics[width=.25\paperheight]{src/slides/falling.pdf}%
@@ -503,6 +581,10 @@ pdfproducer = {Thomas Moulard}
 
 \begin{slideDecision}
   \frametitle{Génération de mouvements (2)}
+
+  \note[item]{Critère de stabilité.}
+  \note[item]{Point virtuel.}
+
   \begin{changeleftmargin}{1.1cm}
     \begin{center}
       ZMP dans le polygone support $\Rightarrow$ mouvement
@@ -644,6 +726,14 @@ pdfproducer = {Thomas Moulard}
 
 \begin{slideDecision}
   \frametitle{Génération de mouvements (3)}
+
+  \note[item]{La position du ZMP évolue
+    en fonction de la position/accélération du CoM
+    ainsi que de la dérivée du moment cinétique.}
+  \note[item]{On veut l'inverse: spécificer la trajectoire du ZMP et
+    en déduire la trajectoire de CoM.}
+  \note[item]{En temps réel! Ici pas le cas.}
+
   \begin{changeleftmargin}{1.1cm}
   \begin{center}
     \begin{equation*}
@@ -671,6 +761,13 @@ pdfproducer = {Thomas Moulard}
 
 \begin{slideDecision}
   \frametitle{Génération de mouvements (4)}
+
+  \note[item]{Mouvement du CoM sur un plan.}
+  \note[item]{Moment cinétique négligé.}
+  \note[item]{Temps réel! Solution analytique!}
+  \note[item]{Mais quelle fiabilité?}
+  \note[item]{Stabilisation nécessaire.}
+
   \begin{changeleftmargin}{1.1cm}
   \begin{center}
 
@@ -683,7 +780,7 @@ pdfproducer = {Thomas Moulard}
     \begin{description}
     \item[$z$] Position du ZMP.
     \item[$x$] Position du centre de masse.
-    \item[$z_G$] Hauteur du centre de masse.
+    \item[$z_G$] Hauteur constante du centre de masse.
     \item[$g$] Constante de gravité.
     \end{description}
   \end{center}
@@ -692,6 +789,11 @@ pdfproducer = {Thomas Moulard}
 
 \begin{slideDecision}
   \frametitle{Génération de mouvements (5)}
+
+  \note[item]{Détailler les étapes.}
+  \note[item]{Trajectoire corps complet dans la planif: pas de
+    comportement réactif.}
+
   \begin{changeleftmargin}{1.5cm}
   \begin{center}
     \begin{enumerate}
@@ -717,6 +819,9 @@ pdfproducer = {Thomas Moulard}
 \begin{slideAction}
   \frametitle{Contrôleur polyvalent (1)}
 
+  \note[item]{Actionement: nécessité d'envoyer une commande
+    à une période fixe. Contraint le temps de calcul.}
+
   \begin{changeleftmargin}{1.1cm}
   \begin{center}
     Contrôleur: algorithme générant la commande envoyée aux moteurs à
@@ -740,10 +845,18 @@ pdfproducer = {Thomas Moulard}
 \begin{slideAction}
   \frametitle{Contrôleur polyvalent (2)}
 
+  \note[item]{Complexe d'exprimer l'objectif d'un robot
+    dans l'espace des configuration.}
+  \note[item]{Espace des tâches: espace ``naturel''.}
+  \note[item]{Prendre l'exemple d'un point 3D.}
+  \note[item]{Jacobienne de la tâche.}
+  \note[item]{Problème d'optimisation!}
+  \note[item]{Cinématique inverse implicite\ldots}
+
   \begin{changeleftmargin}{1.1cm}
   \begin{center}
     Espace des tâches\\
-    VS\\
+    ou\\
     Espaces des configurations.
 
     \bigskip
@@ -763,6 +876,13 @@ pdfproducer = {Thomas Moulard}
 
 \begin{slideAction}
   \frametitle{Contrôleur polyvalent (2)}
+
+  \note[item]{Deux types de tâches. Point6D et CoM.}
+  \note[item]{Peut également ajouter butées, vitesse
+    maximum mais pas d'inégalités en pratique.}
+  \note[item]{Ici tâches ``de base'' mais on peut également
+    ajouter des tâches de priorité moindre: tête.}
+  \note[item]{Il manque le rebouclage capteur. Comment faire?}
 
   \begin{changeleftmargin}{1.1cm}
   \begin{center}
@@ -788,6 +908,11 @@ pdfproducer = {Thomas Moulard}
 
 \begin{slideAction}
   \frametitle{Schéma de contrôle boucle fermée}
+
+  \note[item]{Ajout du rebouclage capteur en déformant
+  les références des tâches.}
+  \note[item]{Localisation externe.}
+  \note[item]{Intérêt du fonctionnement par tâche.}
 
   \begin{changeleftmargin}{1.1cm}
   \begin{center}
