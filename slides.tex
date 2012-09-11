@@ -1,4 +1,5 @@
-\documentclass[14pt,utf8x,hyperref={pdfpagelabels=false}]{beamer}
+\documentclass[14pt,utf8x,hyperref={pdfpagelabels=false},handout]{beamer}
+\usepackage{etex}
 
 \usepackage[utf8]{inputenc} % hyperref broken with utf8x
 \usepackage[C40,T1]{fontenc}
@@ -18,6 +19,11 @@
 \newcommand{\umldrawcolor}{Thoughtless}
 \newcommand{\umlfillcolor}{ThoughtBySome}
 \usepackage{pgf-umlcd}
+
+\reserveinserts{28}
+\usepackage{pgfpages}
+\setbeameroption{show notes on second screen}
+
 
 \usetikzlibrary{shapes.arrows,chains,positioning,%
   matrix,patterns,shapes.multipart,positioning,arrows}
@@ -77,6 +83,7 @@ pdfproducer = {Thomas Moulard}
       src/slides/demo1.jpg}}
   \begin{frame}[plain]
     \titlepage
+    \note[item]{Remercier le jury.}
   \end{frame}
 }
 
@@ -105,7 +112,7 @@ pdfproducer = {Thomas Moulard}
 
         \uncover<1>{
           \node (perception-description)
-                [state, right=of perception]
+                [state, right=of perception, yshift=-6mm, xshift=-6mm]
                 {\textbf{Perception}};
         }
 
@@ -119,7 +126,7 @@ pdfproducer = {Thomas Moulard}
 
         \uncover<2>{
           \node (decision-description)
-                [state, right=of decision]
+                [state, right=of decision, yshift=6mm, xshift=-6mm]
                 {\textbf{Décision}};
         }
 
@@ -131,7 +138,7 @@ pdfproducer = {Thomas Moulard}
 
         \uncover<3>{
           \node (action-description)
-                [state, left=of action]
+                [state, left=of action, yshift=12mm, xshift=6mm]
                 {\textbf{Action}};
         }
 
@@ -1135,7 +1142,7 @@ pdfproducer = {Thomas Moulard}
   \end{equation*}
 \end{slideAction}
 
-\maxFrameImageHeight{src/chap2-suivi-trajectoire/demo.jpg}
+\maxFrameImageHeight{src/slides/demo.jpg}
 
 \maxFrameImageHeight{src/slides/door.jpg}
 
@@ -1238,7 +1245,7 @@ pdfproducer = {Thomas Moulard}
   \end{itemize}
 \end{frame}
 
-\maxFrameImageHeight{src/slides/hrp2-thx.jpg}
+\maxFrameImage{src/slides/hrp2-thx.jpg}
 
 
 %
