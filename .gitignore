@@ -18,6 +18,7 @@
 *.temp
 *.make
 thesis.*.gnuplot
+thesis-figure*
 thesis.pdf
 slides.nav
 slides.pdf
@@ -25,3 +26,6 @@ slides.snm
 slides.cur.gnuplot
 slides.des.gnuplot
 slides.trans.gnuplot
+slides-figure*
+slides.auxlock
+vid/*

@@ -1,5 +1,6 @@
-\documentclass[14pt,utf8x,hyperref={pdfpagelabels=false}]{beamer}
+\documentclass[14pt,utf8,hyperref={pdfpagelabels=false}]{beamer}
 \usepackage{etex}
+\usepackage{media9}
 
 \usepackage[utf8]{inputenc} % hyperref broken with utf8x
 \usepackage[C40,T1]{fontenc}
@@ -26,7 +27,8 @@
 
 
 \usetikzlibrary{shapes.arrows,chains,positioning,%
-  matrix,patterns,shapes.multipart,positioning,arrows}
+  matrix,patterns,shapes.multipart,positioning,arrows,external}
+\tikzexternalize
 
 \tikzstyle{every picture}+=[remember picture]
 \tikzstyle{na} = [baseline=-.5ex]
@@ -542,20 +544,36 @@ pdfproducer = {Thomas Moulard}
     multi-contact, planification dans un environnement non-rigide.}
 
   \begin{center}
-    \includegraphics[height=.33\paperheight]%
-                    {src/chap1-roboptim/straight-line-obstacle.png}
-  \includegraphics[height=.33\paperheight]%
-                  {src/slides/agent-067.jpg}\par
-  \includegraphics[height=.33\paperheight]%
-                  {src/slides/multi-014.jpg}
-  \includegraphics[height=.33\paperheight]%
-                  {src/slides/multi-015.jpg}
-%  \includegraphics[height=.33\paperheight]%
-%                  {src/slides/deformable.jpg}
+    \includegraphics[height=.33\paperheight]{%
+      src/chap1-roboptim/straight-line-obstacle.png}
+    \includegraphics[height=.33\paperheight]{%
+      src/slides/agent-067.jpg}\par
+    \includegraphics[height=.33\paperheight]{%
+      src/slides/multi-014.jpg}
+    \includegraphics[height=.33\paperheight]{%
+      src/slides/multi-015.jpg}
 
-  Figures 2, 3, 4: K. Bouyarmane et collab.
+    Figures 2, 3, 4: K. Bouyarmane et collab.
   \end{center}
 \end{slideDecision}
+
+\begin{frame}[plain]
+  \begin{changemargin}{-1cm}{-1cm}
+    \begin{center}
+      \vspace{-0.1cm}
+      \includemedia[%
+        addresource=vid/karim-multi-contact.mp4,
+        height=\paperheight,
+        width=\paperwidth,
+        flashvars={
+          flv=vid/karim-multi-contact.mp4
+          &autoPlay=true
+      }]{%
+        \includegraphics[height=\paperheight]{%
+          src/slides/multi-014.jpg}}{player_flv_maxi.swf}
+    \end{center}
+  \end{changemargin}
+\end{frame}
 
 
 \begin{slideDecision}
@@ -814,7 +832,22 @@ pdfproducer = {Thomas Moulard}
 \maxFrameImageWidth{src/chap3-primitive-mouvement/footsteps1.jpg}
 
 %\maxFrameImageWidth{src/slides/goal-generation.png}
-\maxFrameImageWidth{src/slides/over.jpg}
+\begin{frame}[plain]
+  \begin{changemargin}{-1cm}{-1cm}
+    \begin{center}
+      \vspace{-0.1cm}
+      \includemedia[%
+        addresource=vid/humanoids11-lbaudouin3.mp4,
+        height=\paperheight,
+        width=\paperwidth,
+        flashvars={
+          flv=vid/humanoids11-lbaudouin3.mp4
+          &autoPlay=true
+      }]{\includegraphics[height=\paperheight]{%
+          src/slides/over.jpg}}{player_flv_maxi.swf}
+    \end{center}
+  \end{changemargin}
+\end{frame}
 
 \begin{slideAction}
   \frametitle{Contrôleur polyvalent (1)}
@@ -966,9 +999,10 @@ pdfproducer = {Thomas Moulard}
 \begin{slideAction}
   \frametitle{Synchronisation temporelle}
 
+  \note[item]{FIXME: descendre la courbe pour avoir
+  une erreur au début}
 
   \begin{center}
-    \vspace{-1cm}
     \begin{tikzpicture}
       \begin{axis}[
           grid=major,
@@ -988,8 +1022,10 @@ pdfproducer = {Thomas Moulard}
 
         \addplot[
           red,
-          dashed,
-        ] table {dat/feet_follower_feet-follower-com.dat};
+          dashed
+        ] table [
+          x expr=(\thisrowno{0}-0)*0.005
+          ]{dat/feet_follower_feet-follower-com.dat};
         \addlegendentry{centre de masse}
 
         \addplot[
@@ -997,7 +1033,8 @@ pdfproducer = {Thomas Moulard}
           dashed,
         ] table[
           x index=0,
-          y index=4
+          y index=4,
+          x expr=(\thisrowno{0}-0)*0.005
         ] {dat/feet_follower_feet-follower-left-ankle.dat};
         \addlegendentry{pied gauche}
 
@@ -1006,14 +1043,17 @@ pdfproducer = {Thomas Moulard}
           dashed,
         ] table[
           x index=0,
-          y index=4
+          y index=4,
+          x expr=(\thisrowno{0}-0)*0.005
         ] {dat/feet_follower_feet-follower-right-ankle.dat};
         \addlegendentry{pied droit}
 
         \uncover<7->{
         \addplot[
           red,
-        ] table {dat/feet_follower_correction-com.dat};
+        ] table[
+          x expr=(\thisrowno{0}-0)*0.005
+        ]{dat/feet_follower_correction-com.dat};
         \addlegendentry{centre de masse (corr.)}
         }
 
@@ -1022,7 +1062,8 @@ pdfproducer = {Thomas Moulard}
           blue,
         ] table[
           x index=0,
-          y index=4
+          y index=4,
+          x expr=(\thisrowno{0}-0)*0.005,
         ] {dat/feet_follower_correction-left-ankle.dat};
         \addlegendentry{pied gauche (corr.)}
         }
@@ -1032,45 +1073,12 @@ pdfproducer = {Thomas Moulard}
           green,
         ] table[
           x index=0,
-          y index=4
+          y index=4,
+          x expr=(\thisrowno{0}-0)*0.005,
         ] {dat/feet_follower_correction-right-ankle.dat};
         \addlegendentry{pied droit (corr.)}
         }
       \end{axis}
-
-      \uncover<2-> {
-        \draw [
-        thick,
-        decoration={
-          brace,
-          raise=-1.05cm
-        },
-        font=\tiny,
-        decorate
-      ] (axis cs:2.1,6.35) -- (axis cs:4.1,6.35)
-      node [pos=0.5,anchor=north,yshift=-0.55cm] {pas 1};
-      }
-
-      \uncover<3-> {
-      \draw [
-        thick,
-        decoration={
-          brace,
-          raise=-1.05cm
-        },
-        font=\tiny,
-        decorate
-      ] (axis cs:5.1,6.35) -- (axis cs:7.1,6.35)
-      node [pos=0.5,anchor=north,yshift=-0.55cm] {pas 2};
-      }
-
-      % error measure
-      \uncover<4-> {
-      \draw[<-]
-      (1.3, 0.5) -- (1.3, 1.5)
-      node [font=\tiny,anchor=north,yshift=0.3cm, line width=1.3]
-      {mesure};
-      }
 
       \def\w{0.5}
       \def\h{0.75}
@@ -1105,7 +1113,6 @@ pdfproducer = {Thomas Moulard}
         rectangle (\dx + 1. + \w, \dy + \h + 3. -0.3);
       }
 
-
       \uncover<5-> {
         \draw[style=solid,color=green,line width=1.25] (\dx + 1., \dy + 3.)
         rectangle (\dx + 1. + \w, \dy + \h + 3.);
@@ -1127,13 +1134,16 @@ pdfproducer = {Thomas Moulard}
         \draw[style=solid,color=green,line width=1.25] (\dx + 0., \dy + 0.5)
       rectangle (\dx + 0. + \w, \dy + \h + 0.5);
       }
-
     \end{tikzpicture}
   \end{center}
 \end{slideAction}
 
 \begin{slideAction}
   \frametitle{Trajectoire des pieds (1)}
+
+  \note[item]{FIXME: expliquer le code couleur des pieds}
+  \note[item]{Pourquoi y a-t-il une dérive après la correction?}
+
 
   \begin{center}
     \begin{tikzpicture}[>=latex]
@@ -1232,6 +1242,10 @@ pdfproducer = {Thomas Moulard}
 \begin{slideAction}
   \frametitle{Trajectoire des pieds (2)}
 
+  \note[item]{Polynôme déterminé complètement par les conditions
+  limites.}
+  \note[item]{Pile de pas discret. Trajectoire continue.}
+
   \begin{equation*}
     \gamma_{\text{pied}}^{(1)}(t) = \Delta^t(t) . \gamma_{\text{pied}}(t)
   \end{equation*}
@@ -1245,6 +1259,10 @@ pdfproducer = {Thomas Moulard}
 
 \begin{slideAction}
   \frametitle{Trajectoire du centre de masse}
+
+  \note[item]{Préservation de la stabilité.}
+  \note[item]{Opérateur linéaire.}
+  \note[item]{Ici delta $E^2$.}
 
   \begin{equation*}
     \mathbf{z} = \mathbf{c} - \frac{z_c}{g} \ddot{\mathbf{c}}
@@ -1267,12 +1285,58 @@ pdfproducer = {Thomas Moulard}
   \end{equation*}
 \end{slideAction}
 
-\maxFrameImageHeight{src/slides/demo.jpg}
 
-\maxFrameImageHeight{src/slides/door.jpg}
+\begin{frame}[plain]
+  \begin{changemargin}{-1cm}{-1cm}
+    \begin{center}
+      \vspace{-0.1cm}
+      \includemedia[%
+        addresource=vid/biorob12.mp4,
+        height=\paperheight,
+        width=\paperwidth,
+        flashvars={
+          flv=vid/biorob12.mp4
+          &autoPlay=true
+      }]{%
+        \includegraphics[height=\paperheight]{%
+          src/slides/over.jpg}}{player_flv_maxi.swf}
+    \end{center}
+  \end{changemargin}
+\end{frame}
+
+\begin{frame}[plain]
+  \begin{changemargin}{-1cm}{-1cm}
+    \begin{center}
+      \vspace{-0.1cm}
+      \includemedia[%
+        addresource=vid/humanoids11-lbaudouin3.mp4,
+        height=\paperheight,
+        width=\paperwidth,
+        flashvars={
+          flv=vid/humanoids11-lbaudouin3.mp4
+          &autoPlay=true
+      }]{%
+        \includegraphics[height=\paperheight]{%
+          src/slides/door.jpg}}{player_flv_maxi.swf}
+    \end{center}
+  \end{changemargin}
+\end{frame}
 
 \begin{slideAction}
   \frametitle{Primitives de mouvement}
+
+  \note[item]{Nécessaire d'adapter la pile de tâches
+    à l'opération en cours. Dépend du scénario.}
+  \note[item]{La localisation également diffère selon
+    les cas.}
+  \note[item]{La localisation globale parfaite d'un robot est
+    difficile mais surtout souvent inutile. L'erreur de localisation
+    doit décroître avec l'acomplissement de la tâche.}
+  \note[item]{Il est nécessaire de planifier les tâches et
+    l'asservissement de façon jointe.}
+  \note[item]{Actuellement planification corps complet puis extraction
+    des tâches. Choix de l'asservissement manuel.}
+
 
   \begin{changeleftmargin}{1.1cm}
   \begin{center}
@@ -1339,6 +1403,9 @@ pdfproducer = {Thomas Moulard}
 \begin{slidePerception}
   \frametitle{Systèmes de localisation}
 
+  \note[item]{Parler d'intégration logicielle.  Mentioner ROS
+    rapidement.}
+
   \begin{changeleftmargin}{1.1cm}
   \begin{description}
   \item[Capture de mouvement] Précision $\pm 1$ cm. Environnement
@@ -1354,6 +1421,14 @@ pdfproducer = {Thomas Moulard}
 
 \begin{frame}
   \frametitle{Conclusion}
+
+  \note[item]{Polyvalence.}
+  \note[item]{Intégration.}
+  \note[item]{Scénarii complexes pour étendre les capacités des robots
+    humanoïdes.}
+  \note[item]{Faire le lien entre la planification et l'exécution.}
+  \note[item]{Démontre le fossé entre robotique et simulation
+    robotique.}
 
   \begin{itemize}
   \item Architecture complète: perception, décision, action.
