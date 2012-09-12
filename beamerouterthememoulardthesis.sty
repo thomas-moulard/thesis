@@ -25,6 +25,17 @@
   \usebeamercolor[fg]{titlegraphic}\inserttitlegraphic
 }
 
+% Custom frametitle.
+\setbeamertemplate{frametitle}
+{\vskip-3pt
+  \leavevmode
+  \hbox{%
+  \begin{beamercolorbox}[wd=\paperwidth,ht=1.8ex,dp=1ex]{frametitle}%
+    \raggedright\hspace*{3em}\insertframetitle
+  \end{beamercolorbox}
+  }%
+}
+
 % Custom footline.
 \defbeamertemplate*{footline}{moulardthesis}{%
 \leavevmode%
