@@ -21,9 +21,9 @@
 \newcommand{\umlfillcolor}{ThoughtBySome}
 \usepackage{pgf-umlcd}
 
-\reserveinserts{28}
-\usepackage{pgfpages}
-\setbeameroption{show notes on second screen}
+%\reserveinserts{28}
+%\usepackage{pgfpages}
+%\setbeameroption{show notes on second screen}
 
 
 \usetikzlibrary{shapes.arrows,chains,positioning,%
@@ -1003,6 +1003,7 @@ pdfproducer = {Thomas Moulard}
   une erreur au début}
 
   \begin{center}
+    \vspace{-.5cm}
     \begin{tikzpicture}
       \begin{axis}[
           grid=major,
@@ -1024,9 +1025,10 @@ pdfproducer = {Thomas Moulard}
           red,
           dashed
         ] table [
-          x expr=(\thisrowno{0}-0)*0.005
+          x expr=(\thisrowno{0}-0)*0.005,
+          y expr=\thisrowno{1}+0.04
           ]{dat/feet_follower_feet-follower-com.dat};
-        \addlegendentry{centre de masse}
+        \addlegendentry{centre de masse (corr.)}
 
         \addplot[
           blue,
@@ -1034,9 +1036,10 @@ pdfproducer = {Thomas Moulard}
         ] table[
           x index=0,
           y index=4,
-          x expr=(\thisrowno{0}-0)*0.005
+          x expr=(\thisrowno{0}-0)*0.005,
+          y expr=\thisrowno{4}+0.04
         ] {dat/feet_follower_feet-follower-left-ankle.dat};
-        \addlegendentry{pied gauche}
+        \addlegendentry{pied gauche (corr.)}
 
         \addplot[
           green,
@@ -1044,20 +1047,18 @@ pdfproducer = {Thomas Moulard}
         ] table[
           x index=0,
           y index=4,
-          x expr=(\thisrowno{0}-0)*0.005
+          x expr=(\thisrowno{0}-0)*0.005,
+          y expr=\thisrowno{4}+0.04
         ] {dat/feet_follower_feet-follower-right-ankle.dat};
-        \addlegendentry{pied droit}
+        \addlegendentry{pied droit (corr.)}
 
-        \uncover<7->{
         \addplot[
           red,
         ] table[
           x expr=(\thisrowno{0}-0)*0.005
         ]{dat/feet_follower_correction-com.dat};
-        \addlegendentry{centre de masse (corr.)}
-        }
+        \addlegendentry{centre de masse}
 
-        \uncover<6->{
         \addplot[
           blue,
         ] table[
@@ -1065,10 +1066,8 @@ pdfproducer = {Thomas Moulard}
           y index=4,
           x expr=(\thisrowno{0}-0)*0.005,
         ] {dat/feet_follower_correction-left-ankle.dat};
-        \addlegendentry{pied gauche (corr.)}
-        }
+        \addlegendentry{pied gauche}
 
-        \uncover<5->{
         \addplot[
           green,
         ] table[
@@ -1076,8 +1075,7 @@ pdfproducer = {Thomas Moulard}
           y index=4,
           x expr=(\thisrowno{0}-0)*0.005,
         ] {dat/feet_follower_correction-right-ankle.dat};
-        \addlegendentry{pied droit (corr.)}
-        }
+        \addlegendentry{pied droit}
       \end{axis}
 
       \def\w{0.5}
@@ -1090,14 +1088,14 @@ pdfproducer = {Thomas Moulard}
       rectangle (\dx + 0. + \w, \dy + \h + 0.5);
 
       % left step planned 1 - drift
-      \uncover<4-> {
+      \uncover<2-> {
         \draw[style=solid,color=red,line width=1.25] (\dx, \dy - 0.3 + 0.5)
         rectangle (\dx + \w, \dy + \h - 0.3 + 0.5);
       }
 
       \filldraw[pattern=north east lines] (\dx + 1., \dy + 0.5)
       rectangle (\dx + 1. + \w, \dy + \h + 0.5);
-      \draw<4->[style=solid,color=red,line width=1.25] (\dx + 1., \dy - 0.3 + 0.5)
+      \draw<2->[style=solid,color=red,line width=1.25] (\dx + 1., \dy - 0.3 + 0.5)
       rectangle (\dx + \w + 1., \dy + \h - 0.3 + 0.5);
 
 
@@ -1107,13 +1105,13 @@ pdfproducer = {Thomas Moulard}
       node [pos=0.5,anchor=north,font=\tiny,yshift=0.75cm] {pas 1};
 
       % right step planned 1 - corrected
-      \uncover<4-> {
+      \uncover<2-> {
         \draw[style=solid,color=red,line width=1.25]
         (\dx + 1., \dy + 3.-0.3)
         rectangle (\dx + 1. + \w, \dy + \h + 3. -0.3);
       }
 
-      \uncover<5-> {
+      \uncover<3-> {
         \draw[style=solid,color=green,line width=1.25] (\dx + 1., \dy + 3.)
         rectangle (\dx + 1. + \w, \dy + \h + 3.);
       }
@@ -1124,13 +1122,13 @@ pdfproducer = {Thomas Moulard}
       rectangle (\dx + 0. + \w, \dy + \h + 0.5)
       node [pos=0.5,anchor=north,font=\tiny,yshift=0.75cm] {pas 2};
 
-      \uncover<4-> {
+      \uncover<2-> {
         \draw[style=solid,color=red,line width=1.25] (\dx, \dy + 0.5 -0.3)
         rectangle (\dx + \w, \dy + \h + 0.5 -0.3);
       }
 
       % left step planned 2 - corrected
-      \uncover<6-> {
+      \uncover<4-> {
         \draw[style=solid,color=green,line width=1.25] (\dx + 0., \dy + 0.5)
       rectangle (\dx + 0. + \w, \dy + \h + 0.5);
       }
@@ -1299,7 +1297,7 @@ pdfproducer = {Thomas Moulard}
           &autoPlay=true
       }]{%
         \includegraphics[height=\paperheight]{%
-          src/slides/over.jpg}}{player_flv_maxi.swf}
+          src/slides/demo.jpg}}{player_flv_maxi.swf}
     \end{center}
   \end{changemargin}
 \end{frame}
