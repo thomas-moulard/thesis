@@ -839,81 +839,6 @@ pdfproducer = {Thomas Moulard}
 
 \maxFrameImageWidth{src/chap3-primitive-mouvement/footsteps1.jpg}
 
-%\maxFrameImageWidth{src/slides/goal-generation.png}
-\begin{frame}[plain]
-  \begin{changemargin}{-1cm}{-1cm}
-    \begin{center}
-      \vspace{-0.1cm}
-      \includemedia[%
-        addresource=vid/humanoids11-lbaudouin3.mp4,
-        height=\paperheight,
-        width=\paperwidth,
-        flashvars={
-          flv=vid/humanoids11-lbaudouin3.mp4
-          &autoPlay=true
-      }]{\includegraphics[height=\paperheight]{%
-          src/slides/over.jpg}}{player_flv_maxi.swf}
-    \end{center}
-  \end{changemargin}
-\end{frame}
-
-\begin{slideAction}
-  \frametitle{Contrôleur temps réel}
-
-  \note[item]{Actionement: nécessité d'envoyer une commande
-    à une période fixe. Contraint le temps de calcul.}
-
-  \begin{changeleftmargin}{1.1cm}
-  \begin{center}
-    Contrôleur: algorithme générant la commande envoyée aux moteurs à
-    une fréquence fixe (200Hz pour HRP-2).
-
-    \bigskip
-
-    \begin{itemize}
-    \item Exécute les tâches générées par la partie décisionelle.
-    \item Permets l'adaptation réactive du mouvement.
-    \end{itemize}
-
-    \bigskip
-
-    Composant \alert{critique} de tout robot.
-  \end{center}
-  \end{changeleftmargin}
-\end{slideAction}
-
-\begin{slideAction}
-  \frametitle{Contrôleur polyvalent (2)}
-
-  \note[item]{Complexe d'exprimer l'objectif d'un robot
-    dans l'espace des configuration.}
-  \note[item]{Espace des tâches: espace ``naturel''.}
-  \note[item]{Prendre l'exemple d'un point 3D.}
-  \note[item]{Jacobienne de la tâche.}
-  \note[item]{Problème d'optimisation!}
-  \note[item]{Cinématique inverse implicite\ldots}
-
-  \begin{changeleftmargin}{1.1cm}
-  \begin{center}
-    Espace des tâches\\
-    ou\\
-    Espaces des configurations.
-
-    \bigskip
-
-    \begin{equation*}
-      \mathbf{e} = \mathbf{s} - \mathbf{s}^{*}
-    \end{equation*}
-
-    \begin{description}
-      \item[$\mathbf{e}$] erreur.
-      \item[$\mathbf{s}$] valeur courante de la tâche.
-      \item[$\mathbf{s}^{*}$] valeur de référence.
-    \end{description}
-  \end{center}
-  \end{changeleftmargin}
-\end{slideAction}
-
 \begin{slideAction}
   \frametitle{Contrôleur polyvalent (2)}
 
@@ -945,6 +870,152 @@ pdfproducer = {Thomas Moulard}
   \end{center}
   \end{changeleftmargin}
 \end{slideAction}
+
+%\maxFrameImageWidth{src/slides/goal-generation.png}
+\begin{frame}[plain]
+  \begin{changemargin}{-1cm}{-1cm}
+    \begin{center}
+      \vspace{-0.1cm}
+      \includemedia[%
+        addresource=vid/humanoids11-lbaudouin3.mp4,
+        height=\paperheight,
+        width=\paperwidth,
+        flashvars={
+          flv=vid/humanoids11-lbaudouin3.mp4
+          &autoPlay=true
+      }]{\includegraphics[height=\paperheight]{%
+          src/slides/over.jpg}}{player_flv_maxi.swf}
+    \end{center}
+  \end{changemargin}
+\end{frame}
+
+\begin{slideAction}
+  \frametitle{Motivation}
+
+  \note[item]{FIXME: expliquer le code couleur des pieds}
+  \note[item]{Pourquoi y a-t-il une dérive après la correction?}
+
+
+  \begin{center}
+    \begin{tikzpicture}[>=latex]
+        \def\w{0.5}
+        \def\h{0.75}
+
+        \foreach \dy in {0., 1., 2., 3.}
+                 {
+                   % left step planned
+                   \filldraw[pattern=north east lines] (0., \dy)
+                   rectangle (0. + \w, \dy + \h);
+
+                   % right step planned
+                   \filldraw[pattern=north west lines] (1., \dy + 0.5)
+                   rectangle (1. + \w, \dy + \h + 0.5);
+                 }
+
+        % before correction
+        \def\driftx{0.1}
+        \def\drifty{0.05}
+        \def\drifttheta{5.}
+
+        \def\dy{0}
+        % left step planned
+        \draw<2->[style=solid, color=red, rotate=\drifttheta * \dy,line width=1.25]
+        (0. + \driftx * \dy, \drifty * \dy + \dy)
+        rectangle (0. + \driftx * \dy + \w, \drifty * \dy + \dy + \h);
+
+        % right step planned
+        \draw<3->[style=solid, color=red, rotate=\drifttheta * \dy + \drifttheta / 2.,line width=1.25]
+        (1. + \driftx * \dy + \drifty / 2., \drifty * \dy + \drifty / 2. + \dy + 0.5)
+        rectangle (1. + \driftx * \dy + \drifty / 2. + \w, \drifty * \dy + \drifty / 2. + \dy + \h + 0.5);
+
+        \def\dy{1}
+        % left step planned
+        \draw<4->[style=solid, color=red, rotate=\drifttheta * \dy,line width=1.25]
+        (0. + \driftx * \dy, \drifty * \dy + \dy)
+        rectangle (0. + \driftx * \dy + \w, \drifty * \dy + \dy + \h);
+
+        % right step planned
+        \draw<5->[style=solid, color=red, rotate=\drifttheta * \dy + \drifttheta / 2.,line width=1.25]
+        (1. + \driftx * \dy + \drifty / 2., \drifty * \dy + \drifty / 2. + \dy + 0.5)
+        rectangle (1. + \driftx * \dy + \drifty / 2. + \w, \drifty * \dy + \drifty / 2. + \dy + \h + 0.5);
+
+
+        \def\dy{2}
+        \draw<6->[style=solid, color=red,line width=1.25, rotate=\drifttheta] (0. + \driftx, \dy + \drifty)
+        rectangle (0. + \w + \driftx, \dy + \h + \drifty);
+
+        % --- after correction ---
+
+        % left step planned
+        \draw<7->[style=solid, color=green,line width=1.25] (0., \dy)
+        rectangle (0. + \w, \dy + \h);
+
+        \uncover<7->{
+        \draw[smooth,rounded corners=1ex,<-,thick]
+        (-0.3, \dy) -- (-0.3 - 0.05, \dy + 0.2) -- (-0.3 - 0.2, \dy + 0.4)
+        node[midway,left]
+        {
+          $\delta \mathbf{x}$
+        };
+        }
+
+
+        \draw<7->[style=solid, color=green,line width=1.25] (0., \dy)
+        rectangle (0. + \w, \dy + \h);
+        \draw<7->[style=solid, color=green,line width=1.25] (1., \dy + 0.5)
+        rectangle (1. + \w, \dy + \h + 0.5);
+        \def\dy{3}
+        \draw<7->[style=solid, color=green,line width=1.25] (0., \dy)
+        rectangle (0. + \w, \dy + \h);
+        \draw<7->[style=solid, color=green,line width=1.25] (1., \dy + 0.5)
+        rectangle (1. + \w, \dy + \h + 0.5);
+
+        % right step planned
+        \def\dy{2}
+        \draw<8->[style=solid, color=orange,line width=1.25, rotate=\drifttheta * 0.5] (1. + \driftx * .5, \dy + 0.5 + \drifty * 0.5)
+        rectangle (1. + \driftx * 0.5 + \w, \dy + \drifty * 0.5 + \h + 0.5);
+
+        \def\dy{3}
+        % left step planned
+        \draw<9->[style=solid, color=orange,line width=1.25, rotate=\drifttheta * 1.] (0. + \driftx * 1., \dy + \drifty * 1.)
+        rectangle (0. + \w + \driftx * 1., \dy + \h + \drifty * 1.);
+
+        % right step planned
+        \uncover<10-> {
+          \draw[style=solid, color=orange,line width=1.25, rotate=\drifttheta * 1.5] (1. + \driftx * 1.5, \dy + 0.5 + \drifty * 1.5)
+        rectangle (1. + \w + \driftx * 1.5, \dy + \h + 0.5 + \drifty * 1.5);
+        }
+
+      \end{tikzpicture}
+      \end{center}
+\end{slideAction}
+
+
+\begin{slideAction}
+  \frametitle{Contrôleur temps réel}
+
+  \note[item]{Actionement: nécessité d'envoyer une commande
+    à une période fixe. Contraint le temps de calcul.}
+
+  \begin{changeleftmargin}{1.1cm}
+  \begin{center}
+    Contrôleur: algorithme générant la commande envoyée aux moteurs à
+    une fréquence fixe (200Hz pour HRP-2).
+
+    \bigskip
+
+    \begin{itemize}
+    \item Exécute les tâches générées par la partie décisionelle.
+    \item Permets l'adaptation réactive du mouvement.
+    \end{itemize}
+
+    \bigskip
+
+    Composant \alert{critique} de tout robot.
+  \end{center}
+  \end{changeleftmargin}
+\end{slideAction}
+
 
 \begin{slideAction}
   \frametitle{Schéma de contrôle boucle fermée}
@@ -1141,125 +1212,6 @@ pdfproducer = {Thomas Moulard}
 \end{slideAction}
 
 \begin{slideAction}
-  \frametitle{Trajectoire des pieds (1)}
-
-  \note[item]{FIXME: expliquer le code couleur des pieds}
-  \note[item]{Pourquoi y a-t-il une dérive après la correction?}
-
-
-  \begin{center}
-    \begin{tikzpicture}[>=latex]
-        \def\w{0.5}
-        \def\h{0.75}
-
-        \foreach \dy in {0., 1., 2., 3.}
-                 {
-                   % left step planned
-                   \filldraw[pattern=north east lines] (0., \dy)
-                   rectangle (0. + \w, \dy + \h);
-
-                   % right step planned
-                   \filldraw[pattern=north west lines] (1., \dy + 0.5)
-                   rectangle (1. + \w, \dy + \h + 0.5);
-                 }
-
-        % before correction
-        \def\driftx{0.1}
-        \def\drifty{0.05}
-        \def\drifttheta{5.}
-
-        \def\dy{0}
-        % left step planned
-        \draw<2->[style=solid, color=red, rotate=\drifttheta * \dy,line width=1.25]
-        (0. + \driftx * \dy, \drifty * \dy + \dy)
-        rectangle (0. + \driftx * \dy + \w, \drifty * \dy + \dy + \h);
-
-        % right step planned
-        \draw<3->[style=solid, color=red, rotate=\drifttheta * \dy + \drifttheta / 2.,line width=1.25]
-        (1. + \driftx * \dy + \drifty / 2., \drifty * \dy + \drifty / 2. + \dy + 0.5)
-        rectangle (1. + \driftx * \dy + \drifty / 2. + \w, \drifty * \dy + \drifty / 2. + \dy + \h + 0.5);
-
-        \def\dy{1}
-        % left step planned
-        \draw<4->[style=solid, color=red, rotate=\drifttheta * \dy,line width=1.25]
-        (0. + \driftx * \dy, \drifty * \dy + \dy)
-        rectangle (0. + \driftx * \dy + \w, \drifty * \dy + \dy + \h);
-
-        % right step planned
-        \draw<5->[style=solid, color=red, rotate=\drifttheta * \dy + \drifttheta / 2.,line width=1.25]
-        (1. + \driftx * \dy + \drifty / 2., \drifty * \dy + \drifty / 2. + \dy + 0.5)
-        rectangle (1. + \driftx * \dy + \drifty / 2. + \w, \drifty * \dy + \drifty / 2. + \dy + \h + 0.5);
-
-
-        \def\dy{2}
-        \draw<6->[style=solid, color=red,line width=1.25, rotate=\drifttheta] (0. + \driftx, \dy + \drifty)
-        rectangle (0. + \w + \driftx, \dy + \h + \drifty);
-
-        % --- after correction ---
-
-        % left step planned
-        \draw<7->[style=solid, color=green,line width=1.25] (0., \dy)
-        rectangle (0. + \w, \dy + \h);
-
-        \uncover<7->{
-        \draw[smooth,rounded corners=1ex,<-,thick]
-        (-0.3, \dy) -- (-0.3 - 0.05, \dy + 0.2) -- (-0.3 - 0.2, \dy + 0.4)
-        node[midway,left]
-        {
-          $\delta \mathbf{x}$
-        };
-        }
-
-
-        \draw<7->[style=solid, color=green,line width=1.25] (0., \dy)
-        rectangle (0. + \w, \dy + \h);
-        \draw<7->[style=solid, color=green,line width=1.25] (1., \dy + 0.5)
-        rectangle (1. + \w, \dy + \h + 0.5);
-        \def\dy{3}
-        \draw<7->[style=solid, color=green,line width=1.25] (0., \dy)
-        rectangle (0. + \w, \dy + \h);
-        \draw<7->[style=solid, color=green,line width=1.25] (1., \dy + 0.5)
-        rectangle (1. + \w, \dy + \h + 0.5);
-
-        % right step planned
-        \def\dy{2}
-        \draw<8->[style=solid, color=orange,line width=1.25, rotate=\drifttheta * 0.5] (1. + \driftx * .5, \dy + 0.5 + \drifty * 0.5)
-        rectangle (1. + \driftx * 0.5 + \w, \dy + \drifty * 0.5 + \h + 0.5);
-
-        \def\dy{3}
-        % left step planned
-        \draw<9->[style=solid, color=orange,line width=1.25, rotate=\drifttheta * 1.] (0. + \driftx * 1., \dy + \drifty * 1.)
-        rectangle (0. + \w + \driftx * 1., \dy + \h + \drifty * 1.);
-
-        % right step planned
-        \uncover<10-> {
-          \draw[style=solid, color=orange,line width=1.25, rotate=\drifttheta * 1.5] (1. + \driftx * 1.5, \dy + 0.5 + \drifty * 1.5)
-        rectangle (1. + \w + \driftx * 1.5, \dy + \h + 0.5 + \drifty * 1.5);
-        }
-
-      \end{tikzpicture}
-      \end{center}
-\end{slideAction}
-
-\begin{slideAction}
-  \frametitle{Trajectoire des pieds (2)}
-
-  \note[item]{Polynôme déterminé complètement par les conditions
-  limites.}
-  \note[item]{Pile de pas discret. Trajectoire continue.}
-
-  \begin{equation*}
-    \gamma_{\text{pied}}^{(1)}(t) = \Delta^t(t) . \gamma_{\text{pied}}(t)
-  \end{equation*}
-
-  \begin{equation*}
-    \gamma_{\text{foot}}^{(n)}(t) =
-    ( \prod_{i=0}^{n-1}\Delta^{t_{n-i}}(t) ) . \gamma_{\text{pied}}(t)
-  \end{equation*}
-
-\end{slideAction}
-
-\begin{slideAction}
   \frametitle{Trajectoire du centre de masse}
 
   \note[item]{Préservation de la stabilité.}
@@ -1410,11 +1362,13 @@ pdfproducer = {Thomas Moulard}
 
   \begin{changeleftmargin}{1.1cm}
   \begin{description}
-  \item[Capture de mouvement] Précision $\pm 1$ cm. Environnement
-    instrumenté.
-  \item[Tracker] Algorithme de vision. Précision à quelques
-    centimètres près. Méthode locale.
-  \item[Odométrie visuelle] Précision trop faible.
+  \item[Capture de mouvement]~\\
+    Précision $\pm 1$ cm. Environnement instrumenté.
+  \item[Tracker]~\\
+    Algorithme de vision. Précision à quelques centimètres près.
+    Méthode locale.
+  \item[Odométrie visuelle]~\\
+    Précision trop faible.
   \end{description}
   \end{changeleftmargin}
 \end{slidePerception}
