@@ -116,7 +116,7 @@
   \begin{frame}}{\end{frame}}
 
 
-\newcommand{\fullFrameVideo}[2]{
+\newcommand{\fullFrameVideo}[3]{
   \begin{frame}[plain, typeset second]
     \begin{changemargin}{-1cm}{-1cm}
       \begin{center}
@@ -135,7 +135,8 @@
               \includegraphics[height=\paperheight]{%
                 #1}}{player_flv_maxi.swf}%
         }}
-      \end{center}
+      \end{center}%
+      #3
     \end{changemargin}
   \end{frame}
 }

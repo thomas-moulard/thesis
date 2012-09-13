@@ -560,7 +560,7 @@ pdfproducer = {Thomas Moulard}
   \end{center}
 \end{slideDecision}
 
-\fullFrameVideo{src/slides/multi-014.jpg}{vid/karim-multi-contact.mp4}
+\fullFrameVideo{src/slides/multi-014.jpg}{vid/karim-multi-contact.mp4}{}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -912,7 +912,14 @@ pdfproducer = {Thomas Moulard}
   \end{changeleftmargin}
 \end{slideAction}
 
-\fullFrameVideo{src/slides/over.jpg}{vid/humanoids11-lbaudouin3.mp4}
+\fullFrameVideo{src/slides/over.jpg}{vid/humanoids11-lbaudouin3.mp4}{%
+    \tiny{%
+      \vspace{-.6cm}%
+      ~\includegraphics[height=.25cm]{src/slides/idea.pdf}~%
+      Real-time Replanning Using 3D Environment for Humanoid Robot,%
+      Proc. of Humanoids'11.%
+    }%
+}
 
 \begin{slideAction}
   \frametitle{Motivation}
@@ -1043,7 +1050,7 @@ pdfproducer = {Thomas Moulard}
 
 
 \begin{slideAction}
-  \frametitle{Schéma de contrôle boucle fermée}
+  \frametitle{Schéma de contrôle}
 
   \note[item]{Ajout du rebouclage capteur en déformant
   les références des tâches.}
@@ -1094,7 +1101,13 @@ pdfproducer = {Thomas Moulard}
 
       \draw[<-] (gen.north) --++ (0,1) node [left,font=\tiny,yshift=-0.25cm]
            {$\mathbf{S}$};
-    \end{tikzpicture}
+    \end{tikzpicture}%
+    %
+    \footnotesize{%
+      \hspace{-5cm}%
+      \includegraphics[height=.5cm]{src/slides/idea.pdf}~%
+      Trajectory Following for Legged Robots, Proc. of Biorob'12.%
+    }%
   \end{center}
   \end{changeleftmargin}
 \end{slideAction}
@@ -1264,12 +1277,12 @@ pdfproducer = {Thomas Moulard}
   \end{equation*}
 \end{slideAction}
 
-\fullFrameVideo{src/slides/demo.jpg}{vid/biorob12.mp4}
+\fullFrameVideo{src/slides/demo.jpg}{vid/biorob12.mp4}{}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \againframe<9>{contrib}
 
-\fullFrameVideo{src/slides/door.jpg}{vid/hrp2-opening-door.mp4}
+\fullFrameVideo{src/slides/door.jpg}{vid/hrp2-opening-door.mp4}{}
 
 \begin{slideAction}
   \frametitle{Primitives de mouvement}
