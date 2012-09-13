@@ -114,3 +114,28 @@
     \includegraphics[height=.75\paperheight]{%
       src/slides/perception.jpg}}%
   \begin{frame}}{\end{frame}}
+
+
+\newcommand{\fullFrameVideo}[2]{
+  \begin{frame}[plain, typeset second]
+    \begin{changemargin}{-1cm}{-1cm}
+      \begin{center}
+        \vspace{-0.1cm}
+        \only<second:0>{\centerline{%
+            \includemedia[%
+              addresource=#2,
+              height=.95\paperheight,
+              width=\paperwidth,
+              flashvars={
+                flv=#2
+                &autoPlay=true
+              },
+              activate=pageopen
+            ]{%
+              \includegraphics[height=\paperheight]{%
+                #1}}{player_flv_maxi.swf}%
+        }}
+      \end{center}
+    \end{changemargin}
+  \end{frame}
+}

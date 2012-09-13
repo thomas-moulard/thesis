@@ -94,7 +94,7 @@ pdfproducer = {Thomas Moulard}
 
 % Introduction
 % Animated scheme introducing contributions.
-\begin{frame}
+\begin{frame}[label=contrib]
   \note[item]{Architecture P-D-A}
   \note[item]{Perception: environnement, capteurs}
   \note[item]{Décision: résolution de l'objectif, planification}
@@ -222,9 +222,8 @@ pdfproducer = {Thomas Moulard}
 \end{frame}
 
 \begin{slideDecision}
+  \frametitle{Décision: planification de mouvement}
   \begin{changeleftmargin}{1.1cm}
-    \frametitle{Décision: planification de mouvement}
-
     \note[item]{Deux familles d'algos: planification vs optimisation}
     \note[item]{Contribution porte sur l'optimisation.}
     \note[item]{Planification utilisée pour trouver %
@@ -561,24 +560,11 @@ pdfproducer = {Thomas Moulard}
   \end{center}
 \end{slideDecision}
 
-\begin{frame}[plain]
-  \begin{changemargin}{-1cm}{-1cm}
-    \begin{center}
-      \vspace{-0.1cm}
-      \includemedia[%
-        addresource=vid/karim-multi-contact.mp4,
-        height=\paperheight,
-        width=\paperwidth,
-        flashvars={
-          flv=vid/karim-multi-contact.mp4
-          &autoPlay=true
-      }]{%
-        \includegraphics[height=\paperheight]{%
-          src/slides/multi-014.jpg}}{player_flv_maxi.swf}
-    \end{center}
-  \end{changemargin}
-\end{frame}
+\fullFrameVideo{src/slides/multi-014.jpg}{vid/karim-multi-contact.mp4}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\againframe<8>{contrib}
 
 \begin{slideDecision}
   \frametitle{Génération de mouvements}
@@ -607,6 +593,17 @@ pdfproducer = {Thomas Moulard}
 
 \begin{slideDecision}
   \frametitle{Équilibre (1)}
+
+  \begin{changeleftmargin}{1.1cm}
+    \begin{center}
+      FIXME
+    \end{center}
+  \end{changeleftmargin}
+\end{slideDecision}
+
+
+\begin{slideDecision}
+  \frametitle{Équilibre (2)}
 
   \note[item]{Critère de stabilité.}
   \note[item]{Point virtuel.}
@@ -751,7 +748,7 @@ pdfproducer = {Thomas Moulard}
 \end{slideDecision}
 
 \begin{slideDecision}
-  \frametitle{Équilibre (2)}
+  \frametitle{Équilibre (3)}
 
   \note[item]{La position du ZMP évolue
     en fonction de la position/accélération du CoM
@@ -786,7 +783,7 @@ pdfproducer = {Thomas Moulard}
 \end{slideDecision}
 
 \begin{slideDecision}
-  \frametitle{Équilibre (3)}
+  \frametitle{Équilibre (4)}
 
   \note[item]{Mouvement du CoM sur un plan.}
   \note[item]{Moment cinétique négligé.}
@@ -871,23 +868,7 @@ pdfproducer = {Thomas Moulard}
   \end{changeleftmargin}
 \end{slideAction}
 
-%\maxFrameImageWidth{src/slides/goal-generation.png}
-\begin{frame}[plain]
-  \begin{changemargin}{-1cm}{-1cm}
-    \begin{center}
-      \vspace{-0.1cm}
-      \includemedia[%
-        addresource=vid/humanoids11-lbaudouin3.mp4,
-        height=\paperheight,
-        width=\paperwidth,
-        flashvars={
-          flv=vid/humanoids11-lbaudouin3.mp4
-          &autoPlay=true
-      }]{\includegraphics[height=\paperheight]{%
-          src/slides/over.jpg}}{player_flv_maxi.swf}
-    \end{center}
-  \end{changemargin}
-\end{frame}
+\fullFrameVideo{src/slides/over.jpg}{vid/humanoids11-lbaudouin3.mp4}
 
 \begin{slideAction}
   \frametitle{Motivation}
@@ -1239,42 +1220,12 @@ pdfproducer = {Thomas Moulard}
   \end{equation*}
 \end{slideAction}
 
+\fullFrameVideo{src/slides/demo.jpg}{vid/biorob12.mp4}
 
-\begin{frame}[plain]
-  \begin{changemargin}{-1cm}{-1cm}
-    \begin{center}
-      \vspace{-0.1cm}
-      \includemedia[%
-        addresource=vid/biorob12.mp4,
-        height=\paperheight,
-        width=\paperwidth,
-        flashvars={
-          flv=vid/biorob12.mp4
-          &autoPlay=true
-      }]{%
-        \includegraphics[height=\paperheight]{%
-          src/slides/demo.jpg}}{player_flv_maxi.swf}
-    \end{center}
-  \end{changemargin}
-\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\againframe<9>{contrib}
 
-\begin{frame}[plain]
-  \begin{changemargin}{-1cm}{-1cm}
-    \begin{center}
-      \vspace{-0.1cm}
-      \includemedia[%
-        addresource=vid/hrp2-opening-door.mp4,
-        height=\paperheight,
-        width=\paperwidth,
-        flashvars={
-          flv=vid/hrp2-opening-door.mp4
-          &autoPlay=true
-      }]{%
-        \includegraphics[height=\paperheight]{%
-          src/slides/door.jpg}}{player_flv_maxi.swf}
-    \end{center}
-  \end{changemargin}
-\end{frame}
+\fullFrameVideo{src/slides/door.jpg}{vid/hrp2-opening-door.mp4}
 
 \begin{slideAction}
   \frametitle{Primitives de mouvement}
@@ -1350,7 +1301,8 @@ pdfproducer = {Thomas Moulard}
   }
 \end{slideAction}
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\againframe<10>{contrib}
 
 %\maxFrameImageHeight{src/chap3-primitive-mouvement/calibextrinsic.jpg}
 
