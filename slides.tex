@@ -596,7 +596,42 @@ pdfproducer = {Thomas Moulard}
 
   \begin{changeleftmargin}{1.1cm}
     \begin{center}
-      FIXME
+      \vspace{-1cm}
+      \begin{tikzpicture}[%
+          force/.style={>=latex,
+            draw=Thoughtless,
+            fill=Thoughtless,
+            ultra thick},
+        ]
+        \node (body) {\includegraphics[height=6cm]{%
+            src/slides/walking.pdf}};
+
+        % Floor
+        \draw[ultra thick] ([yshift=5]body.south west)
+        -- ([yshift=5]body.south east);
+
+        % Center of mass.
+        \fill[radius=0.4em] ([xshift=-5.5]body.center) -- ++(0.4,0)%
+        arc [start angle=0,end angle=90] -- ++(0,-0.4)%
+        arc [start angle=270, end angle=180];%
+        \draw[radius=0.4em] (body.center) circle;%
+
+        % Forces
+        \draw[force,->] (body.center)
+        -- ++(0,-1) node[left] {$\mathcal{P}$};
+
+        \draw[force,->] ([xshift=-15,yshift=5]body.south east)
+        -- ++(0,1) node[right] {$f_c$};
+      \end{tikzpicture}
+
+      \begin{equation*}
+        \left(
+        \begin{array}{c}
+          \dot{\mathcal{P}}\\
+          \dot{\sigma}
+        \end{array}
+        \right) = f(m, f_c)
+      \end{equation*}
     \end{center}
   \end{changeleftmargin}
 \end{slideDecision}
