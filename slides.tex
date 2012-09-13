@@ -624,14 +624,23 @@ pdfproducer = {Thomas Moulard}
         -- ++(0,1) node[right] {$f_c$};
       \end{tikzpicture}
 
-      \begin{equation*}
-        \left(
-        \begin{array}{c}
-          \dot{\mathcal{P}}\\
-          \dot{\sigma}
-        \end{array}
-        \right) = f(m, f_c)
-      \end{equation*}
+      \begin{columns}
+        \begin{column}{.5\paperwidth}
+          \begin{equation*}
+            \mathbf{x} = (\dot{x_G}, \dot{y_G}, \dot{z_G})
+          \end{equation*}
+        \end{column}
+        \begin{column}{.5\paperwidth}
+          \begin{equation*}
+            \left(
+            \begin{array}{c}
+              \dot{\mathbf{x}}\\
+              \dot{\sigma}
+            \end{array}
+            \right) = f(m, f_c)
+          \end{equation*}
+        \end{column}
+      \end{columns}
     \end{center}
   \end{changeleftmargin}
 \end{slideDecision}
