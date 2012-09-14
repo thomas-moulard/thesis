@@ -27,7 +27,7 @@
 
 
 \usetikzlibrary{shapes.arrows,chains,positioning,%
-  matrix,patterns,shapes.multipart,positioning,arrows}
+  matrix,patterns,shapes,shapes.multipart,positioning,arrows}
 %\tikzexternalize
 
 \tikzstyle{every picture}+=[remember picture]
@@ -39,6 +39,9 @@
   inner sep=0.2cm,
   rounded corners=2mm]
 
+\tikzstyle{mathbox} = [inner sep=0pt, anchor=base,%
+  node distance=0pt, column sep=0em, thick]
+
 \tikzset{
   template parameter/.style={
         append after command={
@@ -49,9 +52,15 @@
     }
 }
 
-\newcommand{\tikzplaceholder}[1]{\begingroup\shorthandoff{;}\tikz[na] \node[coordinate] (#1) {};\endgroup}
+\tikzset{onslide/.code args={<#1>#2}{%
+  \only<#1>{\pgfkeysalso{#2}}
+}}
 
-\newcommand{\blueoverlay}[2]{\tikz[baseline]{ \node[fill=blue!20,anchor=base,rounded corners=2pt] (#1) {$#2$}; }}
+\newcommand{\tikzplaceholder}[1]{%
+  \begingroup\shorthandoff{;}\tikz[na] \node[coordinate] (#1) {};\endgroup}
+
+\newcommand{\blueoverlay}[2]{%
+  \tikz[baseline]{ \node[fill=blue!20,anchor=base,rounded corners=2pt] (#1) {$#2$}; }}
 
 \usetheme{moulardthesis}
 
@@ -222,7 +231,7 @@ pdfproducer = {Thomas Moulard}
 \end{frame}
 
 \begin{slideDecision}
-  \frametitle{Décision: planification de mouvement}
+  \frametitle{Planification de mouvement}
   \begin{changeleftmargin}{1.1cm}
     \note[item]{Deux familles d'algos: planification vs optimisation}
     \note[item]{Contribution porte sur l'optimisation.}
@@ -584,7 +593,7 @@ pdfproducer = {Thomas Moulard}
   \end{center}
 
   \begin{itemize}
-  \item Limites en couple et vitesse,
+  \item Limites en position, vitesse et couple,
   \item (auto-)collision,
   \item \alert{équilibre}.
   \end{itemize}
@@ -654,7 +663,7 @@ pdfproducer = {Thomas Moulard}
 
   \begin{changeleftmargin}{1.1cm}
     \begin{center}
-      ZMP dans le polygone support $\Rightarrow$ mouvement
+      ZMP dans le polygone support: mouvement
       dynamiquement stable.
 
       \bigskip
@@ -815,15 +824,32 @@ pdfproducer = {Thomas Moulard}
 
   \begin{changeleftmargin}{1.1cm}
   \begin{center}
-    \begin{equation*}
-    \begin{array}{lll}
-    x_{ZMP} &=& x_G -
-    \frac{\dot{\sigma}_y\ +\ m\ z_G\ \ddot{x}_G}{m\ (\ddot{z}_G + g)}\\
-    y_{ZMP} &=& y_G +
-    \frac{\dot{\sigma}_x - m z_G \ddot{y}_G}{m (\ddot{z}_G + g)}
-    \end{array}
-  \end{equation*}
-
+    \only<1-2>{%
+      \begin{equation*}
+        \begin{array}{lll}
+          x_{ZMP} &=& x_G -
+          \frac{\tikz \node[mathbox,%
+              onslide=<2->{cross out,draw=ThoughfulBrick}]{$\dot{\sigma}_y$};
+            + m z_G \ddot{x}_G}{%
+            m (\tikz \node[mathbox,%
+              onslide=<2->{cross out,draw=ThoughfulBrick}] {$\ddot{z}_G$}; + g)}\\
+          y_{ZMP} &=& y_G +
+          \frac{\tikz \node[mathbox,%
+              onslide=<2->{cross out,draw=ThoughfulBrick}] {$\dot{\sigma}_x$}; -
+            m z_G \ddot{y}_G}{%
+            m (\tikz \node[mathbox,%
+              onslide=<2->{cross out,draw=ThoughfulBrick}] {$\ddot{z}_G$}; + g)}
+        \end{array}
+      \end{equation*}
+    }
+    \only<3>{%
+      \begin{equation*}
+        \begin{array}{lll}
+          x_{ZMP} &=& x_G - \frac{z_G}{g} \ddot{x_G}\\
+          y_{ZMP} &=& y_G - \frac{z_G}{g} \ddot{y_G}
+        \end{array}
+      \end{equation*}
+    }
   \end{center}
 
   \begin{description}
@@ -835,34 +861,6 @@ pdfproducer = {Thomas Moulard}
     \item[$g$] Constante de gravité.
   \end{description}
 
-  \end{changeleftmargin}
-\end{slideDecision}
-
-\begin{slideDecision}
-  \frametitle{Équilibre (4)}
-
-  \note[item]{Mouvement du CoM sur un plan.}
-  \note[item]{Moment cinétique négligé.}
-  \note[item]{Temps réel! Solution analytique!}
-  \note[item]{Mais quelle fiabilité?}
-  \note[item]{Stabilisation nécessaire.}
-
-  \begin{changeleftmargin}{1.1cm}
-  \begin{center}
-
-    Modèle linéaire:
-
-    \begin{equation*}
-      z = x - \frac{z_G}{g} \ddot{x}_G
-    \end{equation*}
-
-    \begin{description}
-    \item[$z$] Position du ZMP.
-    \item[$x$] Position du centre de masse.
-    \item[$z_G$] Hauteur constante du centre de masse.
-    \item[$g$] Constante de gravité.
-    \end{description}
-  \end{center}
   \end{changeleftmargin}
 \end{slideDecision}
 
@@ -1095,19 +1093,19 @@ pdfproducer = {Thomas Moulard}
 
       \uncover<2-> {
         \draw[->] (gen.south) -- (corr.north)
-        node [at start,left,font=\tiny,yshift=-0.2cm]
+        node [at start,right,font=\tiny,yshift=-0.2cm]
         {$(\gamma_{\text{pieds}}(t), \gamma_{\text{com}}(t))$};
       }
 
       \uncover<3-> {
         \draw[->] (corr.south) -- (ctrl.north)
-        node [at start,left,font=\tiny,yshift=-0.25cm]
+        node [at start,right,font=\tiny,yshift=-0.25cm]
         {$(\gamma'_{\text{pieds}(t)}, \gamma'_{\text{com}}(t))$};
       }
 
       \uncover<4-> {
         \draw[->] (ctrl.south) --++ (0,-1)
-        node [at start,left,font=\tiny,yshift=-0.25cm]
+        node [at start,right,font=\tiny,yshift=-0.25cm]
         {$\dot{\mathbf{q}}_t$};
       }
 
@@ -1143,11 +1141,12 @@ pdfproducer = {Thomas Moulard}
           },
           xlabel=time ($s$),
           ylabel=$x$ position ($m$),
-          no markers
+          no markers,
+          yticklabel pos=lower
           ]
 
         \addplot[
-          red,
+          Thoughtless, thick,
           dashed
         ] table [
           x expr=(\thisrowno{0}-0)*0.005,
@@ -1156,7 +1155,7 @@ pdfproducer = {Thomas Moulard}
         \addlegendentry{centre de masse}
 
         \addplot[
-          blue,
+          ThoughtYouWere,
           dashed,
         ] table[
           x index=0,
@@ -1167,7 +1166,7 @@ pdfproducer = {Thomas Moulard}
         \addlegendentry{pied gauche}
 
         \addplot[
-          green,
+          Thoughtless2, thick,
           dashed,
         ] table[
           x index=0,
@@ -1178,14 +1177,14 @@ pdfproducer = {Thomas Moulard}
         \addlegendentry{pied droit}
 
         \addplot[
-          red,
+          Thoughtless, thick,
         ] table[
           x expr=(\thisrowno{0}-0)*0.005
         ]{dat/feet_follower_correction-com.dat};
         \addlegendentry{centre de masse (corr.)}
 
         \addplot[
-          blue,
+          ThoughtYouWere, thick,
         ] table[
           x index=0,
           y index=4,
@@ -1194,7 +1193,7 @@ pdfproducer = {Thomas Moulard}
         \addlegendentry{pied gauche (corr.)}
 
         \addplot[
-          green,
+          Thoughtless2, thick,
         ] table[
           x index=0,
           y index=4,
@@ -1209,52 +1208,61 @@ pdfproducer = {Thomas Moulard}
 
       \def\dy{.5}
       % left step planned 1
-      \filldraw[pattern=north east lines] (\dx + 0., \dy + 0.5)
+      \filldraw[pattern=north east lines,%
+        draw=ThoughtYouWere] (\dx + 0., \dy + 0.5)
       rectangle (\dx + 0. + \w, \dy + \h + 0.5);
 
       % left step planned 1 - drift
       \uncover<2-> {
-        \draw[style=solid,color=red,line width=1.25] (\dx, \dy - 0.3 + 0.5)
+        \draw[style=solid,draw=ThoughtYouWere,%
+          line width=1.25] (\dx, \dy - 0.3 + 0.5)
         rectangle (\dx + \w, \dy + \h - 0.3 + 0.5);
       }
 
-      \filldraw[pattern=north east lines] (\dx + 1., \dy + 0.5)
+      \filldraw[pattern=north east lines,%
+        draw=Thoughtless2] (\dx + 1., \dy + 0.5)
       rectangle (\dx + 1. + \w, \dy + \h + 0.5);
-      \draw<2->[style=solid,color=red,line width=1.25] (\dx + 1., \dy - 0.3 + 0.5)
+      \draw<2->[style=solid,color=Thoughtless2,%
+        line width=1.25] (\dx + 1., \dy - 0.3 + 0.5)
       rectangle (\dx + \w + 1., \dy + \h - 0.3 + 0.5);
 
 
       % right step planned 1
-      \filldraw[pattern=north east lines] (\dx + 1., \dy + 3.)
+      \filldraw[pattern=north east lines,%
+        draw=Thoughtless2] (\dx + 1., \dy + 3.)
       rectangle (\dx + 1. + \w, \dy + \h + 3.)
       node [pos=0.5,anchor=north,font=\tiny,yshift=0.75cm] {pas 1};
 
       % right step planned 1 - corrected
       \uncover<2-> {
-        \draw[style=solid,color=red,line width=1.25]
+        \draw[style=solid,draw=Thoughtless2,line width=1.25]
         (\dx + 1., \dy + 3.-0.3)
         rectangle (\dx + 1. + \w, \dy + \h + 3. -0.3);
       }
 
       \uncover<3-> {
-        \draw[style=solid,color=green,line width=1.25] (\dx + 1., \dy + 3.)
+        \draw[style=solid,draw=Thoughtless2,%
+          line width=1.25] (\dx + 1., \dy + 3.)
         rectangle (\dx + 1. + \w, \dy + \h + 3.);
       }
 
       \def\dy{3.}
       % left step planned 2
-      \filldraw[pattern=north east lines] (\dx + 0., \dy + 0.5)
+      \filldraw[pattern=north east lines,%
+        draw=ThoughtYouWere] (\dx + 0., \dy + 0.5)
       rectangle (\dx + 0. + \w, \dy + \h + 0.5)
       node [pos=0.5,anchor=north,font=\tiny,yshift=0.75cm] {pas 2};
 
       \uncover<2-> {
-        \draw[style=solid,color=red,line width=1.25] (\dx, \dy + 0.5 -0.3)
+        \draw[style=solid,draw=ThoughtYouWere,%
+          line width=1.25] (\dx, \dy + 0.5 -0.3)
         rectangle (\dx + \w, \dy + \h + 0.5 -0.3);
       }
 
       % left step planned 2 - corrected
       \uncover<4-> {
-        \draw[style=solid,color=green,line width=1.25] (\dx + 0., \dy + 0.5)
+        \draw[style=solid,draw=ThoughtYouWere,%
+          line width=1.25] (\dx + 0., \dy + 0.5)
       rectangle (\dx + 0. + \w, \dy + \h + 0.5);
       }
     \end{tikzpicture}
