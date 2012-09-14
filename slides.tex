@@ -230,6 +230,326 @@ pdfproducer = {Thomas Moulard}
   \end{changemargin}
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{slideDecision}
+  \frametitle{Génération de mouvements}
+
+  \note[item]{Contraintes = plus de temps de calcul ainsi
+  que possiblement plus de minima locaux.}
+  \note[item]{Exemple: contrainte de distances/évitement d'obstacles.}
+  \note[item]{Travail effectué: représentation du problème pour
+    trouver équilibre entre réalisme, sûreté et tractabilité.}
+
+  \begin{changeleftmargin}{1.1cm}
+  \begin{center}
+    Quelles contraintes?\par
+    \vspace{1cm}
+    \includegraphics[width=.25\paperheight]{src/slides/falling.pdf}%
+    \includegraphics[width=.25\paperheight]{src/slides/burning.pdf}\par
+  \end{center}
+
+  \begin{itemize}
+  \item Limites en position, vitesse et couple,
+  \item (auto-)collision,
+  \item \alert{équilibre}.
+  \end{itemize}
+  \end{changeleftmargin}
+\end{slideDecision}
+
+\begin{slideDecision}
+  \frametitle{Équilibre (1)}
+
+  \begin{changeleftmargin}{1.1cm}
+    \begin{center}
+      \vspace{-1cm}
+      \begin{tikzpicture}[%
+          force/.style={>=latex,
+            draw=Thoughtless,
+            fill=Thoughtless,
+            ultra thick},
+        ]
+        \node (body) {\includegraphics[height=6cm]{%
+            src/slides/walking.pdf}};
+
+        % Floor
+        \draw[ultra thick] ([yshift=5]body.south west)
+        -- ([yshift=5]body.south east);
+
+        % Center of mass.
+        \fill[radius=0.4em] ([xshift=-5.5]body.center) -- ++(0.4,0)%
+        arc [start angle=0,end angle=90] -- ++(0,-0.4)%
+        arc [start angle=270, end angle=180];%
+        \draw[radius=0.4em] (body.center) circle;%
+
+        % Forces
+        \draw[force,->] (body.center)
+        -- ++(0,-1) node[left] {$\mathcal{P}$};
+
+        \draw[force,->] ([xshift=-15,yshift=5]body.south east)
+        -- ++(0,1) node[right] {$f_c$};
+      \end{tikzpicture}
+
+      \begin{columns}
+        \begin{column}{.5\paperwidth}
+          \begin{equation*}
+            \mathbf{x} = (\dot{x_G}, \dot{y_G}, \dot{z_G})
+          \end{equation*}
+        \end{column}
+        \begin{column}{.5\paperwidth}
+          \begin{equation*}
+            \left(
+            \begin{array}{c}
+              \dot{\mathbf{x}}\\
+              \dot{\sigma}
+            \end{array}
+            \right) = f(m, f_c)
+          \end{equation*}
+        \end{column}
+      \end{columns}
+    \end{center}
+  \end{changeleftmargin}
+\end{slideDecision}
+
+
+\begin{slideDecision}
+  \frametitle{Équilibre (2)}
+
+  \note[item]{Critère de stabilité.}
+  \note[item]{Point virtuel.}
+
+  \begin{changeleftmargin}{1.1cm}
+    \begin{center}
+      ZMP dans le polygone support: mouvement
+      dynamiquement stable.
+
+      \bigskip
+
+      \begin{tikzpicture}[%
+          auto,
+          footprint/.style={%
+            rectangle,
+            draw=black,
+            ultra thick,
+            minimum size=6mm,
+            text width=8mm,
+            decoration={brace},
+        },
+        fpLeft/.style={%
+          footprint,
+          decoration={brace, raise=-1.05cm},
+        },
+        fpRight/.style={%
+          footprint,
+          decoration={brace, raise=1.05cm},
+        },
+        supportPolygon/.style={%
+          draw,
+          ultra thick
+        },
+        zmpPoint/.style={%
+          fill=ThoughfulBrick,
+        }]
+
+        \matrix[ampersand replacement=\&,
+          row sep=1cm, column sep=.5cm]{%
+            \uncover<1-6> {
+              \node[fpLeft] (l0) {};
+            } \&
+            \&
+            \uncover<8-> {
+              \node[fpLeft] (l1) {};
+            }\\
+%
+            \uncover<1-2> {
+              \node[fpRight] (r0) {};
+            }\&
+            \uncover<4-10> {
+              \node[fpRight] (r1) {};
+            } \&
+            \&
+            \uncover<12-> {
+              \node[fpRight] (r2) {};
+            }\\
+          };
+
+        \uncover<1>{
+          \draw[zmpPoint] (barycentric cs:l0=1/2,r0=1/2) circle (1mm);
+        }
+        \uncover<2-4>{
+          \draw[zmpPoint] (l0) circle (1mm);
+        }
+        \uncover<5>{
+          \draw[zmpPoint] (barycentric cs:l0=1/2,r1=1/2) circle (1mm);
+        }
+        \uncover<6-8>{
+          \draw[zmpPoint] (r1) circle (1mm);
+        }
+        \uncover<9>{
+          \draw[zmpPoint] (barycentric cs:l1=1/2,r1=1/2) circle (1mm);
+        }
+        \uncover<10-12>{
+          \draw[zmpPoint] (l1) circle (1mm);
+        }
+        \uncover<13>{
+          \draw[zmpPoint] (barycentric cs:l1=1/2,r2=1/2) circle (1mm);
+        }
+        \uncover<14>{
+          \draw[zmpPoint] (r2) circle (1mm);
+        }
+
+
+        % 1/ double support.
+        \uncover<1-2> {
+          \path[supportPolygon]
+          (l0.north west) -- (r0.south west)
+          -- (r0.south east) -- (l0.north east) -- cycle;
+          }
+
+        % 2/ single support, left
+        \uncover<3> {
+          \path[supportPolygon]
+          (l0.north west) -- (l0.south west)
+          -- (l0.south east) -- (l0.north east) -- cycle;
+        }
+
+        % 3/ double support lr
+        \uncover<4-6> {
+          \path[supportPolygon]
+          (l0.north west) -- (l0.north east)
+          -- (r1.north east) -- (r1.south east) -- (r1.south west)
+          -- (l0.south west) -- cycle;
+        }
+
+        % 4/ single support, right
+        \uncover<7> {
+          \path[supportPolygon]
+          (r1.north west) -- (r1.south west)
+          -- (r1.south east) -- (r1.north east) -- cycle;
+        }
+
+        % 5/ double support rl
+        \uncover<8-10> {
+          \path[supportPolygon]
+          (l1.north west) -- (l1.north east)
+          -- (l1.south east)
+          -- (r1.south east) -- (r1.south west)
+          -- (r1.north west) -- (l1.north west)
+          -- cycle;
+        }
+
+        % 6/ single support, left
+        \uncover<11> {
+          \path[supportPolygon]
+          (l1.north west) -- (l1.south west)
+          -- (l1.south east) -- (l1.north east) -- cycle;
+        }
+
+        % 3/ double support lr
+        \uncover<12-14> {
+          \path[supportPolygon]
+          (l1.north west) -- (l1.north east);
+          \path[supportPolygon]
+          (l1.north west) -- (l1.south west);
+
+
+          \path[supportPolygon]
+          (r2.south west) -- (r2.south east);
+          \path[supportPolygon]
+          (r2.south east) -- (r2.north east);
+
+          \path[supportPolygon]
+          (l1.south west) -- (r2.south west);
+          \path[supportPolygon]
+          (l1.north east) -- (r2.north east);
+        }
+      \end{tikzpicture}
+
+    \end{center}
+  \end{changeleftmargin}
+\end{slideDecision}
+
+\begin{slideDecision}
+  \frametitle{Équilibre (3)}
+
+  \note[item]{La position du ZMP évolue
+    en fonction de la position/accélération du CoM
+    ainsi que de la dérivée du moment cinétique.}
+  \note[item]{On veut l'inverse: spécificer la trajectoire du ZMP et
+    en déduire la trajectoire de CoM.}
+  \note[item]{En temps réel! Ici pas le cas.}
+
+  \begin{changeleftmargin}{1.1cm}
+  \begin{center}
+    \only<1-2>{%
+      \begin{equation*}
+        \begin{array}{lll}
+          x_{ZMP} &=& x_G -
+          \frac{\tikz \node[mathbox,%
+              onslide=<2->{cross out,draw=ThoughfulBrick}]{$\dot{\sigma}_y$};
+            + m z_G \ddot{x}_G}{%
+            m (\tikz \node[mathbox,%
+              onslide=<2->{cross out,draw=ThoughfulBrick}] {$\ddot{z}_G$}; + g)}\\
+          y_{ZMP} &=& y_G +
+          \frac{\tikz \node[mathbox,%
+              onslide=<2->{cross out,draw=ThoughfulBrick}] {$\dot{\sigma}_x$}; -
+            m z_G \ddot{y}_G}{%
+            m (\tikz \node[mathbox,%
+              onslide=<2->{cross out,draw=ThoughfulBrick}] {$\ddot{z}_G$}; + g)}
+        \end{array}
+      \end{equation*}
+    }
+    \only<3>{%
+      \begin{equation*}
+        \begin{array}{lll}
+          x_{ZMP} &=& x_G - \frac{z_G}{g} \ddot{x_G}\\
+          y_{ZMP} &=& y_G - \frac{z_G}{g} \ddot{y_G}
+        \end{array}
+      \end{equation*}
+    }
+  \end{center}
+
+  \begin{description}
+    \item[$(x_G, y_G, z_G)$]~\\
+      Position du centre de masse (CoM).
+    \item[$(\sigma_x, \sigma_y)$]~\\
+      Moment cinétique autour du centre de masse.
+    \item[$m$] Masse du robot.
+    \item[$g$] Constante de gravité.
+  \end{description}
+
+  \end{changeleftmargin}
+\end{slideDecision}
+
+\begin{slideDecision}
+  \frametitle{Génération de mouvements}
+
+  \note[item]{Détailler les étapes.}
+  \note[item]{Trajectoire corps complet dans la planif: pas de
+    comportement réactif.}
+
+  \begin{changeleftmargin}{1.5cm}
+  \begin{center}
+    \begin{enumerate}
+      \item Génération d'une pile de pas.
+      \item Génération d'une trajectoire de ZMP.
+      \item Génération de la trajectoire de centre de masse
+        correspondante.
+      \item Génération des trajectoires de pieds.
+    \end{enumerate}
+
+    \bigskip
+
+    \alert{Et la trajectoire corps complet?}
+  \end{center}
+  \end{changeleftmargin}
+\end{slideDecision}
+
+\maxFrameImageWidth{src/chap3-primitive-mouvement/footsteps1.jpg}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\againframe<7>{contrib}
 \begin{slideDecision}
   \frametitle{Planification de mouvement}
   \begin{changeleftmargin}{1.1cm}
@@ -576,327 +896,11 @@ pdfproducer = {Thomas Moulard}
 
 \fullFrameVideo{src/slides/multi-014.jpg}{vid/karim-multi-contact.mp4}{}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \againframe<8>{contrib}
 
-\begin{slideDecision}
-  \frametitle{Génération de mouvements}
-
-  \note[item]{Contraintes = plus de temps de calcul ainsi
-  que possiblement plus de minima locaux.}
-  \note[item]{Exemple: contrainte de distances/évitement d'obstacles.}
-  \note[item]{Travail effectué: représentation du problème pour
-    trouver équilibre entre réalisme, sûreté et tractabilité.}
-
-  \begin{changeleftmargin}{1.1cm}
-  \begin{center}
-    Quelles contraintes?\par
-    \vspace{1cm}
-    \includegraphics[width=.25\paperheight]{src/slides/falling.pdf}%
-    \includegraphics[width=.25\paperheight]{src/slides/burning.pdf}\par
-  \end{center}
-
-  \begin{itemize}
-  \item Limites en position, vitesse et couple,
-  \item (auto-)collision,
-  \item \alert{équilibre}.
-  \end{itemize}
-  \end{changeleftmargin}
-\end{slideDecision}
-
-\begin{slideDecision}
-  \frametitle{Équilibre (1)}
-
-  \begin{changeleftmargin}{1.1cm}
-    \begin{center}
-      \vspace{-1cm}
-      \begin{tikzpicture}[%
-          force/.style={>=latex,
-            draw=Thoughtless,
-            fill=Thoughtless,
-            ultra thick},
-        ]
-        \node (body) {\includegraphics[height=6cm]{%
-            src/slides/walking.pdf}};
-
-        % Floor
-        \draw[ultra thick] ([yshift=5]body.south west)
-        -- ([yshift=5]body.south east);
-
-        % Center of mass.
-        \fill[radius=0.4em] ([xshift=-5.5]body.center) -- ++(0.4,0)%
-        arc [start angle=0,end angle=90] -- ++(0,-0.4)%
-        arc [start angle=270, end angle=180];%
-        \draw[radius=0.4em] (body.center) circle;%
-
-        % Forces
-        \draw[force,->] (body.center)
-        -- ++(0,-1) node[left] {$\mathcal{P}$};
-
-        \draw[force,->] ([xshift=-15,yshift=5]body.south east)
-        -- ++(0,1) node[right] {$f_c$};
-      \end{tikzpicture}
-
-      \begin{columns}
-        \begin{column}{.5\paperwidth}
-          \begin{equation*}
-            \mathbf{x} = (\dot{x_G}, \dot{y_G}, \dot{z_G})
-          \end{equation*}
-        \end{column}
-        \begin{column}{.5\paperwidth}
-          \begin{equation*}
-            \left(
-            \begin{array}{c}
-              \dot{\mathbf{x}}\\
-              \dot{\sigma}
-            \end{array}
-            \right) = f(m, f_c)
-          \end{equation*}
-        \end{column}
-      \end{columns}
-    \end{center}
-  \end{changeleftmargin}
-\end{slideDecision}
-
-
-\begin{slideDecision}
-  \frametitle{Équilibre (2)}
-
-  \note[item]{Critère de stabilité.}
-  \note[item]{Point virtuel.}
-
-  \begin{changeleftmargin}{1.1cm}
-    \begin{center}
-      ZMP dans le polygone support: mouvement
-      dynamiquement stable.
-
-      \bigskip
-
-      \begin{tikzpicture}[%
-          auto,
-          footprint/.style={%
-            rectangle,
-            draw=black,
-            ultra thick,
-            minimum size=6mm,
-            text width=8mm,
-            decoration={brace},
-        },
-        fpLeft/.style={%
-          footprint,
-          decoration={brace, raise=-1.05cm},
-        },
-        fpRight/.style={%
-          footprint,
-          decoration={brace, raise=1.05cm},
-        },
-        supportPolygon/.style={%
-          draw,
-          ultra thick
-        },
-        zmpPoint/.style={%
-          fill=ThoughfulBrick,
-        }]
-
-        \matrix[ampersand replacement=\&,
-          row sep=1cm, column sep=.5cm]{%
-            \uncover<1-6> {
-              \node[fpLeft] (l0) {};
-            } \&
-            \&
-            \uncover<8-> {
-              \node[fpLeft] (l1) {};
-            }\\
-%
-            \uncover<1-2> {
-              \node[fpRight] (r0) {};
-            }\&
-            \uncover<4-10> {
-              \node[fpRight] (r1) {};
-            } \&
-            \&
-            \uncover<12-> {
-              \node[fpRight] (r2) {};
-            }\\
-          };
-
-        \uncover<1>{
-          \draw[zmpPoint] (barycentric cs:l0=1/2,r0=1/2) circle (1mm);
-        }
-        \uncover<2-4>{
-          \draw[zmpPoint] (l0) circle (1mm);
-        }
-        \uncover<5>{
-          \draw[zmpPoint] (barycentric cs:l0=1/2,r1=1/2) circle (1mm);
-        }
-        \uncover<6-8>{
-          \draw[zmpPoint] (r1) circle (1mm);
-        }
-        \uncover<9>{
-          \draw[zmpPoint] (barycentric cs:l1=1/2,r1=1/2) circle (1mm);
-        }
-        \uncover<10-12>{
-          \draw[zmpPoint] (l1) circle (1mm);
-        }
-        \uncover<13>{
-          \draw[zmpPoint] (barycentric cs:l1=1/2,r2=1/2) circle (1mm);
-        }
-        \uncover<14>{
-          \draw[zmpPoint] (r2) circle (1mm);
-        }
-
-
-        % 1/ double support.
-        \uncover<1-2> {
-          \path[supportPolygon]
-          (l0.north west) -- (r0.south west)
-          -- (r0.south east) -- (l0.north east) -- cycle;
-          }
-
-        % 2/ single support, left
-        \uncover<3> {
-          \path[supportPolygon]
-          (l0.north west) -- (l0.south west)
-          -- (l0.south east) -- (l0.north east) -- cycle;
-        }
-
-        % 3/ double support lr
-        \uncover<4-6> {
-          \path[supportPolygon]
-          (l0.north west) -- (l0.north east)
-          -- (r1.north east) -- (r1.south east) -- (r1.south west)
-          -- (l0.south west) -- cycle;
-        }
-
-        % 4/ single support, right
-        \uncover<7> {
-          \path[supportPolygon]
-          (r1.north west) -- (r1.south west)
-          -- (r1.south east) -- (r1.north east) -- cycle;
-        }
-
-        % 5/ double support rl
-        \uncover<8-10> {
-          \path[supportPolygon]
-          (l1.north west) -- (l1.north east)
-          -- (l1.south east)
-          -- (r1.south east) -- (r1.south west)
-          -- (r1.north west) -- (l1.north west)
-          -- cycle;
-        }
-
-        % 6/ single support, left
-        \uncover<11> {
-          \path[supportPolygon]
-          (l1.north west) -- (l1.south west)
-          -- (l1.south east) -- (l1.north east) -- cycle;
-        }
-
-        % 3/ double support lr
-        \uncover<12-14> {
-          \path[supportPolygon]
-          (l1.north west) -- (l1.north east);
-          \path[supportPolygon]
-          (l1.north west) -- (l1.south west);
-
-
-          \path[supportPolygon]
-          (r2.south west) -- (r2.south east);
-          \path[supportPolygon]
-          (r2.south east) -- (r2.north east);
-
-          \path[supportPolygon]
-          (l1.south west) -- (r2.south west);
-          \path[supportPolygon]
-          (l1.north east) -- (r2.north east);
-        }
-      \end{tikzpicture}
-
-    \end{center}
-  \end{changeleftmargin}
-\end{slideDecision}
-
-\begin{slideDecision}
-  \frametitle{Équilibre (3)}
-
-  \note[item]{La position du ZMP évolue
-    en fonction de la position/accélération du CoM
-    ainsi que de la dérivée du moment cinétique.}
-  \note[item]{On veut l'inverse: spécificer la trajectoire du ZMP et
-    en déduire la trajectoire de CoM.}
-  \note[item]{En temps réel! Ici pas le cas.}
-
-  \begin{changeleftmargin}{1.1cm}
-  \begin{center}
-    \only<1-2>{%
-      \begin{equation*}
-        \begin{array}{lll}
-          x_{ZMP} &=& x_G -
-          \frac{\tikz \node[mathbox,%
-              onslide=<2->{cross out,draw=ThoughfulBrick}]{$\dot{\sigma}_y$};
-            + m z_G \ddot{x}_G}{%
-            m (\tikz \node[mathbox,%
-              onslide=<2->{cross out,draw=ThoughfulBrick}] {$\ddot{z}_G$}; + g)}\\
-          y_{ZMP} &=& y_G +
-          \frac{\tikz \node[mathbox,%
-              onslide=<2->{cross out,draw=ThoughfulBrick}] {$\dot{\sigma}_x$}; -
-            m z_G \ddot{y}_G}{%
-            m (\tikz \node[mathbox,%
-              onslide=<2->{cross out,draw=ThoughfulBrick}] {$\ddot{z}_G$}; + g)}
-        \end{array}
-      \end{equation*}
-    }
-    \only<3>{%
-      \begin{equation*}
-        \begin{array}{lll}
-          x_{ZMP} &=& x_G - \frac{z_G}{g} \ddot{x_G}\\
-          y_{ZMP} &=& y_G - \frac{z_G}{g} \ddot{y_G}
-        \end{array}
-      \end{equation*}
-    }
-  \end{center}
-
-  \begin{description}
-    \item[$(x_G, y_G, z_G)$]~\\
-      Position du centre de masse (CoM).
-    \item[$(\sigma_x, \sigma_y)$]~\\
-      Moment cinétique autour du centre de masse.
-    \item[$m$] Masse du robot.
-    \item[$g$] Constante de gravité.
-  \end{description}
-
-  \end{changeleftmargin}
-\end{slideDecision}
-
-\begin{slideDecision}
-  \frametitle{Génération de mouvements}
-
-  \note[item]{Détailler les étapes.}
-  \note[item]{Trajectoire corps complet dans la planif: pas de
-    comportement réactif.}
-
-  \begin{changeleftmargin}{1.5cm}
-  \begin{center}
-    \begin{enumerate}
-      \item Génération d'une pile de pas.
-      \item Génération d'une trajectoire de ZMP.
-      \item Génération de la trajectoire de centre de masse
-        correspondante.
-      \item Génération des trajectoires de pieds.
-    \end{enumerate}
-
-    \bigskip
-
-    \alert{Et la trajectoire corps complet?}
-  \end{center}
-  \end{changeleftmargin}
-\end{slideDecision}
-
-\maxFrameImageWidth{src/chap3-primitive-mouvement/footsteps1.jpg}
-
 \begin{slideAction}
-  \frametitle{Contrôleur polyvalent (2)}
+  \frametitle{Contrôleur polyvalent}
 
   \note[item]{Deux types de tâches. Point6D et CoM.}
   \note[item]{Peut également ajouter butées, vitesse
@@ -1405,6 +1409,8 @@ pdfproducer = {Thomas Moulard}
 \end{slidePerception}
 
 \maxFrameImageHeight{src/chap4-integration/shelf.png}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{slidePerception}
   \frametitle{Contributions logicielles (1)}
