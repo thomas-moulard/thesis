@@ -318,13 +318,9 @@ pdfproducer = {Thomas Moulard}
 
     \begin{center}
       \footnotesize
-    \begin{tikzpicture}[%
-        y=.1\paperheight,
-        auto]
+    \begin{tikzpicture}[auto]
 
       \begin{interface}[text width=7cm]{Fonction}{0,0}
-        %\attribute{+ taille de l'espace d'entrée: entier}
-        %\attribute{+ taille de l'espace de sortie: entier}
         \operation{+ calcul}
       \end{interface}
 
@@ -334,9 +330,14 @@ pdfproducer = {Thomas Moulard}
       \end{interface}
 
       \begin{interface}[text width=7cm]{Fonction dérivable deux fois}{0,-6}
-        \inherit{Fonction dérivable}
+        %\inherit{Fonction dérivable}
         \operation{+ hessien}
       \end{interface}
+
+      \path[draw=\umldrawcolor, open triangle 45-, ultra thick]
+      (Fonction.south) -- (Fonction dérivable.north);
+      \path[draw=\umldrawcolor, open triangle 45-, ultra thick]
+      (Fonction dérivable.south) -- (Fonction dérivable deux fois.north);
     \end{tikzpicture}
     \end{center}
   \end{changeleftmargin}
@@ -351,9 +352,7 @@ pdfproducer = {Thomas Moulard}
 
     \begin{center}
       \footnotesize
-    \begin{tikzpicture}[%
-        y=.1\paperheight,
-        auto]
+    \begin{tikzpicture}[auto]
 
       \begin{interface}[text width=7cm]{Fonction dérivable deux fois}{0,0}
         \operation{+ hessien (vecteur, entier): vecteur}
@@ -361,14 +360,19 @@ pdfproducer = {Thomas Moulard}
 
       \begin{interface}[template parameter=n,text width=7cm]{%
           Fonction dérivable ``n'' fois}{0,-3}
-        \inherit{Fonction dérivable deux fois}
+        %\inherit{Fonction dérivable deux fois}
         \operation{+ dérivée}
       \end{interface}
 
-%      \path[umlcd style inherit line, ultra thick]
-%      (Fonction dérivable ``n'' fois.south) + (0,-0.1) --
-%      (Fonction dérivable ``n'' fois.south) + (-0.1,0) --
-%      (Fonction dérivable ``n'' fois.south) + (0,0.1);
+      \path[draw=\umldrawcolor, open triangle 45-, ultra thick]
+      (Fonction dérivable deux fois.south) node[below right] {$n=3$}
+      -- (Fonction dérivable ``n'' fois.north);
+
+      \path[draw=\umldrawcolor, open triangle 45-, ultra thick]
+      (Fonction dérivable ``n'' fois.south)
+      -- ++(0, -1)
+      -- ++(-1, 0) node[below] {$n > 3$}
+      -- ++(0, 1);
 
     \end{tikzpicture}
     \end{center}
@@ -388,17 +392,15 @@ pdfproducer = {Thomas Moulard}
 
     \begin{center}
       \footnotesize
-    \begin{tikzpicture}[%
-        y=.1\paperheight,
-        auto]
+    \begin{tikzpicture}[auto]
 
-      \begin{class}[template parameter={F,$C_1$,$\dotsc$,$C_n$},%
+      \begin{interface}[template parameter={F,$C_1$,$\dotsc$,$C_n$},%
           text width=7cm]{Problème}{0,0}
         \attribute{+ estimation initiale: vecteur}
         \attribute{+ bornes: (double, double)[*]}
         \attribute{+ coût: \texttt{$F$}}
         \attribute{+ contraintes: (\texttt{$C_i$}, entier, entier)[*]}
-      \end{class}
+      \end{interface}
     \end{tikzpicture}
 
     \begin{equation*}
@@ -425,13 +427,13 @@ pdfproducer = {Thomas Moulard}
 
       \node[na] at (5,-1) (P) {P};
 
-      \begin{class}[%
+      \begin{interface}[%
           template parameter={Problème<$F$,$C_1$,$\dotsc$,$C_n$>},
           text width=7cm]{Solveur}{0,0}
-        \inherit{P}
+        %\inherit{P}
         \attribute{+ problème: $\text{Problème}<F, C_1, \dotsc, C_n>$}
         \operation{+ résous (): vecteur}
-      \end{class}
+      \end{interface}
 
       \composition{Solveur}{}{1}{P}
     \end{tikzpicture}
@@ -463,12 +465,15 @@ pdfproducer = {Thomas Moulard}
 
       \node[na] at (0,0) (F) {F};
 
-        \begin{class}[template parameter=F,%
+        \begin{interface}[template parameter=F,%
             text width=7cm]{DifférencesFinies}{0,-2}
-          \inherit{F}
+          %\inherit{F}
           \attribute{- fonction: F}
           \operation{+ jacobien (vecteur): vecteur}
-        \end{class}
+        \end{interface}
+
+      \path[draw=\umldrawcolor, open triangle 45-, ultra thick]
+      (F.south) -- (DifférencesFinies.north);
       \end{tikzpicture}
     \end{center}
     \bigskip
@@ -1427,7 +1432,7 @@ pdfproducer = {Thomas Moulard}
         ROS: contrôle, capteurs (IMU, vision), planification.
       \item Amélioration des bibliothèques bas-niveau et de
         l'architecture logicielles du planificateur de pas (HPP).
-      \item C++: \~ 100k lignes modifiées / Python: \~ 5k lignes
+      \item C++: \textasciitilde{} 100k lignes modifiées / Python: \textasciitilde{} 5k lignes
         modifiées (source: Ohloh.net).
     \end{itemize}
 
