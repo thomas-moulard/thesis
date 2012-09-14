@@ -687,86 +687,100 @@ pdfproducer = {Thomas Moulard}
 
         \matrix[ampersand replacement=\&,
           row sep=1cm, column sep=.5cm]{%
-            \uncover<1-3> {
+            \uncover<1-6> {
               \node[fpLeft] (l0) {};
             } \&
             \&
-            \uncover<5-> {
+            \uncover<8-> {
               \node[fpLeft] (l1) {};
             }\\
 %
-            \uncover<1> {
+            \uncover<1-2> {
               \node[fpRight] (r0) {};
             }\&
-            \uncover<3-5> {
+            \uncover<4-10> {
               \node[fpRight] (r1) {};
             } \&
             \&
-            \uncover<7-> {
+            \uncover<12-> {
               \node[fpRight] (r2) {};
             }\\
           };
 
+        \uncover<1>{
+          \draw[zmpPoint] (barycentric cs:l0=1/2,r0=1/2) circle (1mm);
+        }
+        \uncover<2-4>{
+          \draw[zmpPoint] (l0) circle (1mm);
+        }
+        \uncover<5>{
+          \draw[zmpPoint] (barycentric cs:l0=1/2,r1=1/2) circle (1mm);
+        }
+        \uncover<6-8>{
+          \draw[zmpPoint] (r1) circle (1mm);
+        }
+        \uncover<9>{
+          \draw[zmpPoint] (barycentric cs:l1=1/2,r1=1/2) circle (1mm);
+        }
+        \uncover<10-12>{
+          \draw[zmpPoint] (l1) circle (1mm);
+        }
+        \uncover<13>{
+          \draw[zmpPoint] (barycentric cs:l1=1/2,r2=1/2) circle (1mm);
+        }
+        \uncover<14>{
+          \draw[zmpPoint] (r2) circle (1mm);
+        }
+
+
         % 1/ double support.
-        \uncover<1> {
+        \uncover<1-2> {
           \path[supportPolygon]
           (l0.north west) -- (r0.south west)
           -- (r0.south east) -- (l0.north east) -- cycle;
-
-          \draw[zmpPoint] (barycentric cs:l0=1/2,r0=1/2) circle (1mm);
-        }
+          }
 
         % 2/ single support, left
-        \uncover<2> {
+        \uncover<3> {
           \path[supportPolygon]
           (l0.north west) -- (l0.south west)
           -- (l0.south east) -- (l0.north east) -- cycle;
-
-          \draw[zmpPoint] (l0) circle (1mm);
         }
 
         % 3/ double support lr
-        \uncover<3> {
+        \uncover<4-6> {
           \path[supportPolygon]
           (l0.north west) -- (l0.north east)
           -- (r1.north east) -- (r1.south east) -- (r1.south west)
           -- (l0.south west) -- cycle;
-
-          \draw[zmpPoint] (barycentric cs:l0=1/2,r1=1/2) circle (1mm);
         }
 
         % 4/ single support, right
-        \uncover<4> {
+        \uncover<7> {
           \path[supportPolygon]
           (r1.north west) -- (r1.south west)
           -- (r1.south east) -- (r1.north east) -- cycle;
-
-          \draw[zmpPoint] (r1) circle (1mm);
         }
 
         % 5/ double support rl
-        \uncover<5> {
+        \uncover<8-10> {
           \path[supportPolygon]
           (l1.north west) -- (l1.north east)
           -- (l1.south east)
           -- (r1.south east) -- (r1.south west)
           -- (r1.north west) -- (l1.north west)
           -- cycle;
-
-          \draw[zmpPoint] (barycentric cs:l1=1/2,r1=1/2) circle (1mm);
         }
 
         % 6/ single support, left
-        \uncover<6> {
+        \uncover<11> {
           \path[supportPolygon]
           (l1.north west) -- (l1.south west)
           -- (l1.south east) -- (l1.north east) -- cycle;
-
-          \draw[zmpPoint] (l1) circle (1mm);
         }
 
         % 3/ double support lr
-        \uncover<7> {
+        \uncover<12-14> {
           \path[supportPolygon]
           (l1.north west) -- (l1.north east);
           \path[supportPolygon]
@@ -782,8 +796,6 @@ pdfproducer = {Thomas Moulard}
           (l1.south west) -- (r2.south west);
           \path[supportPolygon]
           (l1.north east) -- (r2.north east);
-
-          \draw[zmpPoint] (barycentric cs:l1=1/2,r2=1/2) circle (1mm);
         }
       \end{tikzpicture}
 
