@@ -1373,8 +1373,6 @@ pdfproducer = {Thomas Moulard}
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \againframe<10>{contrib}
 
-%\maxFrameImageHeight{src/chap3-primitive-mouvement/calibextrinsic.jpg}
-
 \begin{slidePerception}
   \frametitle{Systèmes de localisation}
 
@@ -1394,6 +1392,46 @@ pdfproducer = {Thomas Moulard}
 \end{slidePerception}
 
 \maxFrameImageHeight{src/chap4-integration/shelf.png}
+
+\begin{slidePerception}
+  \frametitle{Contributions logicielles (1)}
+
+  \begin{changeleftmargin}{1.1cm}
+    \begin{itemize}
+      \item Interface Python pour le contrôle robotique.
+      \item Module Python pour la manipulation de modèles de robots.
+      \item Interfaces pour la représentation des problèmes de marche.
+      \item Formalisation de la représentation des robots humanoïdes.
+      \item Intégration d'un algorithme de suivi dans un composant
+        ROS, du système de capture de mouvement.
+      \item Participation au portage du modèle des robots HRP-2 et
+        Romeo en URDF.
+    \end{itemize}
+  \end{changeleftmargin}
+\end{slidePerception}
+
+\begin{slidePerception}
+  \frametitle{Contributions logicielles (2)}
+
+  \begin{changeleftmargin}{1.1cm}
+    \begin{itemize}
+      \item Portage de l'architecture complète du robot HRP-2 sous
+        ROS: contrôle, capteurs (IMU, vision), planification.
+      \item Amélioration des bibliothèques bas-niveau et de
+        l'architecture logicielles du planificateur de pas (HPP).
+      \item C++: \~100k lignes modifiées / Python: \~5k lignes
+        modifiées (Ohloh).
+    \end{itemize}
+
+    \bigskip
+
+    \includegraphics[height=.5cm]{src/slides/idea.pdf}~%
+    Coordinate Frames for Humanoid Robots, REP 120.
+
+  \end{changeleftmargin}
+\end{slidePerception}
+
+\maxFrameImageHeight{src/chap3-primitive-mouvement/calibextrinsic.jpg}
 
 \begin{frame}
   \frametitle{Conclusion}
