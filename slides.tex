@@ -1372,7 +1372,7 @@ pdfproducer = {Thomas Moulard}
   \end{changeleftmargin}
   \vbox{%
     \tikz \node[state,
-      color=ThoughtBySome,fill=Thoughtless2] {\tiny{Asservissement}};
+      color=ThoughtBySome,fill=Thoughtless2] {\tiny{Amers}};
     \tikz \node[state] {\tiny{Tâche}};
   }
 \end{slideAction}
@@ -1406,15 +1406,12 @@ pdfproducer = {Thomas Moulard}
   \frametitle{Contributions logicielles (1)}
 
   \begin{changeleftmargin}{1.1cm}
+    Stacks ROS:
     \begin{itemize}
-      \item Interface Python pour le contrôle robotique.
-      \item Module Python pour la manipulation de modèles de robots.
-      \item Interfaces pour la représentation des problèmes de marche.
-      \item Formalisation de la représentation des robots humanoïdes.
-      \item Intégration d'un algorithme de suivi dans un composant
-        ROS, du système de capture de mouvement.
-      \item Participation au portage du modèle des robots HRP-2 et
-        Romeo en URDF.
+    \item ViSP Tracker. BSD.
+    \item Motion Analysis Mocap. BSD.
+    \item RCPDF. BSD.
+    \item RobotModelPy. BSD.
     \end{itemize}
   \end{changeleftmargin}
 \end{slidePerception}
@@ -1428,8 +1425,9 @@ pdfproducer = {Thomas Moulard}
         ROS: contrôle, capteurs (IMU, vision), planification.
       \item Amélioration des bibliothèques bas-niveau et de
         l'architecture logicielles du planificateur de pas (HPP).
-      \item C++: \textasciitilde{} 100k lignes modifiées / Python: \textasciitilde{} 5k lignes
-        modifiées (source: Ohloh.net).
+      \item C++: \textasciitilde{} 100k lignes modifiées\\
+        Python: \textasciitilde{} 5k lignes
+        modifiées.
     \end{itemize}
 
     \bigskip
