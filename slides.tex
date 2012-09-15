@@ -1097,7 +1097,7 @@ pdfproducer = {Thomas Moulard}
       \uncover<3-> {
         \draw[->] (loc.west) -- (corr.east)
         node [at start,left,font=\tiny,yshift=0.2cm]
-        {$\hat{\mathbf{x}}_t$};
+        {$\hat{\mathbf{x}}(t)$};
       }
 
       \uncover<2-> {
@@ -1115,7 +1115,7 @@ pdfproducer = {Thomas Moulard}
       \uncover<4-> {
         \draw[->] (ctrl.south) --++ (0,-1)
         node [at start,right,font=\tiny,yshift=-0.25cm]
-        {$\dot{\mathbf{q}}_t$};
+        {$\dot{\mathbf{q}}(t)$};
       }
 
       \draw[<-] (gen.north) --++ (0,1) node [left,font=\tiny,yshift=-0.25cm]
@@ -1148,8 +1148,8 @@ pdfproducer = {Thomas Moulard}
             rounded corners=2pt,
             draw=white
           },
-          xlabel=time ($s$),
-          ylabel=$x$ position ($m$),
+          xlabel=temps ($s$),
+          ylabel=position en $x$ ($m$),
           no markers,
           yticklabel pos=lower
           ]
@@ -1243,11 +1243,11 @@ pdfproducer = {Thomas Moulard}
       node [pos=0.5,anchor=north,font=\tiny,yshift=0.75cm] {pas 1};
 
       % right step planned 1 - corrected
-      \uncover<2-> {
-        \draw[style=solid,draw=Thoughtless2,line width=1.25]
-        (\dx + 1., \dy + 3.-0.3)
-        rectangle (\dx + 1. + \w, \dy + \h + 3. -0.3);
-      }
+%      \uncover<2-> {
+%        \draw[style=solid,draw=Thoughtless2,line width=1.25]
+%        (\dx + 1., \dy + 3.-0.3)
+%        rectangle (\dx + 1. + \w, \dy + \h + 3. -0.3);
+%      }
 
       \uncover<3-> {
         \draw[style=solid,draw=Thoughtless2,%
@@ -1261,12 +1261,6 @@ pdfproducer = {Thomas Moulard}
         draw=ThoughtYouWere] (\dx + 0., \dy + 0.5)
       rectangle (\dx + 0. + \w, \dy + \h + 0.5)
       node [pos=0.5,anchor=north,font=\tiny,yshift=0.75cm] {pas 2};
-
-      \uncover<2-> {
-        \draw[style=solid,draw=ThoughtYouWere,%
-          line width=1.25] (\dx, \dy + 0.5 -0.3)
-        rectangle (\dx + \w, \dy + \h + 0.5 -0.3);
-      }
 
       % left step planned 2 - corrected
       \uncover<4-> {
@@ -1285,25 +1279,21 @@ pdfproducer = {Thomas Moulard}
   \note[item]{Opérateur linéaire.}
   \note[item]{Ici delta $E^2$.}
 
-  \begin{equation*}
-    \mathbf{z} = \mathbf{c} - \frac{z_c}{g} \ddot{\mathbf{c}}
-  \end{equation*}
-
-  \begin{equation*}
-    \mathbf{c}^{(n)}(t) =
-    \underbrace{\scriptstyle \cosh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{V} +
-      \sinh(\sqrt{\frac{g}{z_c}}.t) . \mathbf{W} +
-      \mathbf{r}(t)}_{\mathbf{c}(t) \in \mathbb{R}^2} + \sum_{i=1}^n \Delta^{t_i}(t)
-  \end{equation*}
-
-  \begin{center}
-    $\mathbf{V}$, $\mathbf{W}$ déterminent la position et vitesse
-    initiale.
-  \end{center}
-
-  \begin{equation*}
-    \forall t \in \mathbb{R}, \Delta^t(0) = \dot{\Delta}^t(0) = 0
-  \end{equation*}
+  \begin{changeleftmargin}{1.1cm}
+    \begin{itemize}
+    \item Utilise le modèle linéaire.
+    \item Adapté à une correction locale.
+    \item Solution analytique temps réel.
+    \end{itemize}
+    
+    \begin{equation*}
+      \mathbf{z} = \mathbf{c} - \frac{z_c}{g} \ddot{\mathbf{c}}
+    \end{equation*}
+    
+    \begin{equation*}
+      \mathbf{c}^{(n)}(t) = \mathbf{c}(t)  + \sum_{i=1}^n \Delta^{t_i}(t)
+    \end{equation*}
+  \end{changeleftmargin}
 \end{slideAction}
 
 \fullFrameVideo{src/slides/demo.jpg}{vid/biorob12.mp4}{}
@@ -1450,6 +1440,7 @@ pdfproducer = {Thomas Moulard}
   \end{changeleftmargin}
 \end{slidePerception}
 
+
 \maxFrameImageHeight{src/chap3-primitive-mouvement/calibextrinsic.jpg}
 
 \begin{frame}
@@ -1479,6 +1470,17 @@ pdfproducer = {Thomas Moulard}
 \end{frame}
 
 \maxFrameImage{src/slides/hrp2-thx.jpg}
+
+\begin{frame}[plain]
+  \begin{changemargin}{-1cm}{-1cm}
+    \begin{center}
+      \vspace{-0.1cm}
+      \includegraphics[width=.95\paperwidth,height=\paperheight,%
+        keepaspectratio]{src/chap4-integration/archi.pdf}
+    \end{center}
+  \end{changemargin}
+\end{frame}
+%\maxFrameImage{src/chap4-integration/archi.pdf}
 
 
 %
