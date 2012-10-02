@@ -1243,10 +1243,10 @@ figure.
             {\color{black} $\bigoplus$};
 
       \path node (robot) at (-0.15,0)
-            [shape=rectangle,draw,label=3:$\hat{\mathbf{x}}$] {robot};
+            [shape=rectangle,draw,label=$\hat{\mathbf{x}}$] {robot};
 
       \path node (errorcomp) at (-0.15,0.6)
-            [shape=rectangle,draw,label=185:$\mathbf{\delta \mathbf{x}}$]
+            [shape=rectangle,draw,label=$\mathbf{\delta \mathbf{x}}$]
             {$\begin{array}{c}
                 k_x (x^{ref} - \hat{x})\\
                 k_y (y^{ref} - \hat{y})\\
@@ -1255,13 +1255,13 @@ figure.
       \draw[-] (-0.45,0.6) -- (errorcomp.west);
       \draw[->] (-0.45,0.6) -- (-0.45,0.07);
 
-      \draw[->] (0.1,0.6) -- (errorcomp.east);
-      \draw[-] (0.1,0.6) -- (0.1,0.);
-      \draw[->] (robot.east) -- (0.2,0.);
+      \draw[->] (0.2,0.6) -- (errorcomp.east);
+      \draw[-] (0.2,0.6) -- (0.2,0.);
+      \draw[->] (robot.east) -- (0.25,0.);
 
       \draw[->] (-0.45,0.) -- (robot.west);
 
-      \draw[->] (-0.6,0.) -- (-0.474,0.) node [above left]
+      \draw[-] (-0.6,0.) -- (-0.474,0.) node [above left]
            {$\mathbf{\dot{\mathbf{x}^{\text{ref}}}}$};
 
       \draw[->] (-0.6,0.8) -- (errorcomp.160) node [above left]
@@ -2074,8 +2074,10 @@ mouvement. Ce comportement ne perturbe pas le schéma de correction qui
 peut atteindre la position finale sans problème.
 
 
-La vidéo de l'expérience est disponible sur internet:
-\mbox{\url{http://youtu.be/cUZ0nNiPs70}}. La figure \ref{fig:scenario}
+La vidéo de l'expérience est disponible sur internet:%
+\vspace{-.1cm}%
+\begin{center}\url{http://youtu.be/cUZ0nNiPs70}\end{center}%
+La figure \ref{fig:scenario}
 fournit un aperçu de l'expérience réalisée. Le robot part de la droite
 et marche au travers des obstacles jusqu'à arriver à son but, sur la
 partie gauche de l'image.
