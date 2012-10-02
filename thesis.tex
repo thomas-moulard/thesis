@@ -194,13 +194,21 @@ pdfproducer = {Thomas Moulard}
 \newcommand{\transformation}[2]{%
 \ensuremath{{}^{#1}\!\text{M}_{#2}}}
 
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
 \begin{document}
 \bibliographystyle{francais}
 %
 \author{Thomas Moulard}
 \title{Optimisation numérique pour la robotique et exécution de trajectoires référencées capteurs}
 \date{Juillet 2012}
-\maketitle
+%
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture, overlay]
+ \node[inner sep=0pt] at (current page.center) {%
+  \includegraphics[width=\paperwidth,height=\paperheight]{couverture}%
+};
+\end{tikzpicture}
 %
 \frontmatter
 \tableofcontents{\thispagestyle{headings}}
